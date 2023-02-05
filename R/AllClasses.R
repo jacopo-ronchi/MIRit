@@ -1,3 +1,7 @@
+## Load generics before classes
+#' @include AllGenerics.R
+NULL
+
 ## ==========================================================================
 ## MirnaExperiment Class
 ## ==========================================================================
@@ -48,13 +52,13 @@
 #' slot is commonly populated by the [integrateMirnaTargets()] function
 #'
 #' @inheritSection
-#' MultiAssayExperiment::MultiAssayExperiment-class ExperimentList
+#' MultiAssayExperiment::'MultiAssayExperiment-class' ExperimentList
 #'
-#' @inheritSection MultiAssayExperiment::MultiAssayExperiment-class colData
+#' @inheritSection MultiAssayExperiment::'MultiAssayExperiment-class' colData
 #'
-#' @inheritSection MultiAssayExperiment::MultiAssayExperiment-class sampleMap
+#' @inheritSection MultiAssayExperiment::'MultiAssayExperiment-class' sampleMap
 #'
-#' # mirnaDE and geneDE
+#' @section mirnaDE and geneDE:
 #'
 #' `mirnaDE` consists of a `data.frame` with five columns:
 #' * `ID`: indicates the name of the miRNA;
@@ -72,27 +76,27 @@
 #' analysis;
 #' * `FDR`: contains the p-values adjusted for multiple testing.
 #'
-#' # significantMirnas and significantGenes
+#' @section significantMirnas and significantGenes:
 #'
 #' `significantMirnas` and `significantGenes` are `character` vectors of
 #' miRNA/gene IDs that are considered as statistically differentially expressed.
 #' The IDs contained in these vectors must be present in the `ID` columns of
 #' `mirnaDE` and `geneDE`.
 #'
-#' # pairedSamples
+#' @section pairedSamples:
 #'
 #' As already mentioned, `pairedSamples` must be `TRUE` when miRNA and gene
 #' expression derive from the same subjects, while it must `FALSE` if this is
 #' not the case.
 #'
-#' # targets
+#' @section targets:
 #'
 #' `targets` is a `data.frame` with just two columns:
 #' * `mature_mirna_id`, which contains miRNA names; and
 #' * `target_symbol`, which indicates the target gene for the corresponding
 #' miRNA.
 #'
-#' # mirnaTargetsIntegration
+#' @section mirnaTargetsIntegration:
 #'
 #' Lastly, `mirnaTargetsIntegration` slot contains a `data.frame` that differs
 #' on the basis of the integration strategy used. For the one-sided Fisher's
@@ -138,8 +142,8 @@
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
 #'
 #' @seealso
-#' See [MultiAssayExperiment::MultiAssayExperiment-class] for additional
-#' information.
+#' See [`MultiAssayExperiment-class`][MultiAssayExperiment::MultiAssayExperiment-class]
+#' for additional information.
 #'
 #' @docType class
 #' @export
@@ -627,8 +631,8 @@ setReplaceMethod("mirnaTargetsIntegration",
 
 #' The `MirnaEnrichment` class
 #'
-#' This function extends and adapts the [`DOSE::enrichResult-class`] in order
-#' to make it suitable for handling miRNA enrichment results.
+#' This function extends and adapts the [`DOSE::enrichResult-class`] class
+#' in order to make it suitable for handling miRNA enrichment results.
 #'
 #' @slot result A `data.frame` object holding the output of enrichment analysis
 #' @slot pvalueCutoff A `numeric` value defining the threshold used for
@@ -662,9 +666,11 @@ setReplaceMethod("mirnaTargetsIntegration",
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
 #'
+#' @name MirnaEnrichment-class
+#' @docType class
 #' @export
 #' @import methods
-#' @importClassesFrom clusterProfiler enrichResult
+#' @importClassesFrom DOSE enrichResult
 setClass("MirnaEnrichment",
          contains="enrichResult")
 
@@ -718,8 +724,8 @@ setReplaceMethod("enrichmentDatabase", "MirnaEnrichment", function(object, value
 
 #' The `MirnaGsea` class
 #'
-#' This function extends and adapts the [`DOSE::gseaResult-class`] in order
-#' to make it suitable for handling miRNA gene set enrichment analysis
+#' This function extends and adapts the [`DOSE::gseaResult-class`] class
+#' in order to make it suitable for handling miRNA gene set enrichment analysis
 #' (GSEA) results.
 #'
 #' @slot result A `data.frame` object holding the output of enrichment analysis
@@ -753,9 +759,11 @@ setReplaceMethod("enrichmentDatabase", "MirnaEnrichment", function(object, value
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
 #'
+#' @name MirnaGsea-class
+#' @docType class
 #' @export
 #' @import methods
-#' @importClassesFrom clusterProfiler gseaResult
+#' @importClassesFrom DOSE gseaResult
 setClass("MirnaGsea",
          contains="gseaResult",
          slots = representation(

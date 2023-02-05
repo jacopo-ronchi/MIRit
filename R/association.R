@@ -294,7 +294,7 @@ findMirnaSNPs <- function(mirnaObj,
 #' disease-SNP association.
 #'
 #' @examples
-#' dis <- searchDisease("Alzheimer's disease)
+#' dis <- searchDisease("Alzheimer's disease")
 #' dis
 #'
 #' association <- findMirnaSNPs(obj, diseaseUML = "C0002395")

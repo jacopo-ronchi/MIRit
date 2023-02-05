@@ -1,0 +1,25 @@
+Package: MIRit
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: What the package does (one paragraph).
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Imports: 
+    DOSE (>= 3.22.1),
+    MultiAssayExperiment (>= 1.22.0),
+    tidygraph
+Collate: 
+    'AllGenerics.R'
+    'AllClasses.R'
+    'association.R'
+    'enrichment.R'
+    'integration.R'
+    'show-methods.R'
+    'targets.R'
+    'utils.R'
+    'visualization.R'

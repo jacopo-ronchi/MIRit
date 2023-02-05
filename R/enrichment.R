@@ -787,7 +787,7 @@ supportedOrganisms <- function(database) {
 #' 'DOWN-miRNA targets', containing enrichment results of genes targeted by
 #' upregulated miRNAs and by downregulated miRNAs, respectively. Each element
 #' of this `list` consists of an object of class
-#' [enrichResult][`clusterProfiler::enrichResult-class`] containing the outcome
+#' [enrichResult][`DOSE:enrichResult-class`] containing the outcome
 #' of the enrichment analysis of target genes. To access the enrichment results
 #' as a standard `data.frame`, you can use the `as.data.frame()` function.
 #' The user can also refer to the documentation of [clusterProfiler] for
@@ -1062,7 +1062,7 @@ enrichTargets <- function(mirnaObj,
 #' A `list` object with two elements, namely 'upregulated' and 'downregulated',
 #' containing enrichment results of upregulated and downregulated genes,
 #' respectively. Each element of this `list` consists of an object of class
-#' [enrichResult][`clusterProfiler::enrichResult-class`] containing the outcome
+#' [enrichResult][`DOSE:enrichResult-class`] containing the outcome
 #' of the enrichment analysis of DE-genes. To access the enrichment results
 #' as a standard `data.frame`, you can use the `as.data.frame()` function.
 #' The user can also refer to the documentation of [clusterProfiler] for
@@ -1431,7 +1431,7 @@ enrichInternal <- function(targets,
 #' @param ... Other parameters that can be given to the GSEA functions
 #'
 #' @returns
-#' An object of class [gseaResult][`clusterProfiler::gseaResult-class`]
+#' An object of class [gseaResult][`DOSE:gseaResult-class`]
 #' containing the outcome of the gene set enrichment analysis (GSEA). To
 #' access the enrichment results as a standard `data.frame`, you can use the
 #' `as.data.frame()` function. The user can also refer to the documentation of
