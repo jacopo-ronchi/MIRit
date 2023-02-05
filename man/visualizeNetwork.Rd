@@ -56,7 +56,7 @@ arrow caps and nodes for the \code{circle} design. Default is \code{0.1}}
 }
 \value{
 A \code{ggraph} object representing the network graph. For instructions on how
-to handle and edit this object, please refer to the \link{ggraph} package.
+to handle and edit this object, please refer to the \code{ggraph} package.
 }
 \description{
 This function is used to plot the network object created with the
@@ -72,7 +72,7 @@ this parameter is set to \code{stress}, this function adopts an optimized versio
 of the stress-minimization algorithm (known as Kamada-Kawai algorithm).
 Otherwise, if \code{circle} layout is used, biological pathways will be
 displayed as a circular network. Both of these layout algorithms are
-implemented in the \link{ggraph} package.
+implemented in the \code{ggraph} package.
 
 The \code{stress} layout is suitable for small pathways, but it can get messed
 for larger biological networks. In these cases, the \code{circle} layout

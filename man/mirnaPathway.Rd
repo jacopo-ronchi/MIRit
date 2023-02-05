@@ -38,7 +38,7 @@ resulting network can then be used with the \link{visualizeNetwork} function
 to visualize the relationships between miRNA and gene expression.
 }
 \note{
-This function uses the \link{graphite} package to retrieve biological pathways as
+This function uses the \code{graphite} package to retrieve biological pathways as
 \code{graph} objects from KEGG, Reactome and WikiPathways.
 }
 \examples{
@@ -57,17 +57,18 @@ visualizeNetwork(net)
 \references{
 Sales, G., Calura, E., Cavalieri, D. et al. graphite - a Bioconductor
 package to convert pathway topology to gene network.
-BMC Bioinformatics 13, 20 (2012). \link{https://doi.org/10.1186/1471-2105-13-20}
+BMC Bioinformatics 13, 20 (2012).
+\url{https://doi.org/10.1186/1471-2105-13-20}
 
 Minoru Kanehisa, Susumu Goto, KEGG: Kyoto Encyclopedia of Genes and Genomes,
 Nucleic Acids Research, Volume 28, Issue 1, 1 January 2000, Pages 27–30,
-\link{https://doi.org/10.1093/nar/28.1.27}
+\url{https://doi.org/10.1093/nar/28.1.27}
 
 G. Joshi-Tope, M. Gillespie, I. Vastrik, P. D'Eustachio, E. Schmidt, B.
 de Bono, B. Jassal, G.R. Gopinath, G.R. Wu, L. Matthews, S. Lewis, E.
 Birney, L. Stein, Reactome: a knowledgebase of biological pathways, Nucleic
 Acids Research, Volume 33, Issue suppl_1, 1 January 2005, Pages D428–D432,
-\link{https://doi.org/10.1093/nar/gki072}
+\url{https://doi.org/10.1093/nar/gki072}
 
 Marvin Martens, Ammar Ammar, Anders Riutta, Andra Waagmeester, Denise N
 Slenter, Kristina Hanspers, Ryan A. Miller, Daniela Digles, Elisson N Lopes,
@@ -75,11 +76,11 @@ Friederike Ehrhart, Lauren J Dupuis, Laurent A Winckers, Susan L Coort, Egon
 L Willighagen, Chris T Evelo, Alexander R Pico, Martina Kutmon,
 WikiPathways: connecting communities, Nucleic Acids Research, Volume 49,
 Issue D1, 8 January 2021, Pages D613–D621,
-\link{https://doi.org/10.1093/nar/gkaa1024}
+\url{https://doi.org/10.1093/nar/gkaa1024}
 }
 \seealso{
 For additional details on how to handle \code{\link[tidygraph:tbl_graph]{tidygraph::tbl_graph}} objects,
-refer to the \link{tidygraph} package.
+refer to the \code{tidygraph} package.
 }
 \author{
 Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}

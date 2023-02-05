@@ -67,10 +67,10 @@ version 22}
 \code{\link[rbioapi:rba_mieaa_enrich]{rbioapi::rba_mieaa_enrich()}}}
 }
 \value{
-A \link{MirnaGsea} object containing the results of gene set enrichment
-analysis. To access the results table with the enriched terms, the user
-can make use of the \code{\link[=enrichmentResults]{enrichmentResults()}} function.
-For additional instructions see \code{\link{MirnaGsea}} class.
+A \code{\link[=MirnaGsea-class]{MirnaGsea}} object containing the results of gene set
+enrichment analysis. To access the results table with the enriched terms,
+the user can make use of the \code{\link[=enrichmentResults]{enrichmentResults()}} function.
+For additional instructions see \code{\link[=MirnaGsea-class]{MirnaGsea}} class.
 }
 \description{
 This function uses miEAA 2.0 (Kern et al., 2020) to perform a gene set
@@ -95,7 +95,7 @@ organs, tissues and more. To retrieve the complete list of available
 miEAA 2.0 categories, use the \code{\link[=listCategories]{listCategories()}} function.
 }
 \note{
-To query miEAA 2.0, this function uses the package \link{rbioapi}, which
+To query miEAA 2.0, this function uses the package \code{rbioapi}, which
 provides convenient methods for accessing miEAA 2.0 to perform
 enrichment analyses.
 }
@@ -118,16 +118,16 @@ Christina Backes, Kendall Van Keuren-Jensen, David Wesley Craig, Eckart
 Meese, Andreas Keller, miEAA 2.0: integrating multi-species microRNA
 enrichment analysis and workflow management systems, Nucleic Acids Research,
 Volume 48, Issue W1, 02 July 2020, Pages W521–W528,
-\link{https://doi.org/10.1093/nar/gkaa309}
+\url{https://doi.org/10.1093/nar/gkaa309}
 
 Thomas Bleazard, Janine A Lamb, Sam Griffiths-Jones, Bias in microRNA
 functional enrichment analysis, Bioinformatics, Volume 31, Issue 10, 15 May
-2015, Pages 1592–1598, \link{https://doi.org/10.1093/bioinformatics/btv023}
+2015, Pages 1592–1598, \url{https://doi.org/10.1093/bioinformatics/btv023}
 
 Moosa Rezwani, Ali Akbar Pourfathollah, Farshid Noorbakhsh, rbioapi:
 user-friendly R interface to biologic web services’ API, Bioinformatics,
 Volume 38, Issue 10, 15 May 2022, Pages 2952–2953,
-\link{https://doi.org/10.1093/bioinformatics/btac172}
+\url{https://doi.org/10.1093/bioinformatics/btac172}
 }
 \author{
 Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}

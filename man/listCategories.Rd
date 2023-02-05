@@ -28,7 +28,7 @@ with \code{\link[=enrichMirnas]{enrichMirnas()}} and \code{\link[=gseaMirnas]{gs
 enrichment analysis with the desired category.
 }
 \note{
-This function uses the package \link{rbioapi} to interface miEAA 2.0 database
+This function uses the package \code{rbioapi} to interface miEAA 2.0 database
 for retrieving the available categories for different organisms.
 }
 \examples{
@@ -40,14 +40,14 @@ available_categories <- listCategories(organism = "Mus musculus")
 Moosa Rezwani, Ali Akbar Pourfathollah, Farshid Noorbakhsh, rbioapi:
 user-friendly R interface to biologic web services’ API, Bioinformatics,
 Volume 38, Issue 10, 15 May 2022, Pages 2952–2953,
-\link{https://doi.org/10.1093/bioinformatics/btac172}
+\url{https://doi.org/10.1093/bioinformatics/btac172}
 
 Fabian Kern, Tobias Fehlmann, Jeffrey Solomon, Louisa Schwed, Nadja Grammes,
 Christina Backes, Kendall Van Keuren-Jensen, David Wesley Craig, Eckart
 Meese, Andreas Keller, miEAA 2.0: integrating multi-species microRNA
 enrichment analysis and workflow management systems, Nucleic Acids Research,
 Volume 48, Issue W1, 02 July 2020, Pages W521–W528,
-\link{https://doi.org/10.1093/nar/gkaa309}
+\url{https://doi.org/10.1093/nar/gkaa309}
 }
 \author{
 Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}

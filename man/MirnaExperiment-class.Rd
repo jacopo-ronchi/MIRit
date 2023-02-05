@@ -8,8 +8,12 @@
 \usage{
 \S4method{show}{MirnaExperiment}(object)
 }
+\arguments{
+\item{object}{An object of class \code{\link[=MirnaExperiment-class]{MirnaExperiment}}}
+}
 \description{
-This class extends the \code{\link[MultiAssayExperiment:MultiAssayExperiment-class]{MultiAssayExperiment::MultiAssayExperiment}}
+This class extends the
+\code{\link[MultiAssayExperiment:MultiAssayExperiment-class]{MultiAssayExperiment}}
 from the homonym package to provide the flexibility of handling genomic data
 of both microRNAs and their targets, allowing to store information about
 microRNA and gene expression, differential expression results, microRNA
@@ -29,8 +33,7 @@ MirnaExperiment
 \section{Slots}{
 
 \describe{
-\item{\code{ExperimentList}}{A \code{\link[MultiAssayExperiment:ExperimentList]{MultiAssayExperiment::ExperimentList}} class object
-for each assay dataset}
+\item{\code{ExperimentList}}{An \code{ExperimentList} class object for each assay dataset}
 
 \item{\code{colData}}{A \code{DataFrame} of all clinical/specimen data available across
 experiments}
@@ -72,6 +75,43 @@ the \code{\link[=MirnaExperiment]{MirnaExperiment()}} constructor function, whic
 and verify a valid object starting from the results of differential
 expression analysis.
 }
+\section{ExperimentList}{
+
+
+The \code{\link[MultiAssayExperiment:ExperimentList]{ExperimentList}} slot is designed
+to contain results from each experiment/assay. In this case, it holds miRNA
+and gene expression matrices. It contains a
+\code{\link[S4Vectors:SimpleList-class]{SimpleList-class}}.
+}
+
+\section{colData}{
+
+
+The \code{colData} slot is a collection of primary specimen data valid across all
+experiments. This slot is strictly of class \code{\link{DataFrame}} but arguments for
+the constructor function allow arguments to be of class \code{data.frame} and
+subsequently coerced.
+}
+
+\section{sampleMap}{
+
+
+The \code{sampleMap} contains a \code{\link{DataFrame}} of translatable identifiers of
+samples and participants or biological units. The standard column names of
+the sampleMap are "assay", "primary", and "colname". Note that the "assay"
+column is a factor corresponding to the names of each experiment in the
+\code{\link[MultiAssayExperiment:ExperimentList]{ExperimentList}}. In the case where
+these names do not match between the sampleMap and the experiments, the
+documented experiments in the \code{sampleMap} take precedence and experiments
+are dropped by the harmonization procedure. The constructor function will
+generate a \code{sampleMap} in the case where it is not provided and this method
+may be a 'safer' alternative for creating the \code{MultiAssayExperiment} (so
+long as the rownames are identical in the \code{colData}, if provided). An empty
+\code{sampleMap} may produce empty experiments if the levels of the "assay"
+factor in the \code{sampleMap} do not match the names in the
+\code{\link[MultiAssayExperiment:ExperimentList]{ExperimentList}}.
+}
+
 \section{mirnaDE and geneDE}{
 
 
@@ -157,48 +197,10 @@ multiple testing.
 }
 }
 
-\section{ExperimentList}{
-
-
-The \code{\link[MultiAssayExperiment]{ExperimentList}} slot is designed to contain results from
-each experiment/assay. It contains a \linkS4class{SimpleList}.
-
-}
-
-\section{colData}{
-
-
-The \code{colData} slot is a collection of primary specimen data valid
-across all experiments. This slot is strictly of class
-\code{\linkS4class{DataFrame}} but arguments for the constructor function
-allow arguments to be of class \code{data.frame} and subsequently coerced.
-
-}
-
-\section{sampleMap}{
-
-
-The \code{\link[MultiAssayExperiment]{sampleMap}} contains a \code{DataFrame} of translatable
-identifiers of samples and participants or biological units. The standard
-column names of the \code{sampleMap} are "assay", "primary", and "colname".
-Note that the "assay" column is a factor corresponding to the names of each
-experiment in the \code{ExperimentList}. In the case where these names do
-not match between the \code{sampleMap} and the experiments, the documented
-experiments in the \code{sampleMap} take precedence and experiments are
-dropped by the harmonization procedure. The constructor function will
-generate a \code{sampleMap} in the case where it is not provided and this
-method may be a 'safer' alternative for creating the \code{MultiAssayExperiment}
-(so long as the rownames are identical in the \code{colData}, if provided).
-An empty \code{sampleMap} may produce empty experiments if the levels of the
-"assay" factor in the \code{sampleMap} do not match the names in the
-\code{ExperimentList}.
-
-}
-
 \references{
 Marcel Ramos et al. Software For The Integration Of Multiomics Experiments
 In Bioconductor. Cancer Research, 2017 November 1; 77(21); e39-42. DOI:
-\link{10.1158/0008-5472.CAN-17-0344}
+\url{10.1158/0008-5472.CAN-17-0344}
 }
 \seealso{
 See \code{\link[MultiAssayExperiment:MultiAssayExperiment-class]{MultiAssayExperiment-class}}

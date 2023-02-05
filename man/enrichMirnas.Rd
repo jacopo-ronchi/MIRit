@@ -68,12 +68,13 @@ version 22}
 }
 \value{
 A \code{list} object containing miEAA 2.0 enrichment results. This \code{list} object
-has two \code{\link{MirnaEnrichment}} objects, one for the enrichment results of
-up-regulated miRNAs and one for enrichment results of down-regulated miRNAs.
-To access one or the other, the user can make use of \code{res[["upregulated"]]}
-and \code{res[["downregulated"]]}. Further, it is possible to access the results
-of these \code{\link{MirnaEnrichment}} object through the \code{\link[=enrichmentResults]{enrichmentResults()}}
-function. For additional instructions see \code{\link{MirnaEnrichment}} class.
+has two \code{\link[=MirnaEnrichment-class]{MirnaEnrichment}} objects, one for the
+enrichment results of up-regulated miRNAs and one for enrichment results of
+down-regulated miRNAs. To access one or the other, the user can make use of
+\code{res[["upregulated"]]} and \code{res[["downregulated"]]}. Further, it is possible
+to access the results of these \code{\link[=MirnaEnrichment-class]{MirnaEnrichment}}
+objects through the \code{\link[=enrichmentResults]{enrichmentResults()}} function. For additional
+instructions see \code{\link[=MirnaEnrichment-class]{MirnaEnrichment}} class.
 }
 \description{
 This function uses miEAA 2.0 (Kern et al., 2020) to perform an
@@ -100,7 +101,7 @@ retrieve the complete list of available miEAA 2.0 categories, use the
 \code{\link[=listCategories]{listCategories()}} function.
 }
 \note{
-To query miEAA 2.0, this function uses the package \link{rbioapi}, which
+To query miEAA 2.0, this function uses the package \code{rbioapi}, which
 provides convenient methods for accessing miEAA 2.0 to perform
 enrichment analyses.
 }
@@ -128,16 +129,16 @@ Christina Backes, Kendall Van Keuren-Jensen, David Wesley Craig, Eckart
 Meese, Andreas Keller, miEAA 2.0: integrating multi-species microRNA
 enrichment analysis and workflow management systems, Nucleic Acids Research,
 Volume 48, Issue W1, 02 July 2020, Pages W521–W528,
-\link{https://doi.org/10.1093/nar/gkaa309}
+\url{https://doi.org/10.1093/nar/gkaa309}
 
 Thomas Bleazard, Janine A Lamb, Sam Griffiths-Jones, Bias in microRNA
 functional enrichment analysis, Bioinformatics, Volume 31, Issue 10, 15 May
-2015, Pages 1592–1598, \link{https://doi.org/10.1093/bioinformatics/btv023}
+2015, Pages 1592–1598, \url{https://doi.org/10.1093/bioinformatics/btv023}
 
 Moosa Rezwani, Ali Akbar Pourfathollah, Farshid Noorbakhsh, rbioapi:
 user-friendly R interface to biologic web services’ API, Bioinformatics,
 Volume 38, Issue 10, 15 May 2022, Pages 2952–2953,
-\link{https://doi.org/10.1093/bioinformatics/btac172}
+\url{https://doi.org/10.1093/bioinformatics/btac172}
 }
 \author{
 Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}

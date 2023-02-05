@@ -26,7 +26,7 @@ to create and visualize miRNA-gene regulation networks through the
 \code{\link[=mirnaPathway]{mirnaPathway()}} function.
 }
 \note{
-This function uses the \link{graphite} package to retrieve biological pathways
+This function uses the \code{graphite} package to retrieve biological pathways
 from KEGG, Reactome and WikiPathways.
 }
 \examples{
@@ -37,7 +37,8 @@ listPathways("Mus musculus", "WikiPathways")
 \references{
 Sales, G., Calura, E., Cavalieri, D. et al. graphite - a Bioconductor
 package to convert pathway topology to gene network.
-BMC Bioinformatics 13, 20 (2012). \link{https://doi.org/10.1186/1471-2105-13-20}
+BMC Bioinformatics 13, 20 (2012).
+\url{https://doi.org/10.1186/1471-2105-13-20}
 }
 \author{
 Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}

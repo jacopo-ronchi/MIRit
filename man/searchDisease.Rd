@@ -21,7 +21,7 @@ of a particular disease. This identifier is then needed to use the function
 }
 \note{
 To retrieve CUIs for specific diseases, this function makes use of the
-\link{disgenet2r} package.
+\code{disgenet2r} package.
 }
 \examples{
 # search the CUI identifier of Creutzfeldt-Jakob disease

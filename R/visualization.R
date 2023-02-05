@@ -21,13 +21,14 @@
 #' listPathways("Mus musculus", "WikiPathways")
 #'
 #' @note
-#' This function uses the [graphite] package to retrieve biological pathways
+#' This function uses the `graphite` package to retrieve biological pathways
 #' from KEGG, Reactome and WikiPathways.
 #'
 #' @references
 #' Sales, G., Calura, E., Cavalieri, D. et al. graphite - a Bioconductor
 #' package to convert pathway topology to gene network.
-#' BMC Bioinformatics 13, 20 (2012). [https://doi.org/10.1186/1471-2105-13-20]
+#' BMC Bioinformatics 13, 20 (2012).
+#' \url{https://doi.org/10.1186/1471-2105-13-20}
 #'
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
@@ -106,7 +107,7 @@ listPathways <- function(organism, database) {
 #'
 #' @seealso
 #' For additional details on how to handle [`tidygraph::tbl_graph`] objects,
-#' refer to the [tidygraph] package.
+#' refer to the `tidygraph` package.
 #'
 #' @examples
 #' # perform the integration analysis between miRNAs and their targets
@@ -121,23 +122,24 @@ listPathways <- function(organism, database) {
 #' visualizeNetwork(net)
 #'
 #' @note
-#' This function uses the [graphite] package to retrieve biological pathways as
+#' This function uses the `graphite` package to retrieve biological pathways as
 #' `graph` objects from KEGG, Reactome and WikiPathways.
 #'
 #' @references
 #' Sales, G., Calura, E., Cavalieri, D. et al. graphite - a Bioconductor
 #' package to convert pathway topology to gene network.
-#' BMC Bioinformatics 13, 20 (2012). [https://doi.org/10.1186/1471-2105-13-20]
+#' BMC Bioinformatics 13, 20 (2012).
+#' \url{https://doi.org/10.1186/1471-2105-13-20}
 #'
 #' Minoru Kanehisa, Susumu Goto, KEGG: Kyoto Encyclopedia of Genes and Genomes,
 #' Nucleic Acids Research, Volume 28, Issue 1, 1 January 2000, Pages 27–30,
-#' [https://doi.org/10.1093/nar/28.1.27]
+#' \url{https://doi.org/10.1093/nar/28.1.27}
 #'
 #' G. Joshi-Tope, M. Gillespie, I. Vastrik, P. D'Eustachio, E. Schmidt, B.
 #' de Bono, B. Jassal, G.R. Gopinath, G.R. Wu, L. Matthews, S. Lewis, E.
 #' Birney, L. Stein, Reactome: a knowledgebase of biological pathways, Nucleic
 #' Acids Research, Volume 33, Issue suppl_1, 1 January 2005, Pages D428–D432,
-#' [https://doi.org/10.1093/nar/gki072]
+#' \url{https://doi.org/10.1093/nar/gki072}
 #'
 #' Marvin Martens, Ammar Ammar, Anders Riutta, Andra Waagmeester, Denise N
 #' Slenter, Kristina Hanspers, Ryan A. Miller, Daniela Digles, Elisson N Lopes,
@@ -145,7 +147,7 @@ listPathways <- function(organism, database) {
 #' L Willighagen, Chris T Evelo, Alexander R Pico, Martina Kutmon,
 #' WikiPathways: connecting communities, Nucleic Acids Research, Volume 49,
 #' Issue D1, 8 January 2021, Pages D613–D621,
-#' [https://doi.org/10.1093/nar/gkaa1024]
+#' \url{https://doi.org/10.1093/nar/gkaa1024}
 #'
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
@@ -319,7 +321,7 @@ mirnaPathway <- function(mirnaObj,
 #' of the stress-minimization algorithm (known as Kamada-Kawai algorithm).
 #' Otherwise, if `circle` layout is used, biological pathways will be
 #' displayed as a circular network. Both of these layout algorithms are
-#' implemented in the [ggraph] package.
+#' implemented in the `ggraph` package.
 #'
 #' The `stress` layout is suitable for small pathways, but it can get messed
 #' for larger biological networks. In these cases, the `circle` layout
@@ -354,7 +356,7 @@ mirnaPathway <- function(mirnaObj,
 #'
 #' @returns
 #' A `ggraph` object representing the network graph. For instructions on how
-#' to handle and edit this object, please refer to the [ggraph] package.
+#' to handle and edit this object, please refer to the `ggraph` package.
 #'
 #' @examples
 #' # explore a TCR-associated pathway present in Reactome
@@ -910,8 +912,9 @@ mirnaDotplot.MirnaGsea <- function(mirnaGsea,
 #' area represents the density of fold changes belonging to miRNAs annotated
 #' to that category.
 #'
-#' @param mirnaGsea A [`MirnaGsea`] object containing the results of gene set
-#' enrichment analysis obtained with the [gseaMirnas()] function
+#' @param mirnaGsea A [`MirnaGsea`][MirnaGsea-class] object containing the
+#' results of gene set enrichment analysis obtained with the [gseaMirnas()]
+#' function
 #' @param showTerms It is the number of top enriched terms to show or,
 #' alternatively, a character vector indicating the enriched terms to plot.
 #' Default is `10`
@@ -1070,14 +1073,14 @@ theme_enr <- function() {
 #'
 #' @note
 #' This function retrieves genomic coordinates from the output of
-#' [findMirnaSNPs()] function and then uses [Gviz] package to build
+#' [findMirnaSNPs()] function and then uses `Gviz` package to build
 #' the trackplot.
 #'
 #' @references
 #' Hahne, F., Ivanek, R. (2016). Visualizing Genomic Data Using Gviz and
 #' Bioconductor. In: Mathé, E., Davis, S. (eds) Statistical Genomics. Methods
 #' in Molecular Biology, vol 1418. Humana Press, New York, NY.
-#' [https://doi.org/10.1007/978-1-4939-3578-9_16]
+#' \url{https://doi.org/10.1007/978-1-4939-3578-9_16}
 #'
 #' @returns
 #' A trackplot with information about chromosome, SNP and miRNA gene location.

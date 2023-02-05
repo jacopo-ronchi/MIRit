@@ -50,7 +50,7 @@ which the function obtains disease-associated SNPs. The options include:
 }
 \note{
 To retrieve evidences of disease-SNP association, this function makes use of
-the \link{disgenet2r} package.
+the \code{disgenet2r} package.
 }
 \examples{
 dis <- searchDisease("Alzheimer's disease")

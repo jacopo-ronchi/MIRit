@@ -12,14 +12,15 @@
 \S4method{show}{MirnaGsea}(object)
 }
 \description{
-This function extends and adapts the \code{\link[DOSE:gseaResult-class]{DOSE::gseaResult}} class
-in order to make it suitable for handling miRNA gene set enrichment analysis
-(GSEA) results.
+This class extends and adapts the
+\code{\link[DOSE:gseaResult-class]{gseaResult-class}} in order to make it
+suitable for handling miRNA gene set enrichment analysis (GSEA) results.
 }
-\section{Methods (by generic)}{
+\section{Functions}{
 \itemize{
-\item \code{x[i}: Subset a \code{\link{MirnaGsea}} object that contains multiple
-miEAA 2.0 categories into one that holds just the specified category
+\item \code{x[i}: Subset a \code{\link[=MirnaGsea-class]{MirnaGsea}} object
+that contains multiple miEAA 2.0 categories into one that holds just the
+specified category
 
 \item \code{show(MirnaGsea)}: Show method for objects of class MirnaGsea
 

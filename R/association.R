@@ -22,7 +22,7 @@
 #'
 #' @note
 #' To retrieve CUIs for specific diseases, this function makes use of the
-#' [disgenet2r] package.
+#' `disgenet2r` package.
 #'
 #' @references
 #' Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,
@@ -129,7 +129,7 @@ searchDisease <- function(diseaseName) {
 #'
 #' @note
 #' To retrieve disease-associated SNPs, this function makes use of the
-#' [disgenet2r] package.
+#' `disgenet2r` package.
 #'
 #' @references
 #' Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,
@@ -302,7 +302,7 @@ findMirnaSNPs <- function(mirnaObj,
 #'
 #' @note
 #' To retrieve evidences of disease-SNP association, this function makes use of
-#' the [disgenet2r] package.
+#' the `disgenet2r` package.
 #'
 #' @references
 #' Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,

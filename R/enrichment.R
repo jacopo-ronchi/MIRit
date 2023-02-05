@@ -23,21 +23,21 @@
 #' available_categories <- listCategories(organism = "Mus musculus")
 #'
 #' @note
-#' This function uses the package [rbioapi] to interface miEAA 2.0 database
+#' This function uses the package `rbioapi` to interface miEAA 2.0 database
 #' for retrieving the available categories for different organisms.
 #'
 #' @references
 #' Moosa Rezwani, Ali Akbar Pourfathollah, Farshid Noorbakhsh, rbioapi:
 #' user-friendly R interface to biologic web services’ API, Bioinformatics,
 #' Volume 38, Issue 10, 15 May 2022, Pages 2952–2953,
-#' [https://doi.org/10.1093/bioinformatics/btac172]
+#' \url{https://doi.org/10.1093/bioinformatics/btac172}
 #'
 #' Fabian Kern, Tobias Fehlmann, Jeffrey Solomon, Louisa Schwed, Nadja Grammes,
 #' Christina Backes, Kendall Van Keuren-Jensen, David Wesley Craig, Eckart
 #' Meese, Andreas Keller, miEAA 2.0: integrating multi-species microRNA
 #' enrichment analysis and workflow management systems, Nucleic Acids Research,
 #' Volume 48, Issue W1, 02 July 2020, Pages W521–W528,
-#' [https://doi.org/10.1093/nar/gkaa309]
+#' \url{https://doi.org/10.1093/nar/gkaa309}
 #'
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
@@ -133,12 +133,13 @@ listCategories <- function(organism = "Homo sapiens",
 #'
 #' @returns
 #' A `list` object containing miEAA 2.0 enrichment results. This `list` object
-#' has two [`MirnaEnrichment`] objects, one for the enrichment results of
-#' up-regulated miRNAs and one for enrichment results of down-regulated miRNAs.
-#' To access one or the other, the user can make use of `res[["upregulated"]]`
-#' and `res[["downregulated"]]`. Further, it is possible to access the results
-#' of these [`MirnaEnrichment`] object through the [enrichmentResults()]
-#' function. For additional instructions see [`MirnaEnrichment`] class.
+#' has two [`MirnaEnrichment`][MirnaEnrichment-class] objects, one for the
+#' enrichment results of up-regulated miRNAs and one for enrichment results of
+#' down-regulated miRNAs. To access one or the other, the user can make use of
+#' `res[["upregulated"]]` and `res[["downregulated"]]`. Further, it is possible
+#' to access the results of these [`MirnaEnrichment`][MirnaEnrichment-class]
+#' objects through the [enrichmentResults()] function. For additional
+#' instructions see [`MirnaEnrichment`][MirnaEnrichment-class] class.
 #'
 #' @examples
 #' # perform an over-represantation analysis with the miEAA category miRWalk
@@ -158,7 +159,7 @@ listCategories <- function(organism = "Homo sapiens",
 #' mirnaDotplot(enr_down)
 #'
 #' @note
-#' To query miEAA 2.0, this function uses the package [rbioapi], which
+#' To query miEAA 2.0, this function uses the package `rbioapi`, which
 #' provides convenient methods for accessing miEAA 2.0 to perform
 #' enrichment analyses.
 #'
@@ -168,16 +169,16 @@ listCategories <- function(organism = "Homo sapiens",
 #' Meese, Andreas Keller, miEAA 2.0: integrating multi-species microRNA
 #' enrichment analysis and workflow management systems, Nucleic Acids Research,
 #' Volume 48, Issue W1, 02 July 2020, Pages W521–W528,
-#' [https://doi.org/10.1093/nar/gkaa309]
+#' \url{https://doi.org/10.1093/nar/gkaa309}
 #'
 #' Thomas Bleazard, Janine A Lamb, Sam Griffiths-Jones, Bias in microRNA
 #' functional enrichment analysis, Bioinformatics, Volume 31, Issue 10, 15 May
-#' 2015, Pages 1592–1598, [https://doi.org/10.1093/bioinformatics/btv023]
+#' 2015, Pages 1592–1598, \url{https://doi.org/10.1093/bioinformatics/btv023}
 #'
 #' Moosa Rezwani, Ali Akbar Pourfathollah, Farshid Noorbakhsh, rbioapi:
 #' user-friendly R interface to biologic web services’ API, Bioinformatics,
 #' Volume 38, Issue 10, 15 May 2022, Pages 2952–2953,
-#' [https://doi.org/10.1093/bioinformatics/btac172]
+#' \url{https://doi.org/10.1093/bioinformatics/btac172}
 #'
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
@@ -431,10 +432,10 @@ enrichMirnas <- function(mirnaObj,
 #' [rbioapi::rba_mieaa_enrich()]
 #'
 #' @returns
-#' A [MirnaGsea] object containing the results of gene set enrichment
-#' analysis. To access the results table with the enriched terms, the user
-#' can make use of the [enrichmentResults()] function.
-#' For additional instructions see [`MirnaGsea`] class.
+#' A [`MirnaGsea`][MirnaGsea-class] object containing the results of gene set
+#' enrichment analysis. To access the results table with the enriched terms,
+#' the user can make use of the [enrichmentResults()] function.
+#' For additional instructions see [`MirnaGsea`][MirnaGsea-class] class.
 #'
 #' @examples
 #' # perform a GSEA with the miEAA category miRWalk
@@ -449,7 +450,7 @@ enrichMirnas <- function(mirnaObj,
 #' mirnaRidgeplot(gse)
 #'
 #' @note
-#' To query miEAA 2.0, this function uses the package [rbioapi], which
+#' To query miEAA 2.0, this function uses the package `rbioapi`, which
 #' provides convenient methods for accessing miEAA 2.0 to perform
 #' enrichment analyses.
 #'
@@ -459,16 +460,16 @@ enrichMirnas <- function(mirnaObj,
 #' Meese, Andreas Keller, miEAA 2.0: integrating multi-species microRNA
 #' enrichment analysis and workflow management systems, Nucleic Acids Research,
 #' Volume 48, Issue W1, 02 July 2020, Pages W521–W528,
-#' [https://doi.org/10.1093/nar/gkaa309]
+#' \url{https://doi.org/10.1093/nar/gkaa309}
 #'
 #' Thomas Bleazard, Janine A Lamb, Sam Griffiths-Jones, Bias in microRNA
 #' functional enrichment analysis, Bioinformatics, Volume 31, Issue 10, 15 May
-#' 2015, Pages 1592–1598, [https://doi.org/10.1093/bioinformatics/btv023]
+#' 2015, Pages 1592–1598, \url{https://doi.org/10.1093/bioinformatics/btv023}
 #'
 #' Moosa Rezwani, Ali Akbar Pourfathollah, Farshid Noorbakhsh, rbioapi:
 #' user-friendly R interface to biologic web services’ API, Bioinformatics,
 #' Volume 38, Issue 10, 15 May 2022, Pages 2952–2953,
-#' [https://doi.org/10.1093/bioinformatics/btac172]
+#' \url{https://doi.org/10.1093/bioinformatics/btac172}
 #'
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
@@ -620,9 +621,9 @@ gseaMirnas <- function(mirnaObj,
 
 
 
-#' @describeIn MirnaEnrichment Subset a [`MirnaEnrichment`] object that
-#' contains multiple miEAA 2.0 categories into one that holds just the
-#' specified category
+#' @describeIn MirnaEnrichment-class Subset a
+#' [`MirnaEnrichment`][MirnaEnrichment-class] object that contains multiple
+#' miEAA 2.0 categories into one that holds just the specified category
 #' @export
 setMethod("[", c("MirnaEnrichment", "character", "missing", "ANY"),
           function(x, i, j, ..., drop = TRUE) {
@@ -636,8 +637,9 @@ setMethod("[", c("MirnaEnrichment", "character", "missing", "ANY"),
 
 
 
-#' @describeIn MirnaGsea Subset a [`MirnaGsea`] object that contains multiple
-#' miEAA 2.0 categories into one that holds just the specified category
+#' @describeIn MirnaGsea-class Subset a [`MirnaGsea`][MirnaGsea-class] object
+#' that contains multiple miEAA 2.0 categories into one that holds just the
+#' specified category
 #' @export
 setMethod("[", c("MirnaGsea", "character", "missing", "ANY"),
           function(x, i, j, ..., drop = TRUE) {
@@ -674,17 +676,17 @@ setMethod("[", c("MirnaGsea", "character", "missing", "ANY"),
 #' @references
 #' Ashburner, M., Ball, C., Blake, J. et al. Gene Ontology: tool for the
 #' unification of biology. Nat Genet 25, 25–29 (2000).
-#' [https://doi.org/10.1038/75556]
+#' \url{https://doi.org/10.1038/75556}
 #'
 #' Minoru Kanehisa, Susumu Goto, KEGG: Kyoto Encyclopedia of Genes and Genomes,
 #' Nucleic Acids Research, Volume 28, Issue 1, 1 January 2000, Pages 27–30,
-#' [https://doi.org/10.1093/nar/28.1.27]
+#' \url{https://doi.org/10.1093/nar/28.1.27}
 #'
 #' G. Joshi-Tope, M. Gillespie, I. Vastrik, P. D'Eustachio, E. Schmidt, B.
 #' de Bono, B. Jassal, G.R. Gopinath, G.R. Wu, L. Matthews, S. Lewis, E.
 #' Birney, L. Stein, Reactome: a knowledgebase of biological pathways, Nucleic
 #' Acids Research, Volume 33, Issue suppl_1, 1 January 2005, Pages D428–D432,
-#' [https://doi.org/10.1093/nar/gki072]
+#' \url{https://doi.org/10.1093/nar/gki072}
 #'
 #' Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,
 #' E., Sanz, F., & Furlong, L. I. (2020). The DisGeNET knowledge platform for
@@ -696,7 +698,7 @@ setMethod("[", c("MirnaGsea", "character", "missing", "ANY"),
 #' L Willighagen, Chris T Evelo, Alexander R Pico, Martina Kutmon,
 #' WikiPathways: connecting communities, Nucleic Acids Research, Volume 49,
 #' Issue D1, 8 January 2021, Pages D613–D621,
-#' [https://doi.org/10.1093/nar/gkaa1024]
+#' \url{https://doi.org/10.1093/nar/gkaa1024}
 #'
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
@@ -749,7 +751,7 @@ supportedOrganisms <- function(database) {
 #' be `FALSE`.
 #'
 #' Moreover, if the enrichment analysis is performed using `GO` database,
-#' the [clusterProfiler::simplify()] method contained in the [clusterProfiler]
+#' the [clusterProfiler::simplify()] method contained in the `clusterProfiler`
 #' package may be used. This is particularly useful since the structure of GO
 #' database is highly redundant. Therefore, to remove some of the redundancy
 #' from the resulting enriched GO terms, the parameter `simplifyGO` can be set
@@ -769,7 +771,7 @@ supportedOrganisms <- function(database) {
 #' organisms for a given database, use the [supportedOrganisms()] function.
 #' Default is `Homo sapiens`
 #' @param simplifyGO Logical, whether to apply the
-#' [clusterProfiler::simplify()] function in [clusterProfiler] package to
+#' [clusterProfiler::simplify()] function in `clusterProfiler` package to
 #' reduce the redundancy of GO terms in the results (default is `TRUE`).
 #' This argument is only considered when `database` is set to `GO`. For further
 #' information see the *details* section
@@ -787,12 +789,12 @@ supportedOrganisms <- function(database) {
 #' 'DOWN-miRNA targets', containing enrichment results of genes targeted by
 #' upregulated miRNAs and by downregulated miRNAs, respectively. Each element
 #' of this `list` consists of an object of class
-#' [enrichResult][`DOSE:enrichResult-class`] containing the outcome
+#' [`enrichResult-class`][DOSE::enrichResult-class] containing the outcome
 #' of the enrichment analysis of target genes. To access the enrichment results
 #' as a standard `data.frame`, you can use the `as.data.frame()` function.
-#' The user can also refer to the documentation of [clusterProfiler] for
+#' The user can also refer to the documentation of `clusterProfiler` for
 #' analyzing and plotting results:
-#' [http://yulab-smu.top/biomedical-knowledge-mining-book/index.html].
+#' \url{http://yulab-smu.top/biomedical-knowledge-mining-book/index.html}.
 #'
 #' @examples
 #' # perform enrichment analysis of integrated targets with Reactome
@@ -810,7 +812,7 @@ supportedOrganisms <- function(database) {
 #'
 #' @note
 #' The over-representation analysis is implemented in this function through
-#' the packages [clusterProfiler], [ReactomePA] and [DOSE].
+#' the packages `clusterProfiler`, `ReactomePA` and `DOSE`.
 #'
 #' @references
 #' T Wu, E Hu, S Xu, M Chen, P Guo, Z Dai, T Feng, L Zhou, W Tang, L Zhan, X
@@ -827,17 +829,17 @@ supportedOrganisms <- function(database) {
 #'
 #' Ashburner, M., Ball, C., Blake, J. et al. Gene Ontology: tool for the
 #' unification of biology. Nat Genet 25, 25–29 (2000).
-#' [https://doi.org/10.1038/75556]
+#' \url{https://doi.org/10.1038/75556}
 #'
 #' Minoru Kanehisa, Susumu Goto, KEGG: Kyoto Encyclopedia of Genes and Genomes,
 #' Nucleic Acids Research, Volume 28, Issue 1, 1 January 2000, Pages 27–30,
-#' [https://doi.org/10.1093/nar/28.1.27]
+#' \url{https://doi.org/10.1093/nar/28.1.27}
 #'
 #' G. Joshi-Tope, M. Gillespie, I. Vastrik, P. D'Eustachio, E. Schmidt, B.
 #' de Bono, B. Jassal, G.R. Gopinath, G.R. Wu, L. Matthews, S. Lewis, E.
 #' Birney, L. Stein, Reactome: a knowledgebase of biological pathways, Nucleic
 #' Acids Research, Volume 33, Issue suppl_1, 1 January 2005, Pages D428–D432,
-#' [https://doi.org/10.1093/nar/gki072]
+#' \url{https://doi.org/10.1093/nar/gki072}
 #'
 #' Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,
 #' E., Sanz, F., & Furlong, L. I. (2020). The DisGeNET knowledge platform for
@@ -849,7 +851,7 @@ supportedOrganisms <- function(database) {
 #' L Willighagen, Chris T Evelo, Alexander R Pico, Martina Kutmon,
 #' WikiPathways: connecting communities, Nucleic Acids Research, Volume 49,
 #' Issue D1, 8 January 2021, Pages D613–D621,
-#' [https://doi.org/10.1093/nar/gkaa1024]
+#' \url{https://doi.org/10.1093/nar/gkaa1024}
 #'
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
@@ -1029,7 +1031,7 @@ enrichTargets <- function(mirnaObj,
 #'
 #' @details
 #' If the enrichment analysis is performed using `GO` database,
-#' the [clusterProfiler::simplify()] method contained in the [clusterProfiler]
+#' the [clusterProfiler::simplify()] method contained in the `clusterProfiler`
 #' package may be used. This is particularly useful since the structure of GO
 #' database is highly redundant. Therefore, to remove some of the redundancy
 #' from the resulting enriched GO terms, the parameter `simplifyGO` can be set
@@ -1045,7 +1047,7 @@ enrichTargets <- function(mirnaObj,
 #' organisms for a given database, use the [supportedOrganisms()] function.
 #' Default is `Homo sapiens`
 #' @param simplifyGO Logical, whether to apply the
-#' [clusterProfiler::simplify()] function in [clusterProfiler] package to
+#' [clusterProfiler::simplify()] function in `clusterProfiler` package to
 #' reduce the redundancy of GO terms in the results (default is `TRUE`).
 #' This argument is only considered when `database` is set to `GO`. For further
 #' information see the *details* section
@@ -1062,12 +1064,12 @@ enrichTargets <- function(mirnaObj,
 #' A `list` object with two elements, namely 'upregulated' and 'downregulated',
 #' containing enrichment results of upregulated and downregulated genes,
 #' respectively. Each element of this `list` consists of an object of class
-#' [enrichResult][`DOSE:enrichResult-class`] containing the outcome
+#' [`enrichResult-class`][DOSE::enrichResult-class] containing the outcome
 #' of the enrichment analysis of DE-genes. To access the enrichment results
 #' as a standard `data.frame`, you can use the `as.data.frame()` function.
-#' The user can also refer to the documentation of [clusterProfiler] for
+#' The user can also refer to the documentation of `clusterProfiler` for
 #' analyzing and plotting results:
-#' [http://yulab-smu.top/biomedical-knowledge-mining-book/index.html].
+#' \url{http://yulab-smu.top/biomedical-knowledge-mining-book/index.html}.
 #'
 #' @examples
 #' # perform enrichment analysis of DE genes with Reactome
@@ -1085,7 +1087,7 @@ enrichTargets <- function(mirnaObj,
 #'
 #' @note
 #' The over-representation analysis is implemented in this function through
-#' the packages [clusterProfiler], [ReactomePA] and [DOSE].
+#' the packages `clusterProfiler`, `ReactomePA` and `DOSE`.
 #'
 #' @references
 #' T Wu, E Hu, S Xu, M Chen, P Guo, Z Dai, T Feng, L Zhou, W Tang, L Zhan, X
@@ -1102,17 +1104,17 @@ enrichTargets <- function(mirnaObj,
 #'
 #' Ashburner, M., Ball, C., Blake, J. et al. Gene Ontology: tool for the
 #' unification of biology. Nat Genet 25, 25–29 (2000).
-#' [https://doi.org/10.1038/75556]
+#' \url{https://doi.org/10.1038/75556}
 #'
 #' Minoru Kanehisa, Susumu Goto, KEGG: Kyoto Encyclopedia of Genes and Genomes,
 #' Nucleic Acids Research, Volume 28, Issue 1, 1 January 2000, Pages 27–30,
-#' [https://doi.org/10.1093/nar/28.1.27]
+#' \url{https://doi.org/10.1093/nar/28.1.27}
 #'
 #' G. Joshi-Tope, M. Gillespie, I. Vastrik, P. D'Eustachio, E. Schmidt, B.
 #' de Bono, B. Jassal, G.R. Gopinath, G.R. Wu, L. Matthews, S. Lewis, E.
 #' Birney, L. Stein, Reactome: a knowledgebase of biological pathways, Nucleic
 #' Acids Research, Volume 33, Issue suppl_1, 1 January 2005, Pages D428–D432,
-#' [https://doi.org/10.1093/nar/gki072]
+#' \url{https://doi.org/10.1093/nar/gki072}
 #'
 #' Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,
 #' E., Sanz, F., & Furlong, L. I. (2020). The DisGeNET knowledge platform for
@@ -1124,7 +1126,7 @@ enrichTargets <- function(mirnaObj,
 #' L Willighagen, Chris T Evelo, Alexander R Pico, Martina Kutmon,
 #' WikiPathways: connecting communities, Nucleic Acids Research, Volume 49,
 #' Issue D1, 8 January 2021, Pages D613–D621,
-#' [https://doi.org/10.1093/nar/gkaa1024]
+#' \url{https://doi.org/10.1093/nar/gkaa1024}
 #'
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
@@ -1394,7 +1396,7 @@ enrichInternal <- function(targets,
 #'
 #' @details
 #' If GSEA is performed using `GO` database, the [clusterProfiler::simplify()]
-#' method contained in the [clusterProfiler] package may be used. This is
+#' method contained in the `clusterProfiler` package may be used. This is
 #' particularly useful since the structure of GO database is highly redundant.
 #' Therefore, to remove some of the redundancy from the resulting enriched GO
 #' terms, the parameter `simplifyGO` can be set to `TRUE`.
@@ -1409,7 +1411,7 @@ enrichInternal <- function(targets,
 #' organisms for a given database, use the [supportedOrganisms()] function.
 #' Default is `Homo sapiens`
 #' @param simplifyGO Logical, whether to apply the
-#' [clusterProfiler::simplify()] function in [clusterProfiler] package to
+#' [clusterProfiler::simplify()] function in `clusterProfiler` package to
 #' reduce the redundancy of GO terms in the results (default is `TRUE`).
 #' This argument is only considered when `database` is set to `GO`. For further
 #' information see the *details* section
@@ -1431,12 +1433,12 @@ enrichInternal <- function(targets,
 #' @param ... Other parameters that can be given to the GSEA functions
 #'
 #' @returns
-#' An object of class [gseaResult][`DOSE:gseaResult-class`]
+#' An object of class [`gseaResult-class`][DOSE::gseaResult-class]
 #' containing the outcome of the gene set enrichment analysis (GSEA). To
 #' access the enrichment results as a standard `data.frame`, you can use the
 #' `as.data.frame()` function. The user can also refer to the documentation of
-#' [clusterProfiler] for analyzing and plotting results:
-#' [http://yulab-smu.top/biomedical-knowledge-mining-book/index.html].
+#' `clusterProfiler` for analyzing and plotting results:
+#' \url{http://yulab-smu.top/biomedical-knowledge-mining-book/index.html}.
 #'
 #' @examples
 #' # perform a gene set enrichment analysis with KEGG
@@ -1451,7 +1453,7 @@ enrichInternal <- function(targets,
 #'
 #' @note
 #' The GSEA algorithm is applied in this function through the packages
-#' [clusterProfiler], [ReactomePA] and [DOSE].
+#' `clusterProfiler`, `ReactomePA` and `DOSE`.
 #'
 #' @references
 #' T Wu, E Hu, S Xu, M Chen, P Guo, Z Dai, T Feng, L Zhou, W Tang, L Zhan, X
@@ -1468,17 +1470,17 @@ enrichInternal <- function(targets,
 #'
 #' Ashburner, M., Ball, C., Blake, J. et al. Gene Ontology: tool for the
 #' unification of biology. Nat Genet 25, 25–29 (2000).
-#' [https://doi.org/10.1038/75556]
+#' \url{https://doi.org/10.1038/75556}
 #'
 #' Minoru Kanehisa, Susumu Goto, KEGG: Kyoto Encyclopedia of Genes and Genomes,
 #' Nucleic Acids Research, Volume 28, Issue 1, 1 January 2000, Pages 27–30,
-#' [https://doi.org/10.1093/nar/28.1.27]
+#' \url{https://doi.org/10.1093/nar/28.1.27}
 #'
 #' G. Joshi-Tope, M. Gillespie, I. Vastrik, P. D'Eustachio, E. Schmidt, B.
 #' de Bono, B. Jassal, G.R. Gopinath, G.R. Wu, L. Matthews, S. Lewis, E.
 #' Birney, L. Stein, Reactome: a knowledgebase of biological pathways, Nucleic
 #' Acids Research, Volume 33, Issue suppl_1, 1 January 2005, Pages D428–D432,
-#' [https://doi.org/10.1093/nar/gki072]
+#' \url{https://doi.org/10.1093/nar/gki072}
 #'
 #' Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,
 #' E., Sanz, F., & Furlong, L. I. (2020). The DisGeNET knowledge platform for
@@ -1490,7 +1492,7 @@ enrichInternal <- function(targets,
 #' L Willighagen, Chris T Evelo, Alexander R Pico, Martina Kutmon,
 #' WikiPathways: connecting communities, Nucleic Acids Research, Volume 49,
 #' Issue D1, 8 January 2021, Pages D613–D621,
-#' [https://doi.org/10.1093/nar/gkaa1024]
+#' \url{https://doi.org/10.1093/nar/gkaa1024}
 #'
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}

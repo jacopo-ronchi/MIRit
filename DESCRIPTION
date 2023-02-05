@@ -10,8 +10,27 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Imports: 
+    AnnotationDbi,
+    biomaRt (>= 2.52.0),
+    BSgenome.Hsapiens.UCSC.hg38 (>= 1.4.4),
+    clusterProfiler (>= 4.4.4),
     DOSE (>= 3.22.1),
+    dplyr (>= 1.0.10),
+    fuzzyjoin (>= 0.1.6),
+    GenomicRanges (>= 1.48.0),
+    ggnewscale (>= 0.4.8),
+    ggplot2 (>= 3.3.6),
+    ggraph (>= 2.0.6),
+    ggridges (>= 0.5.3),
+    graph (>= 1.74.0),
+    graphite (>= 1.42.0),
+    Gviz (>= 1.40.1),
+    methods (>= 4.2.2),
     MultiAssayExperiment (>= 1.22.0),
+    multiMiR (>= 1.18.0),
+    rbioapi (>= 0.7.7),
+    ReactomePA (>= 1.40.0),
+    stringr (>= 1.4.1),
     tidygraph
 Collate: 
     'AllGenerics.R'
@@ -23,3 +42,8 @@ Collate:
     'targets.R'
     'utils.R'
     'visualization.R'
+Suggests: 
+    DESeq2 (>= 1.36.0),
+    edgeR (>= 3.38.4),
+    enrichplot (>= 1.16.2),
+    limma (>= 3.52.2)

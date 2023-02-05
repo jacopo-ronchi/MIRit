@@ -6,7 +6,7 @@
 \usage{
 getTargets(
   mirnaObj,
-  specie = "Homo sapiens",
+  organism = "Homo sapiens",
   onlyValidated = FALSE,
   minPredicted = 3,
   minValidated = 1,
@@ -16,6 +16,9 @@ getTargets(
 \arguments{
 \item{mirnaObj}{A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object
 containing miRNA and gene data}
+
+\item{organism}{The name of the organism under consideration. It must be one
+of: \verb{Homo sapiens}, \verb{Mus musculus}, \verb{Rattus norvegicus}}
 
 \item{onlyValidated}{Logical, if \code{TRUE}, the function will retrieve only
 experimentally validated targets; if \code{FALSE}, a combination of validated
@@ -29,7 +32,7 @@ than n databases with validated interactions. It should be within 1-3
 (default is \code{1})}
 
 \item{topCutoff}{This value corresponds to the percentage of top results
-retrieved by the different prediction databases present in \link{multiMiR}.
+retrieved by the different prediction databases present in \code{multiMiR}.
 Default is \code{20}}
 }
 \value{
@@ -39,7 +42,7 @@ and can be accessed with the \code{\link[=mirnaTargets]{mirnaTargets()}} functio
 }
 \description{
 This function allows to obtain the targets of differentially expressed
-miRNAs using the \link{multiMiR} package, which outputs microRNA targets from
+miRNAs using the \code{multiMiR} package, which outputs microRNA targets from
 several databases, including 8 prediction databases and 3 databases with
 experimentally validated targets. The microRNA-mRNA interactions reported
 by this function can derive by both predicted and validated interactions.
@@ -61,7 +64,7 @@ Radcliffe, Russell Bowler, Spencer Mahaffey, Simona Rossi, George A. Calin,
 Lynne Bemis, Dan Theodorescu; The multiMiR R package and database:
 integration of microRNA–target interactions along with their disease and
 drug associations. Nucleic Acids Res 2014; 42 (17): e133. doi:
-\link{10.1093/nar/gku631}
+\url{10.1093/nar/gku631}
 }
 \author{
 Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}

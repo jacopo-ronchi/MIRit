@@ -34,8 +34,8 @@ mirnaDotplot(
 )
 }
 \arguments{
-\item{object}{An object of class \code{\link{MirnaEnrichment}} or \code{\link{MirnaGsea}}
-containing miRNA enrichment results}
+\item{object}{An object of class \code{\link[=MirnaEnrichment-class]{MirnaEnrichment}}
+or \code{\link[=MirnaGsea-class]{MirnaGsea}} containing miRNA enrichment results}
 
 \item{showTerms}{It is the number of top enriched terms to show or,
 alternatively, a character vector indicating the enriched terms to plot.
@@ -64,13 +64,13 @@ over-representation analysis (ORA), carried out with \code{\link[=enrichMirnas]{
 gene set enrichment analysis (GSEA), performed with \code{\link[=gseaMirnas]{gseaMirnas()}}.
 }
 \note{
-For objects of class \code{\link{MirnaEnrichment}}, the \code{"fold"} value in \code{ordBy},
-\code{sizeBy} and \code{colBy} refers to fold enrichment, which corresponds to the
-ratio between observed and expected hits for a given category. This means
-that the higher the fold enrichment is, the more unlikely it is that the
-enrichment was reported by chance. Instead, for objects of class
-\code{\link{MirnaGsea}} the \code{"fold"} value refers to the average absolute fold change
-of observed miRNAs in a given category.
+For objects of class \code{\link[=MirnaEnrichment-class]{MirnaEnrichment}}, the \code{fold}
+value in \code{ordBy}, \code{sizeBy} and \code{colBy} refers to fold enrichment, which
+corresponds to the ratio between observed and expected hits for a given
+category. This means that the higher the fold enrichment is, the more
+unlikely it is that the enrichment was reported by chance. Instead, for
+objects of class \code{\link[=MirnaGsea-class]{MirnaGsea}} the \code{fold} value refers to
+the average absolute fold change of observed miRNAs in a given category.
 }
 \examples{
 # perform a GSEA with the miEAA category miRWalk

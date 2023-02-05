@@ -1,7 +1,7 @@
 #' Get microRNA targets
 #'
 #' This function allows to obtain the targets of differentially expressed
-#' miRNAs using the [multiMiR] package, which outputs microRNA targets from
+#' miRNAs using the `multiMiR` package, which outputs microRNA targets from
 #' several databases, including 8 prediction databases and 3 databases with
 #' experimentally validated targets. The microRNA-mRNA interactions reported
 #' by this function can derive by both predicted and validated interactions.
@@ -13,6 +13,8 @@
 #'
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
 #' containing miRNA and gene data
+#' @param organism The name of the organism under consideration. It must be one
+#' of: `Homo sapiens`, `Mus musculus`, `Rattus norvegicus`
 #' @param onlyValidated Logical, if `TRUE`, the function will retrieve only
 #' experimentally validated targets; if `FALSE`, a combination of validated
 #' and predicted targets will be used (default is `FALSE`)
@@ -22,7 +24,7 @@
 #' than n databases with validated interactions. It should be within 1-3
 #' (default is `1`)
 #' @param topCutoff This value corresponds to the percentage of top results
-#' retrieved by the different prediction databases present in [multiMiR].
+#' retrieved by the different prediction databases present in `multiMiR`.
 #' Default is `20`
 #'
 #' @returns
@@ -41,14 +43,14 @@
 #' Lynne Bemis, Dan Theodorescu; The multiMiR R package and database:
 #' integration of microRNA–target interactions along with their disease and
 #' drug associations. Nucleic Acids Res 2014; 42 (17): e133. doi:
-#' [10.1093/nar/gku631]
+#' \url{10.1093/nar/gku631}
 #'
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
 #'
 #' @export
 getTargets <- function(mirnaObj,
-                       specie = "Homo sapiens",
+                       organism = "Homo sapiens",
                        onlyValidated=FALSE,
                        minPredicted=3,
                        minValidated=1,
@@ -59,8 +61,8 @@ getTargets <- function(mirnaObj,
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
          call. = FALSE)
   }
-  if (!specie %in% convertOrganism("multiMiR", "all")) {
-    stop(paste("'specie' must be one of:",
+  if (!organism %in% convertOrganism("multiMiR", "all")) {
+    stop(paste("'organism' must be one of:",
                paste(convertOrganism("multiMiR", "all"), collapse = ", ")),
          call. = FALSE)
   }
@@ -103,7 +105,7 @@ getTargets <- function(mirnaObj,
     mirTar <- suppressWarnings(
       suppressMessages(
         quiet(
-          multiMiR::get_multimir(org=specie,
+          multiMiR::get_multimir(org=organism,
                                  mirna=mirnaTab$ID,
                                  table="validated",
                                  predicted.cutoff=topCutoff,
@@ -120,7 +122,7 @@ getTargets <- function(mirnaObj,
     mirTar <- suppressWarnings(
       suppressMessages(
         quiet(
-          multiMiR::get_multimir(org=specie,
+          multiMiR::get_multimir(org=organism,
                                  mirna=mirnaTab$ID,
                                  table="all",
                                  predicted.cutoff=topCutoff,

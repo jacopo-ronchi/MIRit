@@ -73,7 +73,7 @@ SNPs within miRNA genes.
 }
 \note{
 To retrieve disease-associated SNPs, this function makes use of the
-\link{disgenet2r} package.
+\code{disgenet2r} package.
 }
 \examples{
 # search disease

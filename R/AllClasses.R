@@ -15,7 +15,8 @@ NULL
 #' The 'MirnaExperiment' class
 #'
 #' @description
-#' This class extends the [`MultiAssayExperiment::MultiAssayExperiment-class`]
+#' This class extends the
+#' [`MultiAssayExperiment`][MultiAssayExperiment::MultiAssayExperiment-class]
 #' from the homonym package to provide the flexibility of handling genomic data
 #' of both microRNAs and their targets, allowing to store information about
 #' microRNA and gene expression, differential expression results, microRNA
@@ -26,8 +27,7 @@ NULL
 #' and gene expression levels may originate from the same individuals
 #' (paired samples) or from different subjects (unpaired samples).
 #'
-#' @slot ExperimentList A [`MultiAssayExperiment::ExperimentList`] class object
-#' for each assay dataset
+#' @slot ExperimentList An `ExperimentList` class object for each assay dataset
 #' @slot colData A `DataFrame` of all clinical/specimen data available across
 #' experiments
 #' @slot sampleMap A `DataFrame` of translatable identifiers of samples and
@@ -50,13 +50,37 @@ NULL
 #' @slot mirnaTargetsIntegration A `data.frame` object containing the results
 #' of the integration analysis between miRNA and gene expression values. This
 #' slot is commonly populated by the [integrateMirnaTargets()] function
-#'
-#' @inheritSection
-#' MultiAssayExperiment::'MultiAssayExperiment-class' ExperimentList
-#'
-#' @inheritSection MultiAssayExperiment::'MultiAssayExperiment-class' colData
-#'
-#' @inheritSection MultiAssayExperiment::'MultiAssayExperiment-class' sampleMap
+#' 
+#' @section ExperimentList:
+#' 
+#' The [`ExperimentList`][MultiAssayExperiment::ExperimentList] slot is designed
+#' to contain results from each experiment/assay. In this case, it holds miRNA
+#' and gene expression matrices. It contains a
+#' [`SimpleList-class`][S4Vectors::SimpleList-class].
+#' 
+#' @section colData:
+#' 
+#' The `colData` slot is a collection of primary specimen data valid across all
+#' experiments. This slot is strictly of class [`DataFrame`] but arguments for
+#' the constructor function allow arguments to be of class `data.frame` and
+#' subsequently coerced.
+#' 
+#' @section sampleMap:
+#' 
+#' The `sampleMap` contains a [`DataFrame`] of translatable identifiers of
+#' samples and participants or biological units. The standard column names of
+#' the sampleMap are "assay", "primary", and "colname". Note that the "assay"
+#' column is a factor corresponding to the names of each experiment in the
+#' [`ExperimentList`][MultiAssayExperiment::ExperimentList]. In the case where
+#' these names do not match between the sampleMap and the experiments, the
+#' documented experiments in the `sampleMap` take precedence and experiments
+#' are dropped by the harmonization procedure. The constructor function will
+#' generate a `sampleMap` in the case where it is not provided and this method
+#' may be a 'safer' alternative for creating the `MultiAssayExperiment` (so
+#' long as the rownames are identical in the `colData`, if provided). An empty
+#' `sampleMap` may produce empty experiments if the levels of the "assay"
+#' factor in the `sampleMap` do not match the names in the
+#' [`ExperimentList`][MultiAssayExperiment::ExperimentList].
 #'
 #' @section mirnaDE and geneDE:
 #'
@@ -130,13 +154,15 @@ NULL
 #' the [MirnaExperiment()] constructor function, which allows to easily build
 #' and verify a valid object starting from the results of differential
 #' expression analysis.
+#' 
+#' @param object An object of class [`MirnaExperiment`][MirnaExperiment-class]
 #'
 #' @name MirnaExperiment-class
 #'
 #' @references
 #' Marcel Ramos et al. Software For The Integration Of Multiomics Experiments
 #' In Bioconductor. Cancer Research, 2017 November 1; 77(21); e39-42. DOI:
-#' [10.1158/0008-5472.CAN-17-0344]
+#' \url{10.1158/0008-5472.CAN-17-0344}
 #'
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
@@ -238,7 +264,7 @@ setValidity("MirnaExperiment", function(object) {
 #' be normalized and log2 transformed, for example with the RMA algorithm,
 #' while for NGS experiments, data should consist of normalized counts/CPM.
 #' For instance, normalized values for NGS experiments can be extracted from a
-#' [DESeq2] object with `counts(obj, normalized = TRUE)`, or from an [edgeR]
+#' `DESeq2` object with `counts(obj, normalized = TRUE)`, or from an `edgeR`
 #' object through `cpm(obj, normalized.lib.sizes = TRUE)`.
 #'
 #' ## mirnaMetadata and geneMetadata
@@ -319,9 +345,9 @@ setValidity("MirnaExperiment", function(object) {
 #' @param significantGenes A `character` vector containing the IDs of
 #' statistically differentially expressed genes. See the *details* section for
 #' further information
-#' @param Logical, wheteher miRNA and gene expression levels derive from the
-#' same subjects or not. Check the *details* section for additional
-#' instructions. Default is `TRUE`
+#' @param pairedSamples Logical, wheteher miRNA and gene expression levels
+#' derive from the same subjects or not. Check the *details* section for
+#' additional instructions. Default is `TRUE`
 #'
 #' @returns
 #' A valid [`MirnaExperiment`][MirnaExperiment-class] object containing
@@ -631,8 +657,9 @@ setReplaceMethod("mirnaTargetsIntegration",
 
 #' The `MirnaEnrichment` class
 #'
-#' This function extends and adapts the [`DOSE::enrichResult-class`] class
-#' in order to make it suitable for handling miRNA enrichment results.
+#' This class extends and adapts the
+#' [`enrichResult-class`][DOSE::enrichResult-class] in order to make it
+#' suitable for handling miRNA enrichment results.
 #'
 #' @slot result A `data.frame` object holding the output of enrichment analysis
 #' @slot pvalueCutoff A `numeric` value defining the threshold used for
@@ -654,7 +681,7 @@ setReplaceMethod("mirnaTargetsIntegration",
 #' @slot gene2Symbol Mapping of genes to symbols, if needed
 #' @slot geneSets Gene sets
 #' @slot readable Logical flag of gene ID in symbol or not
-#' @slot termism Similarity between terms
+#' @slot termsim Similarity between terms
 #' @slot method Method for calculating the similarity between nodes
 #' @slot dr Dimension reduction result
 #'
@@ -724,9 +751,9 @@ setReplaceMethod("enrichmentDatabase", "MirnaEnrichment", function(object, value
 
 #' The `MirnaGsea` class
 #'
-#' This function extends and adapts the [`DOSE::gseaResult-class`] class
-#' in order to make it suitable for handling miRNA gene set enrichment analysis
-#' (GSEA) results.
+#' This class extends and adapts the
+#' [`gseaResult-class`][DOSE::gseaResult-class] in order to make it
+#' suitable for handling miRNA gene set enrichment analysis (GSEA) results.
 #'
 #' @slot result A `data.frame` object holding the output of enrichment analysis
 #' @slot pvalueCutoff A `numeric` value defining the threshold used for

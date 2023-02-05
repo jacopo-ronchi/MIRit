@@ -7,8 +7,9 @@
 mirnaRidgeplot(mirnaGsea, showTerms = 10, colBy = "P.adjusted")
 }
 \arguments{
-\item{mirnaGsea}{A \code{\link{MirnaGsea}} object containing the results of gene set
-enrichment analysis obtained with the \code{\link[=gseaMirnas]{gseaMirnas()}} function}
+\item{mirnaGsea}{A \code{\link[=MirnaGsea-class]{MirnaGsea}} object containing the
+results of gene set enrichment analysis obtained with the \code{\link[=gseaMirnas]{gseaMirnas()}}
+function}
 
 \item{showTerms}{It is the number of top enriched terms to show or,
 alternatively, a character vector indicating the enriched terms to plot.

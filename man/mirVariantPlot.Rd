@@ -50,7 +50,7 @@ affect miRNA expression.
 }
 \note{
 This function retrieves genomic coordinates from the output of
-\code{\link[=findMirnaSNPs]{findMirnaSNPs()}} function and then uses \link{Gviz} package to build
+\code{\link[=findMirnaSNPs]{findMirnaSNPs()}} function and then uses \code{Gviz} package to build
 the trackplot.
 }
 \examples{
@@ -65,7 +65,7 @@ mirVariantPlot(variantId = varId, snpAssociation = association)
 Hahne, F., Ivanek, R. (2016). Visualizing Genomic Data Using Gviz and
 Bioconductor. In: Mathé, E., Davis, S. (eds) Statistical Genomics. Methods
 in Molecular Biology, vol 1418. Humana Press, New York, NY.
-\link{https://doi.org/10.1007/978-1-4939-3578-9_16}
+\url{https://doi.org/10.1007/978-1-4939-3578-9_16}
 }
 \author{
 Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}

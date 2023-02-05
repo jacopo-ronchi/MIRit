@@ -35,7 +35,7 @@ organisms for a given database, use the \code{\link[=supportedOrganisms]{support
 Default is \verb{Homo sapiens}}
 
 \item{simplifyGO}{Logical, whether to apply the
-\code{\link[clusterProfiler:simplify-methods]{clusterProfiler::simplify()}} function in \link{clusterProfiler} package to
+\code{\link[clusterProfiler:simplify-methods]{clusterProfiler::simplify()}} function in \code{clusterProfiler} package to
 reduce the redundancy of GO terms in the results (default is \code{TRUE}).
 This argument is only considered when \code{database} is set to \code{GO}. For further
 information see the \emph{details} section}
@@ -57,12 +57,12 @@ A \code{list} object with two elements, namely 'UP-miRNA targets' and
 'DOWN-miRNA targets', containing enrichment results of genes targeted by
 upregulated miRNAs and by downregulated miRNAs, respectively. Each element
 of this \code{list} consists of an object of class
-\link[=`DOSE:enrichResult-class`]{enrichResult} containing the outcome
+\code{\link[DOSE:enrichResult-class]{enrichResult-class}} containing the outcome
 of the enrichment analysis of target genes. To access the enrichment results
 as a standard \code{data.frame}, you can use the \code{as.data.frame()} function.
-The user can also refer to the documentation of \link{clusterProfiler} for
+The user can also refer to the documentation of \code{clusterProfiler} for
 analyzing and plotting results:
-\link{http://yulab-smu.top/biomedical-knowledge-mining-book/index.html}.
+\url{http://yulab-smu.top/biomedical-knowledge-mining-book/index.html}.
 }
 \description{
 This function allows to enrich microRNA targets through an
@@ -82,7 +82,7 @@ whereas to enrich all the DE-miRNA target genes \code{integratedTargets} must
 be \code{FALSE}.
 
 Moreover, if the enrichment analysis is performed using \code{GO} database,
-the \code{\link[clusterProfiler:simplify-methods]{clusterProfiler::simplify()}} method contained in the \link{clusterProfiler}
+the \code{\link[clusterProfiler:simplify-methods]{clusterProfiler::simplify()}} method contained in the \code{clusterProfiler}
 package may be used. This is particularly useful since the structure of GO
 database is highly redundant. Therefore, to remove some of the redundancy
 from the resulting enriched GO terms, the parameter \code{simplifyGO} can be set
@@ -90,7 +90,7 @@ to \code{TRUE}.
 }
 \note{
 The over-representation analysis is implemented in this function through
-the packages \link{clusterProfiler}, \link{ReactomePA} and \link{DOSE}.
+the packages \code{clusterProfiler}, \code{ReactomePA} and \code{DOSE}.
 }
 \examples{
 # perform enrichment analysis of integrated targets with Reactome
@@ -122,17 +122,17 @@ analysis. Bioinformatics 2015 31(4):608-609
 
 Ashburner, M., Ball, C., Blake, J. et al. Gene Ontology: tool for the
 unification of biology. Nat Genet 25, 25–29 (2000).
-\link{https://doi.org/10.1038/75556}
+\url{https://doi.org/10.1038/75556}
 
 Minoru Kanehisa, Susumu Goto, KEGG: Kyoto Encyclopedia of Genes and Genomes,
 Nucleic Acids Research, Volume 28, Issue 1, 1 January 2000, Pages 27–30,
-\link{https://doi.org/10.1093/nar/28.1.27}
+\url{https://doi.org/10.1093/nar/28.1.27}
 
 G. Joshi-Tope, M. Gillespie, I. Vastrik, P. D'Eustachio, E. Schmidt, B.
 de Bono, B. Jassal, G.R. Gopinath, G.R. Wu, L. Matthews, S. Lewis, E.
 Birney, L. Stein, Reactome: a knowledgebase of biological pathways, Nucleic
 Acids Research, Volume 33, Issue suppl_1, 1 January 2005, Pages D428–D432,
-\link{https://doi.org/10.1093/nar/gki072}
+\url{https://doi.org/10.1093/nar/gki072}
 
 Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,
 E., Sanz, F., & Furlong, L. I. (2020). The DisGeNET knowledge platform for
@@ -144,7 +144,7 @@ Friederike Ehrhart, Lauren J Dupuis, Laurent A Winckers, Susan L Coort, Egon
 L Willighagen, Chris T Evelo, Alexander R Pico, Martina Kutmon,
 WikiPathways: connecting communities, Nucleic Acids Research, Volume 49,
 Issue D1, 8 January 2021, Pages D613–D621,
-\link{https://doi.org/10.1093/nar/gkaa1024}
+\url{https://doi.org/10.1093/nar/gkaa1024}
 }
 \author{
 Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}

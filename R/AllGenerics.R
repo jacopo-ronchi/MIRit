@@ -253,8 +253,8 @@ setGeneric("mirnaTargetsIntegration<-", function(object, value)
 #' over-representation analysis (ORA), carried out with [enrichMirnas()], and
 #' gene set enrichment analysis (GSEA), performed with [gseaMirnas()].
 #'
-#' @param object An object of class [`MirnaEnrichment`] or [`MirnaGsea`]
-#' containing miRNA enrichment results
+#' @param object An object of class [`MirnaEnrichment`][MirnaEnrichment-class]
+#' or [`MirnaGsea`][MirnaGsea-class] containing miRNA enrichment results
 #' @param showTerms It is the number of top enriched terms to show or,
 #' alternatively, a character vector indicating the enriched terms to plot.
 #' Default is `10`
@@ -269,13 +269,13 @@ setGeneric("mirnaTargetsIntegration<-", function(object, value)
 #' `fold`, `P.adjusted` (default), `P.value` and `Observed`
 #'
 #' @note
-#' For objects of class [`MirnaEnrichment`], the `"fold"` value in `ordBy`,
-#' `sizeBy` and `colBy` refers to fold enrichment, which corresponds to the
-#' ratio between observed and expected hits for a given category. This means
-#' that the higher the fold enrichment is, the more unlikely it is that the
-#' enrichment was reported by chance. Instead, for objects of class
-#' [`MirnaGsea`] the `"fold"` value refers to the average absolute fold change
-#' of observed miRNAs in a given category.
+#' For objects of class [`MirnaEnrichment`][MirnaEnrichment-class], the `fold`
+#' value in `ordBy`, `sizeBy` and `colBy` refers to fold enrichment, which
+#' corresponds to the ratio between observed and expected hits for a given
+#' category. This means that the higher the fold enrichment is, the more
+#' unlikely it is that the enrichment was reported by chance. Instead, for
+#' objects of class [`MirnaGsea`][MirnaGsea-class] the `fold` value refers to
+#' the average absolute fold change of observed miRNAs in a given category.
 #'
 #' @returns
 #' A `ggplot` graph with a dotplot of enrichment results.
@@ -307,15 +307,19 @@ setGeneric("mirnaDotplot",
 
 #' Extract results from enrichment objects
 #'
-#' This function allows to access the `result` slot of [`MirnaEnrichment`] and
-#' [`MirnaGsea`] objects. This is useful to take a closer look at all the
+#' This function allows to access the `result` slot of
+#' [`MirnaEnrichment`][MirnaEnrichment-class] and [`MirnaGsea`][MirnaGsea-class]
+#' objects. This is useful to take a closer look at all the
 #' enriched terms of an enrichment analysis. Note that this function can also
 #' extract the enrichment results for objects of classes
-#' [`DOSE::enrichResult-class`] and [`DOSE::gseaResult-class`].
+#' [`enrichResult-class`][DOSE::enrichResult-class] and
+#' [`gseaResult-class`][DOSE::gseaResult-class].
 #'
-#' @param object An object of class [`MirnaEnrichment`] or [`MirnaGsea`]
-#' containing miRNA enrichment results. Alternatively, object of class
-#' [`DOSE::enrichResult-class`] or [`DOSE::gseaResult-class`] are also accepted
+#' @param object An object of class [`MirnaEnrichment`][MirnaEnrichment-class]
+#' or [`MirnaGsea`][MirnaGsea-class] containing miRNA enrichment results.
+#' Alternatively, object of class
+#' [`enrichResult-class`][DOSE::enrichResult-class] or
+#' [`gseaResult-class`][DOSE::gseaResult-class] are also accepted
 #'
 #' @returns
 #' A `data.frame` object with the full results of the enrichment analysis.
@@ -338,6 +342,7 @@ setGeneric("mirnaDotplot",
 setGeneric("enrichmentResults", function(object)
   standardGeneric("enrichmentResults"))
 
+
 ## Make 'enrichmentResults' work also for enrichResult and gseaResult
 #' @rdname enrichmentResults
 #' @export
@@ -345,6 +350,8 @@ setMethod("enrichmentResults", "enrichResult", function(object) {
   object@result
 })
 
+#' @rdname enrichmentResults
+#' @export
 setMethod("enrichmentResults", "gseaResult", function(object) {
   object@result
 })

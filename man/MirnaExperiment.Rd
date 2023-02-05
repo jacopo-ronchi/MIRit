@@ -47,9 +47,9 @@ further information}
 statistically differentially expressed genes. See the \emph{details} section for
 further information}
 
-\item{Logical, }{wheteher miRNA and gene expression levels derive from the
-same subjects or not. Check the \emph{details} section for additional
-instructions. Default is \code{TRUE}}
+\item{pairedSamples}{Logical, wheteher miRNA and gene expression levels
+derive from the same subjects or not. Check the \emph{details} section for
+additional instructions. Default is \code{TRUE}}
 }
 \value{
 A valid \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing
@@ -76,7 +76,7 @@ microarray and RNA-Seq experiments. For microarray experiments, data should
 be normalized and log2 transformed, for example with the RMA algorithm,
 while for NGS experiments, data should consist of normalized counts/CPM.
 For instance, normalized values for NGS experiments can be extracted from a
-\link{DESeq2} object with \code{counts(obj, normalized = TRUE)}, or from an \link{edgeR}
+\code{DESeq2} object with \code{counts(obj, normalized = TRUE)}, or from an \code{edgeR}
 object through \code{cpm(obj, normalized.lib.sizes = TRUE)}.
 }
 

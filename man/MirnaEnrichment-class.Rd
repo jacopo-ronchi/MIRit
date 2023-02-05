@@ -12,16 +12,18 @@
 \S4method{show}{MirnaEnrichment}(object)
 }
 \description{
-This function extends and adapts the \code{\link[DOSE:enrichResult-class]{DOSE::enrichResult}} class
-in order to make it suitable for handling miRNA enrichment results.
+This class extends and adapts the
+\code{\link[DOSE:enrichResult-class]{enrichResult-class}} in order to make it
+suitable for handling miRNA enrichment results.
 }
-\section{Methods (by generic)}{
+\section{Functions}{
 \itemize{
-\item \code{x[i}: Subset a \code{\link{MirnaEnrichment}} object that
-contains multiple miEAA 2.0 categories into one that holds just the
-specified category
+\item \code{x[i}: Subset a
+\code{\link[=MirnaEnrichment-class]{MirnaEnrichment}} object that contains multiple
+miEAA 2.0 categories into one that holds just the specified category
 
-\item \code{show(MirnaEnrichment)}: Show method for objects of class MirnaEnrichment
+\item \code{show(MirnaEnrichment)}: Show method for objects of
+class MirnaEnrichment
 
 }}
 \section{Slots}{
@@ -59,7 +61,7 @@ list of miRNAs assayed}
 
 \item{\code{readable}}{Logical flag of gene ID in symbol or not}
 
-\item{\code{termism}}{Similarity between terms}
+\item{\code{termsim}}{Similarity between terms}
 
 \item{\code{method}}{Method for calculating the similarity between nodes}
 

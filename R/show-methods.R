@@ -51,7 +51,8 @@ setMethod("show", "MirnaExperiment", function(object) {
 ## ==========================================================================
 
 
-#' @describeIn MirnaEnrichment Show method for objects of class MirnaEnrichment
+#' @describeIn MirnaEnrichment-class Show method for objects of
+#' class MirnaEnrichment
 #' @export
 setMethod("show", "MirnaEnrichment", function(object) {
   cat("Object of class MirnaEnrichment containing:\n\n",
@@ -75,7 +76,7 @@ setMethod("show", "MirnaEnrichment", function(object) {
 ## ==========================================================================
 
 
-#' @describeIn MirnaGsea Show method for objects of class MirnaGsea
+#' @describeIn MirnaGsea-class Show method for objects of class MirnaGsea
 #' @export
 setMethod("show", "MirnaGsea", function(object) {
   cat("Object of class MirnaGsea containing:\n\n",

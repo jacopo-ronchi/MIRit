@@ -3,6 +3,7 @@
 \name{enrichmentResults}
 \alias{enrichmentResults}
 \alias{enrichmentResults,enrichResult-method}
+\alias{enrichmentResults,gseaResult-method}
 \alias{enrichmentResults,MirnaEnrichment-method}
 \alias{enrichmentResults,MirnaGsea-method}
 \title{Extract results from enrichment objects}
@@ -11,24 +12,30 @@ enrichmentResults(object)
 
 \S4method{enrichmentResults}{enrichResult}(object)
 
+\S4method{enrichmentResults}{gseaResult}(object)
+
 \S4method{enrichmentResults}{MirnaEnrichment}(object)
 
 \S4method{enrichmentResults}{MirnaGsea}(object)
 }
 \arguments{
-\item{object}{An object of class \code{\link{MirnaEnrichment}} or \code{\link{MirnaGsea}}
-containing miRNA enrichment results. Alternatively, object of class
-\code{\link[DOSE:enrichResult-class]{DOSE::enrichResult}} or \code{\link[DOSE:gseaResult-class]{DOSE::gseaResult}} are also accepted}
+\item{object}{An object of class \code{\link[=MirnaEnrichment-class]{MirnaEnrichment}}
+or \code{\link[=MirnaGsea-class]{MirnaGsea}} containing miRNA enrichment results.
+Alternatively, object of class
+\code{\link[DOSE:enrichResult-class]{enrichResult-class}} or
+\code{\link[DOSE:gseaResult-class]{gseaResult-class}} are also accepted}
 }
 \value{
 A \code{data.frame} object with the full results of the enrichment analysis.
 }
 \description{
-This function allows to access the \code{result} slot of \code{\link{MirnaEnrichment}} and
-\code{\link{MirnaGsea}} objects. This is useful to take a closer look at all the
+This function allows to access the \code{result} slot of
+\code{\link[=MirnaEnrichment-class]{MirnaEnrichment}} and \code{\link[=MirnaGsea-class]{MirnaGsea}}
+objects. This is useful to take a closer look at all the
 enriched terms of an enrichment analysis. Note that this function can also
 extract the enrichment results for objects of classes
-\code{\link[DOSE:enrichResult-class]{DOSE::enrichResult}} and \code{\link[DOSE:gseaResult-class]{DOSE::gseaResult}}.
+\code{\link[DOSE:enrichResult-class]{enrichResult-class}} and
+\code{\link[DOSE:gseaResult-class]{gseaResult-class}}.
 }
 \examples{
 # perform a GSEA with the miEAA category miRWalk

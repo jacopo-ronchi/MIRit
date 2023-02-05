@@ -30,17 +30,17 @@ supportedOrganisms("Reactome")
 \references{
 Ashburner, M., Ball, C., Blake, J. et al. Gene Ontology: tool for the
 unification of biology. Nat Genet 25, 25–29 (2000).
-\link{https://doi.org/10.1038/75556}
+\url{https://doi.org/10.1038/75556}
 
 Minoru Kanehisa, Susumu Goto, KEGG: Kyoto Encyclopedia of Genes and Genomes,
 Nucleic Acids Research, Volume 28, Issue 1, 1 January 2000, Pages 27–30,
-\link{https://doi.org/10.1093/nar/28.1.27}
+\url{https://doi.org/10.1093/nar/28.1.27}
 
 G. Joshi-Tope, M. Gillespie, I. Vastrik, P. D'Eustachio, E. Schmidt, B.
 de Bono, B. Jassal, G.R. Gopinath, G.R. Wu, L. Matthews, S. Lewis, E.
 Birney, L. Stein, Reactome: a knowledgebase of biological pathways, Nucleic
 Acids Research, Volume 33, Issue suppl_1, 1 January 2005, Pages D428–D432,
-\link{https://doi.org/10.1093/nar/gki072}
+\url{https://doi.org/10.1093/nar/gki072}
 
 Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,
 E., Sanz, F., & Furlong, L. I. (2020). The DisGeNET knowledge platform for
@@ -52,7 +52,7 @@ Friederike Ehrhart, Lauren J Dupuis, Laurent A Winckers, Susan L Coort, Egon
 L Willighagen, Chris T Evelo, Alexander R Pico, Martina Kutmon,
 WikiPathways: connecting communities, Nucleic Acids Research, Volume 49,
 Issue D1, 8 January 2021, Pages D613–D621,
-\link{https://doi.org/10.1093/nar/gkaa1024}
+\url{https://doi.org/10.1093/nar/gkaa1024}
 }
 \author{
 Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}
