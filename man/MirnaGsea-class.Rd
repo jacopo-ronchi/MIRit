@@ -3,13 +3,27 @@
 \docType{class}
 \name{MirnaGsea-class}
 \alias{MirnaGsea-class}
-\alias{[,MirnaGsea,character,missing,ANY-method}
+\alias{[,MirnaGsea,character,missing,missing-method}
 \alias{show,MirnaGsea-method}
 \title{The \code{MirnaGsea} class}
 \usage{
-\S4method{[}{MirnaGsea,character,missing,ANY}(x, i, j, ..., drop = TRUE)
+\S4method{[}{MirnaGsea,character,missing,missing}(x, i, j, ..., drop = TRUE)
 
 \S4method{show}{MirnaGsea}(object)
+}
+\arguments{
+\item{x}{An object of class \code{\link[=MirnaGsea-class]{MirnaGsea}} containing
+enrichment results of multiple miEAA 2.0 categories}
+
+\item{i}{A valid miEAA 2.0 category name}
+
+\item{j}{Missing}
+
+\item{...}{Additional arguments not used}
+
+\item{drop}{Missing}
+
+\item{object}{An object of class \code{\link[=MirnaGsea-class]{MirnaGsea}}}
 }
 \description{
 This class extends and adapts the

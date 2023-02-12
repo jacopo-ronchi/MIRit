@@ -3,13 +3,27 @@
 \docType{class}
 \name{MirnaEnrichment-class}
 \alias{MirnaEnrichment-class}
-\alias{[,MirnaEnrichment,character,missing,ANY-method}
+\alias{[,MirnaEnrichment,character,missing,missing-method}
 \alias{show,MirnaEnrichment-method}
 \title{The \code{MirnaEnrichment} class}
 \usage{
-\S4method{[}{MirnaEnrichment,character,missing,ANY}(x, i, j, ..., drop = TRUE)
+\S4method{[}{MirnaEnrichment,character,missing,missing}(x, i, j, ..., drop = TRUE)
 
 \S4method{show}{MirnaEnrichment}(object)
+}
+\arguments{
+\item{x}{An object of class \code{\link[=MirnaEnrichment-class]{MirnaEnrichment}}
+containing enrichment results of multiple miEAA 2.0 categories}
+
+\item{i}{A valid miEAA 2.0 category name}
+
+\item{j}{Missing}
+
+\item{...}{Additional arguments not used}
+
+\item{drop}{Missing}
+
+\item{object}{An object of class \code{\link[=MirnaEnrichment-class]{MirnaEnrichment}}}
 }
 \description{
 This class extends and adapts the

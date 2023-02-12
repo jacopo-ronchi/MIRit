@@ -36,6 +36,7 @@ Collate:
     'AllGenerics.R'
     'AllClasses.R'
     'association.R'
+    'data.R'
     'enrichment.R'
     'integration.R'
     'show-methods.R'

@@ -16,6 +16,14 @@
 #' 
 #' @source \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63511}
 #' 
+#' @references
+#' Garcilaso Riesco-Eizaguirre et al., “The MiR-146b-3p/PAX8/NIS Regulatory
+#' Circuit Modulates the Differentiation Phenotype and Function of Thyroid Cells
+#' during Carcinogenesis,” Cancer Research 75, no. 19 (September 30, 2015):
+#' 4119–30, \url{https://doi.org/10.1158/0008-5472.CAN-14-3547}.
+#' 
+#' @usage data(geneCounts)
+#' 
 "geneCounts"
 
 
@@ -33,5 +41,13 @@
 #' A `matrix` object containing samples as columns and microRNAs as rows.
 #' 
 #' @source \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63511}
+#' 
+#' @references
+#' Garcilaso Riesco-Eizaguirre et al., “The MiR-146b-3p/PAX8/NIS Regulatory
+#' Circuit Modulates the Differentiation Phenotype and Function of Thyroid Cells
+#' during Carcinogenesis,” Cancer Research 75, no. 19 (September 30, 2015):
+#' 4119–30, \url{https://doi.org/10.1158/0008-5472.CAN-14-3547}.
+#' 
+#' @usage data(mirnaCounts)
 #' 
 "mirnaCounts"

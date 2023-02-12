@@ -625,7 +625,7 @@ gseaMirnas <- function(mirnaObj,
 #' [`MirnaEnrichment`][MirnaEnrichment-class] object that contains multiple
 #' miEAA 2.0 categories into one that holds just the specified category
 #' @export
-setMethod("[", c("MirnaEnrichment", "character", "missing", "ANY"),
+setMethod("[", c("MirnaEnrichment", "character", "missing", "missing"),
           function(x, i, j, ..., drop = TRUE) {
             res <- enrichmentResults(x)
             enrichmentResults(x) <- res[res$Category == i, ]
@@ -641,7 +641,7 @@ setMethod("[", c("MirnaEnrichment", "character", "missing", "ANY"),
 #' that contains multiple miEAA 2.0 categories into one that holds just the
 #' specified category
 #' @export
-setMethod("[", c("MirnaGsea", "character", "missing", "ANY"),
+setMethod("[", c("MirnaGsea", "character", "missing", "missing"),
           function(x, i, j, ..., drop = TRUE) {
             res <- enrichmentResults(x)
             enrichmentResults(x) <- res[res$Category == i, ]

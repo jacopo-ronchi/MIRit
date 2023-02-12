@@ -507,7 +507,7 @@ MirnaExperiment <- function(
   genesMap <- data.frame("primary"=geneMetadata$primary,
                          "colname"=geneMetadata$colName)
   mapList <- list("microRNA"=mirnaMap, "genes"=genesMap)
-  sMap <- listToMap(mapList)
+  sMap <- MultiAssayExperiment::listToMap(mapList)
   colnames(mirnaMetadata)[which(colnames(mirnaMetadata)
                                 == "colName")] <- "mirnaColName"
   colnames(geneMetadata)[which(colnames(geneMetadata)
@@ -516,10 +516,11 @@ MirnaExperiment <- function(
                                                        geneMetadata,
                                                        by = "primary"))
   rownames(samplesMetadata) <- samplesMetadata$primary
-  expList <- list("microRNA"=mirnaExpr, "genes"=geneExpr)
-  objMulti <- MultiAssayExperiment(experiments=expList,
-                                   colData=samplesMetadata,
-                                   sampleMap=sMap)
+  expList <- list("microRNA" = mirnaExpr, "genes" = geneExpr)
+  objMulti <- MultiAssayExperiment::MultiAssayExperiment(
+    experiments = expList,
+    colData = samplesMetadata,
+    sampleMap = sMap)
 
   ## create MirnaExperiment object
   object <- new("MirnaExperiment",
@@ -684,6 +685,14 @@ setReplaceMethod("mirnaTargetsIntegration",
 #' @slot termsim Similarity between terms
 #' @slot method Method for calculating the similarity between nodes
 #' @slot dr Dimension reduction result
+#' 
+#' @param object An object of class [`MirnaEnrichment`][MirnaEnrichment-class]
+#' @param x An object of class [`MirnaEnrichment`][MirnaEnrichment-class]
+#' containing enrichment results of multiple miEAA 2.0 categories
+#' @param i A valid miEAA 2.0 category name
+#' @param j Missing
+#' @param drop Missing
+#' @param ... Additional arguments not used
 #'
 #' @references
 #' Guangchuang Yu, Li-Gen Wang, Guang-Rong Yan, Qing-Yu He. DOSE: an
@@ -777,6 +786,14 @@ setReplaceMethod("enrichmentDatabase", "MirnaEnrichment", function(object, value
 #' @slot params Parameters
 #' @slot readable Logical flag of gene ID in symbol or not
 #' @slot dr Dimension reduction result
+#' 
+#' @param object An object of class [`MirnaGsea`][MirnaGsea-class]
+#' @param x An object of class [`MirnaGsea`][MirnaGsea-class] containing
+#' enrichment results of multiple miEAA 2.0 categories
+#' @param i A valid miEAA 2.0 category name
+#' @param j Missing
+#' @param drop Missing
+#' @param ... Additional arguments not used
 #'
 #' @references
 #' Guangchuang Yu, Li-Gen Wang, Guang-Rong Yan, Qing-Yu He. DOSE: an
