@@ -1670,6 +1670,11 @@ gseaInternal <- function(genes,
                                         fromType = "SYMBOL",
                                         toType = "ENTREZID",
                                         OrgDb = orgDb)
+    
+    ## remove duplicated mappings
+    geneEntrez <- geneEntrez[-which(duplicated(geneEntrez$SYMBOL)), ]
+    
+    ## recreate ranked list with entrez ID
     convGenes <- genes[names(genes) %in% geneEntrez$SYMBOL]
     names(convGenes) <- geneEntrez$ENTREZID
 
