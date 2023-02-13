@@ -417,7 +417,7 @@ visualizeNetwork <- function(pathGraph,
          call. = FALSE)
   }
   if (!(is.character(title) | is.null(title)) |
-      length(title) != 1) {
+      !length(title) %in% c(0, 1)) {
     stop(paste("'title' must be the title of the plot (e.g. 'Apoptosis').",
                "For additional details see ?visualizeNetwork"),
          call. = FALSE)
