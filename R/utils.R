@@ -30,6 +30,13 @@ identifyColNames <- function(tabOutput, tabID) {
                "Please change the name of these columns to one of:",
                paste(acceptedNames[which(lengths(tableCols) == 0)],
                      collapse = ", ")), call. = FALSE)
+  } else if (any(lengths(tableCols) > 1)) {
+    stop(paste("More than one column can be interpreted as",
+               paste(tableNames[which(lengths(tableCols) > 1)],
+                     collapse = ", "),
+               "in the", tabID, "differential expression data.frame!",
+               "Please rename these columns to have unambiguous column names!",
+               "See ?MirnaExperiment for further details"), call. = FALSE)
   }
 
   ## create a data.frame with desired columns

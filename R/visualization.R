@@ -458,9 +458,18 @@ visualizeNetwork <- function(pathGraph,
 
   ## retain only integrated targets if wanted by the user
   if (onlyIntegrated == TRUE) {
-    pathGraph <- tidygraph::to_subgraph(pathGraph,
-                                        integrated == "integrated",
-                                        subset_by = "nodes")$subgraph
+    
+    tmpGraph <- tidygraph::to_subgraph(pathGraph,
+                                       integrated == "integrated",
+                                       subset_by = "nodes")$subgraph
+    
+    ## check if integrated axes are present, otherwise report the whole pathway
+    if (length(tmpGraph) == 0) {
+      warning(paste("There are no integrated axes within this pathway.",
+                    "The complete pathway will be reported..."), call. = FALSE)
+    } else {
+      pathGraph <- tmpGraph
+    }
   }
 
   ## create a ggraph network to visualize biological pathways with DE-miRNAs

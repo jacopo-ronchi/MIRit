@@ -1607,6 +1607,13 @@ gseaGenes <- function(mirnaObj,
   ## create ranked gene list
   rankGenes <- de$logFC
   names(rankGenes) <- de$ID
+  
+  ## check if there are NAs in differential expression results
+  if (any(is.na(rankGenes))) {
+    warning(paste(sum(is.na(rankGenes)), "genes do not have `logFC` values.",
+                  "These genes will be excluded from GSEA..."), call. = TRUE)
+    rankGenes <- rankGenes[!is.na(rankGenes)]
+  }
 
   ## perform gene set enrichment analysis
   gse <- gseaInternal(genes = rankGenes,
