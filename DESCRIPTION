@@ -1,10 +1,15 @@
 Package: MIRit
-Title: What the Package Does (One Line, Title Case)
+Title: Integrate microRNA and gene expression to decipher pathway complexity
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Jacopo", "Ronchi", email = "j.ronchi2@campus.unimib.it",
+           role = c("aut", "cre"), comment = c(ORCID = "0000-0001-5520-4631"))
+Description: MIRit is an R package that provides several methods for
+    investigating the relationships between miRNAs and genes in different
+    biological conditions. In particular, MIRit allows to explore the functions
+    of dysregulated miRNAs, and makes it possible to identify miRNA-gene
+    regulatory axes that control biological pathways, thus enabling the users
+    to unveil the complexity of miRNA biology.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -44,10 +49,14 @@ Collate:
     'utils.R'
     'visualization.R'
 Suggests: 
+    BiocStyle,
     DESeq2 (>= 1.36.0),
     edgeR (>= 3.38.4),
     enrichplot (>= 1.16.2),
-    limma (>= 3.52.2)
+    knitr,
+    limma (>= 3.52.2),
+    rmarkdown
 Depends: 
     R (>= 2.10)
 LazyData: false
+VignetteBuilder: knitr
