@@ -94,55 +94,71 @@ getTargets <- function(mirnaObj,
          call. = FALSE)
   }
 
-  ## selecting differentially expressed miRNAs from MirnaExperiment object
+  ## set the databases for miRNA-target pairs
+  if (onlyValidated == TRUE) {
+    dbs <- c("mirecords", "mirtarbase", "tarbase")
+  } else {
+    dbs <- c("mirecords", "mirtarbase", "tarbase", "diana_microt",
+             "elmmo", "microcosm", "miranda", "mirdb", "pictar",
+             "pita", "targetscan")
+  }
+  
+  ## select differentially expressed miRNAs from MirnaExperiment object
   mirnaTab <- mirnaDE(mirnaObj)
-
-  ## obtaining targets with multiMiR according to specified parameters
+  
+  ## obtain targets with multiMiR according to specified parameters
   message(paste("Retrieving targets of differentially expressed miRNAs",
                 "(this may take some time) ..."))
-  if (onlyValidated == TRUE) {
-
+  
+  multi <- lapply(dbs, function(x) {
     mirTar <- suppressWarnings(
       suppressMessages(
         quiet(
           multiMiR::get_multimir(org=organism,
                                  mirna=mirnaTab$ID,
-                                 table="validated",
+                                 table=x,
                                  predicted.cutoff=topCutoff,
                                  predicted.cutoff.type="p",
                                  summary=TRUE)
         )
       )
     )
-
-    multiRes <- mirTar@summary[mirTar@summary$validated.sum >= minValidated, ]
-
+    mirTar@summary[, c("mature_mirna_id", "target_symbol")]
+  })
+  
+  ## rename list elements
+  names(multi) <- dbs
+  
+  ## remove duplicated hits
+  multi <- lapply(multi, unique)
+  
+  ## summarize validated interactions
+  validated <- rbind(multi[[1]], multi[[2]], multi[[3]])
+  validated <- dplyr::group_by_all(validated)
+  validated <- dplyr::count(validated)
+  validated <- validated[validated$n >= minValidated,
+                         c("mature_mirna_id", "target_symbol")]
+  
+  ## summarize predicted interactions and merge them with validated ones
+  if (onlyValidated == FALSE) {
+    predicted <- rbind(multi[[4]], multi[[5]], multi[[6]], multi[[7]],
+                       multi[[8]], multi[[9]], multi[[10]], multi[[11]])
+    predicted <- dplyr::group_by_all(predicted)
+    predicted <- dplyr::count(predicted)
+    predicted <- predicted[predicted$n >= minPredicted,
+                           c("mature_mirna_id", "target_symbol")]
+    targDf <- merge(validated, predicted, all = TRUE)
   } else {
-
-    mirTar <- suppressWarnings(
-      suppressMessages(
-        quiet(
-          multiMiR::get_multimir(org=organism,
-                                 mirna=mirnaTab$ID,
-                                 table="all",
-                                 predicted.cutoff=topCutoff,
-                                 predicted.cutoff.type="p",
-                                 summary=TRUE)
-        )
-      )
-    )
-
-    multiRes <- mirTar@summary[mirTar@summary$predicted.sum >= minPredicted |
-                                 mirTar@summary$validated.sum >= minValidated, ]
-
+    targDf <- validated
   }
+  
+  ## remove empty interactions
+  targDf <- targDf[targDf$target_symbol != "", ]
 
   ## append results to 'targets' slot and report number of targets found
-  multiRes <- na.omit(multiRes[, c(2, 3)])
-  multiRes <- unique(multiRes)
-  message(paste(length(unique(multiRes$target_symbol)), "targets of the",
+  message(paste(length(unique(targDf$target_symbol)), "targets of the",
                 length(mirnaTab$ID), "DE-miRNAs were found!"))
-  mirnaTargets(mirnaObj) <- multiRes[order(multiRes$mature_mirna_id), ]
+  mirnaTargets(mirnaObj) <- targDf[order(targDf$mature_mirna_id), ]
   return(mirnaObj)
 
 }
