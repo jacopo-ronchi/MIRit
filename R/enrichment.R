@@ -278,18 +278,22 @@ enrichMirnas <- function(mirnaObj,
 
   ## convert miRNAs to miRBase v22
   if (convertVer == TRUE) {
-    upMirna <- rbioapi::rba_mieaa_convert_version(upMirna,
-                                                  mirna_type = mirnaType,
-                                                  input_version = mirBaseVer,
-                                                  output_version = 22,
-                                                  simple_output = TRUE,
-                                                  ...)
-    downMirna <- rbioapi::rba_mieaa_convert_version(downMirna,
-                                                    mirna_type = mirnaType,
-                                                    input_version = mirBaseVer,
-                                                    output_version = 22,
-                                                    simple_output = TRUE,
-                                                    ...)
+    upMirna <- quiet(suppressMessages(
+      rbioapi::rba_mieaa_convert_version(upMirna,
+                                         mirna_type = mirnaType,
+                                         input_version = mirBaseVer,
+                                         output_version = 22,
+                                         simple_output = TRUE,
+                                         ...)
+    ))
+    downMirna <- quiet(suppressMessages(
+      rbioapi::rba_mieaa_convert_version(downMirna,
+                                         mirna_type = mirnaType,
+                                         input_version = mirBaseVer,
+                                         output_version = 22,
+                                         simple_output = TRUE,
+                                         ...)
+    ))
   }
 
   ## set background genes
@@ -297,31 +301,35 @@ enrichMirnas <- function(mirnaObj,
 
   ## retrieve miRNA enrichment
   message("Querying miEAA 2.0 for enriching up-regulated microRNAs\n")
-  enrUp <- rbioapi::rba_mieaa_enrich(test_set = upMirna,
-                                     ref_set = universe,
-                                     mirna_type = mirnaType,
-                                     test_type = "ORA",
-                                     species = organism,
-                                     categories = cat,
-                                     p_adj_method = pAdjustment,
-                                     independent_p_adj = independentAdj,
-                                     sig_level = pCutoff,
-                                     min_hits = minHits,
-                                     sort_by = sortBy,
-                                     ...)
+  enrUp <- quiet(suppressMessages(
+    rbioapi::rba_mieaa_enrich(test_set = upMirna,
+                              ref_set = universe,
+                              mirna_type = mirnaType,
+                              test_type = "ORA",
+                              species = organism,
+                              categories = cat,
+                              p_adj_method = pAdjustment,
+                              independent_p_adj = independentAdj,
+                              sig_level = pCutoff,
+                              min_hits = minHits,
+                              sort_by = sortBy,
+                              ...)
+  ))
   message("Querying miEAA 2.0 for enriching down-regulated microRNAs\n")
-  enrDown <- rbioapi::rba_mieaa_enrich(test_set = downMirna,
-                                       ref_set = universe,
-                                       mirna_type = mirnaType,
-                                       test_type = "ORA",
-                                       species = organism,
-                                       categories = cat,
-                                       p_adj_method = pAdjustment,
-                                       independent_p_adj = independentAdj,
-                                       sig_level = pCutoff,
-                                       min_hits = minHits,
-                                       sort_by = sortBy,
-                                       ...)
+  enrDown <- quiet(suppressMessages(
+    rbioapi::rba_mieaa_enrich(test_set = downMirna,
+                              ref_set = universe,
+                              mirna_type = mirnaType,
+                              test_type = "ORA",
+                              species = organism,
+                              categories = cat,
+                              p_adj_method = pAdjustment,
+                              independent_p_adj = independentAdj,
+                              sig_level = pCutoff,
+                              min_hits = minHits,
+                              sort_by = sortBy,
+                              ...)
+  ))
 
   ## convert wrong character columns to numeric
   numCols <- c("P-value", "P-adjusted", "Q-value", "Expected", "Observed")
@@ -571,26 +579,30 @@ gseaMirnas <- function(mirnaObj,
 
   ## convert miRNAs to miRBase v22
   if (convertVer == TRUE) {
-    mirna <- rbioapi::rba_mieaa_convert_version(mirnaID,
-                                                mirna_type = mirnaType,
-                                                input_version = mirBaseVer,
-                                                output_version = 22,
-                                                simple_output = TRUE,
-                                                ...)
+    mirna <- quiet(suppressMessages(
+      rbioapi::rba_mieaa_convert_version(mirnaID,
+                                         mirna_type = mirnaType,
+                                         input_version = mirBaseVer,
+                                         output_version = 22,
+                                         simple_output = TRUE,
+                                         ...)
+    ))
   }
 
   ## perform GSEA on miRNAs
-  mirGsea <- rbioapi::rba_mieaa_enrich(test_set = mirnaID,
-                                       mirna_type = mirnaType,
-                                       test_type = "GSEA",
-                                       species = organism,
-                                       categories = cat,
-                                       p_adj_method = pAdjustment,
-                                       independent_p_adj = independentAdj,
-                                       sig_level = pCutoff,
-                                       min_hits = minHits,
-                                       sort_by = sortBy,
-                                       ...)
+  mirGsea <- quiet(suppressMessages(
+    rbioapi::rba_mieaa_enrich(test_set = mirnaID,
+                              mirna_type = mirnaType,
+                              test_type = "GSEA",
+                              species = organism,
+                              categories = cat,
+                              p_adj_method = pAdjustment,
+                              independent_p_adj = independentAdj,
+                              sig_level = pCutoff,
+                              min_hits = minHits,
+                              sort_by = sortBy,
+                              ...)
+  ))
 
   ## convert wrong character columns to numeric
   numCols <- c("P-value", "P-adjusted", "Q-value", "Observed")
@@ -611,6 +623,10 @@ gseaMirnas <- function(mirnaObj,
                  gene = mirnaID,
                  lfc = mirnaRes$logFC,
                  keytype = "miRBase v22")
+  
+  ## report the results of miRNA GSEA
+  message(paste("miRNA GSEA reported", nrow(enrichmentResults(resGsea)),
+                "significant terms!"))
 
   ## return GSEA results
   return(resGsea)
@@ -1678,8 +1694,8 @@ gseaInternal <- function(genes,
                                         toType = "ENTREZID",
                                         OrgDb = orgDb)
     
-    ## remove duplicated mappings
-    geneEntrez <- geneEntrez[-which(duplicated(geneEntrez$SYMBOL)), ]
+    ## remove duplicated mappings if present
+    geneEntrez <- geneEntrez[which(!duplicated(geneEntrez$SYMBOL)), ]
     
     ## recreate ranked list with entrez ID
     convGenes <- genes[names(genes) %in% geneEntrez$SYMBOL]
