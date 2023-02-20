@@ -387,10 +387,12 @@ normalized expression levels we need to use the `cpm()` function.
 
 ```{r counts}
 ## extract normalized counts for gene expression
-geneExpr <- cpm(genes, normalized.lib.sizes = TRUE)
+geneExpr <- cpm(geneTest, normalized.lib.sizes = TRUE)
+colnames(geneExpr) <- colnames(geneCounts)
 
 ## extract normalized counts for miRNA expression
-mirnaExpr <- cpm(mirnas, normalized.lib.sizes = TRUE)
+mirnaExpr <- cpm(mirnaTest, normalized.lib.sizes = TRUE)
+colnames(mirnaExpr) <- colnames(mirnaCounts)
 ```
 
 Eventually, the expression matrices required by MIRit should appear as displayed
