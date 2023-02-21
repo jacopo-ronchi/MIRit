@@ -472,58 +472,76 @@ visualizeNetwork <- function(pathGraph,
     }
   }
 
+  ## extract network edges
+  graphEdges <- as.data.frame(tidygraph::activate(pathGraph, edges))
+  
   ## create a ggraph network to visualize biological pathways with DE-miRNAs
-  mirNet <- ggraph::ggraph(pathGraph, layout = layout) +
-
-    ## use different edges for different biological interactions
-    ggraph::geom_edge_link(
-      ggplot2::aes(filter = grepl(binding, edgeType),
-                   linetype = "binding"),
-      color = bindingEdgesCol) +
-
-    ggraph::geom_edge_link(
-      ggplot2::aes(filter = grepl(inhibition, edgeType) &
-                     !grepl(activation, edgeType),
-                   linetype = "inhibition",
-                   end_cap = {
-                     ## set the arrow distance from nodes for boxed labels/points
-                     if (node == "box") {
-                       ggraph::label_rect(node2.name,
-                                          padding = ggplot2::margin(2, 2, 2, 2,
-                                                                    unit = "mm"))
-                     } else if (node == "point") {
-                       ggraph::circle(3, unit = "mm")
-                     }
-                   }),
-      color = edgesCol,
-      arrow = grid::arrow(length = ggplot2::unit(2, "mm"),
-                          angle = 90,
-                          type = "open")) +
-
-    ggraph::geom_edge_link(
-      ggplot2::aes(filter = grepl(activation, edgeType),
-                   linetype = "activation",
-                   end_cap = {
-                     ## set the arrow distance from nodes for boxed labels/points
-                     if (node == "box") {
-                       ggraph::label_rect(node2.name,
-                                          padding = ggplot2::margin(2, 2, 2, 2,
-                                                                    unit = "mm"))
-                     } else if (node == "point") {
-                       ggraph::circle(3, unit = "mm")
-                     }
-                   }),
-      color = edgesCol,
-      arrow = grid::arrow(length = ggplot2::unit(2, "mm"),
-                          type = "closed")) +
-
-    ggraph::geom_edge_link(
-      ggplot2::aes(filter = !grepl(paste(activation,
-                                         inhibition,
-                                         binding,
-                                         sep = "|"), edgeType),
-                   linetype = "standard"),
-      color = edgesCol)
+  mirNet <- ggraph::ggraph(pathGraph, layout = layout)
+  
+  ## use different edges for different biological interactions
+  if (sum(grepl(binding, graphEdges$edgeType)) != 0) {
+    mirNet <- mirNet +
+      ggraph::geom_edge_link(
+        ggplot2::aes(filter = grepl(binding, edgeType),
+                     linetype = "binding"),
+        color = bindingEdgesCol)
+  }
+  
+  if (sum(grepl(inhibition, graphEdges$edgeType)) != 0) {
+    mirNet <- mirNet +
+      ggraph::geom_edge_link(
+        ggplot2::aes(filter = grepl(inhibition, edgeType) &
+                       !grepl(activation, edgeType),
+                     linetype = "inhibition",
+                     end_cap = {
+                       ## set the arrow distance from nodes for boxed labels/points
+                       if (node == "box") {
+                         ggraph::label_rect(node2.name,
+                                            padding = ggplot2::margin(2, 2, 2, 2,
+                                                                      unit = "mm"))
+                       } else if (node == "point") {
+                         ggraph::circle(3, unit = "mm")
+                       }
+                     }),
+        color = edgesCol,
+        arrow = grid::arrow(length = ggplot2::unit(2, "mm"),
+                            angle = 90,
+                            type = "open"))
+  }
+  
+  if (sum(grepl(activation, graphEdges$edgeType)) != 0) {
+    mirNet <- mirNet +
+      ggraph::geom_edge_link(
+        ggplot2::aes(filter = grepl(activation, edgeType),
+                     linetype = "activation",
+                     end_cap = {
+                       ## set the arrow distance from nodes for boxed labels/points
+                       if (node == "box") {
+                         ggraph::label_rect(node2.name,
+                                            padding = ggplot2::margin(2, 2, 2, 2,
+                                                                      unit = "mm"))
+                       } else if (node == "point") {
+                         ggraph::circle(3, unit = "mm")
+                       }
+                     }),
+        color = edgesCol,
+        arrow = grid::arrow(length = ggplot2::unit(2, "mm"),
+                            type = "closed"))
+  }
+  
+  if (sum(!grepl(paste(activation,
+                       inhibition,
+                       binding,
+                       sep = "|"), graphEdges$edgeType)) != 0) {
+    mirNet <- mirNet +
+      ggraph::geom_edge_link(
+        ggplot2::aes(filter = !grepl(paste(activation,
+                                           inhibition,
+                                           binding,
+                                           sep = "|"), edgeType),
+                     linetype = "standard"),
+        color = edgesCol)
+  }
 
   ## customize colors and labels with different scales for genes and miRNAs
   if (node == "box") {
