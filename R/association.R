@@ -139,6 +139,7 @@ searchDisease <- function(diseaseName) {
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
 #'
+#' @importFrom rlang .data
 #' @export
 findMirnaSNPs <- function(mirnaObj,
                           diseaseUML,
@@ -203,14 +204,14 @@ findMirnaSNPs <- function(mirnaObj,
   mirMatches <- paste(mirGenes$gene_symbol, collapse = "|")
   resDf <- varDf[grepl(mirMatches, varDf$gene_symbol), ]
   resDf$genes <- resDf$gene_symbol
-  resDf <- dplyr::mutate(resDf, gene_symbol = sapply(strsplit(gene_symbol, ";"), function(z)
+  resDf <- dplyr::mutate(resDf, gene_symbol = sapply(strsplit(.data$gene_symbol, ";"), function(z)
     paste0("\\b(", paste(z, collapse = "|"), ")\\b")))
   resDf <- fuzzyjoin::regex_left_join(mirGenes, resDf, by = "gene_symbol")
   resDf <- resDf[, c("variantid", "disease_name", "gene_symbol.x", "genes",
                      "source", "variant_dsi", "variant_dpi", "ei", "score",
                      "chromosome_name", "strand",
                      "start_position", "end_position")]
-  resDf <- na.omit(resDf)
+  resDf <- stats::na.omit(resDf)
   colnames(resDf) <- c("variant", "disease", "mirnaGene", "genesPresent",
                        "source", "variantDSI", "variantDPI", "ei", "score",
                        "chr", "mirnaStrand",

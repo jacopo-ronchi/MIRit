@@ -152,6 +152,7 @@ listPathways <- function(organism, database) {
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
 #'
+#' @importFrom rlang .data
 #' @export
 mirnaPathway <- function(mirnaObj,
                          pathway,
@@ -201,6 +202,9 @@ mirnaPathway <- function(mirnaObj,
                      collapse = ", ")),
          call. = FALSE)
   }
+  
+  ## listing the variables not present in the global environment
+  edges <- nodes <- NULL
 
   ## define integration method used
   integration <- mirnaTargetsIntegration(mirnaObj)
@@ -345,10 +349,10 @@ mirnaPathway <- function(mirnaObj,
 #' pathway)". Default is `NULL` not to include a plot title
 #' @param edgesCol It must be an R color name that specifies the color of
 #' interaction arrows in the network. Default is `gray`. All available colors
-#' can be listed with [colors()]
+#' can be listed with [grDevices::colors()]
 #' @param bindingEdgesCol It must be an R color name that specifies the color
 #' of chemical binding arrows in the network. Default is `gray`. All available
-#' colors can be listed with [colors()]
+#' colors can be listed with [grDevices::colors()]
 #' @param stress.text.distance The distance between activation/inhibition
 #' arrow caps and nodes for the `stress` design. Default is `0.2`
 #' @param circle.text.distance The distance between activation/inhibition
@@ -373,6 +377,7 @@ mirnaPathway <- function(mirnaObj,
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
 #'
+#' @importFrom rlang .data
 #' @export
 visualizeNetwork <- function(pathGraph,
                              onlyIntegrated = FALSE,
@@ -424,14 +429,14 @@ visualizeNetwork <- function(pathGraph,
   }
   if (!is.character(edgesCol) |
       length(edgesCol) != 1 |
-      !edgesCol %in% colors()) {
+      !edgesCol %in% grDevices::colors()) {
     stop(paste("'edgesCol' must be an R color name. All available colors",
                "can be listed with 'colors()'."),
          call. = FALSE)
   }
   if (!is.character(bindingEdgesCol) |
       length(bindingEdgesCol) != 1 |
-      !bindingEdgesCol %in% colors()) {
+      !bindingEdgesCol %in% grDevices::colors()) {
     stop(paste("'bindingEdgesCol' must be an R color name. All available",
                "colors can be listed with 'colors()'."),
          call. = FALSE)
@@ -450,6 +455,9 @@ visualizeNetwork <- function(pathGraph,
                "For additional details see ?visualizeNetwork"),
          call. = FALSE)
   }
+  
+  ## listing the variables not present in the global environment
+  edges <- NULL
 
   ## set accepted pathway processes
   activation <- "ACTIVATION|Activation|activation|expression"
@@ -460,7 +468,7 @@ visualizeNetwork <- function(pathGraph,
   if (onlyIntegrated == TRUE) {
     
     tmpGraph <- tidygraph::to_subgraph(pathGraph,
-                                       integrated == "integrated",
+                                       .data$integrated == "integrated",
                                        subset_by = "nodes")$subgraph
     
     ## check if integrated axes are present, otherwise report the whole pathway
@@ -482,7 +490,7 @@ visualizeNetwork <- function(pathGraph,
   if (sum(grepl(binding, graphEdges$edgeType)) != 0) {
     mirNet <- mirNet +
       ggraph::geom_edge_link(
-        ggplot2::aes(filter = grepl(binding, edgeType),
+        ggplot2::aes(filter = grepl(binding, .data$edgeType),
                      linetype = "binding"),
         color = bindingEdgesCol)
   }
@@ -490,13 +498,13 @@ visualizeNetwork <- function(pathGraph,
   if (sum(grepl(inhibition, graphEdges$edgeType)) != 0) {
     mirNet <- mirNet +
       ggraph::geom_edge_link(
-        ggplot2::aes(filter = grepl(inhibition, edgeType) &
-                       !grepl(activation, edgeType),
+        ggplot2::aes(filter = grepl(inhibition, .data$edgeType) &
+                       !grepl(activation, .data$edgeType),
                      linetype = "inhibition",
                      end_cap = {
                        ## set the arrow distance from nodes for boxed labels/points
                        if (node == "box") {
-                         ggraph::label_rect(node2.name,
+                         ggraph::label_rect(.data$node2.name,
                                             padding = ggplot2::margin(2, 2, 2, 2,
                                                                       unit = "mm"))
                        } else if (node == "point") {
@@ -512,12 +520,12 @@ visualizeNetwork <- function(pathGraph,
   if (sum(grepl(activation, graphEdges$edgeType)) != 0) {
     mirNet <- mirNet +
       ggraph::geom_edge_link(
-        ggplot2::aes(filter = grepl(activation, edgeType),
+        ggplot2::aes(filter = grepl(activation, .data$edgeType),
                      linetype = "activation",
                      end_cap = {
                        ## set the arrow distance from nodes for boxed labels/points
                        if (node == "box") {
-                         ggraph::label_rect(node2.name,
+                         ggraph::label_rect(.data$node2.name,
                                             padding = ggplot2::margin(2, 2, 2, 2,
                                                                       unit = "mm"))
                        } else if (node == "point") {
@@ -538,7 +546,7 @@ visualizeNetwork <- function(pathGraph,
         ggplot2::aes(filter = !grepl(paste(activation,
                                            inhibition,
                                            binding,
-                                           sep = "|"), edgeType),
+                                           sep = "|"), .data$edgeType),
                      linetype = "standard"),
         color = edgesCol)
   }
@@ -546,23 +554,27 @@ visualizeNetwork <- function(pathGraph,
   ## customize colors and labels with different scales for genes and miRNAs
   if (node == "box") {
     mirNet <- mirNet +
-      ggraph::geom_node_label(ggplot2::aes(label = name, fill = geneLogFC), size = size) +
+      ggraph::geom_node_label(ggplot2::aes(label = .data$name,
+                                           fill = .data$geneLogFC),
+                              size = size) +
       ggplot2::scale_fill_gradient2(low = "blue", mid = "white", high = "red",
                                     guide = ggplot2::guide_colorbar(order = 1)) +
       ggnewscale::new_scale_fill() +
-      ggraph::geom_node_label(data = function(x) {tidygraph::filter(x, is.na(geneLogFC))},
-                              ggplot2::aes(label = name, fill = mirnaLogFC), size = size) +
+      ggraph::geom_node_label(data = function(x) {tidygraph::filter(x, is.na(.data$geneLogFC))},
+                              ggplot2::aes(label = .data$name,
+                                           fill = .data$mirnaLogFC),
+                              size = size) +
       ggplot2::scale_fill_gradient2(low = "green", mid = "grey", high = "yellow",
                                     guide = ggplot2::guide_colorbar(order = 2))
   } else if (node == "point") {
     mirNet <- mirNet +
-      ggraph::geom_node_point(ggplot2::aes(fill = geneLogFC),
+      ggraph::geom_node_point(ggplot2::aes(fill = .data$geneLogFC),
                               pch = 21, size = size) +
       ggplot2::scale_fill_gradient2(low = "blue", mid = "white", high = "red",
                                     guide = ggplot2::guide_colorbar(order = 1)) +
       ggnewscale::new_scale_fill() +
-      ggraph::geom_node_point(data = function(x) {tidygraph::filter(x, is.na(geneLogFC))},
-                              ggplot2::aes(fill = mirnaLogFC),
+      ggraph::geom_node_point(data = function(x) {tidygraph::filter(x, is.na(.data$geneLogFC))},
+                              ggplot2::aes(fill = .data$mirnaLogFC),
                               pch = 21, size = size) +
       ggplot2::scale_fill_gradient2(low = "green", mid = "grey", high = "yellow",
                                     guide = ggplot2::guide_colorbar(order = 2))
@@ -572,11 +584,11 @@ visualizeNetwork <- function(pathGraph,
   if (node == "point") {
     if (layout == "stress") {
       mirNet <- mirNet +
-        ggraph::geom_node_text(ggplot2::aes(label = name),
+        ggraph::geom_node_text(ggplot2::aes(label = .data$name),
                                size = size, nudge_y = - stress.text.distance)
     } else if (layout == "circle") {
       mirNet <- mirNet +
-        ggraph::geom_node_text(ggplot2::aes(label = name), size = size,
+        ggraph::geom_node_text(ggplot2::aes(label = .data$name), size = size,
                                nudge_x = mirNet$data$x * circle.text.distance,
                                nudge_y = mirNet$data$y * circle.text.distance)
     }
@@ -662,6 +674,7 @@ setMethod("mirnaDotplot", "MirnaGsea",
 
 
 ## create a dotplot for MirnaEnrichment objects
+#' @importFrom rlang .data
 mirnaDotplot.MirnaEnrichment <- function(mirnaEnr,
                                          showTerms,
                                          splitDir,
@@ -759,8 +772,8 @@ mirnaDotplot.MirnaEnrichment <- function(mirnaEnr,
   ## create a dotplot
   dotRes <- ggplot2::ggplot(res,
                             ggplot2::aes(x = !!ggplot2::sym(ordBy),
-                                         y = reorder(Subcategory,
-                                                     !!ggplot2::sym(ordBy)),
+                                         y = stats::reorder(.data$Subcategory,
+                                                            !!ggplot2::sym(ordBy)),
                                          size = !!ggplot2::sym(sizeBy),
                                          color = !!ggplot2::sym(colBy))) +
     ggplot2::geom_point() +
@@ -791,6 +804,7 @@ mirnaDotplot.MirnaEnrichment <- function(mirnaEnr,
 
 
 ## create a dotplot for MirnaGsea objects
+#' @importFrom rlang .data
 mirnaDotplot.MirnaGsea <- function(mirnaGsea,
                                    showTerms,
                                    splitDir,
@@ -898,8 +912,8 @@ mirnaDotplot.MirnaGsea <- function(mirnaGsea,
   ## create a dotplot
   dotRes <- ggplot2::ggplot(res,
                             ggplot2::aes(x = !!ggplot2::sym(ordBy),
-                                         y = reorder(Subcategory,
-                                                     !!ggplot2::sym(ordBy)),
+                                         y = stats::reorder(.data$Subcategory,
+                                                            !!ggplot2::sym(ordBy)),
                                          size = !!ggplot2::sym(sizeBy),
                                          color = !!ggplot2::sym(colBy))) +
     ggplot2::geom_point() +
@@ -962,6 +976,7 @@ mirnaDotplot.MirnaGsea <- function(mirnaGsea,
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
 #'
+#' @importFrom rlang .data
 #' @export
 mirnaRidgeplot <- function(mirnaGsea, showTerms = 10, colBy = "P.adjusted") {
 
@@ -1032,8 +1047,9 @@ mirnaRidgeplot <- function(mirnaGsea, showTerms = 10, colBy = "P.adjusted") {
                         val = unlist(lfcSet))
 
   ## create a ridgeplot
-  ridgeRes <- ggplot2::ggplot(ridgeDf, ggplot2::aes(x = val,
-                                                    y = reorder(term, meanLFC),
+  ridgeRes <- ggplot2::ggplot(ridgeDf, ggplot2::aes(x = .data$val,
+                                                    y = stats::reorder(.data$term,
+                                                                       .data$meanLFC),
                                                     fill = !!ggplot2::sym(colBy))) +
     ggridges::geom_density_ridges() +
     ggplot2::scale_fill_continuous(low = "red",
@@ -1091,10 +1107,10 @@ theme_enr <- function() {
 #' to `FALSE` if `showContext` is `TRUE`
 #' @param snpFill It must be an R color name that specifies the fill color of
 #' the SNP locus. Default is `lightblue`. All available colors can be listed
-#' with [colors()]
+#' with [grDevices::colors()]
 #' @param mirFill It must be an R color name that specifies the fill color of
 #' the miRNA locus. Default is `orange`. All available colors can be listed
-#' with [colors()]
+#' with [grDevices::colors()]
 #' @param ... Other parameters that can be passed to [Gviz::plotTracks()]
 #' function
 #'
@@ -1167,14 +1183,14 @@ mirVariantPlot <- function(variantId,
   }
   if (!is.character(snpFill) |
       length(snpFill) != 1 |
-      !snpFill %in% colors()) {
+      !snpFill %in% grDevices::colors()) {
     stop(paste("'snpFill' must be an R color name. All available colors",
                "can be listed with 'colors()'. Default is: 'lightblue'"),
          call. = FALSE)
   }
   if (!is.character(mirFill) |
       length(mirFill) != 1 |
-      !mirFill %in% colors()) {
+      !mirFill %in% grDevices::colors()) {
     stop(paste("'mirFill' must be an R color name. All available colors",
                "can be listed with 'colors()'. Default is: 'orange'"),
          call. = FALSE)

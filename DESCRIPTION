@@ -29,12 +29,14 @@ Imports:
     ggridges (>= 0.5.3),
     graph (>= 1.74.0),
     graphite (>= 1.42.0),
+    grDevices,
     Gviz (>= 1.40.1),
     methods (>= 4.2.2),
     MultiAssayExperiment (>= 1.22.0),
     multiMiR (>= 1.18.0),
     rbioapi (>= 0.7.7),
     ReactomePA (>= 1.40.0),
+    rlang (>= 1.0.5),
     stringr (>= 1.4.1),
     tidygraph
 Collate: 

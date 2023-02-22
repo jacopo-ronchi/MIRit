@@ -42,11 +42,11 @@ pathway)". Default is \code{NULL} not to include a plot title}
 
 \item{edgesCol}{It must be an R color name that specifies the color of
 interaction arrows in the network. Default is \code{gray}. All available colors
-can be listed with \code{\link[=colors]{colors()}}}
+can be listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
 
 \item{bindingEdgesCol}{It must be an R color name that specifies the color
 of chemical binding arrows in the network. Default is \code{gray}. All available
-colors can be listed with \code{\link[=colors]{colors()}}}
+colors can be listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
 
 \item{stress.text.distance}{The distance between activation/inhibition
 arrow caps and nodes for the \code{stress} design. Default is \code{0.2}}

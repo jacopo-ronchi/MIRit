@@ -299,7 +299,7 @@ oneSidedFisher <- function(mirnaObj, pCutoff, pAdjustment, onlySignificant) {
     )
 
     ## perform one-sided Fisher's exact test
-    fisherRes <- fisher.test(contingencyTable, alternative = "greater")
+    fisherRes <- stats::fisher.test(contingencyTable, alternative = "greater")
     fisherPval <- fisherRes$p.value
 
     ## report results to a list object
@@ -323,7 +323,7 @@ oneSidedFisher <- function(mirnaObj, pCutoff, pAdjustment, onlySignificant) {
                              "DE_targets")
 
   ## correct p values
-  adjFisher <- p.adjust(association$Fisher.P.Val, method = pAdjustment)
+  adjFisher <- stats::p.adjust(association$Fisher.P.Val, method = pAdjustment)
   association$Fisher.Adjusted.P.Val <- adjFisher
   association <- association[, c(1, 2, 3, 4, 5, 7, 6)]
   association <- association[order(association$Fisher.Adjusted.P.Val), ]
@@ -410,7 +410,7 @@ correlateMirnaTargets <- function(mirnaObj,
     mirnaNorm <- lapply(rownames(featExpr), function(x){
       expVal <- featExpr[x, ]
       if (length(unique(expVal)) != 1) {
-        normTest <- shapiro.test(expVal)
+        normTest <- stats::shapiro.test(expVal)
         normTest$p.value
       }
     })
@@ -456,11 +456,11 @@ correlateMirnaTargets <- function(mirnaObj,
     geneInt <- as.numeric(targetExpr[gene, ])
 
     ## perform the correlation analysis (ONE SIDED OR TWO SIDED - INFORMARSI ???)
-    corPair <- cor.test(mirnaInt,
-                        geneInt,
-                        method = corMethod,
-                        alternative = corDirection,
-                        exact = FALSE)
+    corPair <- stats::cor.test(mirnaInt,
+                               geneInt,
+                               method = corMethod,
+                               alternative = corDirection,
+                               exact = FALSE)
 
     ## report the results of the correlation analysis
     coefDirection <- ifelse(corPair$estimate > 0,
@@ -488,7 +488,7 @@ correlateMirnaTargets <- function(mirnaObj,
   corRes$Corr.P.Value <- as.numeric(corRes$Corr.P.Value)
 
   ## correct correlation p values for multiple testing
-  pAdj <- p.adjust(corRes$Corr.P.Value, method = pAdjustment)
+  pAdj <- stats::p.adjust(corRes$Corr.P.Value, method = pAdjustment)
   corRes$Corr.Adjusted.P.Val <- pAdj
 
   ## select statistically significant associations

@@ -12,7 +12,7 @@ bibliography: references.bib
 abstract: |
   In this vignette we are going to see how to use MIRit for investigating the miRNA-gene regulatory networks. In particular, an RNA-seq experiment will be used as an example to demonstrate how to perform an integrative analysis with MIRit, including the differential expression analysis, the functional enrichment and characterization, the correlation analysis and, lastly, the construction and visualization of the impaired miRNAs regulatory axes within biological pathways.
 vignette: |
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Integrate miRNA and gene expression data with MIRit}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
