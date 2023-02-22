@@ -13,7 +13,7 @@ Description: MIRit is an R package that provides several methods for
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Imports: 
     AnnotationDbi,
     biomaRt (>= 2.52.0),
@@ -24,8 +24,8 @@ Imports:
     fuzzyjoin (>= 0.1.6),
     GenomicRanges (>= 1.48.0),
     ggnewscale (>= 0.4.8),
-    ggplot2 (>= 3.3.6),
-    ggraph (>= 2.0.6),
+    ggplot2 (>= 3.4.1),
+    ggraph (>= 2.1.0),
     ggridges (>= 0.5.3),
     graph (>= 1.74.0),
     graphite (>= 1.42.0),
@@ -36,9 +36,9 @@ Imports:
     multiMiR (>= 1.18.0),
     rbioapi (>= 0.7.7),
     ReactomePA (>= 1.40.0),
-    rlang (>= 1.0.5),
+    rlang (>= 1.0.6),
     stringr (>= 1.4.1),
-    tidygraph
+    tidygraph (>= 1.2.3)
 Collate: 
     'AllGenerics.R'
     'AllClasses.R'
