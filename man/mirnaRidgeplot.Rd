@@ -4,7 +4,7 @@
 \alias{mirnaRidgeplot}
 \title{Create a ridgeplot to display the results of miRNA GSEA analysis}
 \usage{
-mirnaRidgeplot(mirnaGsea, showTerms = 10, colBy = "P.adjusted")
+mirnaRidgeplot(mirnaGsea, showTerms = 10, colBy = "P.adjusted", title = NULL)
 }
 \arguments{
 \item{mirnaGsea}{A \code{\link[=MirnaGsea-class]{MirnaGsea}} object containing the
@@ -17,6 +17,9 @@ Default is \code{10}}
 
 \item{colBy}{The parameter used to set the color scale. It must be one of
 \code{P.adjusted} (default), \code{P.value} and \code{Observed}}
+
+\item{title}{The title of the plot. Default is \code{NULL} not to include a plot
+title}
 }
 \value{
 An object of class \code{ggplot} containing the ridgeplot of miRNA GSEA results.

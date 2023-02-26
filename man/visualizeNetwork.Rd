@@ -38,7 +38,7 @@ identifier}
 \item{size}{The size of node elements in the graph. Default is \code{3}}
 
 \item{title}{The title of the plot (e.g. "Thyroid hormone signaling
-pathway)". Default is \code{NULL} not to include a plot title}
+pathway"). Default is \code{NULL} not to include a plot title}
 
 \item{edgesCol}{It must be an R color name that specifies the color of
 interaction arrows in the network. Default is \code{gray}. All available colors

@@ -267,6 +267,8 @@ setGeneric("mirnaTargetsIntegration<-", function(object, value)
 #' `fold`, `P.adjusted`, `P.value` and `Observed` (default)
 #' @param colBy The parameter used to set the color scale. It must be one of
 #' `fold`, `P.adjusted` (default), `P.value` and `Observed`
+#' @param title The title of the plot. Default is `NULL` not to include a plot
+#' title
 #'
 #' @note
 #' For objects of class [`MirnaEnrichment`][MirnaEnrichment-class], the `fold`
@@ -301,7 +303,8 @@ setGeneric("mirnaDotplot",
                     splitDir = FALSE,
                     ordBy = "fold",
                     sizeBy = "Observed",
-                    colBy = "P.adjusted") standardGeneric("mirnaDotplot"))
+                    colBy = "P.adjusted",
+                    title = NULL) standardGeneric("mirnaDotplot"))
 
 
 

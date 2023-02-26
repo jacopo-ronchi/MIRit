@@ -11,6 +11,7 @@ mirVariantPlot(
   showSequence = TRUE,
   snpFill = "lightblue",
   mirFill = "orange",
+  title = NULL,
   ...
 )
 }
@@ -35,6 +36,9 @@ with \code{\link[grDevices:colors]{grDevices::colors()}}}
 \item{mirFill}{It must be an R color name that specifies the fill color of
 the miRNA locus. Default is \code{orange}. All available colors can be listed
 with \code{\link[grDevices:colors]{grDevices::colors()}}}
+
+\item{title}{The title of the plot. Default is \code{NULL} not to include a plot
+title}
 
 \item{...}{Other parameters that can be passed to \code{\link[Gviz:plotTracks]{Gviz::plotTracks()}}
 function}

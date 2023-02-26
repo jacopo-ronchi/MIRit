@@ -12,7 +12,8 @@ mirnaDotplot(
   splitDir = FALSE,
   ordBy = "fold",
   sizeBy = "Observed",
-  colBy = "P.adjusted"
+  colBy = "P.adjusted",
+  title = NULL
 )
 
 \S4method{mirnaDotplot}{MirnaEnrichment}(
@@ -21,7 +22,8 @@ mirnaDotplot(
   splitDir = FALSE,
   ordBy = "fold",
   sizeBy = "Observed",
-  colBy = "P.adjusted"
+  colBy = "P.adjusted",
+  title = NULL
 )
 
 \S4method{mirnaDotplot}{MirnaGsea}(
@@ -30,7 +32,8 @@ mirnaDotplot(
   splitDir = FALSE,
   ordBy = "fold",
   sizeBy = "Observed",
-  colBy = "P.adjusted"
+  colBy = "P.adjusted",
+  title = NULL
 )
 }
 \arguments{
@@ -53,6 +56,9 @@ Default is \code{FALSE}}
 
 \item{colBy}{The parameter used to set the color scale. It must be one of
 \code{fold}, \code{P.adjusted} (default), \code{P.value} and \code{Observed}}
+
+\item{title}{The title of the plot. Default is \code{NULL} not to include a plot
+title}
 }
 \value{
 A \code{ggplot} graph with a dotplot of enrichment results.

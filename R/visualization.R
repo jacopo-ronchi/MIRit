@@ -346,7 +346,7 @@ mirnaPathway <- function(mirnaObj,
 #' identifier
 #' @param size The size of node elements in the graph. Default is `3`
 #' @param title The title of the plot (e.g. "Thyroid hormone signaling
-#' pathway)". Default is `NULL` not to include a plot title
+#' pathway"). Default is `NULL` not to include a plot title
 #' @param edgesCol It must be an R color name that specifies the color of
 #' interaction arrows in the network. Default is `gray`. All available colors
 #' can be listed with [grDevices::colors()]
@@ -625,13 +625,15 @@ setMethod("mirnaDotplot", "MirnaEnrichment",
                    splitDir,
                    ordBy,
                    sizeBy,
-                   colBy) {
+                   colBy,
+                   title) {
             mirnaDotplot.MirnaEnrichment(object,
                                          showTerms = showTerms,
                                          splitDir = splitDir,
                                          ordBy = ordBy,
                                          sizeBy = sizeBy,
-                                         colBy = colBy)
+                                         colBy = colBy,
+                                         title = title)
           })
 
 
@@ -646,13 +648,15 @@ setMethod("mirnaDotplot", "MirnaGsea",
                    splitDir,
                    ordBy,
                    sizeBy,
-                   colBy) {
+                   colBy,
+                   title) {
             mirnaDotplot.MirnaGsea(object,
                                    showTerms = showTerms,
                                    splitDir = splitDir,
                                    ordBy = ordBy,
                                    sizeBy = sizeBy,
-                                   colBy = colBy)
+                                   colBy = colBy,
+                                   title = title)
           })
 
 
@@ -666,7 +670,8 @@ mirnaDotplot.MirnaEnrichment <- function(mirnaEnr,
                                          splitDir,
                                          ordBy,
                                          sizeBy,
-                                         colBy) {
+                                         colBy,
+                                         title) {
 
   ## check inputs
   if (!is(mirnaEnr, "MirnaEnrichment")) {
@@ -713,6 +718,12 @@ mirnaDotplot.MirnaEnrichment <- function(mirnaEnr,
       !colBy %in% c("fold", "P.adjusted", "P.value", "Observed")) {
     stop(paste("'colBy' must be one of: 'fold', 'P.adjusted'",
                "(default), 'P.value', 'Observed'"),
+         call. = FALSE)
+  }
+  if (!(is.character(title) | is.null(title)) |
+      !length(title) %in% c(0, 1)) {
+    stop(paste("'title' must be the title of the plot (e.g. 'Enrichment').",
+               "For additional details see ?mirnaDotplot"),
          call. = FALSE)
   }
 
@@ -779,6 +790,12 @@ mirnaDotplot.MirnaEnrichment <- function(mirnaEnr,
       ggplot2::facet_grid(~ Enrichment) +
       ggplot2::theme(strip.text = ggplot2::element_text(size = 12))
   }
+  
+  ## add the title of the plot
+  if (!is.null(title)) {
+    dotRes <- dotRes +
+      ggplot2::ggtitle(title)
+  }
 
   ## return ggplot2 graph
   return(dotRes)
@@ -796,7 +813,8 @@ mirnaDotplot.MirnaGsea <- function(mirnaGsea,
                                    splitDir,
                                    ordBy,
                                    colBy,
-                                   sizeBy) {
+                                   sizeBy,
+                                   title) {
 
   ## check inputs
   if (!is(mirnaGsea, "MirnaGsea")) {
@@ -843,6 +861,12 @@ mirnaDotplot.MirnaGsea <- function(mirnaGsea,
       !colBy %in% c("fold", "P.adjusted", "P.value", "Observed")) {
     stop(paste("'colBy' must be one of: 'fold', 'P.adjusted' (default),",
                "'P.value', 'Observed'"),
+         call. = FALSE)
+  }
+  if (!(is.character(title) | is.null(title)) |
+      !length(title) %in% c(0, 1)) {
+    stop(paste("'title' must be the title of the plot (e.g. 'Enrichment').",
+               "For additional details see ?mirnaDotplot"),
          call. = FALSE)
   }
 
@@ -919,6 +943,12 @@ mirnaDotplot.MirnaGsea <- function(mirnaGsea,
       ggplot2::facet_grid(~ Enrichment) +
       ggplot2::theme(strip.text = ggplot2::element_text(size = 12))
   }
+  
+  ## add the title of the plot
+  if (!is.null(title)) {
+    dotRes <- dotRes +
+      ggplot2::ggtitle(title)
+  }
 
   ## return ggplot2 graph
   return(dotRes)
@@ -947,6 +977,8 @@ mirnaDotplot.MirnaGsea <- function(mirnaGsea,
 #' Default is `10`
 #' @param colBy The parameter used to set the color scale. It must be one of
 #' `P.adjusted` (default), `P.value` and `Observed`
+#' @param title The title of the plot. Default is `NULL` not to include a plot
+#' title
 #'
 #' @returns
 #' An object of class `ggplot` containing the ridgeplot of miRNA GSEA results.
@@ -964,7 +996,10 @@ mirnaDotplot.MirnaGsea <- function(mirnaGsea,
 #'
 #' @importFrom rlang .data
 #' @export
-mirnaRidgeplot <- function(mirnaGsea, showTerms = 10, colBy = "P.adjusted") {
+mirnaRidgeplot <- function(mirnaGsea,
+                           showTerms = 10,
+                           colBy = "P.adjusted",
+                           title = NULL) {
 
   ## check inputs
   if (!is(mirnaGsea, "MirnaGsea")) {
@@ -992,6 +1027,12 @@ mirnaRidgeplot <- function(mirnaGsea, showTerms = 10, colBy = "P.adjusted") {
       !colBy %in% c("P.adjusted", "P.value", "Observed")) {
     stop(paste("'colBy' must be one of: P.adjusted' (default),",
                "'P.value', 'Observed'"),
+         call. = FALSE)
+  }
+  if (!(is.character(title) | is.null(title)) |
+      !length(title) %in% c(0, 1)) {
+    stop(paste("'title' must be the title of the plot (e.g. 'Enrichment').",
+               "For additional details see ?mirnaRidgeplot"),
          call. = FALSE)
   }
 
@@ -1045,6 +1086,12 @@ mirnaRidgeplot <- function(mirnaGsea, showTerms = 10, colBy = "P.adjusted") {
     ggplot2::ylab(NULL) +
     ggplot2::xlab("miRNAs logFC") +
     theme_enr()
+  
+  ## add the title of the plot
+  if (!is.null(title)) {
+    ridgeRes <- ridgeRes +
+      ggplot2::ggtitle(title)
+  }
 
   ## return ggplot2 graph
   return(ridgeRes)
@@ -1067,7 +1114,8 @@ theme_enr <- function() {
                                           hjust = 1),
       axis.title = ggplot2::element_text(colour = "black",
                                          size = 12,
-                                         margin = ggplot2::margin(10, 5, 0, 0))
+                                         margin = ggplot2::margin(10, 5, 0, 0)),
+      plot.title = ggplot2::element_text(hjust = 0.5)
     )
 }
 
@@ -1097,6 +1145,8 @@ theme_enr <- function() {
 #' @param mirFill It must be an R color name that specifies the fill color of
 #' the miRNA locus. Default is `orange`. All available colors can be listed
 #' with [grDevices::colors()]
+#' @param title The title of the plot. Default is `NULL` not to include a plot
+#' title
 #' @param ... Other parameters that can be passed to [Gviz::plotTracks()]
 #' function
 #'
@@ -1131,6 +1181,7 @@ mirVariantPlot <- function(variantId,
                            showSequence = TRUE,
                            snpFill = "lightblue",
                            mirFill = "orange",
+                           title = NULL,
                            ...) {
 
   ## check inputs
@@ -1179,6 +1230,12 @@ mirVariantPlot <- function(variantId,
       !mirFill %in% grDevices::colors()) {
     stop(paste("'mirFill' must be an R color name. All available colors",
                "can be listed with 'colors()'. Default is: 'orange'"),
+         call. = FALSE)
+  }
+  if (!(is.character(title) | is.null(title)) |
+      !length(title) %in% c(0, 1)) {
+    stop(paste("'title' must be the title of the plot (e.g. 'SNPs overlap').",
+               "For additional details see ?mirVariantPlot"),
          call. = FALSE)
   }
 
@@ -1258,6 +1315,7 @@ mirVariantPlot <- function(variantId,
                                 extend.left = lf,
                                 extend.right = rf,
                                 transcriptAnnotation = "symbol",
+                                main = title,
                                 ...)
 
 
