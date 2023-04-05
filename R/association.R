@@ -1,57 +1,81 @@
-#' Search for disease CUI identifiers
+#' Search for disease EFO identifiers
 #'
-#' This function allows to retrieve the UMLS Concept Unique Identifier (CUI)
-#' of a particular disease. This identifier is then needed to use the function
-#' [findMirnaSNPs()].
+#' This function allows to retrieve the Experimental Factor Ontology (EFO)
+#' identifier of a particular disease. This ID is then needed to use the
+#' function [findMirnaSNPs()].
 #'
 #' @param diseaseName The name of a particular disease
-#' (ex. `Creutzfeldt-Jakob disease`).
+#' (ex. `Alzheimer disease`).
 #'
 #' @returns
-#' A `data.frame` object containing CUI identifiers in the first column, and
-#' full disease names in the second column.
+#' A `character` object containing EFO identifiers.
 #'
 #' @examples
-#' # search the CUI identifier of Creutzfeldt-Jakob disease
-#' cui <- searchDisease("Creutzfeldt-Jakob disease")
-#' cui
-#'
-#' # search the CUI identifier of Alzheimer's disease
-#' cui <- searchDisease("Alzheimer's disease")
-#' cui
+#' # search the EFO identifier of Alzheimer disease
+#' efo <- searchDisease("Alzheimer disease")
+#' efo
 #'
 #' @note
-#' To retrieve CUIs for specific diseases, this function makes use of the
-#' `disgenet2r` package.
+#' To retrieve EFO IDs for specific diseases, this function makes use of the
+#' `gwasrapidd` package.
 #'
 #' @references
-#' Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,
-#' E., Sanz, F., & Furlong, L. I. (2020). The DisGeNET knowledge platform for
-#' disease genomics: 2019 update. Nucleic Acids Research, 48(D1), D845-D855.
+#' Ramiro Magno, Ana-Teresa Maia, gwasrapidd: an R package to query, download
+#' and wrangle GWAS catalog data, Bioinformatics, Volume 36, Issue 2, January
+#' 2020, Pages 649–650, \url{https://doi.org/10.1093/bioinformatics/btz605}.
 #'
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
 #'
 #' @export
 searchDisease <- function(diseaseName) {
-
+  
   ## check input
   if (!is.character(diseaseName) | length(diseaseName) != 1) {
     stop(paste("'diseaseName' must be a string of length 1",
-                 "containing the name of the disease"), call. = FALSE)
+               "containing the name of the disease"), call. = FALSE)
   }
-
-  ## set the DisGeNet api key
-  disgenetApiKey <- "4cc61ac212f71bfefcdf375e31e879a135ffbb4d"
-
+  
+  ## load cache
+  path <- file.path(tempdir(), "MIRit_cache")
+  bfc <- BiocFileCache::BiocFileCache(path, ask = FALSE)
+  
+  ## check if EFO traits are cached
+  message("Checking for cached EFO traits...")
+  cache <- BiocFileCache::bfcquery(bfc, "EFO_ids")
+  if ("EFO_ids" %in% cache$rname) {
+    
+    ## load cached EFO ids
+    message("Reading EFO traits from cache...")
+    ids <- readRDS(BiocFileCache::bfcrpath(bfc, "EFO_ids")[1])
+    
+  } else {
+    
+    ## inform the user about retrieving IDs
+    message("Downloading EFO traits, this may take some minutes...")
+    
+    ## retrieve disease EFO traits
+    ids <- gwasrapidd::get_traits()
+    ids <- ids@traits$trait
+    
+    ## save EFO traits to cache
+    savepath <- BiocFileCache::bfcnew(bfc, rname = "EFO_ids", ext = ".RDS")
+    saveRDS(ids, file = savepath)
+    
+  }
+  
+  ## return results
+  message(paste("Searching for disease:", diseaseName))
+  
   ## search for the disease specified by the user
-  disList <- disgenet2r::get_umls_from_vocabulary(disease = diseaseName,
-                                                  vocabulary = "NAME",
-                                                  api_key = disgenetApiKey)
-
+  disList <- ids[agrep(diseaseName,
+                       ids,
+                       ignore.case = TRUE,
+                       max.distance = 0.2)]
+  
   ## return disease list
   return(disList)
-
+  
 }
 
 
@@ -100,7 +124,7 @@ searchDisease <- function(diseaseName) {
 #' @examples
 #' # search disease
 #' efo <- searchDisease("Alzheimer disease")
-#' disId <- efo[1, 1]
+#' disId <- efo[1]
 #'
 #' # retrieve associated SNPs
 #' association <- findMirnaSNPs(obj, disId)
@@ -215,103 +239,59 @@ findMirnaSNPs <- function(mirnaObj,
 #' This function returns the biomedical evidence that supports the association
 #' between a particular SNP and a phenotypic trait.
 #'
-#' To retrieve disease-SNPs, this function uses DisGeNet, which is one of the
-#' largest public databases containing information about human gene-disease
-#' associations and human variants-disease associations. For variants, it
-#' integrates information from multiple sources, such as GWAS catalogues and
-#' biomedical literature. The `database` parameter specifies the database from
-#' which the function obtains disease-associated SNPs. The options include:
-#' * `CLINVAR`, to use ClinVar;
-#' * `UNIPROT`, to use the Universal Protein Resource;
-#' * `GWASCAT`, to use the NHGRI-EBI GWAS Catalog;
-#' * `GWASDB`, to use GWAS Database GWASdb;
-#' * `BEFREE`, to use text mining data, generated using BeFree System;
-#' * `CURATED`, to use expert curated, human databases,
-#' * `ALL`, to use all the above mentioned databases together (default).
-#'
 #' @param variant The SNP ID of a particular variant of interest
 #' (e.g. 'rs394581')
-#' @param diseaseUML The CUI identifier of a disease of interest. This can be
+#' @param diseaseEFO The EFO identifier of a disease of interest. This can be
 #' identified with the function [searchDisease()]
-#' @param database The name of the database of disease-SNPs associations to
-#' draw from. The default value is `ALL` to use all databases included in
-#' DisGeNet. For a detailed list of all the possible values, see the details
-#' section
-#' @param score A numeric vector of length two containing the minimum value of
-#' score and the maximum value of score. Default is `c(0, 1)`. The score is a
-#' DisGeNet metric that estimates the strength of the association between
-#' the variant and the disease
 #'
 #' @returns
-#' A `data.frame` containing information about literature evidences for a
+#' A `tbl_df` dataframe containing information about literature evidences for a
 #' disease-SNP association.
 #'
 #' @examples
-#' dis <- searchDisease("Alzheimer's disease")
+#' dis <- searchDisease("Alzheimer disease")
 #' dis
 #'
-#' association <- findMirnaSNPs(obj, diseaseUML = "C0002395")
-#' evidence <- getEvidence("rs2075650", diseaseUML = "C0002395")
+#' association <- findMirnaSNPs(obj, diseaseEFO = dis[1])
+#' evidence <- getEvidence("rs2075650", diseaseEFO = dis[1])
 #'
 #' @note
 #' To retrieve evidences of disease-SNP association, this function makes use of
-#' the `disgenet2r` package.
+#' the `gwasrapidd` package.
 #'
 #' @references
-#' Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,
-#' E., Sanz, F., & Furlong, L. I. (2020). The DisGeNET knowledge platform for
-#' disease genomics: 2019 update. Nucleic Acids Research, 48(D1), D845-D855.
+#' Ramiro Magno, Ana-Teresa Maia, gwasrapidd: an R package to query, download
+#' and wrangle GWAS catalog data, Bioinformatics, Volume 36, Issue 2, January
+#' 2020, Pages 649–650, \url{https://doi.org/10.1093/bioinformatics/btz605}.
 #'
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
 #'
 #' @export
 getEvidence <- function(variant,
-                        diseaseUML,
-                        database = "ALL",
-                        score = c(0, 1)) {
-
+                        diseaseEFO) {
+  
   ## check inputs
   if (!is.character(variant) | length(variant) != 1) {
     stop("'variant' should be a character with the ID of a SNP.", call. = FALSE)
   }
-  if (!is.character(diseaseUML) | length(diseaseUML) != 1) {
-    stop(paste("'diseaseUML' must be a string of length 1",
-               "containing the CUI of the disease. You can obtain the",
+  if (!is.character(diseaseEFO) | length(diseaseEFO) != 1) {
+    stop(paste("'diseaseEFO' must be a string of length 1",
+               "containing the EFO trait of the disease. You can obtain the",
                "disease identifier with 'searchDisease()'"), call. = FALSE)
   }
-  if (!is.character(database) |
-      length(database) != 1 |
-      !database %in% c("UNIPROT", "CLINVAR", "GWASCAT", "GWASDB",
-                       "CURATED", "BEFREE", "ALL")) {
-    stop(paste("'database' must be one of: 'UNIPROT', 'CLINVAR', 'GWASCAT',
-               'GWASDB', 'CURATED', 'BEFREE', 'ALL'."), call. = FALSE)
-  }
-  if (!is.numeric(score) |
-      length(score) != 2) {
-    stop(paste("'score' must be a numeric vector of length 2 with the initial",
-               "and final values of score. Default: 'c(0, 1)'"), call. = FALSE)
-  }
-
-  ## set the DisGeNet api key
-  disgenetApiKey <- "4cc61ac212f71bfefcdf375e31e879a135ffbb4d"
-
-  ## explore the evidences in literature for a particular variant
-  suppressMessages(
-    disEv <- disgenet2r::disease2evidence(disease = diseaseUML,
-                                          type = "VDA",
-                                          database = database,
-                                          variant = variant,
-                                          api_key = disgenetApiKey,
-                                          score = score,
-                                          warnings = FALSE)
-  )
-
-  ## return evidence data.frame
-  if (!is.character(disEv)) {
-    return(disgenet2r::extract(disEv))
-  } else {
-    warning("No evidence was found for this disease-associated SNP")
-  }
+  
+  ## retrieve biomedical evidence for a disease-SNP association
+  message(paste("Retrieving biomedical evidence for the association between",
+                diseaseEFO, "and", variant, "variant..."))
+  ev <- gwasrapidd::get_studies(variant_id = variant,
+                                efo_trait = diseaseEFO)
+  ev <- ev@publications
+  
+  ## returning results
+  message(paste(length(unique(ev$title)), "studies reporting this association",
+                "were found!"))
+  return(ev)
+  
 }
 
