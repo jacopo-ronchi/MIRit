@@ -22,7 +22,6 @@ Imports:
     clusterProfiler (>= 4.4.4),
     DOSE (>= 3.22.1),
     dplyr,
-    fuzzyjoin,
     GenomicRanges,
     ggnewscale,
     ggplot2,
@@ -59,7 +58,9 @@ Suggests:
     enrichplot (>= 1.16.2),
     knitr,
     limma,
-    rmarkdown
+    org.Hs.eg.db,
+    rmarkdown,
+    statmod
 Depends: 
     R (>= 2.10)
 LazyData: false

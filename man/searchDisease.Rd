@@ -2,41 +2,36 @@
 % Please edit documentation in R/association.R
 \name{searchDisease}
 \alias{searchDisease}
-\title{Search for disease CUI identifiers}
+\title{Search for disease EFO identifiers}
 \usage{
 searchDisease(diseaseName)
 }
 \arguments{
 \item{diseaseName}{The name of a particular disease
-(ex. \verb{Creutzfeldt-Jakob disease}).}
+(ex. \verb{Alzheimer disease}).}
 }
 \value{
-A \code{data.frame} object containing CUI identifiers in the first column, and
-full disease names in the second column.
+A \code{character} object containing EFO identifiers.
 }
 \description{
-This function allows to retrieve the UMLS Concept Unique Identifier (CUI)
-of a particular disease. This identifier is then needed to use the function
-\code{\link[=findMirnaSNPs]{findMirnaSNPs()}}.
+This function allows to retrieve the Experimental Factor Ontology (EFO)
+identifier of a particular disease. This ID is then needed to use the
+function \code{\link[=findMirnaSNPs]{findMirnaSNPs()}}.
 }
 \note{
-To retrieve CUIs for specific diseases, this function makes use of the
-\code{disgenet2r} package.
+To retrieve EFO IDs for specific diseases, this function makes use of the
+\code{gwasrapidd} package.
 }
 \examples{
-# search the CUI identifier of Creutzfeldt-Jakob disease
-cui <- searchDisease("Creutzfeldt-Jakob disease")
-cui
-
-# search the CUI identifier of Alzheimer's disease
-cui <- searchDisease("Alzheimer's disease")
-cui
+# search the EFO identifier of Alzheimer disease
+efo <- searchDisease("Alzheimer disease")
+efo
 
 }
 \references{
-Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,
-E., Sanz, F., & Furlong, L. I. (2020). The DisGeNET knowledge platform for
-disease genomics: 2019 update. Nucleic Acids Research, 48(D1), D845-D855.
+Ramiro Magno, Ana-Teresa Maia, gwasrapidd: an R package to query, download
+and wrangle GWAS catalog data, Bioinformatics, Volume 36, Issue 2, January
+2020, Pages 649–650, \url{https://doi.org/10.1093/bioinformatics/btz605}.
 }
 \author{
 Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}

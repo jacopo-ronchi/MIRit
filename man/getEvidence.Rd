@@ -4,66 +4,39 @@
 \alias{getEvidence}
 \title{Get the scientific evidence for a particular disease-SNP association}
 \usage{
-getEvidence(variant, diseaseUML, database = "ALL", score = c(0, 1))
+getEvidence(variant, diseaseEFO)
 }
 \arguments{
 \item{variant}{The SNP ID of a particular variant of interest
 (e.g. 'rs394581')}
 
-\item{diseaseUML}{The CUI identifier of a disease of interest. This can be
+\item{diseaseEFO}{The EFO identifier of a disease of interest. This can be
 identified with the function \code{\link[=searchDisease]{searchDisease()}}}
-
-\item{database}{The name of the database of disease-SNPs associations to
-draw from. The default value is \code{ALL} to use all databases included in
-DisGeNet. For a detailed list of all the possible values, see the details
-section}
-
-\item{score}{A numeric vector of length two containing the minimum value of
-score and the maximum value of score. Default is \code{c(0, 1)}. The score is a
-DisGeNet metric that estimates the strength of the association between
-the variant and the disease}
 }
 \value{
-A \code{data.frame} containing information about literature evidences for a
+A \code{tbl_df} dataframe containing information about literature evidences for a
 disease-SNP association.
 }
 \description{
 This function returns the biomedical evidence that supports the association
 between a particular SNP and a phenotypic trait.
 }
-\details{
-To retrieve disease-SNPs, this function uses DisGeNet, which is one of the
-largest public databases containing information about human gene-disease
-associations and human variants-disease associations. For variants, it
-integrates information from multiple sources, such as GWAS catalogues and
-biomedical literature. The \code{database} parameter specifies the database from
-which the function obtains disease-associated SNPs. The options include:
-\itemize{
-\item \code{CLINVAR}, to use ClinVar;
-\item \code{UNIPROT}, to use the Universal Protein Resource;
-\item \code{GWASCAT}, to use the NHGRI-EBI GWAS Catalog;
-\item \code{GWASDB}, to use GWAS Database GWASdb;
-\item \code{BEFREE}, to use text mining data, generated using BeFree System;
-\item \code{CURATED}, to use expert curated, human databases,
-\item \code{ALL}, to use all the above mentioned databases together (default).
-}
-}
 \note{
 To retrieve evidences of disease-SNP association, this function makes use of
-the \code{disgenet2r} package.
+the \code{gwasrapidd} package.
 }
 \examples{
-dis <- searchDisease("Alzheimer's disease")
+dis <- searchDisease("Alzheimer disease")
 dis
 
-association <- findMirnaSNPs(obj, diseaseUML = "C0002395")
-evidence <- getEvidence("rs2075650", diseaseUML = "C0002395")
+association <- findMirnaSNPs(obj, diseaseEFO = dis[1])
+evidence <- getEvidence("rs2075650", diseaseEFO = dis[1])
 
 }
 \references{
-Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,
-E., Sanz, F., & Furlong, L. I. (2020). The DisGeNET knowledge platform for
-disease genomics: 2019 update. Nucleic Acids Research, 48(D1), D845-D855.
+Ramiro Magno, Ana-Teresa Maia, gwasrapidd: an R package to query, download
+and wrangle GWAS catalog data, Bioinformatics, Volume 36, Issue 2, January
+2020, Pages 649–650, \url{https://doi.org/10.1093/bioinformatics/btz605}.
 }
 \author{
 Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}
