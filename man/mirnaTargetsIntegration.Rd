@@ -24,6 +24,9 @@ in the \code{mirnaTargetsIntegration} slot of a
 this function.
 }
 \examples{
+# load example MirnaExperiment object
+obj <- loadExamples()
+
 # perform Kendall's correlation analysis with tau > 0.8 and p < 0.05
 obj <- integrateMirnaTargets(obj, test = "correlation",
 corMethod = "kendall", corCutoff = 0.8)

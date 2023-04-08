@@ -23,6 +23,9 @@ This function is an accessor of the \code{significantGenes} slot of a
 the IDs of statistically differentially expressed genes.
 }
 \examples{
+# load example MirnaExperiment object
+obj <- loadExamples()
+
 # extract significant DEGs
 sigGenes <- significantGenes(obj)
 

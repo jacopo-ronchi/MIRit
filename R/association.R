@@ -12,8 +12,7 @@
 #'
 #' @examples
 #' # search the EFO identifier of Alzheimer disease
-#' efo <- searchDisease("Alzheimer disease")
-#' efo
+#' # searchDisease("Alzheimer disease")
 #'
 #' @note
 #' To retrieve EFO IDs for specific diseases, this function makes use of the
@@ -122,13 +121,16 @@ searchDisease <- function(diseaseName) {
 #' * `mirnaEndPosition` displays the end position of DE-miRNA gene
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # search disease
-#' efo <- searchDisease("Alzheimer disease")
-#' disId <- efo[1]
+#' # searchDisease("Alzheimer disease")
+#' # disId <- "Alzheimer disease"
 #'
 #' # retrieve associated SNPs
-#' association <- findMirnaSNPs(obj, disId)
-#' association
+#' # association <- findMirnaSNPs(obj, disId)
+#' # association
 #'
 #' @note
 #' To retrieve disease-associated SNPs, this function makes use of the
@@ -249,11 +251,8 @@ findMirnaSNPs <- function(mirnaObj,
 #' disease-SNP association.
 #'
 #' @examples
-#' dis <- searchDisease("Alzheimer disease")
-#' dis
-#'
-#' association <- findMirnaSNPs(obj, diseaseEFO = dis[1])
-#' evidence <- getEvidence("rs2075650", diseaseEFO = dis[1])
+#' # searchDisease("Alzheimer disease")
+#' # evidence <- getEvidence("rs2075650", diseaseEFO = dis[1])
 #'
 #' @note
 #' To retrieve evidences of disease-SNP association, this function makes use of

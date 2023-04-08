@@ -29,6 +29,9 @@ to retrieve the results of gene differential expression stored in a
 \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object.
 }
 \examples{
+# load example MirnaExperiment object
+obj <- loadExamples()
+
 # access gene differential expression of a MirnaExperiment object
 sig <- geneDE(obj)
 all <- geneDE(obj, onlySignificant = FALSE)

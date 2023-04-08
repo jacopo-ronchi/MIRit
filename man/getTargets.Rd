@@ -53,9 +53,12 @@ predicted targets or to include only those targets predicted by a minimum
 of n prediction databases.
 }
 \examples{
+# load example MirnaExperiment object
+obj <- loadExamples()
+
 # retrieve validated targets and targets predicted by at lest 3 databases
-mirnaObj <- getTargets(mirnaObj = mirnaObj, onlyValidated = FALSE,
-minPredicted = 3, minValidated = 1, topCutoff = 20)
+# obj <- getTargets(mirnaObj = obj, onlyValidated = FALSE,
+# minPredicted = 3, minValidated = 1, topCutoff = 20)
 
 }
 \references{

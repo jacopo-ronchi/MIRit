@@ -26,8 +26,8 @@ the interactions between miRNAs and target genes are stored in the
 \code{mirnaTargets} slot and can be explored with this function.
 }
 \examples{
-# retrieve miRNA targets
-obj <- getTargets(obj)
+# load example MirnaExperiment object
+obj <- loadExamples()
 
 # visualize targets
 targets_df <- mirnaTargets(obj)

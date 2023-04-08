@@ -42,13 +42,16 @@ This function uses the \code{graphite} package to retrieve biological pathways a
 \code{graph} objects from KEGG, Reactome and WikiPathways.
 }
 \examples{
+# load example MirnaExperiment object
+obj <- loadExamples()
+
 # perform the integration analysis between miRNAs and their targets
 obj <- integrateMirnaTargets(obj)
 
-# explore a TCR-associated pathway present in Reactome
+# explore Thyroid hormone synthesis pathway in KEGG
 net <- mirnaPathway(obj,
-pathway = "Phosphorylation of CD3 and TCR zeta chains", organism = "Homo
-sapiens", database = "Reactome")
+pathway = "Thyroid hormone synthesis", organism = "Homo sapiens",
+database = "KEGG")
 
 # visualize miRNA-gene network
 visualizeNetwork(net)

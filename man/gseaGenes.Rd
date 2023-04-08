@@ -87,6 +87,9 @@ The GSEA algorithm is applied in this function through the packages
 \code{clusterProfiler}, \code{ReactomePA} and \code{DOSE}.
 }
 \examples{
+# load example MirnaExperiment object
+obj <- loadExamples()
+
 # perform a gene set enrichment analysis with KEGG
 gse <- gseaGenes(obj, database = "KEGG")
 

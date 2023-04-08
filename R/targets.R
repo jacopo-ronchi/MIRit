@@ -33,9 +33,12 @@
 #' and can be accessed with the [mirnaTargets()] function.
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # retrieve validated targets and targets predicted by at lest 3 databases
-#' mirnaObj <- getTargets(mirnaObj = mirnaObj, onlyValidated = FALSE,
-#' minPredicted = 3, minValidated = 1, topCutoff = 20)
+#' # obj <- getTargets(mirnaObj = obj, onlyValidated = FALSE,
+#' # minPredicted = 3, minValidated = 1, topCutoff = 20)
 #'
 #' @references
 #' Yuanbin Ru, Katerina J. Kechris, Boris Tabakoff, Paula Hoffman, Richard A.

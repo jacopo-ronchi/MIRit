@@ -25,6 +25,9 @@ from the same individuals (paired samples), or from different subjects
 (unpaired samples).
 }
 \examples{
+# load example MirnaExperiment object
+obj <- loadExamples()
+
 # check if an existing MirnaExperiment object derive from paired samples
 pairedSamples(obj)
 

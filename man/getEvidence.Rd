@@ -26,11 +26,8 @@ To retrieve evidences of disease-SNP association, this function makes use of
 the \code{gwasrapidd} package.
 }
 \examples{
-dis <- searchDisease("Alzheimer disease")
-dis
-
-association <- findMirnaSNPs(obj, diseaseEFO = dis[1])
-evidence <- getEvidence("rs2075650", diseaseEFO = dis[1])
+# searchDisease("Alzheimer disease")
+# evidence <- getEvidence("rs2075650", diseaseEFO = dis[1])
 
 }
 \references{

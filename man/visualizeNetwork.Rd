@@ -79,10 +79,13 @@ for larger biological networks. In these cases, the \code{circle} layout
 performs better.
 }
 \examples{
-# explore a TCR-associated pathway present in Reactome
+# load example MirnaExperiment object
+obj <- loadExamples()
+
+# explore Thyroid hormone synthesis pathway present in KEGG
 net <- mirnaPathway(obj,
-pathway = "Phosphorylation of CD3 and TCR zeta chains", organism = "Homo
-sapiens", database = "Reactome", onlyIntegrated = TRUE)
+pathway = "Thyroid hormone synthesis", organism = "Homo sapiens",
+database = "KEGG")
 
 # visualize miRNA-gene network
 visualizeNetwork(net)

@@ -137,6 +137,9 @@ enriched in up-regulated genes, and, conversely, if targets of up-regulated
 miRNAs are statistically enriched in down-regulated genes.
 }
 \examples{
+# load example MirnaExperiment object
+obj <- loadExamples()
+
 # perform integration analysis with default settings
 obj <- integrateMirnaTargets(obj)
 

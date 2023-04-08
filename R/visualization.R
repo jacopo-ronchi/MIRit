@@ -110,13 +110,16 @@ listPathways <- function(organism, database) {
 #' refer to the `tidygraph` package.
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # perform the integration analysis between miRNAs and their targets
 #' obj <- integrateMirnaTargets(obj)
 #'
-#' # explore a TCR-associated pathway present in Reactome
+#' # explore Thyroid hormone synthesis pathway in KEGG
 #' net <- mirnaPathway(obj,
-#' pathway = "Phosphorylation of CD3 and TCR zeta chains", organism = "Homo
-#' sapiens", database = "Reactome")
+#' pathway = "Thyroid hormone synthesis", organism = "Homo sapiens",
+#' database = "KEGG")
 #'
 #' # visualize miRNA-gene network
 #' visualizeNetwork(net)
@@ -363,10 +366,13 @@ mirnaPathway <- function(mirnaObj,
 #' to handle and edit this object, please refer to the `ggraph` package.
 #'
 #' @examples
-#' # explore a TCR-associated pathway present in Reactome
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # explore Thyroid hormone synthesis pathway present in KEGG
 #' net <- mirnaPathway(obj,
-#' pathway = "Phosphorylation of CD3 and TCR zeta chains", organism = "Homo
-#' sapiens", database = "Reactome", onlyIntegrated = TRUE)
+#' pathway = "Thyroid hormone synthesis", organism = "Homo sapiens",
+#' database = "KEGG")
 #'
 #' # visualize miRNA-gene network
 #' visualizeNetwork(net)
@@ -984,9 +990,12 @@ mirnaDotplot.MirnaGsea <- function(mirnaGsea,
 #' An object of class `ggplot` containing the ridgeplot of miRNA GSEA results.
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # perform miRNA GSEA analysis
 #' gse_res <- gseaMirnas(obj, organism = "Homo sapiens",
-#' category = "miRWalk_GO_mature")
+#' category = "GO_Annotations_mature")
 #'
 #' # plot results as a ridgeplot
 #' mirnaRidgeplot(gse_res)
@@ -1165,11 +1174,14 @@ theme_enr <- function() {
 #' A trackplot with information about chromosome, SNP and miRNA gene location.
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # retrieve associated SNPs
-#' association <- findMirnaSNPs(obj, disId)
+#' # association <- findMirnaSNPs(obj, disId)
 #'
 #' # visualize association as a trackplot
-#' mirVariantPlot(variantId = varId, snpAssociation = association)
+#' # mirVariantPlot(variantId = varId, snpAssociation = association)
 #'
 #' @author
 #' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}

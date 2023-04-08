@@ -79,9 +79,12 @@ objects of class \code{\link[=MirnaGsea-class]{MirnaGsea}} the \code{fold} value
 the average absolute fold change of observed miRNAs in a given category.
 }
 \examples{
-# perform a GSEA with the miEAA category miRWalk
+# load example MirnaExperiment object
+obj <- loadExamples()
+
+# perform a GSEA with the miEAA category GO Annotations
 gse <- gseaMirnas(obj, organism = "Homo sapiens",
-category = "miRWalk_GO_mature")
+category = "GO_Annotations_mature")
 
 # extract results
 res <- enrichmentResults(gse)

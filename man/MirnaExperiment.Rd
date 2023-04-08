@@ -145,18 +145,24 @@ match those contained in the \code{primary} column of \code{geneMetadata}.
 }
 }
 \examples{
-# limma output for miRNAs
-de_m <- limma::topTable(fit_m, number = Inf)
-sig_m <- de_m[1, which(de_m$adj.P.Val < 0.05)]
+# load example data
+mirna_de <- loadExamples("mirnaDE")
+sig_m <- mirna_de$ID[abs(mirna_de$logFC) > 1 & mirna_de$FDR < 0.05]
+mirna_expr <- loadExamples("mirnaExpr")
+gene_de <- loadExamples("geneDE")
+sig_g <- gene_de$ID[abs(gene_de$logFC) > 1 & gene_de$FDR < 0.05]
+gene_expr <- loadExamples("geneExpr")
 
-# limma output for genes
-de_g <- limma::topTable(fit_g, number = Inf)
-sig_g <- de_g[1, which(de_g$adj.P.Val < 0.05)]
+# create sample maps
+geneMap <- data.frame("primary" = colnames(gene_expr),
+                      "colName" = colnames(gene_expr))
+mirnaMap <- data.frame("primary" = colnames(mirna_expr),
+                       "colName" = colnames(mirna_expr))
 
-# create a 'MirnaExperiment' object after DE analysis with limma
-obj <- MirnaExperiment(mirnaExpr = exp_m, geneExpr = exp_b,
-mirnaMetadata = info_m, geneMetadata = info_g, mirnaDE = de_m,
-geneDE = de_g, significantMirnas = sig_m, significantGenes = sig_g,
+# create a 'MirnaExperiment' object after DE analysis
+obj <- MirnaExperiment(mirnaExpr = mirna_expr, geneExpr = gene_expr,
+mirnaMetadata = mirnaMap, geneMetadata = geneMap, mirnaDE = mirna_de,
+geneDE = gene_de, significantMirnas = sig_m, significantGenes = sig_g,
 pairedSamples = TRUE)
 
 }

@@ -38,9 +38,12 @@ extract the enrichment results for objects of classes
 \code{\link[DOSE:gseaResult-class]{gseaResult-class}}.
 }
 \examples{
-# perform a GSEA with the miEAA category miRWalk
+# load example MirnaExperiment object
+obj <- loadExamples()
+
+# perform a GSEA with the miEAA category GO Annotations
 gse <- gseaMirnas(obj, organism = "Homo sapiens",
-category = "miRWalk_GO_mature")
+category = "GO_Annotations_mature")
 
 # extract results
 res <- enrichmentResults(gse)

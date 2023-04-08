@@ -93,6 +93,9 @@ The over-representation analysis is implemented in this function through
 the packages \code{clusterProfiler}, \code{ReactomePA} and \code{DOSE}.
 }
 \examples{
+# load example MirnaExperiment object
+obj <- loadExamples()
+
 # perform enrichment analysis of integrated targets with Reactome
 targets_enrichment <- enrichTargets(obj, database = "Reactome")
 

@@ -24,8 +24,7 @@ To retrieve EFO IDs for specific diseases, this function makes use of the
 }
 \examples{
 # search the EFO identifier of Alzheimer disease
-efo <- searchDisease("Alzheimer disease")
-efo
+# searchDisease("Alzheimer disease")
 
 }
 \references{

@@ -107,6 +107,9 @@
 #' multiple testing.
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # perform integration analysis with default settings
 #' obj <- integrateMirnaTargets(obj)
 #'

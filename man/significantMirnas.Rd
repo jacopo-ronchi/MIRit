@@ -23,6 +23,9 @@ This function is an accessor of the \code{significantMirnas} slot of a
 the IDs of statistically differentially expressed miRNAs.
 }
 \examples{
+# load example MirnaExperiment object
+obj <- loadExamples()
+
 # extract significant DE-miRNAs
 sigMirnas <- significantMirnas(obj)
 

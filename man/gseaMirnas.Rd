@@ -100,9 +100,12 @@ provides convenient methods for accessing miEAA 2.0 to perform
 enrichment analyses.
 }
 \examples{
-# perform a GSEA with the miEAA category miRWalk
+# load example MirnaExperiment object
+obj <- loadExamples()
+
+# perform a GSEA with the miEAA category GO Annotations
 gse <- gseaMirnas(obj, organism = "Homo sapiens",
-category = "miRWalk_GO_mature")
+category = "GO_Annotations_mature")
 
 # extract results
 res <- enrichmentResults(gse)

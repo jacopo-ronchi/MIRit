@@ -34,9 +34,12 @@ area represents the density of fold changes belonging to miRNAs annotated
 to that category.
 }
 \examples{
+# load example MirnaExperiment object
+obj <- loadExamples()
+
 # perform miRNA GSEA analysis
 gse_res <- gseaMirnas(obj, organism = "Homo sapiens",
-category = "miRWalk_GO_mature")
+category = "GO_Annotations_mature")
 
 # plot results as a ridgeplot
 mirnaRidgeplot(gse_res)

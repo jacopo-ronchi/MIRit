@@ -29,6 +29,9 @@ to retrieve the results of miRNA differential expression stored in a
 \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object.
 }
 \examples{
+# load example MirnaExperiment object
+obj <- loadExamples()
+
 # access miRNA differential expression of a MirnaExperiment object
 sig <- mirnaDE(obj)
 all <- mirnaDE(obj, onlySignificant = FALSE)

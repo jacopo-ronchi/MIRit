@@ -53,13 +53,16 @@ To retrieve disease-associated SNPs, this function makes use of the
 \code{gwasrapidd} package.
 }
 \examples{
+# load example MirnaExperiment object
+obj <- loadExamples()
+
 # search disease
-efo <- searchDisease("Alzheimer disease")
-disId <- efo[1]
+# searchDisease("Alzheimer disease")
+# disId <- "Alzheimer disease"
 
 # retrieve associated SNPs
-association <- findMirnaSNPs(obj, disId)
-association
+# association <- findMirnaSNPs(obj, disId)
+# association
 
 }
 \references{

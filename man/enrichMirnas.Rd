@@ -106,9 +106,12 @@ provides convenient methods for accessing miEAA 2.0 to perform
 enrichment analyses.
 }
 \examples{
-# perform an over-represantation analysis with the miEAA category miRWalk
+# load example MirnaExperiment object
+obj <- loadExamples()
+
+# perform an over-represantation analysis with miEAA category GO Annotations
 enr <- enrichMirnas(obj, organism = "Homo sapiens",
-category = "miRWalk_GO_mature")
+category = "GO_Annotations_mature")
 
 # divide the enrichment of up- and down-regulated miRNAs
 enr_up <- enr[["upregulated"]]
@@ -116,11 +119,9 @@ enr_down <- enr[["downregulated"]]
 
 # extract results
 res_up <- enrichmentResults(enr_up)
-res_down <- enrichmentResults(enr_down)
 
 # plot results
 mirnaDotplot(enr_up)
-mirnaDotplot(enr_down)
 
 }
 \references{

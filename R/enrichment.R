@@ -142,9 +142,12 @@ listCategories <- function(organism = "Homo sapiens",
 #' instructions see [`MirnaEnrichment`][MirnaEnrichment-class] class.
 #'
 #' @examples
-#' # perform an over-represantation analysis with the miEAA category miRWalk
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform an over-represantation analysis with miEAA category GO Annotations
 #' enr <- enrichMirnas(obj, organism = "Homo sapiens",
-#' category = "miRWalk_GO_mature")
+#' category = "GO_Annotations_mature")
 #'
 #' # divide the enrichment of up- and down-regulated miRNAs
 #' enr_up <- enr[["upregulated"]]
@@ -152,11 +155,9 @@ listCategories <- function(organism = "Homo sapiens",
 #'
 #' # extract results
 #' res_up <- enrichmentResults(enr_up)
-#' res_down <- enrichmentResults(enr_down)
 #'
 #' # plot results
 #' mirnaDotplot(enr_up)
-#' mirnaDotplot(enr_down)
 #'
 #' @note
 #' To query miEAA 2.0, this function uses the package `rbioapi`, which
@@ -446,9 +447,12 @@ enrichMirnas <- function(mirnaObj,
 #' For additional instructions see [`MirnaGsea`][MirnaGsea-class] class.
 #'
 #' @examples
-#' # perform a GSEA with the miEAA category miRWalk
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform a GSEA with the miEAA category GO Annotations
 #' gse <- gseaMirnas(obj, organism = "Homo sapiens",
-#' category = "miRWalk_GO_mature")
+#' category = "GO_Annotations_mature")
 #'
 #' # extract results
 #' res <- enrichmentResults(gse)
@@ -813,6 +817,9 @@ supportedOrganisms <- function(database) {
 #' \url{http://yulab-smu.top/biomedical-knowledge-mining-book/index.html}.
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # perform enrichment analysis of integrated targets with Reactome
 #' targets_enrichment <- enrichTargets(obj, database = "Reactome")
 #'
@@ -1088,6 +1095,9 @@ enrichTargets <- function(mirnaObj,
 #' \url{http://yulab-smu.top/biomedical-knowledge-mining-book/index.html}.
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # perform enrichment analysis of DE genes with Reactome
 #' de_enr <- enrichGenes(obj, database = "Reactome")
 #'
@@ -1457,6 +1467,9 @@ enrichInternal <- function(targets,
 #' \url{http://yulab-smu.top/biomedical-knowledge-mining-book/index.html}.
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # perform a gene set enrichment analysis with KEGG
 #' gse <- gseaGenes(obj, database = "KEGG")
 #'

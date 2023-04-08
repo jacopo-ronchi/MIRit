@@ -23,6 +23,9 @@
 #' A `data.frame` with miRNA differential expression.
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # access miRNA differential expression of a MirnaExperiment object
 #' sig <- mirnaDE(obj)
 #' all <- mirnaDE(obj, onlySignificant = FALSE)
@@ -55,6 +58,9 @@ setGeneric("mirnaDE", function(object, onlySignificant = TRUE)
 #' A `data.frame` with gene differential expression.
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # access gene differential expression of a MirnaExperiment object
 #' sig <- geneDE(obj)
 #' all <- geneDE(obj, onlySignificant = FALSE)
@@ -82,6 +88,9 @@ setGeneric("geneDE", function(object, onlySignificant = TRUE)
 #' 'hsa-miR-29a-3p'...).
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # extract significant DE-miRNAs
 #' sigMirnas <- significantMirnas(obj)
 #'
@@ -108,6 +117,9 @@ setGeneric("significantMirnas", function(object)
 #' 'CASP1'...).
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # extract significant DEGs
 #' sigGenes <- significantGenes(obj)
 #'
@@ -136,6 +148,9 @@ setGeneric("significantGenes", function(object)
 #' unpaired samples.
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # check if an existing MirnaExperiment object derive from paired samples
 #' pairedSamples(obj)
 #'
@@ -164,8 +179,8 @@ setGeneric("pairedSamples", function(object) standardGeneric("pairedSamples"))
 #' [getTargets()] function.
 #'
 #' @examples
-#' # retrieve miRNA targets
-#' obj <- getTargets(obj)
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
 #'
 #' # visualize targets
 #' targets_df <- mirnaTargets(obj)
@@ -193,6 +208,9 @@ setGeneric("mirnaTargets", function(object) standardGeneric("mirnaTargets"))
 #' A `data.frame` object containing the results of the integration analysis.
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # perform Kendall's correlation analysis with tau > 0.8 and p < 0.05
 #' obj <- integrateMirnaTargets(obj, test = "correlation",
 #' corMethod = "kendall", corCutoff = 0.8)
@@ -283,9 +301,12 @@ setGeneric("mirnaTargetsIntegration<-", function(object, value)
 #' A `ggplot` graph with a dotplot of enrichment results.
 #'
 #' @examples
-#' # perform a GSEA with the miEAA category miRWalk
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform a GSEA with the miEAA category GO Annotations
 #' gse <- gseaMirnas(obj, organism = "Homo sapiens",
-#' category = "miRWalk_GO_mature")
+#' category = "GO_Annotations_mature")
 #'
 #' # extract results
 #' res <- enrichmentResults(gse)
@@ -328,9 +349,12 @@ setGeneric("mirnaDotplot",
 #' A `data.frame` object with the full results of the enrichment analysis.
 #'
 #' @examples
-#' # perform a GSEA with the miEAA category miRWalk
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform a GSEA with the miEAA category GO Annotations
 #' gse <- gseaMirnas(obj, organism = "Homo sapiens",
-#' category = "miRWalk_GO_mature")
+#' category = "GO_Annotations_mature")
 #'
 #' # extract results
 #' res <- enrichmentResults(gse)
