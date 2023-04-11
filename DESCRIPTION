@@ -1,6 +1,6 @@
 Package: MIRit
 Title: Integrate microRNA and gene expression to decipher pathway complexity
-Version: 0.0.0.9000
+Version: 0.99.0
 Authors@R: 
     person("Jacopo", "Ronchi", email = "j.ronchi2@campus.unimib.it",
            role = c("aut", "cre"), comment = c(ORCID = "0000-0001-5520-4631"))
@@ -60,8 +60,10 @@ Suggests:
     limma,
     org.Hs.eg.db,
     rmarkdown,
-    statmod
+    statmod,
+    testthat (>= 3.0.0)
 Depends: 
-    R (>= 2.10)
+    R (>= 4.2.0)
 LazyData: false
 VignetteBuilder: knitr
+Config/testthat/edition: 3
