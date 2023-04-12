@@ -46,3 +46,4 @@ test_that("basic Fisher's association works", {
   expect_snapshot(mirnaTargetsIntegration(fshParam))
   
 })
+

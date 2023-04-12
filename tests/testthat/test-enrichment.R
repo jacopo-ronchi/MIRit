@@ -30,4 +30,113 @@ test_that("listCategories works", {
 
 
 
+test_that("MicroRNA ORA works", {
+  
+  ## load the example MirnaExperiment object
+  obj <- loadExamples()
+  
+  ## perform ORA of DE-miRNAs
+  enr <- enrichMirnas(obj,
+                      organism = "Homo sapiens",
+                      category = "GO_Annotations_mature",
+                      pCutoff = 0.1,
+                      pAdjustment = "fdr",
+                      minHits = 3,
+                      mirnaType = "mature")
+  
+  ## test enrichment results
+  expect_snapshot(enrichmentResults(enr$upregulated))
+  
+})
 
+
+
+test_that("MicroRNA GSEA works", {
+  
+  ## load the example MirnaExperiment object
+  obj <- loadExamples()
+  
+  ## perform GSEA of miRNAs
+  gse <- gseaMirnas(obj,
+                    organism = "Homo sapiens",
+                    category = "GO_Annotations_mature",
+                    pCutoff = 0.1,
+                    pAdjustment = "fdr",
+                    minHits = 3,
+                    mirnaType = "mature")
+  
+  ## test enrichment results
+  expect_snapshot(enrichmentResults(gse))
+  
+})
+
+
+
+test_that("Intergated targets ORA works (with GO)", {
+  
+  ## load the example MirnaExperiment object
+  obj <- loadExamples()
+  
+  ## perform ORA of integrated targets
+  enr <- enrichTargets(obj,
+                       integratedTargets = TRUE,
+                       database = "GO",
+                       organism = "Homo sapiens",
+                       simplifyGO = FALSE)
+  
+  ## test enrichment results
+  expect_snapshot(enrichmentResults(enr$`UP-miRNA targets`))
+  
+})
+
+
+
+test_that("Genes ORA works (with Reactome, DisGeNet and WikiPathways)", {
+  
+  ## load the example MirnaExperiment object
+  obj <- loadExamples()
+  
+  ## perform ORA - Reactome of genes
+  rc <- enrichGenes(obj,
+                    database = "Reactome",
+                    organism = "Homo sapiens")
+  
+  ## test ORA - Reactome results
+  expect_snapshot(enrichmentResults(rc$downregulated))
+  
+  ## perform ORA - DisGeNet of genes
+  dg <- enrichGenes(obj,
+                    database = "KEGG",
+                    organism = "Homo sapiens",
+                    pCutoff = 0.05,
+                    pAdjustment = "none")
+  
+  ## test ORA - DisGeNet results
+  expect_snapshot(enrichmentResults(dg$downregulated))
+  
+  ## perform ORA - WikiPathways of genes
+  wp <- enrichGenes(obj,
+                    database = "WikiPathways",
+                    organism = "Homo sapiens")
+  
+  ## test ORA - WikiPathways results
+  expect_snapshot(enrichmentResults(wp$downregulated))
+  
+})
+
+
+
+test_that("Genes GSEA works (with KEGG)", {
+  
+  ## load the example MirnaExperiment object
+  obj <- loadExamples()
+  
+  ## perform GSEA - KEGG of genes
+  kg <- gseaGenes(obj,
+                  database = "KEGG",
+                  organism = "Homo sapiens")
+  
+  ## test GSEA - KEGG results
+  expect_snapshot(enrichmentResults(kg))
+  
+})
