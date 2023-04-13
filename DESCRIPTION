@@ -19,8 +19,8 @@ Imports:
     BiocFileCache,
     biomaRt,
     BSgenome.Hsapiens.UCSC.hg38,
-    clusterProfiler (>= 4.4.4),
-    DOSE (>= 3.22.1),
+    clusterProfiler,
+    DOSE,
     dplyr,
     GenomicRanges,
     ggnewscale,
@@ -30,7 +30,7 @@ Imports:
     graph,
     graphite,
     grDevices,
-    Gviz (>= 1.40.1),
+    Gviz,
     gwasrapidd,
     methods,
     MultiAssayExperiment,
@@ -47,6 +47,7 @@ Collate:
     'data.R'
     'enrichment.R'
     'integration.R'
+    'networks.R'
     'show-methods.R'
     'targets.R'
     'utils.R'
