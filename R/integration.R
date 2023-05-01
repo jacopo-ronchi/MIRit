@@ -21,26 +21,16 @@
 #' * it is much more resistant to outliers.
 #'
 #' However, the user can also decide to use other correlation methods,
-#' such as Pearson's and Kendall's correlation. Nevertheless, if Pearson's
-#' correlation (`pearson`) is chosen, a Shapiro-Wilk test will be performed to
-#' verify that expression values are normally distributed, since this is a
-#' requirement for Pearson's correlation analysis. Additionally, for NGS data
+#' such as Pearson's and Kendall's correlation. Nevertheless, for NGS data
 #' it may happen that a certain number of ties is present in the expression
 #' values. This can be handled by `spearman` method as it computes a
 #' tie-corrected version of Spearman's coefficients. However, another
 #' correlation method that is suitable to perform rank correlation on tied data
 #' is the Kendall's tau-b method, usable with `kendall`.
-#'
-#' Furthermore, the user can decide whether to evaluate both positive and
-#' negative correlations between miRNA and targets, or only negative
-#' correlations. Negative correlations are more common as miRNAs act by
-#' down-regulating the expression of their targets post-transcriptionally.
-#' However, it has been proven that, in some cases, they can also promote
-#' the transcription of their targets. In the evaluation of both positive and
-#' negative correlations, a two sided t test is used to estimate statistical
-#' significance, while for only negative correlations, a one-sided test is
-#' computed to prove that correlation coefficients are significantly
-#' lower than 0.
+#' 
+#' Regarding correlation direction, since miRNAs mainly act as negative
+#' regulators, only negatively correlated miRNA-target pairs are evaluated, and
+#' statistical significance is calculated through a one-tailed t-test.
 #'
 #' Finally, if gene expression data and miRNA expression data derive from
 #' different samples (unpaired data), a correlation analysis can't be
@@ -66,14 +56,8 @@
 #' @param corMethod The correlation method to be used for correlation analysis.
 #' It must be one of: `spearman` (default), `pearson`, `kendall`. See the
 #' 'details' section for further information
-#' @param corCutoff The minimum absolute value of correlation coefficient to
+#' @param corCutoff The minimum (negative) value of correlation coefficient to
 #' consider meaningful a miRNA-target relationship. Default is `0.5`
-#' @param corDirection The correlation direction to assess. It must be `both`
-#' (default) to evaluate both negative and positive correlations between miRNAs
-#' and genes, or `less` to only evaluate negative correlations.
-#' @param onlyDEGs Logical, whether to perform the correlation analysis between
-#' DE-miRNAs and all targets or only between DE-miRNAs and differentially
-#' expressed targets. Default is `TRUE`
 #'
 #' @returns
 #' A [`MirnaExperiment`][MirnaExperiment-class] object containing integration
@@ -99,8 +83,6 @@
 #' * `microRNA`: the miRNA ID;
 #' * `target`: the correlated target gene;
 #' * `microRNA.Direction`: the fold change direction of the DE-miRNA;
-#' * `Correlation.Type`: specifies the correlation direction, either `positive`
-#' or `negative`;
 #' * `Corr.Coefficient`: the value of the correlation coefficient used;
 #' * `Corr.P.Value`: the p-value resulting from the correlation analysis;
 #' * `Corr.Adjusted.P.Val`: contains the correlation p-values corrected for
@@ -130,9 +112,7 @@ integrateMirnaTargets <- function(mirnaObj,
                                   pAdjustment = "fdr",
                                   onlySignificant = TRUE,
                                   corMethod = "spearman",
-                                  corCutoff = 0.5,
-                                  corDirection = "both",
-                                  onlyDEGs = TRUE) {
+                                  corCutoff = 0.5) {
 
   ## check inputs
   if (!is(mirnaObj, "MirnaExperiment")) {
@@ -196,16 +176,6 @@ integrateMirnaTargets <- function(mirnaObj,
     stop("'corCutoff' must be a number between 0 and 1! (default is 0.5)",
          call. = FALSE)
   }
-  if (!is.character(corDirection) |
-      length(corDirection) != 1 |
-      !corDirection %in% c("both", "less")) {
-    stop(paste("'corDirection' must be one of 'both' (default) or 'less'."),
-         call. = FALSE)
-  }
-  if (!is.logical(onlyDEGs) |
-      length(onlyDEGs) != 1) {
-    stop("'onlyDEGs' must be logical (TRUE/FALSE)!", call. = FALSE)
-  }
 
   ## use the appropriate test
   if (test == "auto" & pairedSamples(mirnaObj) == TRUE) {
@@ -226,12 +196,9 @@ integrateMirnaTargets <- function(mirnaObj,
 
   ## call the right function
   if (intMethod == "correlation") {
-    cDir <- ifelse(corDirection == "both", "two.sided", "less")
     mirnaObj <- correlateMirnaTargets(mirnaObj,
                                       corMethod,
                                       corCutoff,
-                                      cDir,
-                                      onlyDEGs,
                                       pCutoff,
                                       pAdjustment)
   } else if (intMethod == "fisher") {
@@ -362,8 +329,6 @@ oneSidedFisher <- function(mirnaObj, pCutoff, pAdjustment, onlySignificant) {
 correlateMirnaTargets <- function(mirnaObj,
                                   corMethod,
                                   corCutoff,
-                                  corDirection,
-                                  onlyDEGs,
                                   pCutoff,
                                   pAdjustment) {
 
@@ -401,37 +366,6 @@ correlateMirnaTargets <- function(mirnaObj,
 
   }
 
-  ## check if data are normally distributed (for Pearson correlation)
-  if (corMethod == "pearson") {
-
-    ## create a table with all expression features
-    featExpr <- rbind(mirnaExpr, geneExpr)
-
-    ## perform a Shapiro-Wilk test to verify the normality of expression data
-    message(paste("Performing a Shapiro-Wilk test to verify that",
-                  "expression values are normally distributed...\n"))
-    mirnaNorm <- lapply(rownames(featExpr), function(x){
-      expVal <- featExpr[x, ]
-      if (length(unique(expVal)) != 1) {
-        normTest <- stats::shapiro.test(expVal)
-        normTest$p.value
-      }
-    })
-
-    ## calculating the rate of not normally distributed genes
-    mirnaNorm <- unlist(mirnaNorm)
-    failRate <- length(which(mirnaNorm < 0.05)) / length(mirnaNorm) * 100
-
-    ## use Spearman's correlation if more than 10% of features is not normal
-    if (failRate > 10) {
-      warning(paste(round(failRate, digits = 2),
-                    "% of expression values don't follow the normal",
-                    "distribution (as Pearson's analysis requires).",
-                    "Therefore, Spearman's correlation is used.\n"))
-      corMethod <- "spearman"
-    }
-  }
-
   ## retrieve differentially expressed genes and miRNAs
   dem <- mirnaDE(mirnaObj)
   deg <- geneDE(mirnaObj)
@@ -439,10 +373,8 @@ correlateMirnaTargets <- function(mirnaObj,
   ## retrieve targets of DE-miRNAs from the object
   targetsTable <- mirnaTargets(mirnaObj)
 
-  ## select miRNA targets or differentially expressed miRNA targets
-  if (onlyDEGs == TRUE) {
-    targetsTable <- targetsTable[targetsTable$target_symbol %in% deg$ID, ]
-  }
+  ## select differentially expressed miRNA targets
+  targetsTable <- targetsTable[targetsTable$target_symbol %in% deg$ID, ]
 
   ## restrict to target genes present in the assay
   targetsTable <- targetsTable[targetsTable$target_symbol
@@ -458,17 +390,14 @@ correlateMirnaTargets <- function(mirnaObj,
     mirnaInt <- as.numeric(mirnaExpr[mirna, ])
     geneInt <- as.numeric(targetExpr[gene, ])
 
-    ## perform the correlation analysis (ONE SIDED OR TWO SIDED - INFORMARSI ???)
+    ## perform the correlation analysis
     corPair <- stats::cor.test(mirnaInt,
                                geneInt,
                                method = corMethod,
-                               alternative = corDirection,
+                               alternative = "less",
                                exact = FALSE)
 
     ## report the results of the correlation analysis
-    coefDirection <- ifelse(corPair$estimate > 0,
-                            "positive",
-                            "negative")
     fold <- ifelse(dem$logFC[dem$ID == mirna] > 0,
                    "upregulated",
                    "downregulated")
@@ -476,7 +405,6 @@ correlateMirnaTargets <- function(mirnaObj,
     pair <- c(mirna,
               gene,
               fold,
-              coefDirection,
               corPair$estimate,
               corPair$p.value)
     pair
@@ -486,7 +414,7 @@ correlateMirnaTargets <- function(mirnaObj,
   ## convert correlation output to a data.frame object
   corRes <- as.data.frame(t(correlation))
   colnames(corRes) <-c("microRNA", "Target", "microRNA.Direction",
-                       "Correlation.Type", "Corr.Coefficient", "Corr.P.Value")
+                       "Corr.Coefficient", "Corr.P.Value")
   corRes$Corr.Coefficient <- as.numeric(corRes$Corr.Coefficient)
   corRes$Corr.P.Value <- as.numeric(corRes$Corr.P.Value)
 

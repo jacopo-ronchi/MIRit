@@ -11,9 +11,7 @@ integrateMirnaTargets(
   pAdjustment = "fdr",
   onlySignificant = TRUE,
   corMethod = "spearman",
-  corCutoff = 0.5,
-  corDirection = "both",
-  onlyDEGs = TRUE
+  corCutoff = 0.5
 )
 }
 \arguments{
@@ -40,16 +38,8 @@ only if a one-sided Fisher's exact test is applied}
 It must be one of: \code{spearman} (default), \code{pearson}, \code{kendall}. See the
 'details' section for further information}
 
-\item{corCutoff}{The minimum absolute value of correlation coefficient to
+\item{corCutoff}{The minimum (negative) value of correlation coefficient to
 consider meaningful a miRNA-target relationship. Default is \code{0.5}}
-
-\item{corDirection}{The correlation direction to assess. It must be \code{both}
-(default) to evaluate both negative and positive correlations between miRNAs
-and genes, or \code{less} to only evaluate negative correlations.}
-
-\item{onlyDEGs}{Logical, whether to perform the correlation analysis between
-DE-miRNAs and all targets or only between DE-miRNAs and differentially
-expressed targets. Default is \code{TRUE}}
 }
 \value{
 A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing integration
@@ -76,8 +66,6 @@ has seven columns:
 \item \code{microRNA}: the miRNA ID;
 \item \code{target}: the correlated target gene;
 \item \code{microRNA.Direction}: the fold change direction of the DE-miRNA;
-\item \code{Correlation.Type}: specifies the correlation direction, either \code{positive}
-or \code{negative};
 \item \code{Corr.Coefficient}: the value of the correlation coefficient used;
 \item \code{Corr.P.Value}: the p-value resulting from the correlation analysis;
 \item \code{Corr.Adjusted.P.Val}: contains the correlation p-values corrected for
@@ -108,26 +96,12 @@ coefficient, as:
 }
 
 However, the user can also decide to use other correlation methods,
-such as Pearson's and Kendall's correlation. Nevertheless, if Pearson's
-correlation (\code{pearson}) is chosen, a Shapiro-Wilk test will be performed to
-verify that expression values are normally distributed, since this is a
-requirement for Pearson's correlation analysis. Additionally, for NGS data
+such as Pearson's and Kendall's correlation. Nevertheless, for NGS data
 it may happen that a certain number of ties is present in the expression
 values. This can be handled by \code{spearman} method as it computes a
 tie-corrected version of Spearman's coefficients. However, another
 correlation method that is suitable to perform rank correlation on tied data
 is the Kendall's tau-b method, usable with \code{kendall}.
-
-Furthermore, the user can decide whether to evaluate both positive and
-negative correlations between miRNA and targets, or only negative
-correlations. Negative correlations are more common as miRNAs act by
-down-regulating the expression of their targets post-transcriptionally.
-However, it has been proven that, in some cases, they can also promote
-the transcription of their targets. In the evaluation of both positive and
-negative correlations, a two sided t test is used to estimate statistical
-significance, while for only negative correlations, a one-sided test is
-computed to prove that correlation coefficients are significantly
-lower than 0.
 
 Finally, if gene expression data and miRNA expression data derive from
 different samples (unpaired data), a correlation analysis can't be

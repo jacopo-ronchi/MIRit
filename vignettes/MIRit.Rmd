@@ -941,22 +941,13 @@ correlation coefficients result more suitable for representing the interplay
 between miRNAs and target genes, because they are robust to non-linear
 relationships and outliers. However, Kendall's correlation just relies on the
 number of concordant and discordant pairs, and is less sensitive then Spearman's
-correlation, so, when lots of ties are present or when the sample size is small,
+correlation; so, when lots of ties are present or when the sample size is small,
 it may have a lower detection power. This is the reason why **Spearman's
 correlation coefficient** is the default one used in the
 `integrateMirnaTargets()` function to measure the correlation between miRNA and
-gene expression.
-
-Another important concern involves the correlation direction. Indeed, this
-function can analyze both positive and negative correlations, as well as just
-negative correlations. Usually, miRNAs prevent the expression of their targets,
-and, consequently, the expression of a miRNA should negatively correlate with
-the expression of its target. However, it was recently proved that in some
-conditions miRNAs may also promote gene expression, thus positively correlating
-with their target genes. The default behavior of the `integrateMirnaTargets()`
-function is to consider both correlation directions, but the user can decide to
-retain only negative interactions by setting the `corDirection` parameter to
-`less`.
+gene expression. Moreover, since miRNAs mainly act as negative regulators, only
+negatively correlated miRNA-target pairs are considered, and statistical
+significance is estimated through a one-tailed t-test.
 
 To sum up the steps that MIRit follows when evaluating the correlation between
 miRNAs and genes, what the `integrateMirnaTargets()` function does is to:
@@ -969,10 +960,8 @@ miRNAs and genes, what the `integrateMirnaTargets()` function does is to:
 4.  Adjust p-values for multiple testing before reporting significant results.
 
 In our thyroid cancer example, we want to find the miRNA-target pairs that
-exhibit a positive or negative correlation, with an absolute Spearman's
-coefficient higher than 0.5 and with FDR lower than 0.05. Further, we set the
-`onlyDEGs` parameter to `TRUE` in order to calculate the correlations between
-differentially expressed miRNAs and differentially expressed genes.
+exhibit a negative correlation with a Spearman's coefficient lower than -0.5
+and with FDR lower than 0.05.
 
 ```{r correlation}
 ## perform the integration analysis
@@ -981,9 +970,7 @@ experiment <- integrateMirnaTargets(experiment,
                                     pCutoff = 0.05,
                                     pAdjustment = "fdr",
                                     corMethod = "spearman",
-                                    corCutoff = 0.5,
-                                    corDirection = "both",
-                                    onlyDEGs = TRUE)
+                                    corCutoff = 0.5)
 ```
 
 Please notice that all the parameters used are set to their default value.
@@ -995,13 +982,11 @@ experiment <- integrateMirnaTargets(experiment)
 ```
 
 As we can see from the results of the integration analysis, a statistically
-significant correlation between 568 miRNA-target pairs has been found. In
-particular 269 miRNA-target pairs display a negative correlation, while 299
-pairs are positively correlated. Among the 265 differentially expressed genes,
-172 are significantly correlated with at least one differentially expressed
-miRNA. This is particularly interesting because it tells us that miRNA
-dysregulations account for nearly 65% of gene alterations found in thyroid
-cancer.
+significant correlation between 268 miRNA-target pairs has been found.
+Among the 265 differentially expressed genes, 121 are significantly correlated
+with at least one differentially expressed miRNA. This is particularly
+interesting because it tells us that miRNA dysregulations account for nearly
+46% of gene alterations found in thyroid cancer.
 
 Before moving on to the identification of the altered miRNAs regulatory
 networks, we can explore the results of the integration analysis thanks to the
@@ -1190,8 +1175,7 @@ conclude that a dysregulation engendered by these two miRNAs may be responsible
 for the reduction of PAX8, which in turn is not able to activate the
 transcription of numerous thyroid factors, including thyroid hormone. This
 compromised regulatory axis may account for radioactive iodine-resistance in
-thyroid cancer, and it has been further investigated and experimentally
-validated by the authors of the study.
+thyroid cancer, as highlighted by the authors of the study.
 
 Lastly, we can do the same thing to visualize the effects of miRNA
 dysregulations on the thyroid hormone signaling pathway.

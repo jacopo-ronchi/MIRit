@@ -3,1713 +3,544 @@
     Code
       mirnaTargetsIntegration(corr)
     Output
-                                 microRNA     Target microRNA.Direction
-      hsa.miR.1179.1         hsa-miR-1179      FBXL3      downregulated
-      hsa.miR.1179.2         hsa-miR-1179    ANKRD28      downregulated
-      hsa.miR.1179.3         hsa-miR-1179       CUL5      downregulated
-      hsa.miR.1179.4         hsa-miR-1179      GPBP1      downregulated
-      hsa.miR.1179.5         hsa-miR-1179      NOC2L      downregulated
-      hsa.miR.1179.6         hsa-miR-1179     NPEPPS      downregulated
-      hsa.miR.1275           hsa-miR-1275      SMAD2      downregulated
-      hsa.miR.1275.1         hsa-miR-1275     COL1A2      downregulated
-      hsa.miR.138.1.3p.1 hsa-miR-138-1-3p      CCND2      downregulated
-      hsa.miR.138.1.3p.2 hsa-miR-138-1-3p     CYBRD1      downregulated
-      hsa.miR.138.1.3p.3 hsa-miR-138-1-3p    ZFP36L2      downregulated
-      hsa.miR.138.1.3p.4 hsa-miR-138-1-3p ANKRD36BP1      downregulated
-      hsa.miR.138.1.3p.5 hsa-miR-138-1-3p      ASAH1      downregulated
-      hsa.miR.138.1.3p.6 hsa-miR-138-1-3p        DEK      downregulated
-      hsa.miR.138.1.3p.7 hsa-miR-138-1-3p     MED12L      downregulated
-      hsa.miR.138.1.3p.8 hsa-miR-138-1-3p   PPP1R15A      downregulated
-      hsa.miR.138.1.3p.9 hsa-miR-138-1-3p      TDRD6      downregulated
-      hsa.miR.138.5p       hsa-miR-138-5p    ZMYND11      downregulated
-      hsa.miR.138.5p.1     hsa-miR-138-5p        DEK      downregulated
-      hsa.miR.138.5p.2     hsa-miR-138-5p    ZFP36L2      downregulated
-      hsa.miR.138.5p.3     hsa-miR-138-5p       LMO3      downregulated
-      hsa.miR.138.5p.4     hsa-miR-138-5p       CD44      downregulated
-      hsa.miR.138.5p.5     hsa-miR-138-5p       IRS1      downregulated
-      hsa.miR.138.5p.6     hsa-miR-138-5p       BCL2      downregulated
-      hsa.miR.138.5p.7     hsa-miR-138-5p       CTSA      downregulated
-      hsa.miR.138.5p.8     hsa-miR-138-5p       EEF2      downregulated
-      hsa.miR.138.5p.9     hsa-miR-138-5p        JUN      downregulated
-      hsa.miR.138.5p.10    hsa-miR-138-5p     KIF20A      downregulated
-      hsa.miR.138.5p.11    hsa-miR-138-5p     PAPSS2      downregulated
-      hsa.miR.138.5p.12    hsa-miR-138-5p   PPP1R15A      downregulated
-      hsa.miR.138.5p.13    hsa-miR-138-5p    SLC20A2      downregulated
-      hsa.miR.138.5p.14    hsa-miR-138-5p     SPTBN1      downregulated
-      hsa.miR.138.5p.15    hsa-miR-138-5p       TOB1      downregulated
-      hsa.miR.138.5p.16    hsa-miR-138-5p      ZBED2      downregulated
-      hsa.miR.139.5p       hsa-miR-139-5p        JUN      downregulated
-      hsa.miR.139.5p.1     hsa-miR-139-5p     DCBLD2      downregulated
-      hsa.miR.139.5p.2     hsa-miR-139-5p     TSPAN3      downregulated
-      hsa.miR.139.5p.3     hsa-miR-139-5p       BCL2      downregulated
-      hsa.miR.139.5p.4     hsa-miR-139-5p       CANX      downregulated
-      hsa.miR.139.5p.5     hsa-miR-139-5p      CCND2      downregulated
-      hsa.miR.139.5p.6     hsa-miR-139-5p        DEK      downregulated
-      hsa.miR.139.5p.7     hsa-miR-139-5p       EEF2      downregulated
-      hsa.miR.139.5p.8     hsa-miR-139-5p       GJA1      downregulated
-      hsa.miR.139.5p.9     hsa-miR-139-5p      HYOU1      downregulated
-      hsa.miR.139.5p.10    hsa-miR-139-5p     NECAB1      downregulated
-      hsa.miR.139.5p.12    hsa-miR-139-5p     VPS37A      downregulated
-      hsa.miR.139.5p.14    hsa-miR-139-5p    ZFP36L2      downregulated
-      hsa.miR.144.3p       hsa-miR-144-3p    ZFP36L2      downregulated
-      hsa.miR.144.3p.1     hsa-miR-144-3p     DCBLD2      downregulated
-      hsa.miR.144.3p.6     hsa-miR-144-3p       IRS1      downregulated
-      hsa.miR.144.3p.7     hsa-miR-144-3p     CITED2      downregulated
-      hsa.miR.144.3p.8     hsa-miR-144-3p      BEST1      downregulated
-      hsa.miR.144.3p.11    hsa-miR-144-3p        JUN      downregulated
-      hsa.miR.144.5p       hsa-miR-144-5p    SMARCA2      downregulated
-      hsa.miR.144.5p.1     hsa-miR-144-5p        DEK      downregulated
-      hsa.miR.144.5p.2     hsa-miR-144-5p        ID4      downregulated
-      hsa.miR.144.5p.3     hsa-miR-144-5p      ITGA3      downregulated
-      hsa.miR.146b.3p     hsa-miR-146b-3p      RBBP4        upregulated
-      hsa.miR.146b.3p.1   hsa-miR-146b-3p    ZFP36L2        upregulated
-      hsa.miR.146b.3p.2   hsa-miR-146b-3p   C10orf55        upregulated
-      hsa.miR.146b.3p.3   hsa-miR-146b-3p       CANX        upregulated
-      hsa.miR.146b.3p.4   hsa-miR-146b-3p       DDR1        upregulated
-      hsa.miR.146b.3p.5   hsa-miR-146b-3p      LIMD1        upregulated
-      hsa.miR.146b.3p.6   hsa-miR-146b-3p    SLC48A1        upregulated
-      hsa.miR.146b.5p     hsa-miR-146b-5p      FBXL3        upregulated
-      hsa.miR.146b.5p.1   hsa-miR-146b-5p      HYOU1        upregulated
-      hsa.miR.146b.5p.2   hsa-miR-146b-5p       CD44        upregulated
-      hsa.miR.146b.5p.3   hsa-miR-146b-5p     CYBRD1        upregulated
-      hsa.miR.146b.5p.4   hsa-miR-146b-5p       IER2        upregulated
-      hsa.miR.146b.5p.5   hsa-miR-146b-5p        JUN        upregulated
-      hsa.miR.146b.5p.6   hsa-miR-146b-5p       MDM2        upregulated
-      hsa.miR.146b.5p.7   hsa-miR-146b-5p       PAX8        upregulated
-      hsa.miR.146b.5p.8   hsa-miR-146b-5p     TSPAN3        upregulated
-      hsa.miR.146b.5p.9   hsa-miR-146b-5p       WSB2        upregulated
-      hsa.miR.182.5p.1     hsa-miR-182-5p     CITED2        upregulated
-      hsa.miR.182.5p.2     hsa-miR-182-5p       CUL5        upregulated
-      hsa.miR.182.5p.3     hsa-miR-182-5p       BCL2        upregulated
-      hsa.miR.182.5p.4     hsa-miR-182-5p       NUMB        upregulated
-      hsa.miR.182.5p.5     hsa-miR-182-5p       TOB1        upregulated
-      hsa.miR.182.5p.6     hsa-miR-182-5p      CCND2        upregulated
-      hsa.miR.182.5p.7     hsa-miR-182-5p      SYNE2        upregulated
-      hsa.miR.182.5p.9     hsa-miR-182-5p      MCTP2        upregulated
-      hsa.miR.182.5p.10    hsa-miR-182-5p     MED12L        upregulated
-      hsa.miR.182.5p.11    hsa-miR-182-5p      PROS1        upregulated
-      hsa.miR.182.5p.12    hsa-miR-182-5p    ZMYND11        upregulated
-      hsa.miR.182.5p.14    hsa-miR-182-5p    ANKRD28        upregulated
-      hsa.miR.182.5p.15    hsa-miR-182-5p      ANXA1        upregulated
-      hsa.miR.182.5p.16    hsa-miR-182-5p    CCDC152        upregulated
-      hsa.miR.182.5p.17    hsa-miR-182-5p       IRS1        upregulated
-      hsa.miR.182.5p.18    hsa-miR-182-5p      MGST1        upregulated
-      hsa.miR.182.5p.19    hsa-miR-182-5p      RBBP4        upregulated
-      hsa.miR.182.5p.20    hsa-miR-182-5p      RBMS2        upregulated
-      hsa.miR.182.5p.21    hsa-miR-182-5p     SLC5A6        upregulated
-      hsa.miR.182.5p.23    hsa-miR-182-5p    ZFP36L2        upregulated
-      hsa.miR.182.5p.24    hsa-miR-182-5p      AIF1L        upregulated
-      hsa.miR.182.5p.25    hsa-miR-182-5p       ATF3        upregulated
-      hsa.miR.182.5p.26    hsa-miR-182-5p       BEX4        upregulated
-      hsa.miR.182.5p.27    hsa-miR-182-5p   C19orf33        upregulated
-      hsa.miR.182.5p.28    hsa-miR-182-5p   C6orf136        upregulated
-      hsa.miR.182.5p.29    hsa-miR-182-5p       CANX        upregulated
-      hsa.miR.182.5p.30    hsa-miR-182-5p      CCL21        upregulated
-      hsa.miR.182.5p.31    hsa-miR-182-5p      CFDP1        upregulated
-      hsa.miR.182.5p.33    hsa-miR-182-5p        DCN        upregulated
-      hsa.miR.182.5p.34    hsa-miR-182-5p    DENND1C        upregulated
-      hsa.miR.182.5p.35    hsa-miR-182-5p      DLEC1        upregulated
-      hsa.miR.182.5p.36    hsa-miR-182-5p       EEF2        upregulated
-      hsa.miR.182.5p.37    hsa-miR-182-5p       EGR1        upregulated
-      hsa.miR.182.5p.39    hsa-miR-182-5p       GJA1        upregulated
-      hsa.miR.182.5p.40    hsa-miR-182-5p     GNPTAB        upregulated
-      hsa.miR.182.5p.41    hsa-miR-182-5p      GPBP1        upregulated
-      hsa.miR.182.5p.42    hsa-miR-182-5p       GPX3        upregulated
-      hsa.miR.182.5p.43    hsa-miR-182-5p        ID4        upregulated
-      hsa.miR.182.5p.44    hsa-miR-182-5p      MAPK7        upregulated
-      hsa.miR.182.5p.45    hsa-miR-182-5p      NOC2L        upregulated
-      hsa.miR.182.5p.46    hsa-miR-182-5p      PIAS3        upregulated
-      hsa.miR.182.5p.47    hsa-miR-182-5p     PKMYT1        upregulated
-      hsa.miR.182.5p.48    hsa-miR-182-5p      PLIN4        upregulated
-      hsa.miR.182.5p.49    hsa-miR-182-5p    SLC26A4        upregulated
-      hsa.miR.182.5p.50    hsa-miR-182-5p    SMARCA2        upregulated
-      hsa.miR.182.5p.51    hsa-miR-182-5p       TAF5        upregulated
-      hsa.miR.182.5p.52    hsa-miR-182-5p      TAF9B        upregulated
-      hsa.miR.182.5p.54    hsa-miR-182-5p     TNRC6C        upregulated
-      hsa.miR.182.5p.55    hsa-miR-182-5p      UBXN6        upregulated
-      hsa.miR.182.5p.56    hsa-miR-182-5p       URI1        upregulated
-      hsa.miR.183.5p       hsa-miR-183-5p        EZR        upregulated
-      hsa.miR.183.5p.1     hsa-miR-183-5p       EEF2        upregulated
-      hsa.miR.183.5p.2     hsa-miR-183-5p       EGR1        upregulated
-      hsa.miR.183.5p.3     hsa-miR-183-5p       IRS1        upregulated
-      hsa.miR.183.5p.4     hsa-miR-183-5p     VPS37A        upregulated
-      hsa.miR.183.5p.6     hsa-miR-183-5p    ANKRD28        upregulated
-      hsa.miR.183.5p.7     hsa-miR-183-5p       CANX        upregulated
-      hsa.miR.183.5p.9     hsa-miR-183-5p      EFHD2        upregulated
-      hsa.miR.183.5p.10    hsa-miR-183-5p       FOSB        upregulated
-      hsa.miR.183.5p.11    hsa-miR-183-5p     HNRNPM        upregulated
-      hsa.miR.183.5p.12    hsa-miR-183-5p      HYOU1        upregulated
-      hsa.miR.183.5p.13    hsa-miR-183-5p      LLGL1        upregulated
-      hsa.miR.183.5p.15    hsa-miR-183-5p    ZFP36L2        upregulated
-      hsa.miR.204.5p       hsa-miR-204-5p        EZR      downregulated
-      hsa.miR.204.5p.1     hsa-miR-204-5p       BCL2      downregulated
-      hsa.miR.204.5p.2     hsa-miR-204-5p      CCND2      downregulated
-      hsa.miR.204.5p.3     hsa-miR-204-5p       EGR1      downregulated
-      hsa.miR.204.5p.4     hsa-miR-204-5p       FOSB      downregulated
-      hsa.miR.204.5p.5     hsa-miR-204-5p     GIGYF2      downregulated
-      hsa.miR.204.5p.6     hsa-miR-204-5p       MDM2      downregulated
-      hsa.miR.204.5p.7     hsa-miR-204-5p      SYTL4      downregulated
-      hsa.miR.204.5p.8     hsa-miR-204-5p       CANX      downregulated
-      hsa.miR.204.5p.9     hsa-miR-204-5p       CD44      downregulated
-      hsa.miR.204.5p.10    hsa-miR-204-5p     CITED2      downregulated
-      hsa.miR.204.5p.11    hsa-miR-204-5p     DCBLD2      downregulated
-      hsa.miR.204.5p.12    hsa-miR-204-5p        DEK      downregulated
-      hsa.miR.204.5p.13    hsa-miR-204-5p       EEF2      downregulated
-      hsa.miR.204.5p.14    hsa-miR-204-5p   HLA-DRB5      downregulated
-      hsa.miR.204.5p.15    hsa-miR-204-5p      LIMD1      downregulated
-      hsa.miR.204.5p.16    hsa-miR-204-5p       MICA      downregulated
-      hsa.miR.21.3p         hsa-miR-21-3p       SDC2        upregulated
-      hsa.miR.21.3p.1       hsa-miR-21-3p        DEK        upregulated
-      hsa.miR.21.3p.2       hsa-miR-21-3p      ITGA6        upregulated
-      hsa.miR.21.3p.4       hsa-miR-21-3p     TSPAN3        upregulated
-      hsa.miR.21.3p.5       hsa-miR-21-3p      AIF1L        upregulated
-      hsa.miR.21.3p.6       hsa-miR-21-3p    ANKRD28        upregulated
-      hsa.miR.21.3p.8       hsa-miR-21-3p   C19orf33        upregulated
-      hsa.miR.21.3p.9       hsa-miR-21-3p      CCND2        upregulated
-      hsa.miR.21.3p.10      hsa-miR-21-3p       CD24        upregulated
-      hsa.miR.21.3p.11      hsa-miR-21-3p       CD44        upregulated
-      hsa.miR.21.3p.12      hsa-miR-21-3p     COL1A2        upregulated
-      hsa.miR.21.3p.13      hsa-miR-21-3p       CTNS        upregulated
-      hsa.miR.21.3p.16      hsa-miR-21-3p       DDR1        upregulated
-      hsa.miR.21.3p.17      hsa-miR-21-3p     EFTUD2        upregulated
-      hsa.miR.21.3p.18      hsa-miR-21-3p    EIF2AK4        upregulated
-      hsa.miR.21.3p.19      hsa-miR-21-3p        FN1        upregulated
-      hsa.miR.21.3p.20      hsa-miR-21-3p       FZD4        upregulated
-      hsa.miR.21.3p.21      hsa-miR-21-3p        JUN        upregulated
-      hsa.miR.21.3p.22      hsa-miR-21-3p       JUND        upregulated
-      hsa.miR.21.3p.23      hsa-miR-21-3p     KIF20A        upregulated
-      hsa.miR.21.3p.24      hsa-miR-21-3p     NT5DC2        upregulated
-      hsa.miR.21.3p.25      hsa-miR-21-3p      NUPR1        upregulated
-      hsa.miR.21.3p.27      hsa-miR-21-3p      PROS1        upregulated
-      hsa.miR.21.3p.29      hsa-miR-21-3p    SLC20A2        upregulated
-      hsa.miR.21.3p.30      hsa-miR-21-3p     SLC5A6        upregulated
-      hsa.miR.21.3p.31      hsa-miR-21-3p      SMAD2        upregulated
-      hsa.miR.21.3p.32      hsa-miR-21-3p      SMPD4        upregulated
-      hsa.miR.21.3p.33      hsa-miR-21-3p   SNRNP200        upregulated
-      hsa.miR.21.3p.34      hsa-miR-21-3p     SORBS2        upregulated
-      hsa.miR.21.3p.35      hsa-miR-21-3p      SYNE2        upregulated
-      hsa.miR.21.3p.36      hsa-miR-21-3p       THRA        upregulated
-      hsa.miR.21.3p.37      hsa-miR-21-3p      UBXN6        upregulated
-      hsa.miR.21.3p.38      hsa-miR-21-3p       WSB2        upregulated
-      hsa.miR.21.3p.39      hsa-miR-21-3p    ZMYND11        upregulated
-      hsa.miR.21.3p.40      hsa-miR-21-3p     ZNF546        upregulated
-      hsa.miR.21.5p         hsa-miR-21-5p   ARHGAP24        upregulated
-      hsa.miR.21.5p.1       hsa-miR-21-5p       BCL2        upregulated
-      hsa.miR.21.5p.2       hsa-miR-21-5p     MRPL49        upregulated
-      hsa.miR.21.5p.3       hsa-miR-21-5p       TAF5        upregulated
-      hsa.miR.21.5p.4       hsa-miR-21-5p      APAF1        upregulated
-      hsa.miR.21.5p.5       hsa-miR-21-5p    ANKRD28        upregulated
-      hsa.miR.21.5p.6       hsa-miR-21-5p     CYBRD1        upregulated
-      hsa.miR.21.5p.7       hsa-miR-21-5p       LMO3        upregulated
-      hsa.miR.21.5p.8       hsa-miR-21-5p      PIAS3        upregulated
-      hsa.miR.21.5p.9       hsa-miR-21-5p      SYNE2        upregulated
-      hsa.miR.21.5p.10      hsa-miR-21-5p      ANXA1        upregulated
-      hsa.miR.21.5p.11      hsa-miR-21-5p      CCND2        upregulated
-      hsa.miR.21.5p.12      hsa-miR-21-5p       CD44        upregulated
-      hsa.miR.21.5p.13      hsa-miR-21-5p        DEK        upregulated
-      hsa.miR.21.5p.14      hsa-miR-21-5p      EFHD2        upregulated
-      hsa.miR.21.5p.15      hsa-miR-21-5p       EGR1        upregulated
-      hsa.miR.21.5p.16      hsa-miR-21-5p        EZR        upregulated
-      hsa.miR.21.5p.17      hsa-miR-21-5p      FBXL3        upregulated
-      hsa.miR.21.5p.18      hsa-miR-21-5p      GAPDH        upregulated
-      hsa.miR.21.5p.19      hsa-miR-21-5p     GIGYF2        upregulated
-      hsa.miR.21.5p.20      hsa-miR-21-5p       MDM2        upregulated
-      hsa.miR.21.5p.21      hsa-miR-21-5p    METTL7B        upregulated
-      hsa.miR.21.5p.22      hsa-miR-21-5p       SDC2        upregulated
-      hsa.miR.21.5p.23      hsa-miR-21-5p    SMARCA2        upregulated
-      hsa.miR.21.5p.24      hsa-miR-21-5p     SPTBN1        upregulated
-      hsa.miR.21.5p.27      hsa-miR-21-5p    ZMYND11        upregulated
-      hsa.miR.2110           hsa-miR-2110       ECE1        upregulated
-      hsa.miR.2110.1         hsa-miR-2110       EEF2        upregulated
-      hsa.miR.2110.2         hsa-miR-2110      MGST1        upregulated
-      hsa.miR.2110.3         hsa-miR-2110      TNNI1        upregulated
-      hsa.miR.2110.4         hsa-miR-2110     TNRC6C        upregulated
-      hsa.miR.221.3p       hsa-miR-221-3p    ANKRD28        upregulated
-      hsa.miR.221.3p.1     hsa-miR-221-3p      ANXA1        upregulated
-      hsa.miR.221.3p.2     hsa-miR-221-3p      APAF1        upregulated
-      hsa.miR.221.3p.3     hsa-miR-221-3p      GPBP1        upregulated
-      hsa.miR.221.3p.4     hsa-miR-221-3p       SDC2        upregulated
-      hsa.miR.221.3p.5     hsa-miR-221-3p    ZFP36L2        upregulated
-      hsa.miR.221.3p.6     hsa-miR-221-3p      CCND2        upregulated
-      hsa.miR.221.3p.7     hsa-miR-221-3p       MDM2        upregulated
-      hsa.miR.221.3p.8     hsa-miR-221-3p       WSB2        upregulated
-      hsa.miR.221.3p.9     hsa-miR-221-3p       GJA1        upregulated
-      hsa.miR.221.3p.10    hsa-miR-221-3p      TAF9B        upregulated
-      hsa.miR.221.3p.11    hsa-miR-221-3p       CANX        upregulated
-      hsa.miR.221.3p.12    hsa-miR-221-3p        DEK        upregulated
-      hsa.miR.221.3p.13    hsa-miR-221-3p      HYOU1        upregulated
-      hsa.miR.221.3p.14    hsa-miR-221-3p     NT5DC2        upregulated
-      hsa.miR.221.3p.15    hsa-miR-221-3p   PPP1R15A        upregulated
-      hsa.miR.221.3p.16    hsa-miR-221-3p     PPP4R2        upregulated
-      hsa.miR.221.3p.17    hsa-miR-221-3p      RBMS2        upregulated
-      hsa.miR.221.3p.18    hsa-miR-221-3p    SMARCA2        upregulated
-      hsa.miR.221.3p.19    hsa-miR-221-3p     TAPBPL        upregulated
-      hsa.miR.221.5p       hsa-miR-221-5p      LRP11        upregulated
-      hsa.miR.221.5p.2     hsa-miR-221-5p      APAF1        upregulated
-      hsa.miR.221.5p.3     hsa-miR-221-5p     CITED2        upregulated
-      hsa.miR.221.5p.5     hsa-miR-221-5p       DDR1        upregulated
-      hsa.miR.221.5p.6     hsa-miR-221-5p       ECE1        upregulated
-      hsa.miR.221.5p.7     hsa-miR-221-5p        EZR        upregulated
-      hsa.miR.221.5p.8     hsa-miR-221-5p      FBXL3        upregulated
-      hsa.miR.221.5p.9     hsa-miR-221-5p      FCGBP        upregulated
-      hsa.miR.221.5p.10    hsa-miR-221-5p      GAPDH        upregulated
-      hsa.miR.221.5p.11    hsa-miR-221-5p     RAB11B        upregulated
-      hsa.miR.221.5p.12    hsa-miR-221-5p      RBMS2        upregulated
-      hsa.miR.221.5p.13    hsa-miR-221-5p     RNF207        upregulated
-      hsa.miR.221.5p.14    hsa-miR-221-5p   SNRNP200        upregulated
-      hsa.miR.221.5p.15    hsa-miR-221-5p      STAB1        upregulated
-      hsa.miR.221.5p.16    hsa-miR-221-5p      SYNE2        upregulated
-      hsa.miR.221.5p.17    hsa-miR-221-5p      TRAF7        upregulated
-      hsa.miR.221.5p.18    hsa-miR-221-5p       URI1        upregulated
-      hsa.miR.222.3p       hsa-miR-222-3p      GPBP1        upregulated
-      hsa.miR.222.3p.1     hsa-miR-222-3p       SDC2        upregulated
-      hsa.miR.222.3p.2     hsa-miR-222-3p    ZFP36L2        upregulated
-      hsa.miR.222.3p.3     hsa-miR-222-3p       MDM2        upregulated
-      hsa.miR.222.3p.4     hsa-miR-222-3p       WSB2        upregulated
-      hsa.miR.222.3p.5     hsa-miR-222-3p      ANXA1        upregulated
-      hsa.miR.222.3p.6     hsa-miR-222-3p       CANX        upregulated
-      hsa.miR.222.3p.7     hsa-miR-222-3p       GJA1        upregulated
-      hsa.miR.222.3p.8     hsa-miR-222-3p        DCN        upregulated
-      hsa.miR.222.3p.9     hsa-miR-222-3p        DEK        upregulated
-      hsa.miR.222.3p.10    hsa-miR-222-3p       EEF2        upregulated
-      hsa.miR.222.3p.11    hsa-miR-222-3p        EZR        upregulated
-      hsa.miR.222.3p.12    hsa-miR-222-3p     GIGYF2        upregulated
-      hsa.miR.222.3p.13    hsa-miR-222-3p      HYOU1        upregulated
-      hsa.miR.222.3p.14    hsa-miR-222-3p      MATN2        upregulated
-      hsa.miR.222.3p.15    hsa-miR-222-3p   PPP1R15A        upregulated
-      hsa.miR.222.3p.16    hsa-miR-222-3p     PPP4R2        upregulated
-      hsa.miR.222.3p.17    hsa-miR-222-3p      RBMS2        upregulated
-      hsa.miR.222.3p.18    hsa-miR-222-3p      SIAH1        upregulated
-      hsa.miR.222.3p.19    hsa-miR-222-3p    ZFP36L1        upregulated
-      hsa.miR.222.3p.20    hsa-miR-222-3p    ZMYND11        upregulated
-      hsa.miR.31.3p         hsa-miR-31-3p       TOB1        upregulated
-      hsa.miR.31.3p.1       hsa-miR-31-3p     TSPAN3        upregulated
-      hsa.miR.31.5p         hsa-miR-31-5p       NUMB        upregulated
-      hsa.miR.31.5p.1       hsa-miR-31-5p     DCBLD2        upregulated
-      hsa.miR.31.5p.2       hsa-miR-31-5p     GIGYF2        upregulated
-      hsa.miR.31.5p.3       hsa-miR-31-5p       WSB2        upregulated
-      hsa.miR.31.5p.5       hsa-miR-31-5p       CTNS        upregulated
-      hsa.miR.31.5p.6       hsa-miR-31-5p       EGR2        upregulated
-      hsa.miR.31.5p.7       hsa-miR-31-5p        FBL        upregulated
-      hsa.miR.31.5p.8       hsa-miR-31-5p       GJA1        upregulated
-      hsa.miR.31.5p.10      hsa-miR-31-5p       MICA        upregulated
-      hsa.miR.31.5p.11      hsa-miR-31-5p      MTCH1        upregulated
-      hsa.miR.31.5p.12      hsa-miR-31-5p      PIAS3        upregulated
-      hsa.miR.31.5p.13      hsa-miR-31-5p     PPP4R2        upregulated
-      hsa.miR.31.5p.14      hsa-miR-31-5p     SPTBN5        upregulated
-      hsa.miR.31.5p.15      hsa-miR-31-5p       THRA        upregulated
-      hsa.miR.31.5p.16      hsa-miR-31-5p     ZNF497        upregulated
-      hsa.miR.34a.5p       hsa-miR-34a-5p       BCL2        upregulated
-      hsa.miR.34a.5p.1     hsa-miR-34a-5p       TAF5        upregulated
-      hsa.miR.34a.5p.2     hsa-miR-34a-5p    ZMYND11        upregulated
-      hsa.miR.34a.5p.3     hsa-miR-34a-5p       CD44        upregulated
-      hsa.miR.34a.5p.4     hsa-miR-34a-5p       THRA        upregulated
-      hsa.miR.34a.5p.5     hsa-miR-34a-5p       CD24        upregulated
-      hsa.miR.34a.5p.6     hsa-miR-34a-5p     CITED2        upregulated
-      hsa.miR.34a.5p.7     hsa-miR-34a-5p     CYBRD1        upregulated
-      hsa.miR.34a.5p.8     hsa-miR-34a-5p      EFHD2        upregulated
-      hsa.miR.34a.5p.9     hsa-miR-34a-5p     GIGYF2        upregulated
-      hsa.miR.34a.5p.10    hsa-miR-34a-5p     IL17RC        upregulated
-      hsa.miR.34a.5p.11    hsa-miR-34a-5p      ITGA6        upregulated
-      hsa.miR.34a.5p.12    hsa-miR-34a-5p       NOL3        upregulated
-      hsa.miR.34a.5p.13    hsa-miR-34a-5p    SLC48A1        upregulated
-      hsa.miR.34a.5p.14    hsa-miR-34a-5p     SPTBN1        upregulated
-      hsa.miR.34a.5p.15    hsa-miR-34a-5p      SYNE2        upregulated
-      hsa.miR.34a.5p.16    hsa-miR-34a-5p      AIF1L        upregulated
-      hsa.miR.34a.5p.17    hsa-miR-34a-5p    ANKRD28        upregulated
-      hsa.miR.34a.5p.18    hsa-miR-34a-5p      APAF1        upregulated
-      hsa.miR.34a.5p.19    hsa-miR-34a-5p       APOE        upregulated
-      hsa.miR.34a.5p.20    hsa-miR-34a-5p   ARHGAP24        upregulated
-      hsa.miR.34a.5p.21    hsa-miR-34a-5p       ATF3        upregulated
-      hsa.miR.34a.5p.22    hsa-miR-34a-5p       BCAM        upregulated
-      hsa.miR.34a.5p.23    hsa-miR-34a-5p      BEST1        upregulated
-      hsa.miR.34a.5p.24    hsa-miR-34a-5p       BEX4        upregulated
-      hsa.miR.34a.5p.25    hsa-miR-34a-5p   C19orf33        upregulated
-      hsa.miR.34a.5p.26    hsa-miR-34a-5p    C1orf56        upregulated
-      hsa.miR.34a.5p.27    hsa-miR-34a-5p   C6orf136        upregulated
-      hsa.miR.34a.5p.28    hsa-miR-34a-5p     CAPN12        upregulated
-      hsa.miR.34a.5p.29    hsa-miR-34a-5p      CLDN3        upregulated
-      hsa.miR.34a.5p.30    hsa-miR-34a-5p     COL1A2        upregulated
-      hsa.miR.34a.5p.31    hsa-miR-34a-5p     DCBLD2        upregulated
-      hsa.miR.34a.5p.32    hsa-miR-34a-5p       ECE1        upregulated
-      hsa.miR.34a.5p.33    hsa-miR-34a-5p       EGR1        upregulated
-      hsa.miR.34a.5p.34    hsa-miR-34a-5p    EIF2AK4        upregulated
-      hsa.miR.34a.5p.35    hsa-miR-34a-5p        FBL        upregulated
-      hsa.miR.34a.5p.36    hsa-miR-34a-5p      FBXL3        upregulated
-      hsa.miR.34a.5p.37    hsa-miR-34a-5p      FCGBP        upregulated
-      hsa.miR.34a.5p.38    hsa-miR-34a-5p       FHL1        upregulated
-      hsa.miR.34a.5p.39    hsa-miR-34a-5p        FN1        upregulated
-      hsa.miR.34a.5p.40    hsa-miR-34a-5p      FOXH1        upregulated
-      hsa.miR.34a.5p.41    hsa-miR-34a-5p      GAPDH        upregulated
-      hsa.miR.34a.5p.42    hsa-miR-34a-5p       GJA1        upregulated
-      hsa.miR.34a.5p.43    hsa-miR-34a-5p     HNRNPM        upregulated
-      hsa.miR.34a.5p.44    hsa-miR-34a-5p     HNRNPR        upregulated
-      hsa.miR.34a.5p.46    hsa-miR-34a-5p        ID1        upregulated
-      hsa.miR.34a.5p.47    hsa-miR-34a-5p        ID4        upregulated
-      hsa.miR.34a.5p.48    hsa-miR-34a-5p     IL18BP        upregulated
-      hsa.miR.34a.5p.49    hsa-miR-34a-5p      ITGA3        upregulated
-      hsa.miR.34a.5p.50    hsa-miR-34a-5p      JMJD4        upregulated
-      hsa.miR.34a.5p.51    hsa-miR-34a-5p        JUN        upregulated
-      hsa.miR.34a.5p.52    hsa-miR-34a-5p     KIF20A        upregulated
-      hsa.miR.34a.5p.53    hsa-miR-34a-5p     LGALS3        upregulated
-      hsa.miR.34a.5p.54    hsa-miR-34a-5p      LRP11        upregulated
-      hsa.miR.34a.5p.56    hsa-miR-34a-5p    METTL7B        upregulated
-      hsa.miR.34a.5p.57    hsa-miR-34a-5p      MGST1        upregulated
-      hsa.miR.34a.5p.59    hsa-miR-34a-5p       NUMB        upregulated
-      hsa.miR.34a.5p.60    hsa-miR-34a-5p       OGG1        upregulated
-      hsa.miR.34a.5p.61    hsa-miR-34a-5p       PAX8        upregulated
-      hsa.miR.34a.5p.62    hsa-miR-34a-5p       PCP4        upregulated
-      hsa.miR.34a.5p.63    hsa-miR-34a-5p     PKMYT1        upregulated
-      hsa.miR.34a.5p.64    hsa-miR-34a-5p   PPP1R15A        upregulated
-      hsa.miR.34a.5p.65    hsa-miR-34a-5p     PPP4R2        upregulated
-      hsa.miR.34a.5p.66    hsa-miR-34a-5p      RBBP4        upregulated
-      hsa.miR.34a.5p.67    hsa-miR-34a-5p      RBMS2        upregulated
-      hsa.miR.34a.5p.68    hsa-miR-34a-5p     SCPEP1        upregulated
-      hsa.miR.34a.5p.69    hsa-miR-34a-5p       SIX5        upregulated
-      hsa.miR.34a.5p.70    hsa-miR-34a-5p    SMARCA2        upregulated
-      hsa.miR.34a.5p.71    hsa-miR-34a-5p      SPSB3        upregulated
-      hsa.miR.34a.5p.72    hsa-miR-34a-5p      STK16        upregulated
-      hsa.miR.34a.5p.74    hsa-miR-34a-5p      TAF9B        upregulated
-      hsa.miR.34a.5p.75    hsa-miR-34a-5p      TFB1M        upregulated
-      hsa.miR.34a.5p.76    hsa-miR-34a-5p     TNRC6C        upregulated
-      hsa.miR.34a.5p.77    hsa-miR-34a-5p       TOB1        upregulated
-      hsa.miR.34a.5p.78    hsa-miR-34a-5p        TPO        upregulated
-      hsa.miR.34a.5p.79    hsa-miR-34a-5p      TRAF7        upregulated
-      hsa.miR.34a.5p.80    hsa-miR-34a-5p     TSPAN3        upregulated
-      hsa.miR.34a.5p.81    hsa-miR-34a-5p      UFSP2        upregulated
-      hsa.miR.34a.5p.82    hsa-miR-34a-5p       URI1        upregulated
-      hsa.miR.34a.5p.83    hsa-miR-34a-5p     VPS37A        upregulated
-      hsa.miR.34a.5p.84    hsa-miR-34a-5p       WSB2        upregulated
-      hsa.miR.34a.5p.85    hsa-miR-34a-5p    ZFP36L1        upregulated
-      hsa.miR.34a.5p.86    hsa-miR-34a-5p    ZFP36L2        upregulated
-      hsa.miR.3613.5p     hsa-miR-3613-5p        EZR        upregulated
-      hsa.miR.3613.5p.1   hsa-miR-3613-5p        FN1        upregulated
-      hsa.miR.3613.5p.2   hsa-miR-3613-5p       SDC2        upregulated
-      hsa.miR.3613.5p.3   hsa-miR-3613-5p    SLC20A2        upregulated
-      hsa.miR.3613.5p.4   hsa-miR-3613-5p   SNRNP200        upregulated
-      hsa.miR.3613.5p.5   hsa-miR-3613-5p     SPTBN1        upregulated
-      hsa.miR.375             hsa-miR-375       BCL2        upregulated
-      hsa.miR.375.1           hsa-miR-375       CUL5        upregulated
-      hsa.miR.375.2           hsa-miR-375     EFTUD2        upregulated
-      hsa.miR.375.3           hsa-miR-375       FZD4        upregulated
-      hsa.miR.375.4           hsa-miR-375       NUMB        upregulated
-      hsa.miR.375.5           hsa-miR-375       THRA        upregulated
-      hsa.miR.375.6           hsa-miR-375    ZFP36L2        upregulated
-      hsa.miR.375.7           hsa-miR-375        AHR        upregulated
-      hsa.miR.375.8           hsa-miR-375    ANKRD28        upregulated
-      hsa.miR.375.9           hsa-miR-375   C10orf55        upregulated
-      hsa.miR.375.11          hsa-miR-375      CCND2        upregulated
-      hsa.miR.375.12          hsa-miR-375        DEK        upregulated
-      hsa.miR.375.13          hsa-miR-375     DEPTOR        upregulated
-      hsa.miR.375.14          hsa-miR-375       DTX4        upregulated
-      hsa.miR.375.15          hsa-miR-375       EGR1        upregulated
-      hsa.miR.375.16          hsa-miR-375     HNRNPR        upregulated
-      hsa.miR.375.17          hsa-miR-375       IRS1        upregulated
-      hsa.miR.375.18          hsa-miR-375        JUN        upregulated
-      hsa.miR.375.20          hsa-miR-375       MDM2        upregulated
-      hsa.miR.375.21          hsa-miR-375      MED11        upregulated
-      hsa.miR.375.22          hsa-miR-375     MTHFD2        upregulated
-      hsa.miR.375.23          hsa-miR-375     SPTBN1        upregulated
-      hsa.miR.375.24          hsa-miR-375      SYNE2        upregulated
-      hsa.miR.375.25          hsa-miR-375    ZMYND11        upregulated
-      hsa.miR.451a           hsa-miR-451a       BCL2      downregulated
-      hsa.miR.451a.1         hsa-miR-451a       CANX      downregulated
-      hsa.miR.451a.2         hsa-miR-451a     DCBLD2      downregulated
-      hsa.miR.451a.3         hsa-miR-451a      SYNE2      downregulated
-      hsa.miR.486.3p       hsa-miR-486-3p       JUND      downregulated
-      hsa.miR.486.3p.1     hsa-miR-486-3p      ADIRF      downregulated
-      hsa.miR.486.3p.2     hsa-miR-486-3p      BEST1      downregulated
-      hsa.miR.486.3p.4     hsa-miR-486-3p      JMJD4      downregulated
-      hsa.miR.486.3p.6     hsa-miR-486-3p     RPL18A      downregulated
-      hsa.miR.486.5p       hsa-miR-486-5p        ID4      downregulated
-      hsa.miR.486.5p.1     hsa-miR-486-5p      SMAD2      downregulated
-      hsa.miR.486.5p.2     hsa-miR-486-5p       BCL2      downregulated
-      hsa.miR.486.5p.3     hsa-miR-486-5p       ECE1      downregulated
-      hsa.miR.486.5p.4     hsa-miR-486-5p      MATN2      downregulated
-      hsa.miR.504.5p       hsa-miR-504-5p       CANX      downregulated
-      hsa.miR.504.5p.2     hsa-miR-504-5p       TOB1      downregulated
-      hsa.miR.551b.3p     hsa-miR-551b-3p     HNRNPM        upregulated
-      hsa.miR.577             hsa-miR-577       SDC2      downregulated
-      hsa.miR.577.1           hsa-miR-577       WSB2      downregulated
-      hsa.miR.577.2           hsa-miR-577       BCL2      downregulated
-      hsa.miR.577.3           hsa-miR-577       MDM2      downregulated
-      hsa.miR.577.4           hsa-miR-577     SLC5A6      downregulated
-      hsa.miR.577.5           hsa-miR-577      CCND2      downregulated
-      hsa.miR.577.7           hsa-miR-577        ID4      downregulated
-      hsa.miR.577.8           hsa-miR-577      MATN2      downregulated
-      hsa.miR.652.3p       hsa-miR-652-3p      LLGL1      downregulated
-      hsa.miR.652.3p.1     hsa-miR-652-3p       EEF2      downregulated
-      hsa.miR.652.3p.2     hsa-miR-652-3p      AIF1L      downregulated
-      hsa.miR.652.3p.3     hsa-miR-652-3p    ANKRD28      downregulated
-      hsa.miR.652.3p.4     hsa-miR-652-3p       CAV1      downregulated
-      hsa.miR.652.3p.5     hsa-miR-652-3p      CCND2      downregulated
-      hsa.miR.652.3p.6     hsa-miR-652-3p      MGST1      downregulated
-      hsa.miR.652.3p.8     hsa-miR-652-3p     RPL18A      downregulated
-      hsa.miR.652.3p.9     hsa-miR-652-3p    SLC20A2      downregulated
-      hsa.miR.652.3p.10    hsa-miR-652-3p      SMAD2      downregulated
-      hsa.miR.652.3p.11    hsa-miR-652-3p    ZFP36L2      downregulated
-      hsa.miR.653.5p       hsa-miR-653-5p       CTSA        upregulated
-      hsa.miR.653.5p.1     hsa-miR-653-5p     DCBLD2        upregulated
-      hsa.miR.653.5p.4     hsa-miR-653-5p      GAPDH        upregulated
-      hsa.miR.653.5p.5     hsa-miR-653-5p    HTATSF1        upregulated
-      hsa.miR.653.5p.7     hsa-miR-653-5p    ZMYND11        upregulated
-      hsa.miR.6842.3p     hsa-miR-6842-3p       ECE1        upregulated
-      hsa.miR.6842.3p.1   hsa-miR-6842-3p      ITGA3        upregulated
-      hsa.miR.7.2.3p       hsa-miR-7-2-3p       SDC2      downregulated
-      hsa.miR.7.2.3p.1     hsa-miR-7-2-3p     HNRNPR      downregulated
-      hsa.miR.7.2.3p.2     hsa-miR-7-2-3p      LIMD1      downregulated
-      hsa.miR.7.5p           hsa-miR-7-5p       IRS1      downregulated
-      hsa.miR.7.5p.1         hsa-miR-7-5p       CUL5      downregulated
-      hsa.miR.7.5p.2         hsa-miR-7-5p     COL1A2      downregulated
-      hsa.miR.7.5p.3         hsa-miR-7-5p      LIMD1      downregulated
-      hsa.miR.7.5p.4         hsa-miR-7-5p        AGK      downregulated
-      hsa.miR.7.5p.5         hsa-miR-7-5p        AHR      downregulated
-      hsa.miR.7.5p.6         hsa-miR-7-5p      AIF1L      downregulated
-      hsa.miR.7.5p.7         hsa-miR-7-5p       BCL2      downregulated
-      hsa.miR.7.5p.8         hsa-miR-7-5p       CANX      downregulated
-      hsa.miR.7.5p.10        hsa-miR-7-5p      CCND2      downregulated
-      hsa.miR.7.5p.13        hsa-miR-7-5p     MED12L      downregulated
-      hsa.miR.7.5p.15        hsa-miR-7-5p    ANKRD28      downregulated
-      hsa.miR.7.5p.17        hsa-miR-7-5p   C10orf55      downregulated
-      hsa.miR.7.5p.19        hsa-miR-7-5p       CTNS      downregulated
-      hsa.miR.7.5p.20        hsa-miR-7-5p     CYBRD1      downregulated
-      hsa.miR.7.5p.21        hsa-miR-7-5p    EIF2AK4      downregulated
-      hsa.miR.7.5p.23        hsa-miR-7-5p      FBXL3      downregulated
-      hsa.miR.7.5p.24        hsa-miR-7-5p        FN1      downregulated
-      hsa.miR.7.5p.25        hsa-miR-7-5p      GAPDH      downregulated
-      hsa.miR.7.5p.26        hsa-miR-7-5p     GIGYF2      downregulated
-      hsa.miR.7.5p.28        hsa-miR-7-5p     HNRNPR      downregulated
-      hsa.miR.7.5p.29        hsa-miR-7-5p      HYOU1      downregulated
-      hsa.miR.7.5p.30        hsa-miR-7-5p        ID1      downregulated
-      hsa.miR.7.5p.31        hsa-miR-7-5p       IER2      downregulated
-      hsa.miR.7.5p.32        hsa-miR-7-5p      ITGA6      downregulated
-      hsa.miR.7.5p.34        hsa-miR-7-5p       MDM2      downregulated
-      hsa.miR.7.5p.36        hsa-miR-7-5p       NPC2      downregulated
-      hsa.miR.7.5p.37        hsa-miR-7-5p       NUMB      downregulated
-      hsa.miR.7.5p.38        hsa-miR-7-5p      NUPR1      downregulated
-      hsa.miR.7.5p.39        hsa-miR-7-5p     PKMYT1      downregulated
-      hsa.miR.7.5p.40        hsa-miR-7-5p      TAF9B      downregulated
-      hsa.miR.7.5p.41        hsa-miR-7-5p      TFB1M      downregulated
-      hsa.miR.7.5p.42        hsa-miR-7-5p       TOB1      downregulated
-      hsa.miR.7.5p.43        hsa-miR-7-5p        TPO      downregulated
-      hsa.miR.7.5p.45        hsa-miR-7-5p     VPS37A      downregulated
-      hsa.miR.7.5p.46        hsa-miR-7-5p    ZFP36L1      downregulated
-      hsa.miR.873.3p       hsa-miR-873-3p      CCND2      downregulated
-      hsa.miR.873.3p.1     hsa-miR-873-3p      FBXL3      downregulated
-      hsa.miR.873.3p.2     hsa-miR-873-3p       FOSB      downregulated
-      hsa.miR.873.3p.3     hsa-miR-873-3p       MDM2      downregulated
-      hsa.miR.873.3p.4     hsa-miR-873-3p     RPL18A      downregulated
-      hsa.miR.873.5p       hsa-miR-873-5p       CAV1      downregulated
-      hsa.miR.873.5p.1     hsa-miR-873-5p       DDR1      downregulated
-      hsa.miR.873.5p.2     hsa-miR-873-5p     NPEPPS      downregulated
-      hsa.miR.873.5p.3     hsa-miR-873-5p      ASAH1      downregulated
-      hsa.miR.873.5p.4     hsa-miR-873-5p      CCND2      downregulated
-      hsa.miR.873.5p.5     hsa-miR-873-5p      APAF1      downregulated
-      hsa.miR.873.5p.6     hsa-miR-873-5p       CTSA      downregulated
-      hsa.miR.873.5p.7     hsa-miR-873-5p       CUL5      downregulated
-      hsa.miR.873.5p.8     hsa-miR-873-5p       EEF2      downregulated
-      hsa.miR.873.5p.9     hsa-miR-873-5p     EFTUD2      downregulated
-      hsa.miR.873.5p.10    hsa-miR-873-5p       GJA1      downregulated
-      hsa.miR.873.5p.11    hsa-miR-873-5p       IER2      downregulated
-      hsa.miR.873.5p.12    hsa-miR-873-5p       MDM2      downregulated
-      hsa.miR.873.5p.13    hsa-miR-873-5p     PAPSS2      downregulated
-      hsa.miR.873.5p.14    hsa-miR-873-5p     RAB11B      downregulated
-      hsa.miR.873.5p.15    hsa-miR-873-5p      RBMS2      downregulated
-      hsa.miR.873.5p.17    hsa-miR-873-5p     SPIRE1      downregulated
-      hsa.miR.873.5p.18    hsa-miR-873-5p     SPTBN1      downregulated
-      hsa.miR.873.5p.19    hsa-miR-873-5p         TG      downregulated
-      hsa.miR.873.5p.20    hsa-miR-873-5p     TNRC6C      downregulated
-      hsa.miR.873.5p.21    hsa-miR-873-5p      TRAF7      downregulated
-      hsa.miR.873.5p.22    hsa-miR-873-5p    TXNDC11      downregulated
-      hsa.miR.874.3p       hsa-miR-874-3p       THRA      downregulated
-      hsa.miR.874.3p.1     hsa-miR-874-3p     CITED2      downregulated
-      hsa.miR.874.3p.2     hsa-miR-874-3p     TNRC6C      downregulated
-      hsa.miR.874.3p.3     hsa-miR-874-3p       DDR1      downregulated
-      hsa.miR.874.3p.4     hsa-miR-874-3p     SPTBN5      downregulated
-      hsa.miR.9.5p           hsa-miR-9-5p     MTHFD2      downregulated
-      hsa.miR.9.5p.1         hsa-miR-9-5p      FBXL3      downregulated
-      hsa.miR.9.5p.3         hsa-miR-9-5p       SIX5      downregulated
-      hsa.miR.9.5p.5         hsa-miR-9-5p     EFEMP1      downregulated
-      hsa.miR.9.5p.7         hsa-miR-9-5p      MCTP2      downregulated
-      hsa.miR.9.5p.8         hsa-miR-9-5p     PPP4R2      downregulated
-      hsa.miR.9.5p.9         hsa-miR-9-5p      SYNE2      downregulated
-      hsa.miR.9.5p.10        hsa-miR-9-5p       BCL2      downregulated
-      hsa.miR.9.5p.11        hsa-miR-9-5p    CCDC152      downregulated
-      hsa.miR.9.5p.12        hsa-miR-9-5p     SLC5A6      downregulated
-      hsa.miR.9.5p.13        hsa-miR-9-5p     SPTBN1      downregulated
-      hsa.miR.9.5p.14        hsa-miR-9-5p     TNRC6C      downregulated
-      hsa.miR.9.5p.15        hsa-miR-9-5p     TSPAN3      downregulated
-      hsa.miR.9.5p.16        hsa-miR-9-5p    ANKRD28      downregulated
-      hsa.miR.9.5p.17        hsa-miR-9-5p      ASAH1      downregulated
-      hsa.miR.9.5p.18        hsa-miR-9-5p       CUL5      downregulated
-      hsa.miR.9.5p.19        hsa-miR-9-5p       EGR1      downregulated
-      hsa.miR.9.5p.20        hsa-miR-9-5p     GIGYF2      downregulated
-      hsa.miR.9.5p.21        hsa-miR-9-5p       IRS1      downregulated
-      hsa.miR.9.5p.22        hsa-miR-9-5p       LMO3      downregulated
-      hsa.miR.9.5p.24        hsa-miR-9-5p       MDM2      downregulated
-      hsa.miR.9.5p.25        hsa-miR-9-5p     MED12L      downregulated
-      hsa.miR.9.5p.26        hsa-miR-9-5p       NUMB      downregulated
-      hsa.miR.9.5p.27        hsa-miR-9-5p       RYR2      downregulated
-      hsa.miR.9.5p.28        hsa-miR-9-5p    SMARCA2      downregulated
-      hsa.miR.96.5p.2       hsa-miR-96-5p       BCL2        upregulated
-      hsa.miR.96.5p.3       hsa-miR-96-5p       IRS1        upregulated
-      hsa.miR.96.5p.4       hsa-miR-96-5p      CCND2        upregulated
-      hsa.miR.96.5p.5       hsa-miR-96-5p      EFHD2        upregulated
-      hsa.miR.96.5p.6       hsa-miR-96-5p       MDM2        upregulated
-      hsa.miR.96.5p.7       hsa-miR-96-5p     MED12L        upregulated
-      hsa.miR.96.5p.8       hsa-miR-96-5p        DEK        upregulated
-      hsa.miR.96.5p.9       hsa-miR-96-5p       EEF2        upregulated
-      hsa.miR.96.5p.10      hsa-miR-96-5p      GAPDH        upregulated
-      hsa.miR.96.5p.11      hsa-miR-96-5p     GNPTAB        upregulated
-      hsa.miR.96.5p.12      hsa-miR-96-5p      LIMD1        upregulated
-      hsa.miR.96.5p.13      hsa-miR-96-5p      MGST1        upregulated
-      hsa.miR.96.5p.14      hsa-miR-96-5p     RAB11B        upregulated
-      hsa.miR.96.5p.15      hsa-miR-96-5p      RBMS2        upregulated
-      hsa.miR.96.5p.16      hsa-miR-96-5p    SMARCA2        upregulated
-      hsa.miR.96.5p.17      hsa-miR-96-5p      SMPD4        upregulated
-      hsa.miR.96.5p.18      hsa-miR-96-5p     SPTBN1        upregulated
-      hsa.miR.96.5p.19      hsa-miR-96-5p      STAT6        upregulated
-      hsa.miR.96.5p.20      hsa-miR-96-5p     TNRC6C        upregulated
-      hsa.miR.96.5p.21      hsa-miR-96-5p     VPS37A        upregulated
-      hsa.miR.96.5p.22      hsa-miR-96-5p    ZFP36L2        upregulated
-                         Correlation.Type Corr.Coefficient Corr.P.Value
-      hsa.miR.1179.1             positive        0.8294118 7.088454e-05
-      hsa.miR.1179.2             positive        0.9205882 4.320410e-07
-      hsa.miR.1179.3             positive        0.7911765 2.619464e-04
-      hsa.miR.1179.4             positive        0.6558824 5.800737e-03
-      hsa.miR.1179.5             negative       -0.6529412 6.102047e-03
-      hsa.miR.1179.6             negative       -0.8000000 1.985710e-04
-      hsa.miR.1275               positive        0.9470588 2.715731e-08
-      hsa.miR.1275.1             negative       -0.7647059 5.596763e-04
-      hsa.miR.138.1.3p.1         negative       -0.9176471 5.528655e-07
-      hsa.miR.138.1.3p.2         positive        0.8411765 4.442904e-05
-      hsa.miR.138.1.3p.3         positive        0.7764706 4.043508e-04
-      hsa.miR.138.1.3p.4         positive        0.6470588 6.742077e-03
-      hsa.miR.138.1.3p.5         positive        0.7411765 1.018470e-03
-      hsa.miR.138.1.3p.6         positive        0.7882353 2.864657e-04
-      hsa.miR.138.1.3p.7         positive        0.8735294 9.869652e-06
-      hsa.miR.138.1.3p.8         positive        0.6941176 2.853706e-03
-      hsa.miR.138.1.3p.9         positive        0.9352941 1.072017e-07
-      hsa.miR.138.5p             positive        0.7352941 1.171616e-03
-      hsa.miR.138.5p.1           positive        0.6647059 4.967386e-03
-      hsa.miR.138.5p.2           positive        0.6470588 6.742077e-03
-      hsa.miR.138.5p.3           negative       -0.6882353 3.203909e-03
-      hsa.miR.138.5p.4           negative       -0.8264706 7.923549e-05
-      hsa.miR.138.5p.5           positive        0.9411765 5.588938e-08
-      hsa.miR.138.5p.6           positive        0.6500000 6.415707e-03
-      hsa.miR.138.5p.7           negative       -0.7558824 7.058906e-04
-      hsa.miR.138.5p.8           positive        0.6382353 7.801139e-03
-      hsa.miR.138.5p.9           positive        0.7970588 2.180981e-04
-      hsa.miR.138.5p.10          negative       -0.8294118 7.088454e-05
-      hsa.miR.138.5p.11          positive        0.6970588 2.690589e-03
-      hsa.miR.138.5p.12          positive        0.6147059 1.127947e-02
-      hsa.miR.138.5p.13          positive        0.7441176 9.482828e-04
-      hsa.miR.138.5p.14          positive        0.8882353 4.326251e-06
-      hsa.miR.138.5p.15          positive        0.7000000 2.535095e-03
-      hsa.miR.138.5p.16          positive        0.6058824 1.286030e-02
-      hsa.miR.139.5p             positive        0.6647059 4.967386e-03
-      hsa.miR.139.5p.1           negative       -0.5323529 3.376862e-02
-      hsa.miR.139.5p.2           negative       -0.6882353 3.203909e-03
-      hsa.miR.139.5p.3           positive        0.8352941 5.637132e-05
-      hsa.miR.139.5p.4           positive        0.6529412 6.102047e-03
-      hsa.miR.139.5p.5           negative       -0.7117647 1.984043e-03
-      hsa.miR.139.5p.6           positive        0.6411765 7.434419e-03
-      hsa.miR.139.5p.7           positive        0.6705882 4.467209e-03
-      hsa.miR.139.5p.8           positive        0.7823529 3.412208e-04
-      hsa.miR.139.5p.9           positive        0.6264706 9.413977e-03
-      hsa.miR.139.5p.10          positive        0.6941176 2.853706e-03
-      hsa.miR.139.5p.12          negative       -0.6176471 1.078798e-02
-      hsa.miR.139.5p.14          positive        0.7088235 2.111681e-03
-      hsa.miR.144.3p             positive        0.6117647 1.178841e-02
-      hsa.miR.144.3p.1           negative       -0.6058824 1.286030e-02
-      hsa.miR.144.3p.6           positive        0.5117647 4.272345e-02
-      hsa.miR.144.3p.7           positive        0.7000000 2.535095e-03
-      hsa.miR.144.3p.8           negative       -0.7558824 7.058906e-04
-      hsa.miR.144.3p.11          positive        0.8058824 1.638467e-04
-      hsa.miR.144.5p             positive        0.8088235 1.484756e-04
-      hsa.miR.144.5p.1           positive        0.7882353 2.864657e-04
-      hsa.miR.144.5p.2           positive        0.6117647 1.178841e-02
-      hsa.miR.144.5p.3           negative       -0.6323529 8.577584e-03
-      hsa.miR.146b.3p            positive        0.6941176 2.853706e-03
-      hsa.miR.146b.3p.1          negative       -0.7911765 2.619464e-04
-      hsa.miR.146b.3p.2          positive        0.7764706 4.043508e-04
-      hsa.miR.146b.3p.3          negative       -0.9058824 1.363513e-06
-      hsa.miR.146b.3p.4          positive        0.9117647 8.818986e-07
-      hsa.miR.146b.3p.5          negative       -0.8823529 6.095620e-06
-      hsa.miR.146b.3p.6          positive        0.8941176 3.011310e-06
-      hsa.miR.146b.5p            negative       -0.8970588 2.492376e-06
-      hsa.miR.146b.5p.1          negative       -0.7852941 3.128539e-04
-      hsa.miR.146b.5p.2          positive        0.7823529 3.412208e-04
-      hsa.miR.146b.5p.3          negative       -0.8705882 1.149893e-05
-      hsa.miR.146b.5p.4          negative       -0.8500000 3.052260e-05
-      hsa.miR.146b.5p.5          negative       -0.8117647 1.343224e-04
-      hsa.miR.146b.5p.6          positive        0.7529412 7.610811e-04
-      hsa.miR.146b.5p.7          negative       -0.6735294 4.232739e-03
-      hsa.miR.146b.5p.8          positive        0.8588235 2.046440e-05
-      hsa.miR.146b.5p.9          positive        0.8294118 7.088454e-05
-      hsa.miR.182.5p.1           negative       -0.6882353 3.203909e-03
-      hsa.miR.182.5p.2           negative       -0.7235294 1.534481e-03
-      hsa.miR.182.5p.3           negative       -0.8647059 1.544234e-05
-      hsa.miR.182.5p.4           positive        0.5735294 2.019104e-02
-      hsa.miR.182.5p.5           negative       -0.7411765 1.018470e-03
-      hsa.miR.182.5p.6           positive        0.6705882 4.467209e-03
-      hsa.miR.182.5p.7           negative       -0.5470588 2.830109e-02
-      hsa.miR.182.5p.9           positive        0.7617647 6.053428e-04
-      hsa.miR.182.5p.10          negative       -0.5852941 1.722529e-02
-      hsa.miR.182.5p.11          positive        0.5323529 3.376862e-02
-      hsa.miR.182.5p.12          negative       -0.5705882 2.099070e-02
-      hsa.miR.182.5p.14          negative       -0.5647059 2.266320e-02
-      hsa.miR.182.5p.15          positive        0.5529412 2.631450e-02
-      hsa.miR.182.5p.16          negative       -0.8264706 7.923549e-05
-      hsa.miR.182.5p.17          negative       -0.6176471 1.078798e-02
-      hsa.miR.182.5p.18          positive        0.7264706 1.436183e-03
-      hsa.miR.182.5p.19          positive        0.7647059 5.596763e-04
-      hsa.miR.182.5p.20          positive        0.7588235 6.540302e-04
-      hsa.miR.182.5p.21          negative       -0.8000000 1.985710e-04
-      hsa.miR.182.5p.23          negative       -0.8176471 1.093631e-04
-      hsa.miR.182.5p.24          negative       -0.8470588 3.468046e-05
-      hsa.miR.182.5p.25          negative       -0.6147059 1.127947e-02
-      hsa.miR.182.5p.26          negative       -0.7647059 5.596763e-04
-      hsa.miR.182.5p.27          positive        0.5205882 3.869091e-02
-      hsa.miR.182.5p.28          positive        0.8352941 5.637132e-05
-      hsa.miR.182.5p.29          negative       -0.6647059 4.967386e-03
-      hsa.miR.182.5p.30          negative       -0.7588235 6.540302e-04
-      hsa.miR.182.5p.31          negative       -0.7941176 2.391909e-04
-      hsa.miR.182.5p.33          negative       -0.5235294 3.741265e-02
-      hsa.miR.182.5p.34          negative       -0.8558824 2.344916e-05
-      hsa.miR.182.5p.35          positive        0.6941176 2.853706e-03
-      hsa.miR.182.5p.36          negative       -0.7352941 1.171616e-03
-      hsa.miR.182.5p.37          negative       -0.5735294 2.019104e-02
-      hsa.miR.182.5p.39          negative       -0.7794118 3.716802e-04
-      hsa.miR.182.5p.40          positive        0.7205882 1.638191e-03
-      hsa.miR.182.5p.41          negative       -0.7058824 2.245901e-03
-      hsa.miR.182.5p.42          negative       -0.6294118 8.988089e-03
-      hsa.miR.182.5p.43          negative       -0.5823529 1.793273e-02
-      hsa.miR.182.5p.44          negative       -0.7764706 4.043508e-04
-      hsa.miR.182.5p.45          positive        0.6088235 1.231520e-02
-      hsa.miR.182.5p.46          positive        0.6441176 7.081524e-03
-      hsa.miR.182.5p.47          positive        0.5617647 2.353702e-02
-      hsa.miR.182.5p.48          positive        0.5764706 1.941514e-02
-      hsa.miR.182.5p.49          negative       -0.5941176 1.523240e-02
-      hsa.miR.182.5p.50          negative       -0.8000000 1.985710e-04
-      hsa.miR.182.5p.51          positive        0.8411765 4.442904e-05
-      hsa.miR.182.5p.52          negative       -0.6323529 8.577584e-03
-      hsa.miR.182.5p.54          positive        0.6470588 6.742077e-03
-      hsa.miR.182.5p.55          negative       -0.7294118 1.343079e-03
-      hsa.miR.182.5p.56          negative       -0.7294118 1.343079e-03
-      hsa.miR.183.5p             negative       -0.6176471 1.078798e-02
-      hsa.miR.183.5p.1           negative       -0.6970588 2.690589e-03
-      hsa.miR.183.5p.2           negative       -0.5970588 1.460973e-02
-      hsa.miR.183.5p.3           negative       -0.6058824 1.286030e-02
-      hsa.miR.183.5p.4           positive        0.7823529 3.412208e-04
-      hsa.miR.183.5p.6           negative       -0.6617647 5.233753e-03
-      hsa.miR.183.5p.7           negative       -0.7411765 1.018470e-03
-      hsa.miR.183.5p.9           positive        0.6647059 4.967386e-03
-      hsa.miR.183.5p.10          negative       -0.6117647 1.178841e-02
-      hsa.miR.183.5p.11          negative       -0.8470588 3.468046e-05
-      hsa.miR.183.5p.12          negative       -0.5382353 3.149323e-02
-      hsa.miR.183.5p.13          positive        0.6941176 2.853706e-03
-      hsa.miR.183.5p.15          negative       -0.8911765 3.618649e-06
-      hsa.miR.204.5p             positive        0.8647059 1.544234e-05
-      hsa.miR.204.5p.1           positive        0.7235294 1.534481e-03
-      hsa.miR.204.5p.2           negative       -0.9294118 1.940119e-07
-      hsa.miR.204.5p.3           positive        0.8205882 9.841270e-05
-      hsa.miR.204.5p.4           positive        0.7941176 2.391909e-04
-      hsa.miR.204.5p.5           positive        0.7441176 9.482828e-04
-      hsa.miR.204.5p.6           negative       -0.7441176 9.482828e-04
-      hsa.miR.204.5p.7           negative       -0.7764706 4.043508e-04
-      hsa.miR.204.5p.8           positive        0.7176471 1.747535e-03
-      hsa.miR.204.5p.9           negative       -0.8529412 2.679074e-05
-      hsa.miR.204.5p.10          positive        0.8941176 3.011310e-06
-      hsa.miR.204.5p.11          negative       -0.6941176 2.853706e-03
-      hsa.miR.204.5p.12          positive        0.7294118 1.343079e-03
-      hsa.miR.204.5p.13          positive        0.6647059 4.967386e-03
-      hsa.miR.204.5p.14          negative       -0.6941176 2.853706e-03
-      hsa.miR.204.5p.15          positive        0.7588235 6.540302e-04
-      hsa.miR.204.5p.16          positive        0.7000000 2.535095e-03
-      hsa.miR.21.3p              negative       -0.7970588 2.180981e-04
-      hsa.miR.21.3p.1            negative       -0.6970588 2.690589e-03
-      hsa.miR.21.3p.2            positive        0.8852941 5.147148e-06
-      hsa.miR.21.3p.4            positive        0.6882353 3.203909e-03
-      hsa.miR.21.3p.5            negative       -0.8147059 1.213095e-04
-      hsa.miR.21.3p.6            negative       -0.8882353 4.326251e-06
-      hsa.miR.21.3p.8            positive        0.8029412 1.805168e-04
-      hsa.miR.21.3p.9            positive        0.8176471 1.093631e-04
-      hsa.miR.21.3p.10           negative       -0.6205882 1.031352e-02
-      hsa.miR.21.3p.11           positive        0.7588235 6.540302e-04
-      hsa.miR.21.3p.12           positive        0.8323529 6.328125e-05
-      hsa.miR.21.3p.13           positive        0.8176471 1.093631e-04
-      hsa.miR.21.3p.16           positive        0.7470588 8.821070e-04
-      hsa.miR.21.3p.17           positive        0.5235294 3.741265e-02
-      hsa.miR.21.3p.18           negative       -0.5941176 1.523240e-02
-      hsa.miR.21.3p.19           positive        0.8705882 1.149893e-05
-      hsa.miR.21.3p.20           positive        0.8000000 1.985710e-04
-      hsa.miR.21.3p.21           negative       -0.6058824 1.286030e-02
-      hsa.miR.21.3p.22           negative       -0.5617647 2.353702e-02
-      hsa.miR.21.3p.23           positive        0.6000000 1.400712e-02
-      hsa.miR.21.3p.24           positive        0.6117647 1.178841e-02
-      hsa.miR.21.3p.25           negative       -0.6441176 7.081524e-03
-      hsa.miR.21.3p.27           positive        0.8823529 6.095620e-06
-      hsa.miR.21.3p.29           negative       -0.7117647 1.984043e-03
-      hsa.miR.21.3p.30           negative       -0.6000000 1.400712e-02
-      hsa.miR.21.3p.31           negative       -0.8323529 6.328125e-05
-      hsa.miR.21.3p.32           negative       -0.7264706 1.436183e-03
-      hsa.miR.21.3p.33           positive        0.6705882 4.467209e-03
-      hsa.miR.21.3p.34           negative       -0.8264706 7.923549e-05
-      hsa.miR.21.3p.35           negative       -0.6382353 7.801139e-03
-      hsa.miR.21.3p.36           positive        0.7382353 1.092851e-03
-      hsa.miR.21.3p.37           negative       -0.6676471 4.711982e-03
-      hsa.miR.21.3p.38           positive        0.5264706 3.616651e-02
-      hsa.miR.21.3p.39           negative       -0.9264706 2.561397e-07
-      hsa.miR.21.3p.40           positive        0.8205882 9.841270e-05
-      hsa.miR.21.5p              negative       -0.9705882 4.723401e-10
-      hsa.miR.21.5p.1            negative       -0.7352941 1.171616e-03
-      hsa.miR.21.5p.2            positive        0.8411765 4.442904e-05
-      hsa.miR.21.5p.3            positive        0.6323529 8.577584e-03
-      hsa.miR.21.5p.4            negative       -0.7705882 4.768224e-04
-      hsa.miR.21.5p.5            negative       -0.9235294 3.343900e-07
-      hsa.miR.21.5p.6            negative       -0.6823529 3.587970e-03
-      hsa.miR.21.5p.7            positive        0.6647059 4.967386e-03
-      hsa.miR.21.5p.8            positive        0.6147059 1.127947e-02
-      hsa.miR.21.5p.9            negative       -0.6705882 4.467209e-03
-      hsa.miR.21.5p.10           positive        0.9470588 2.715731e-08
-      hsa.miR.21.5p.11           positive        0.8470588 3.468046e-05
-      hsa.miR.21.5p.12           positive        0.8411765 4.442904e-05
-      hsa.miR.21.5p.13           negative       -0.6941176 2.853706e-03
-      hsa.miR.21.5p.14           positive        0.8235294 8.839139e-05
-      hsa.miR.21.5p.15           negative       -0.8029412 1.805168e-04
-      hsa.miR.21.5p.16           negative       -0.8647059 1.544234e-05
-      hsa.miR.21.5p.17           negative       -0.7970588 2.180981e-04
-      hsa.miR.21.5p.18           positive        0.7676471 5.168835e-04
-      hsa.miR.21.5p.19           negative       -0.7088235 2.111681e-03
-      hsa.miR.21.5p.20           positive        0.6735294 4.232739e-03
-      hsa.miR.21.5p.21           positive        0.5088235 4.413522e-02
-      hsa.miR.21.5p.22           negative       -0.8647059 1.544234e-05
-      hsa.miR.21.5p.23           negative       -0.6647059 4.967386e-03
-      hsa.miR.21.5p.24           negative       -0.8235294 8.839139e-05
-      hsa.miR.21.5p.27           negative       -0.9352941 1.072017e-07
-      hsa.miR.2110               positive        0.8588235 2.046440e-05
-      hsa.miR.2110.1             negative       -0.7058824 2.245901e-03
-      hsa.miR.2110.2             positive        0.7588235 6.540302e-04
-      hsa.miR.2110.3             positive        0.8529412 2.679074e-05
-      hsa.miR.2110.4             positive        0.7941176 2.391909e-04
-      hsa.miR.221.3p             negative       -0.7500000 8.197640e-04
-      hsa.miR.221.3p.1           positive        0.5823529 1.793273e-02
-      hsa.miR.221.3p.2           negative       -0.8705882 1.149893e-05
-      hsa.miR.221.3p.3           negative       -0.7588235 6.540302e-04
-      hsa.miR.221.3p.4           negative       -0.6529412 6.102047e-03
-      hsa.miR.221.3p.5           negative       -0.9147059 7.011802e-07
-      hsa.miR.221.3p.6           positive        0.8470588 3.468046e-05
-      hsa.miR.221.3p.7           positive        0.7441176 9.482828e-04
-      hsa.miR.221.3p.8           positive        0.8411765 4.442904e-05
-      hsa.miR.221.3p.9           negative       -0.7470588 8.821070e-04
-      hsa.miR.221.3p.10          negative       -0.7294118 1.343079e-03
-      hsa.miR.221.3p.11          negative       -0.8882353 4.326251e-06
-      hsa.miR.221.3p.12          negative       -0.9529412 1.209658e-08
-      hsa.miR.221.3p.13          negative       -0.6323529 8.577584e-03
-      hsa.miR.221.3p.14          positive        0.5382353 3.149323e-02
-      hsa.miR.221.3p.15          negative       -0.7264706 1.436183e-03
-      hsa.miR.221.3p.16          positive        0.7617647 6.053428e-04
-      hsa.miR.221.3p.17          positive        0.8294118 7.088454e-05
-      hsa.miR.221.3p.18          negative       -0.9941176 6.433997e-15
-      hsa.miR.221.3p.19          positive        0.8235294 8.839139e-05
-      hsa.miR.221.5p             positive        0.8823529 6.095620e-06
-      hsa.miR.221.5p.2           negative       -0.8882353 4.326251e-06
-      hsa.miR.221.5p.3           negative       -0.8294118 7.088454e-05
-      hsa.miR.221.5p.5           positive        0.8588235 2.046440e-05
-      hsa.miR.221.5p.6           positive        0.7411765 1.018470e-03
-      hsa.miR.221.5p.7           negative       -0.8647059 1.544234e-05
-      hsa.miR.221.5p.8           negative       -0.8441176 3.930243e-05
-      hsa.miR.221.5p.9           negative       -0.7294118 1.343079e-03
-      hsa.miR.221.5p.10          positive        0.6941176 2.853706e-03
-      hsa.miR.221.5p.11          negative       -0.5764706 1.941514e-02
-      hsa.miR.221.5p.12          positive        0.8117647 1.343224e-04
-      hsa.miR.221.5p.13          positive        0.8764706 8.439119e-06
-      hsa.miR.221.5p.14          positive        0.8382353 5.010342e-05
-      hsa.miR.221.5p.15          positive        0.7441176 9.482828e-04
-      hsa.miR.221.5p.16          negative       -0.9000000 2.051090e-06
-      hsa.miR.221.5p.17          positive        0.6470588 6.742077e-03
-      hsa.miR.221.5p.18          negative       -0.8647059 1.544234e-05
-      hsa.miR.222.3p             negative       -0.6882353 3.203909e-03
-      hsa.miR.222.3p.1           negative       -0.6294118 8.988089e-03
-      hsa.miR.222.3p.2           negative       -0.8911765 3.618649e-06
-      hsa.miR.222.3p.3           positive        0.7617647 6.053428e-04
-      hsa.miR.222.3p.4           positive        0.8058824 1.638467e-04
-      hsa.miR.222.3p.5           positive        0.6411765 7.434419e-03
-      hsa.miR.222.3p.6           negative       -0.9117647 8.818986e-07
-      hsa.miR.222.3p.7           negative       -0.7588235 6.540302e-04
-      hsa.miR.222.3p.8           negative       -0.7705882 4.768224e-04
-      hsa.miR.222.3p.9           negative       -0.9176471 5.528655e-07
-      hsa.miR.222.3p.10          negative       -0.7000000 2.535095e-03
-      hsa.miR.222.3p.11          negative       -0.8588235 2.046440e-05
-      hsa.miR.222.3p.12          negative       -0.6970588 2.690589e-03
-      hsa.miR.222.3p.13          negative       -0.7088235 2.111681e-03
-      hsa.miR.222.3p.14          negative       -0.7411765 1.018470e-03
-      hsa.miR.222.3p.15          negative       -0.6558824 5.800737e-03
-      hsa.miR.222.3p.16          positive        0.8088235 1.484756e-04
-      hsa.miR.222.3p.17          positive        0.7823529 3.412208e-04
-      hsa.miR.222.3p.18          positive        0.7852941 3.128539e-04
-      hsa.miR.222.3p.19          positive        0.5588235 2.443651e-02
-      hsa.miR.222.3p.20          negative       -0.7882353 2.864657e-04
-      hsa.miR.31.3p              negative       -0.7176471 1.747535e-03
-      hsa.miR.31.3p.1            positive        0.6352941 8.182065e-03
-      hsa.miR.31.5p              positive        0.5617647 2.353702e-02
-      hsa.miR.31.5p.1            positive        0.6588235 5.511422e-03
-      hsa.miR.31.5p.2            negative       -0.6411765 7.434419e-03
-      hsa.miR.31.5p.3            positive        0.5647059 2.266320e-02
-      hsa.miR.31.5p.5            positive        0.7411765 1.018470e-03
-      hsa.miR.31.5p.6            negative       -0.5323529 3.376862e-02
-      hsa.miR.31.5p.7            negative       -0.6941176 2.853706e-03
-      hsa.miR.31.5p.8            negative       -0.8500000 3.052260e-05
-      hsa.miR.31.5p.10           negative       -0.7823529 3.412208e-04
-      hsa.miR.31.5p.11           negative       -0.6823529 3.587970e-03
-      hsa.miR.31.5p.12           positive        0.7500000 8.197640e-04
-      hsa.miR.31.5p.13           positive        0.6882353 3.203909e-03
-      hsa.miR.31.5p.14           positive        0.7176471 1.747535e-03
-      hsa.miR.31.5p.15           positive        0.7323529 1.254958e-03
-      hsa.miR.31.5p.16           positive        0.7764706 4.043508e-04
-      hsa.miR.34a.5p             negative       -0.7823529 3.412208e-04
-      hsa.miR.34a.5p.1           positive        0.7088235 2.111681e-03
-      hsa.miR.34a.5p.2           negative       -0.8235294 8.839139e-05
-      hsa.miR.34a.5p.3           positive        0.8411765 4.442904e-05
-      hsa.miR.34a.5p.4           positive        0.5735294 2.019104e-02
-      hsa.miR.34a.5p.5           negative       -0.6411765 7.434419e-03
-      hsa.miR.34a.5p.6           negative       -0.8647059 1.544234e-05
-      hsa.miR.34a.5p.7           negative       -0.8882353 4.326251e-06
-      hsa.miR.34a.5p.8           positive        0.5294118 3.495201e-02
-      hsa.miR.34a.5p.9           negative       -0.5882353 1.653972e-02
-      hsa.miR.34a.5p.10          negative       -0.6117647 1.178841e-02
-      hsa.miR.34a.5p.11          positive        0.6470588 6.742077e-03
-      hsa.miR.34a.5p.12          positive        0.6882353 3.203909e-03
-      hsa.miR.34a.5p.13          positive        0.7117647 1.984043e-03
-      hsa.miR.34a.5p.14          negative       -0.8117647 1.343224e-04
-      hsa.miR.34a.5p.15          negative       -0.6647059 4.967386e-03
-      hsa.miR.34a.5p.16          negative       -0.8588235 2.046440e-05
-      hsa.miR.34a.5p.17          negative       -0.7970588 2.180981e-04
-      hsa.miR.34a.5p.18          negative       -0.7058824 2.245901e-03
-      hsa.miR.34a.5p.19          positive        0.6500000 6.415707e-03
-      hsa.miR.34a.5p.20          negative       -0.8352941 5.637132e-05
-      hsa.miR.34a.5p.21          negative       -0.7000000 2.535095e-03
-      hsa.miR.34a.5p.22          negative       -0.9058824 1.363513e-06
-      hsa.miR.34a.5p.23          positive        0.8147059 1.213095e-04
-      hsa.miR.34a.5p.24          negative       -0.7294118 1.343079e-03
-      hsa.miR.34a.5p.25          positive        0.7205882 1.638191e-03
-      hsa.miR.34a.5p.26          positive        0.6411765 7.434419e-03
-      hsa.miR.34a.5p.27          positive        0.6470588 6.742077e-03
-      hsa.miR.34a.5p.28          positive        0.7529412 7.610811e-04
-      hsa.miR.34a.5p.29          negative       -0.5117647 4.272345e-02
-      hsa.miR.34a.5p.30          positive        0.6147059 1.127947e-02
-      hsa.miR.34a.5p.31          positive        0.6676471 4.711982e-03
-      hsa.miR.34a.5p.32          positive        0.7764706 4.043508e-04
-      hsa.miR.34a.5p.33          negative       -0.8441176 3.930243e-05
-      hsa.miR.34a.5p.34          negative       -0.6117647 1.178841e-02
-      hsa.miR.34a.5p.35          negative       -0.8176471 1.093631e-04
-      hsa.miR.34a.5p.36          negative       -0.7352941 1.171616e-03
-      hsa.miR.34a.5p.37          negative       -0.6588235 5.511422e-03
-      hsa.miR.34a.5p.38          negative       -0.8235294 8.839139e-05
-      hsa.miR.34a.5p.39          positive        0.6588235 5.511422e-03
-      hsa.miR.34a.5p.40          positive        0.7941176 2.391909e-04
-      hsa.miR.34a.5p.41          positive        0.6382353 7.801139e-03
-      hsa.miR.34a.5p.42          negative       -0.6735294 4.232739e-03
-      hsa.miR.34a.5p.43          negative       -0.6058824 1.286030e-02
-      hsa.miR.34a.5p.44          negative       -0.6764706 4.008252e-03
-      hsa.miR.34a.5p.46          negative       -0.8264706 7.923549e-05
-      hsa.miR.34a.5p.47          negative       -0.7882353 2.864657e-04
-      hsa.miR.34a.5p.48          positive        0.6470588 6.742077e-03
-      hsa.miR.34a.5p.49          positive        0.8411765 4.442904e-05
-      hsa.miR.34a.5p.50          negative       -0.6529412 6.102047e-03
-      hsa.miR.34a.5p.51          negative       -0.8264706 7.923549e-05
-      hsa.miR.34a.5p.52          positive        0.6911765 3.024719e-03
-      hsa.miR.34a.5p.53          positive        0.8000000 1.985710e-04
-      hsa.miR.34a.5p.54          positive        0.7647059 5.596763e-04
-      hsa.miR.34a.5p.56          positive        0.5705882 2.099070e-02
-      hsa.miR.34a.5p.57          positive        0.7529412 7.610811e-04
-      hsa.miR.34a.5p.59          positive        0.8323529 6.328125e-05
-      hsa.miR.34a.5p.60          positive        0.6823529 3.587970e-03
-      hsa.miR.34a.5p.61          negative       -0.6735294 4.232739e-03
-      hsa.miR.34a.5p.62          negative       -0.8676471 1.334868e-05
-      hsa.miR.34a.5p.63          positive        0.7676471 5.168835e-04
-      hsa.miR.34a.5p.64          negative       -0.6735294 4.232739e-03
-      hsa.miR.34a.5p.65          positive        0.7294118 1.343079e-03
-      hsa.miR.34a.5p.66          positive        0.6000000 1.400712e-02
-      hsa.miR.34a.5p.67          positive        0.7764706 4.043508e-04
-      hsa.miR.34a.5p.68          negative       -0.5352941 3.261586e-02
-      hsa.miR.34a.5p.69          positive        0.5147059 4.134581e-02
-      hsa.miR.34a.5p.70          negative       -0.8470588 3.468046e-05
-      hsa.miR.34a.5p.71          positive        0.6235294 9.855650e-03
-      hsa.miR.34a.5p.72          positive        0.8117647 1.343224e-04
-      hsa.miR.34a.5p.74          negative       -0.7941176 2.391909e-04
-      hsa.miR.34a.5p.75          negative       -0.8500000 3.052260e-05
-      hsa.miR.34a.5p.76          positive        0.7823529 3.412208e-04
-      hsa.miR.34a.5p.77          negative       -0.8705882 1.149893e-05
-      hsa.miR.34a.5p.78          negative       -0.6794118 3.793433e-03
-      hsa.miR.34a.5p.79          positive        0.5117647 4.272345e-02
-      hsa.miR.34a.5p.80          positive        0.6294118 8.988089e-03
-      hsa.miR.34a.5p.81          negative       -0.8941176 3.011310e-06
-      hsa.miR.34a.5p.82          negative       -0.6882353 3.203909e-03
-      hsa.miR.34a.5p.83          positive        0.7176471 1.747535e-03
-      hsa.miR.34a.5p.84          positive        0.8176471 1.093631e-04
-      hsa.miR.34a.5p.85          positive        0.5294118 3.495201e-02
-      hsa.miR.34a.5p.86          negative       -0.8382353 5.010342e-05
-      hsa.miR.3613.5p            negative       -0.9382353 7.802220e-08
-      hsa.miR.3613.5p.1          positive        0.6117647 1.178841e-02
-      hsa.miR.3613.5p.2          negative       -0.7352941 1.171616e-03
-      hsa.miR.3613.5p.3          negative       -0.7529412 7.610811e-04
-      hsa.miR.3613.5p.4          positive        0.7558824 7.058906e-04
-      hsa.miR.3613.5p.5          negative       -0.9470588 2.715731e-08
-      hsa.miR.375                negative       -0.7058824 2.245901e-03
-      hsa.miR.375.1              negative       -0.7088235 2.111681e-03
-      hsa.miR.375.2              positive        0.6441176 7.081524e-03
-      hsa.miR.375.3              positive        0.6970588 2.690589e-03
-      hsa.miR.375.4              positive        0.8411765 4.442904e-05
-      hsa.miR.375.5              positive        0.6676471 4.711982e-03
-      hsa.miR.375.6              negative       -0.5705882 2.099070e-02
-      hsa.miR.375.7              positive        0.8352941 5.637132e-05
-      hsa.miR.375.8              negative       -0.9029412 1.677724e-06
-      hsa.miR.375.9              positive        0.8617647 1.780518e-05
-      hsa.miR.375.11             positive        0.8088235 1.484756e-04
-      hsa.miR.375.12             negative       -0.7294118 1.343079e-03
-      hsa.miR.375.13             negative       -0.6058824 1.286030e-02
-      hsa.miR.375.14             positive        0.8764706 8.439119e-06
-      hsa.miR.375.15             negative       -0.6088235 1.231520e-02
-      hsa.miR.375.16             negative       -0.6470588 6.742077e-03
-      hsa.miR.375.17             negative       -0.8823529 6.095620e-06
-      hsa.miR.375.18             negative       -0.5470588 2.830109e-02
-      hsa.miR.375.20             positive        0.8323529 6.328125e-05
-      hsa.miR.375.21             positive        0.7647059 5.596763e-04
-      hsa.miR.375.22             positive        0.5147059 4.134581e-02
-      hsa.miR.375.23             negative       -0.7470588 8.821070e-04
-      hsa.miR.375.24             negative       -0.6617647 5.233753e-03
-      hsa.miR.375.25             negative       -0.8147059 1.213095e-04
-      hsa.miR.451a               positive        0.6441176 7.081524e-03
-      hsa.miR.451a.1             positive        0.7323529 1.254958e-03
-      hsa.miR.451a.2             negative       -0.7941176 2.391909e-04
-      hsa.miR.451a.3             positive        0.8147059 1.213095e-04
-      hsa.miR.486.3p             positive        0.6823529 3.587970e-03
-      hsa.miR.486.3p.1           positive        0.6911765 3.024719e-03
-      hsa.miR.486.3p.2           negative       -0.7676471 5.168835e-04
-      hsa.miR.486.3p.4           positive        0.5441176 2.933634e-02
-      hsa.miR.486.3p.6           positive        0.5764706 1.941514e-02
-      hsa.miR.486.5p             positive        0.7029412 2.386953e-03
-      hsa.miR.486.5p.1           positive        0.5382353 3.149323e-02
-      hsa.miR.486.5p.2           positive        0.6617647 5.233753e-03
-      hsa.miR.486.5p.3           negative       -0.6911765 3.024719e-03
-      hsa.miR.486.5p.4           positive        0.7382353 1.092851e-03
-      hsa.miR.504.5p             positive        0.6823529 3.587970e-03
-      hsa.miR.504.5p.2           positive        0.5529412 2.631450e-02
-      hsa.miR.551b.3p            negative       -0.7352941 1.171616e-03
-      hsa.miR.577                positive        0.7000000 2.535095e-03
-      hsa.miR.577.1              negative       -0.5294118 3.495201e-02
-      hsa.miR.577.2              positive        0.7235294 1.534481e-03
-      hsa.miR.577.3              negative       -0.5470588 2.830109e-02
-      hsa.miR.577.4              positive        0.5235294 3.741265e-02
-      hsa.miR.577.5              negative       -0.7117647 1.984043e-03
-      hsa.miR.577.7              positive        0.6764706 4.008252e-03
-      hsa.miR.577.8              positive        0.7941176 2.391909e-04
-      hsa.miR.652.3p             negative       -0.9176471 5.528655e-07
-      hsa.miR.652.3p.1           positive        0.7470588 8.821070e-04
-      hsa.miR.652.3p.2           positive        0.6235294 9.855650e-03
-      hsa.miR.652.3p.3           positive        0.8147059 1.213095e-04
-      hsa.miR.652.3p.4           positive        0.9058824 1.363513e-06
-      hsa.miR.652.3p.5           negative       -0.9000000 2.051090e-06
-      hsa.miR.652.3p.6           negative       -0.7529412 7.610811e-04
-      hsa.miR.652.3p.8           positive        0.6205882 1.031352e-02
-      hsa.miR.652.3p.9           positive        0.9176471 5.528655e-07
-      hsa.miR.652.3p.10          positive        0.6911765 3.024719e-03
-      hsa.miR.652.3p.11          positive        0.7735294 4.393557e-04
-      hsa.miR.653.5p             positive        0.7500000 8.197640e-04
-      hsa.miR.653.5p.1           positive        0.5823529 1.793273e-02
-      hsa.miR.653.5p.4           positive        0.7294118 1.343079e-03
-      hsa.miR.653.5p.5           negative       -0.5382353 3.149323e-02
-      hsa.miR.653.5p.7           negative       -0.6088235 1.231520e-02
-      hsa.miR.6842.3p            positive        0.7529412 7.610811e-04
-      hsa.miR.6842.3p.1          positive        0.7500000 8.197640e-04
-      hsa.miR.7.2.3p             positive        0.8647059 1.544234e-05
-      hsa.miR.7.2.3p.1           positive        0.5588235 2.443651e-02
-      hsa.miR.7.2.3p.2           positive        0.6411765 7.434419e-03
-      hsa.miR.7.5p               positive        0.7617647 6.053428e-04
-      hsa.miR.7.5p.1             positive        0.7176471 1.747535e-03
-      hsa.miR.7.5p.2             negative       -0.7647059 5.596763e-04
-      hsa.miR.7.5p.3             positive        0.5970588 1.460973e-02
-      hsa.miR.7.5p.4             negative       -0.5735294 2.019104e-02
-      hsa.miR.7.5p.5             negative       -0.9029412 1.677724e-06
-      hsa.miR.7.5p.6             positive        0.6294118 8.988089e-03
-      hsa.miR.7.5p.7             positive        0.6029412 1.342413e-02
-      hsa.miR.7.5p.8             positive        0.7441176 9.482828e-04
-      hsa.miR.7.5p.10            negative       -0.6823529 3.587970e-03
-      hsa.miR.7.5p.13            positive        0.5470588 2.830109e-02
-      hsa.miR.7.5p.15            positive        0.8558824 2.344916e-05
-      hsa.miR.7.5p.17            negative       -0.8794118 7.187273e-06
-      hsa.miR.7.5p.19            negative       -0.7205882 1.638191e-03
-      hsa.miR.7.5p.20            positive        0.5852941 1.722529e-02
-      hsa.miR.7.5p.21            positive        0.7029412 2.386953e-03
-      hsa.miR.7.5p.23            positive        0.7764706 4.043508e-04
-      hsa.miR.7.5p.24            negative       -0.8205882 9.841270e-05
-      hsa.miR.7.5p.25            negative       -0.5558824 2.536218e-02
-      hsa.miR.7.5p.26            positive        0.5117647 4.272345e-02
-      hsa.miR.7.5p.28            positive        0.5205882 3.869091e-02
-      hsa.miR.7.5p.29            positive        0.8735294 9.869652e-06
-      hsa.miR.7.5p.30            positive        0.7705882 4.768224e-04
-      hsa.miR.7.5p.31            positive        0.7382353 1.092851e-03
-      hsa.miR.7.5p.32            negative       -0.8500000 3.052260e-05
-      hsa.miR.7.5p.34            negative       -0.7647059 5.596763e-04
-      hsa.miR.7.5p.36            negative       -0.9088235 1.100585e-06
-      hsa.miR.7.5p.37            negative       -0.7470588 8.821070e-04
-      hsa.miR.7.5p.38            positive        0.7352941 1.171616e-03
-      hsa.miR.7.5p.39            negative       -0.7735294 4.393557e-04
-      hsa.miR.7.5p.40            positive        0.6000000 1.400712e-02
-      hsa.miR.7.5p.41            positive        0.5764706 1.941514e-02
-      hsa.miR.7.5p.42            positive        0.7735294 4.393557e-04
-      hsa.miR.7.5p.43            positive        0.9117647 8.818986e-07
-      hsa.miR.7.5p.45            negative       -0.6852941 3.391562e-03
-      hsa.miR.7.5p.46            negative       -0.5823529 1.793273e-02
-      hsa.miR.873.3p             negative       -0.8588235 2.046440e-05
-      hsa.miR.873.3p.1           positive        0.7117647 1.984043e-03
-      hsa.miR.873.3p.2           positive        0.8235294 8.839139e-05
-      hsa.miR.873.3p.3           negative       -0.8029412 1.805168e-04
-      hsa.miR.873.3p.4           positive        0.5705882 2.099070e-02
-      hsa.miR.873.5p             positive        0.5735294 2.019104e-02
-      hsa.miR.873.5p.1           negative       -0.8588235 2.046440e-05
-      hsa.miR.873.5p.2           negative       -0.7029412 2.386953e-03
-      hsa.miR.873.5p.3           positive        0.8117647 1.343224e-04
-      hsa.miR.873.5p.4           negative       -0.8000000 1.985710e-04
-      hsa.miR.873.5p.5           positive        0.8000000 1.985710e-04
-      hsa.miR.873.5p.6           negative       -0.7676471 5.168835e-04
-      hsa.miR.873.5p.7           positive        0.8176471 1.093631e-04
-      hsa.miR.873.5p.8           positive        0.7176471 1.747535e-03
-      hsa.miR.873.5p.9           negative       -0.7411765 1.018470e-03
-      hsa.miR.873.5p.10          positive        0.8411765 4.442904e-05
-      hsa.miR.873.5p.11          positive        0.8147059 1.213095e-04
-      hsa.miR.873.5p.12          negative       -0.8000000 1.985710e-04
-      hsa.miR.873.5p.13          positive        0.8735294 9.869652e-06
-      hsa.miR.873.5p.14          positive        0.7764706 4.043508e-04
-      hsa.miR.873.5p.15          negative       -0.9235294 3.343900e-07
-      hsa.miR.873.5p.17          negative       -0.6823529 3.587970e-03
-      hsa.miR.873.5p.18          positive        0.8117647 1.343224e-04
-      hsa.miR.873.5p.19          positive        0.6617647 5.233753e-03
-      hsa.miR.873.5p.20          negative       -0.8529412 2.679074e-05
-      hsa.miR.873.5p.21          negative       -0.6117647 1.178841e-02
-      hsa.miR.873.5p.22          negative       -0.8588235 2.046440e-05
-      hsa.miR.874.3p             negative       -0.8000000 1.985710e-04
-      hsa.miR.874.3p.1           positive        0.8264706 7.923549e-05
-      hsa.miR.874.3p.2           negative       -0.8117647 1.343224e-04
-      hsa.miR.874.3p.3           negative       -0.7794118 3.716802e-04
-      hsa.miR.874.3p.4           negative       -0.7558824 7.058906e-04
-      hsa.miR.9.5p               negative       -0.7970588 2.180981e-04
-      hsa.miR.9.5p.1             positive        0.6147059 1.127947e-02
-      hsa.miR.9.5p.3             negative       -0.9529412 1.209658e-08
-      hsa.miR.9.5p.5             positive        0.8294118 7.088454e-05
-      hsa.miR.9.5p.7             negative       -0.6264706 9.413977e-03
-      hsa.miR.9.5p.8             negative       -0.7970588 2.180981e-04
-      hsa.miR.9.5p.9             positive        0.8000000 1.985710e-04
-      hsa.miR.9.5p.10            positive        0.7647059 5.596763e-04
-      hsa.miR.9.5p.11            positive        0.8470588 3.468046e-05
-      hsa.miR.9.5p.12            positive        0.7323529 1.254958e-03
-      hsa.miR.9.5p.13            positive        0.6676471 4.711982e-03
-      hsa.miR.9.5p.14            negative       -0.6735294 4.232739e-03
-      hsa.miR.9.5p.15            negative       -0.5882353 1.653972e-02
-      hsa.miR.9.5p.16            positive        0.5441176 2.933634e-02
-      hsa.miR.9.5p.17            positive        0.6823529 3.587970e-03
-      hsa.miR.9.5p.18            positive        0.5705882 2.099070e-02
-      hsa.miR.9.5p.19            positive        0.5235294 3.741265e-02
-      hsa.miR.9.5p.20            positive        0.7117647 1.984043e-03
-      hsa.miR.9.5p.21            positive        0.5735294 2.019104e-02
-      hsa.miR.9.5p.22            negative       -0.7058824 2.245901e-03
-      hsa.miR.9.5p.24            negative       -0.6852941 3.391562e-03
-      hsa.miR.9.5p.25            positive        0.5264706 3.616651e-02
-      hsa.miR.9.5p.26            negative       -0.6352941 8.182065e-03
-      hsa.miR.9.5p.27            positive        0.5764706 1.941514e-02
-      hsa.miR.9.5p.28            positive        0.9147059 7.011802e-07
-      hsa.miR.96.5p.2            negative       -0.8588235 2.046440e-05
-      hsa.miR.96.5p.3            negative       -0.7000000 2.535095e-03
-      hsa.miR.96.5p.4            positive        0.7647059 5.596763e-04
-      hsa.miR.96.5p.5            positive        0.6235294 9.855650e-03
-      hsa.miR.96.5p.6            positive        0.8235294 8.839139e-05
-      hsa.miR.96.5p.7            negative       -0.6735294 4.232739e-03
-      hsa.miR.96.5p.8            negative       -0.7705882 4.768224e-04
-      hsa.miR.96.5p.9            negative       -0.7294118 1.343079e-03
-      hsa.miR.96.5p.10           positive        0.6264706 9.413977e-03
-      hsa.miR.96.5p.11           positive        0.7323529 1.254958e-03
-      hsa.miR.96.5p.12           negative       -0.7823529 3.412208e-04
-      hsa.miR.96.5p.13           positive        0.7647059 5.596763e-04
-      hsa.miR.96.5p.14           negative       -0.7352941 1.171616e-03
-      hsa.miR.96.5p.15           positive        0.7882353 2.864657e-04
-      hsa.miR.96.5p.16           negative       -0.8529412 2.679074e-05
-      hsa.miR.96.5p.17           negative       -0.8647059 1.544234e-05
-      hsa.miR.96.5p.18           negative       -0.7176471 1.747535e-03
-      hsa.miR.96.5p.19           positive        0.6588235 5.511422e-03
-      hsa.miR.96.5p.20           positive        0.7117647 1.984043e-03
-      hsa.miR.96.5p.21           positive        0.6941176 2.853706e-03
-      hsa.miR.96.5p.22           negative       -0.8764706 8.439119e-06
-                         Corr.Adjusted.P.Val
-      hsa.miR.1179.1            3.665249e-04
-      hsa.miR.1179.2            1.717363e-05
-      hsa.miR.1179.3            8.722405e-04
-      hsa.miR.1179.4            8.721675e-03
-      hsa.miR.1179.5            9.088763e-03
-      hsa.miR.1179.6            7.175633e-04
-      hsa.miR.1275              2.467436e-06
-      hsa.miR.1275.1            1.495606e-03
-      hsa.miR.138.1.3p.1        1.758112e-05
-      hsa.miR.138.1.3p.2        2.640829e-04
-      hsa.miR.138.1.3p.3        1.185102e-03
-      hsa.miR.138.1.3p.4        9.812268e-03
-      hsa.miR.138.1.3p.5        2.305148e-03
-      hsa.miR.138.1.3p.6        9.295519e-04
-      hsa.miR.138.1.3p.7        1.120910e-04
-      hsa.miR.138.1.3p.8        4.972485e-03
-      hsa.miR.138.1.3p.9        6.198206e-06
-      hsa.miR.138.5p            2.551875e-03
-      hsa.miR.138.5p.1          7.649534e-03
-      hsa.miR.138.5p.2          9.812268e-03
-      hsa.miR.138.5p.3          5.405002e-03
-      hsa.miR.138.5p.4          3.906494e-04
-      hsa.miR.138.5p.5          4.443205e-06
-      hsa.miR.138.5p.6          9.511397e-03
-      hsa.miR.138.5p.7          1.774492e-03
-      hsa.miR.138.5p.8          1.102561e-02
-      hsa.miR.138.5p.9          7.621449e-04
-      hsa.miR.138.5p.10         3.665249e-04
-      hsa.miR.138.5p.11         4.833940e-03
-      hsa.miR.138.5p.12         1.507089e-02
-      hsa.miR.138.5p.13         2.201124e-03
-      hsa.miR.138.5p.14         6.253399e-05
-      hsa.miR.138.5p.15         4.619829e-03
-      hsa.miR.138.5p.16         1.659057e-02
-      hsa.miR.139.5p            7.649534e-03
-      hsa.miR.139.5p.1          3.904881e-02
-      hsa.miR.139.5p.2          5.405002e-03
-      hsa.miR.139.5p.3          3.172758e-04
-      hsa.miR.139.5p.4          9.088763e-03
-      hsa.miR.139.5p.5          3.835415e-03
-      hsa.miR.139.5p.6          1.057783e-02
-      hsa.miR.139.5p.7          7.085149e-03
-      hsa.miR.139.5p.8          1.053478e-03
-      hsa.miR.139.5p.9          1.293151e-02
-      hsa.miR.139.5p.10         4.972485e-03
-      hsa.miR.139.5p.12         1.456721e-02
-      hsa.miR.139.5p.14         4.021046e-03
-      hsa.miR.144.3p            1.549055e-02
-      hsa.miR.144.3p.1          1.659057e-02
-      hsa.miR.144.3p.6          4.792260e-02
-      hsa.miR.144.3p.7          4.619829e-03
-      hsa.miR.144.3p.8          1.774492e-03
-      hsa.miR.144.3p.11         6.393036e-04
-      hsa.miR.144.5p            5.865247e-04
-      hsa.miR.144.5p.1          9.295519e-04
-      hsa.miR.144.5p.2          1.549055e-02
-      hsa.miR.144.5p.3          1.196347e-02
-      hsa.miR.146b.3p           4.972485e-03
-      hsa.miR.146b.3p.1         8.722405e-04
-      hsa.miR.146b.3p.2         1.185102e-03
-      hsa.miR.146b.3p.3         2.990326e-05
-      hsa.miR.146b.3p.4         2.243550e-05
-      hsa.miR.146b.3p.5         7.911865e-05
-      hsa.miR.146b.3p.6         5.176198e-05
-      hsa.miR.146b.5p           4.662209e-05
-      hsa.miR.146b.5p.1         1.004925e-03
-      hsa.miR.146b.5p.2         1.053478e-03
-      hsa.miR.146b.5p.3         1.218887e-04
-      hsa.miR.146b.5p.4         2.156930e-04
-      hsa.miR.146b.5p.5         5.406901e-04
-      hsa.miR.146b.5p.6         1.868910e-03
-      hsa.miR.146b.5p.7         6.780912e-03
-      hsa.miR.146b.5p.8         1.626919e-04
-      hsa.miR.146b.5p.9         3.665249e-04
-      hsa.miR.182.5p.1          5.405002e-03
-      hsa.miR.182.5p.2          3.127981e-03
-      hsa.miR.182.5p.3          1.403047e-04
-      hsa.miR.182.5p.4          2.464779e-02
-      hsa.miR.182.5p.5          2.305148e-03
-      hsa.miR.182.5p.6          7.085149e-03
-      hsa.miR.182.5p.7          3.333239e-02
-      hsa.miR.182.5p.9          1.590901e-03
-      hsa.miR.182.5p.10         2.165076e-02
-      hsa.miR.182.5p.11         3.904881e-02
-      hsa.miR.182.5p.12         2.538039e-02
-      hsa.miR.182.5p.14         2.729886e-02
-      hsa.miR.182.5p.15         3.122392e-02
-      hsa.miR.182.5p.16         3.906494e-04
-      hsa.miR.182.5p.17         1.456721e-02
-      hsa.miR.182.5p.18         2.956026e-03
-      hsa.miR.182.5p.19         1.495606e-03
-      hsa.miR.182.5p.20         1.670535e-03
-      hsa.miR.182.5p.21         7.175633e-04
-      hsa.miR.182.5p.23         4.796891e-04
-      hsa.miR.182.5p.24         2.297581e-04
-      hsa.miR.182.5p.25         1.507089e-02
-      hsa.miR.182.5p.26         1.495606e-03
-      hsa.miR.182.5p.27         4.386349e-02
-      hsa.miR.182.5p.28         3.172758e-04
-      hsa.miR.182.5p.29         7.649534e-03
-      hsa.miR.182.5p.30         1.670535e-03
-      hsa.miR.182.5p.31         8.048965e-04
-      hsa.miR.182.5p.33         4.256609e-02
-      hsa.miR.182.5p.34         1.818739e-04
-      hsa.miR.182.5p.35         4.972485e-03
-      hsa.miR.182.5p.36         2.551875e-03
-      hsa.miR.182.5p.37         2.464779e-02
-      hsa.miR.182.5p.39         1.136484e-03
-      hsa.miR.182.5p.40         3.307586e-03
-      hsa.miR.182.5p.41         4.213548e-03
-      hsa.miR.182.5p.42         1.242701e-02
-      hsa.miR.182.5p.43         2.236317e-02
-      hsa.miR.182.5p.44         1.185102e-03
-      hsa.miR.182.5p.45         1.608310e-02
-      hsa.miR.182.5p.46         1.021281e-02
-      hsa.miR.182.5p.47         2.819123e-02
-      hsa.miR.182.5p.48         2.397676e-02
-      hsa.miR.182.5p.49         1.929842e-02
-      hsa.miR.182.5p.50         7.175633e-04
-      hsa.miR.182.5p.51         2.640829e-04
-      hsa.miR.182.5p.52         1.196347e-02
-      hsa.miR.182.5p.54         9.812268e-03
-      hsa.miR.182.5p.55         2.791497e-03
-      hsa.miR.182.5p.56         2.791497e-03
-      hsa.miR.183.5p            1.456721e-02
-      hsa.miR.183.5p.1          4.833940e-03
-      hsa.miR.183.5p.2          1.858358e-02
-      hsa.miR.183.5p.3          1.659057e-02
-      hsa.miR.183.5p.4          1.053478e-03
-      hsa.miR.183.5p.6          7.982415e-03
-      hsa.miR.183.5p.7          2.305148e-03
-      hsa.miR.183.5p.9          7.649534e-03
-      hsa.miR.183.5p.10         1.549055e-02
-      hsa.miR.183.5p.11         2.297581e-04
-      hsa.miR.183.5p.12         3.668442e-02
-      hsa.miR.183.5p.13         4.972485e-03
-      hsa.miR.183.5p.15         5.901181e-05
-      hsa.miR.204.5p            1.403047e-04
-      hsa.miR.204.5p.1          3.127981e-03
-      hsa.miR.204.5p.2          1.028263e-05
-      hsa.miR.204.5p.3          4.502912e-04
-      hsa.miR.204.5p.4          8.048965e-04
-      hsa.miR.204.5p.5          2.201124e-03
-      hsa.miR.204.5p.6          2.201124e-03
-      hsa.miR.204.5p.7          1.185102e-03
-      hsa.miR.204.5p.8          3.451653e-03
-      hsa.miR.204.5p.9          1.981269e-04
-      hsa.miR.204.5p.10         5.176198e-05
-      hsa.miR.204.5p.11         4.972485e-03
-      hsa.miR.204.5p.12         2.791497e-03
-      hsa.miR.204.5p.13         7.649534e-03
-      hsa.miR.204.5p.14         4.972485e-03
-      hsa.miR.204.5p.15         1.670535e-03
-      hsa.miR.204.5p.16         4.619829e-03
-      hsa.miR.21.3p             7.621449e-04
-      hsa.miR.21.3p.1           4.833940e-03
-      hsa.miR.21.3p.2           7.274635e-05
-      hsa.miR.21.3p.4           5.405002e-03
-      hsa.miR.21.3p.5           5.109460e-04
-      hsa.miR.21.3p.6           6.253399e-05
-      hsa.miR.21.3p.8           6.916186e-04
-      hsa.miR.21.3p.9           4.796891e-04
-      hsa.miR.21.3p.10          1.401580e-02
-      hsa.miR.21.3p.11          1.670535e-03
-      hsa.miR.21.3p.12          3.439904e-04
-      hsa.miR.21.3p.13          4.796891e-04
-      hsa.miR.21.3p.16          2.093358e-03
-      hsa.miR.21.3p.17          4.256609e-02
-      hsa.miR.21.3p.18          1.929842e-02
-      hsa.miR.21.3p.19          1.218887e-04
-      hsa.miR.21.3p.20          7.175633e-04
-      hsa.miR.21.3p.21          1.659057e-02
-      hsa.miR.21.3p.22          2.819123e-02
-      hsa.miR.21.3p.23          1.788861e-02
-      hsa.miR.21.3p.24          1.549055e-02
-      hsa.miR.21.3p.25          1.021281e-02
-      hsa.miR.21.3p.27          7.911865e-05
-      hsa.miR.21.3p.29          3.835415e-03
-      hsa.miR.21.3p.30          1.788861e-02
-      hsa.miR.21.3p.31          3.439904e-04
-      hsa.miR.21.3p.32          2.956026e-03
-      hsa.miR.21.3p.33          7.085149e-03
-      hsa.miR.21.3p.34          3.906494e-04
-      hsa.miR.21.3p.35          1.102561e-02
-      hsa.miR.21.3p.36          2.447370e-03
-      hsa.miR.21.3p.37          7.399557e-03
-      hsa.miR.21.3p.38          4.144487e-02
-      hsa.miR.21.3p.39          1.253114e-05
-      hsa.miR.21.3p.40          4.502912e-04
-      hsa.miR.21.5p             1.502042e-07
-      hsa.miR.21.5p.1           2.551875e-03
-      hsa.miR.21.5p.2           2.640829e-04
-      hsa.miR.21.5p.3           1.196347e-02
-      hsa.miR.21.5p.4           1.353835e-03
-      hsa.miR.21.5p.5           1.417814e-05
-      hsa.miR.21.5p.6           5.896510e-03
-      hsa.miR.21.5p.7           7.649534e-03
-      hsa.miR.21.5p.8           1.507089e-02
-      hsa.miR.21.5p.9           7.085149e-03
-      hsa.miR.21.5p.10          2.467436e-06
-      hsa.miR.21.5p.11          2.297581e-04
-      hsa.miR.21.5p.12          2.640829e-04
-      hsa.miR.21.5p.13          4.972485e-03
-      hsa.miR.21.5p.14          4.133598e-04
-      hsa.miR.21.5p.15          6.916186e-04
-      hsa.miR.21.5p.16          1.403047e-04
-      hsa.miR.21.5p.17          7.621449e-04
-      hsa.miR.21.5p.18          1.441833e-03
-      hsa.miR.21.5p.19          4.021046e-03
-      hsa.miR.21.5p.20          6.780912e-03
-      hsa.miR.21.5p.21          4.941901e-02
-      hsa.miR.21.5p.22          1.403047e-04
-      hsa.miR.21.5p.23          7.649534e-03
-      hsa.miR.21.5p.24          4.133598e-04
-      hsa.miR.21.5p.27          6.198206e-06
-      hsa.miR.2110              1.626919e-04
-      hsa.miR.2110.1            4.213548e-03
-      hsa.miR.2110.2            1.670535e-03
-      hsa.miR.2110.3            1.981269e-04
-      hsa.miR.2110.4            8.048965e-04
-      hsa.miR.221.3p            1.982395e-03
-      hsa.miR.221.3p.1          2.236317e-02
-      hsa.miR.221.3p.2          1.218887e-04
-      hsa.miR.221.3p.3          1.670535e-03
-      hsa.miR.221.3p.4          9.088763e-03
-      hsa.miR.221.3p.5          2.027048e-05
-      hsa.miR.221.3p.6          2.297581e-04
-      hsa.miR.221.3p.7          2.201124e-03
-      hsa.miR.221.3p.8          2.640829e-04
-      hsa.miR.221.3p.9          2.093358e-03
-      hsa.miR.221.3p.10         2.791497e-03
-      hsa.miR.221.3p.11         6.253399e-05
-      hsa.miR.221.3p.12         1.923356e-06
-      hsa.miR.221.3p.13         1.196347e-02
-      hsa.miR.221.3p.14         3.668442e-02
-      hsa.miR.221.3p.15         2.956026e-03
-      hsa.miR.221.3p.16         1.590901e-03
-      hsa.miR.221.3p.17         3.665249e-04
-      hsa.miR.221.3p.18         4.092022e-12
-      hsa.miR.221.3p.19         4.133598e-04
-      hsa.miR.221.5p            7.911865e-05
-      hsa.miR.221.5p.2          6.253399e-05
-      hsa.miR.221.5p.3          3.665249e-04
-      hsa.miR.221.5p.5          1.626919e-04
-      hsa.miR.221.5p.6          2.305148e-03
-      hsa.miR.221.5p.7          1.403047e-04
-      hsa.miR.221.5p.8          2.550647e-04
-      hsa.miR.221.5p.9          2.791497e-03
-      hsa.miR.221.5p.10         4.972485e-03
-      hsa.miR.221.5p.11         2.397676e-02
-      hsa.miR.221.5p.12         5.406901e-04
-      hsa.miR.221.5p.13         1.012694e-04
-      hsa.miR.221.5p.14         2.923466e-04
-      hsa.miR.221.5p.15         2.201124e-03
-      hsa.miR.221.5p.16         3.953010e-05
-      hsa.miR.221.5p.17         9.812268e-03
-      hsa.miR.221.5p.18         1.403047e-04
-      hsa.miR.222.3p            5.405002e-03
-      hsa.miR.222.3p.1          1.242701e-02
-      hsa.miR.222.3p.2          5.901181e-05
-      hsa.miR.222.3p.3          1.590901e-03
-      hsa.miR.222.3p.4          6.393036e-04
-      hsa.miR.222.3p.5          1.057783e-02
-      hsa.miR.222.3p.6          2.243550e-05
-      hsa.miR.222.3p.7          1.670535e-03
-      hsa.miR.222.3p.8          1.353835e-03
-      hsa.miR.222.3p.9          1.758112e-05
-      hsa.miR.222.3p.10         4.619829e-03
-      hsa.miR.222.3p.11         1.626919e-04
-      hsa.miR.222.3p.12         4.833940e-03
-      hsa.miR.222.3p.13         4.021046e-03
-      hsa.miR.222.3p.14         2.305148e-03
-      hsa.miR.222.3p.15         8.721675e-03
-      hsa.miR.222.3p.16         5.865247e-04
-      hsa.miR.222.3p.17         1.053478e-03
-      hsa.miR.222.3p.18         1.004925e-03
-      hsa.miR.222.3p.19         2.915876e-02
-      hsa.miR.222.3p.20         9.295519e-04
-      hsa.miR.31.3p             3.451653e-03
-      hsa.miR.31.3p.1           1.151282e-02
-      hsa.miR.31.5p             2.819123e-02
-      hsa.miR.31.5p.1           8.326044e-03
-      hsa.miR.31.5p.2           1.057783e-02
-      hsa.miR.31.5p.3           2.729886e-02
-      hsa.miR.31.5p.5           2.305148e-03
-      hsa.miR.31.5p.6           3.904881e-02
-      hsa.miR.31.5p.7           4.972485e-03
-      hsa.miR.31.5p.8           2.156930e-04
-      hsa.miR.31.5p.10          1.053478e-03
-      hsa.miR.31.5p.11          5.896510e-03
-      hsa.miR.31.5p.12          1.982395e-03
-      hsa.miR.31.5p.13          5.405002e-03
-      hsa.miR.31.5p.14          3.451653e-03
-      hsa.miR.31.5p.15          2.696464e-03
-      hsa.miR.31.5p.16          1.185102e-03
-      hsa.miR.34a.5p            1.053478e-03
-      hsa.miR.34a.5p.1          4.021046e-03
-      hsa.miR.34a.5p.2          4.133598e-04
-      hsa.miR.34a.5p.3          2.640829e-04
-      hsa.miR.34a.5p.4          2.464779e-02
-      hsa.miR.34a.5p.5          1.057783e-02
-      hsa.miR.34a.5p.6          1.403047e-04
-      hsa.miR.34a.5p.7          6.253399e-05
-      hsa.miR.34a.5p.8          4.019797e-02
-      hsa.miR.34a.5p.9          2.087155e-02
-      hsa.miR.34a.5p.10         1.549055e-02
-      hsa.miR.34a.5p.11         9.812268e-03
-      hsa.miR.34a.5p.12         5.405002e-03
-      hsa.miR.34a.5p.13         3.835415e-03
-      hsa.miR.34a.5p.14         5.406901e-04
-      hsa.miR.34a.5p.15         7.649534e-03
-      hsa.miR.34a.5p.16         1.626919e-04
-      hsa.miR.34a.5p.17         7.621449e-04
-      hsa.miR.34a.5p.18         4.213548e-03
-      hsa.miR.34a.5p.19         9.511397e-03
-      hsa.miR.34a.5p.20         3.172758e-04
-      hsa.miR.34a.5p.21         4.619829e-03
-      hsa.miR.34a.5p.22         2.990326e-05
-      hsa.miR.34a.5p.23         5.109460e-04
-      hsa.miR.34a.5p.24         2.791497e-03
-      hsa.miR.34a.5p.25         3.307586e-03
-      hsa.miR.34a.5p.26         1.057783e-02
-      hsa.miR.34a.5p.27         9.812268e-03
-      hsa.miR.34a.5p.28         1.868910e-03
-      hsa.miR.34a.5p.29         4.792260e-02
-      hsa.miR.34a.5p.30         1.507089e-02
-      hsa.miR.34a.5p.31         7.399557e-03
-      hsa.miR.34a.5p.32         1.185102e-03
-      hsa.miR.34a.5p.33         2.550647e-04
-      hsa.miR.34a.5p.34         1.549055e-02
-      hsa.miR.34a.5p.35         4.796891e-04
-      hsa.miR.34a.5p.36         2.551875e-03
-      hsa.miR.34a.5p.37         8.326044e-03
-      hsa.miR.34a.5p.38         4.133598e-04
-      hsa.miR.34a.5p.39         8.326044e-03
-      hsa.miR.34a.5p.40         8.048965e-04
-      hsa.miR.34a.5p.41         1.102561e-02
-      hsa.miR.34a.5p.42         6.780912e-03
-      hsa.miR.34a.5p.43         1.659057e-02
-      hsa.miR.34a.5p.44         6.536535e-03
-      hsa.miR.34a.5p.46         3.906494e-04
-      hsa.miR.34a.5p.47         9.295519e-04
-      hsa.miR.34a.5p.48         9.812268e-03
-      hsa.miR.34a.5p.49         2.640829e-04
-      hsa.miR.34a.5p.50         9.088763e-03
-      hsa.miR.34a.5p.51         3.906494e-04
-      hsa.miR.34a.5p.52         5.213336e-03
-      hsa.miR.34a.5p.53         7.175633e-04
-      hsa.miR.34a.5p.54         1.495606e-03
-      hsa.miR.34a.5p.56         2.538039e-02
-      hsa.miR.34a.5p.57         1.868910e-03
-      hsa.miR.34a.5p.59         3.439904e-04
-      hsa.miR.34a.5p.60         5.896510e-03
-      hsa.miR.34a.5p.61         6.780912e-03
-      hsa.miR.34a.5p.62         1.391764e-04
-      hsa.miR.34a.5p.63         1.441833e-03
-      hsa.miR.34a.5p.64         6.780912e-03
-      hsa.miR.34a.5p.65         2.791497e-03
-      hsa.miR.34a.5p.66         1.788861e-02
-      hsa.miR.34a.5p.67         1.185102e-03
-      hsa.miR.34a.5p.68         3.792265e-02
-      hsa.miR.34a.5p.69         4.670681e-02
-      hsa.miR.34a.5p.70         2.297581e-04
-      hsa.miR.34a.5p.71         1.345106e-02
-      hsa.miR.34a.5p.72         5.406901e-04
-      hsa.miR.34a.5p.74         8.048965e-04
-      hsa.miR.34a.5p.75         2.156930e-04
-      hsa.miR.34a.5p.76         1.053478e-03
-      hsa.miR.34a.5p.77         1.218887e-04
-      hsa.miR.34a.5p.78         6.218101e-03
-      hsa.miR.34a.5p.79         4.792260e-02
-      hsa.miR.34a.5p.80         1.242701e-02
-      hsa.miR.34a.5p.81         5.176198e-05
-      hsa.miR.34a.5p.82         5.405002e-03
-      hsa.miR.34a.5p.83         3.451653e-03
-      hsa.miR.34a.5p.84         4.796891e-04
-      hsa.miR.34a.5p.85         4.019797e-02
-      hsa.miR.34a.5p.86         2.923466e-04
-      hsa.miR.3613.5p           5.513569e-06
-      hsa.miR.3613.5p.1         1.549055e-02
-      hsa.miR.3613.5p.2         2.551875e-03
-      hsa.miR.3613.5p.3         1.868910e-03
-      hsa.miR.3613.5p.4         1.774492e-03
-      hsa.miR.3613.5p.5         2.467436e-06
-      hsa.miR.375               4.213548e-03
-      hsa.miR.375.1             4.021046e-03
-      hsa.miR.375.2             1.021281e-02
-      hsa.miR.375.3             4.833940e-03
-      hsa.miR.375.4             2.640829e-04
-      hsa.miR.375.5             7.399557e-03
-      hsa.miR.375.6             2.538039e-02
-      hsa.miR.375.7             3.172758e-04
-      hsa.miR.375.8             3.442041e-05
-      hsa.miR.375.9             1.594943e-04
-      hsa.miR.375.11            5.865247e-04
-      hsa.miR.375.12            2.791497e-03
-      hsa.miR.375.13            1.659057e-02
-      hsa.miR.375.14            1.012694e-04
-      hsa.miR.375.15            1.608310e-02
-      hsa.miR.375.16            9.812268e-03
-      hsa.miR.375.17            7.911865e-05
-      hsa.miR.375.18            3.333239e-02
-      hsa.miR.375.20            3.439904e-04
-      hsa.miR.375.21            1.495606e-03
-      hsa.miR.375.22            4.670681e-02
-      hsa.miR.375.23            2.093358e-03
-      hsa.miR.375.24            7.982415e-03
-      hsa.miR.375.25            5.109460e-04
-      hsa.miR.451a              1.021281e-02
-      hsa.miR.451a.1            2.696464e-03
-      hsa.miR.451a.2            8.048965e-04
-      hsa.miR.451a.3            5.109460e-04
-      hsa.miR.486.3p            5.896510e-03
-      hsa.miR.486.3p.1          5.213336e-03
-      hsa.miR.486.3p.2          1.441833e-03
-      hsa.miR.486.3p.4          3.442419e-02
-      hsa.miR.486.3p.6          2.397676e-02
-      hsa.miR.486.5p            4.438894e-03
-      hsa.miR.486.5p.1          3.668442e-02
-      hsa.miR.486.5p.2          7.982415e-03
-      hsa.miR.486.5p.3          5.213336e-03
-      hsa.miR.486.5p.4          2.447370e-03
-      hsa.miR.504.5p            5.896510e-03
-      hsa.miR.504.5p.2          3.122392e-02
-      hsa.miR.551b.3p           2.551875e-03
-      hsa.miR.577               4.619829e-03
-      hsa.miR.577.1             4.019797e-02
-      hsa.miR.577.2             3.127981e-03
-      hsa.miR.577.3             3.333239e-02
-      hsa.miR.577.4             4.256609e-02
-      hsa.miR.577.5             3.835415e-03
-      hsa.miR.577.7             6.536535e-03
-      hsa.miR.577.8             8.048965e-04
-      hsa.miR.652.3p            1.758112e-05
-      hsa.miR.652.3p.1          2.093358e-03
-      hsa.miR.652.3p.2          1.345106e-02
-      hsa.miR.652.3p.3          5.109460e-04
-      hsa.miR.652.3p.4          2.990326e-05
-      hsa.miR.652.3p.5          3.953010e-05
-      hsa.miR.652.3p.6          1.868910e-03
-      hsa.miR.652.3p.8          1.401580e-02
-      hsa.miR.652.3p.9          1.758112e-05
-      hsa.miR.652.3p.10         5.213336e-03
-      hsa.miR.652.3p.11         1.270137e-03
-      hsa.miR.653.5p            1.982395e-03
-      hsa.miR.653.5p.1          2.236317e-02
-      hsa.miR.653.5p.4          2.791497e-03
-      hsa.miR.653.5p.5          3.668442e-02
-      hsa.miR.653.5p.7          1.608310e-02
-      hsa.miR.6842.3p           1.868910e-03
-      hsa.miR.6842.3p.1         1.982395e-03
-      hsa.miR.7.2.3p            1.403047e-04
-      hsa.miR.7.2.3p.1          2.915876e-02
-      hsa.miR.7.2.3p.2          1.057783e-02
-      hsa.miR.7.5p              1.590901e-03
-      hsa.miR.7.5p.1            3.451653e-03
-      hsa.miR.7.5p.2            1.495606e-03
-      hsa.miR.7.5p.3            1.858358e-02
-      hsa.miR.7.5p.4            2.464779e-02
-      hsa.miR.7.5p.5            3.442041e-05
-      hsa.miR.7.5p.6            1.242701e-02
-      hsa.miR.7.5p.7            1.728288e-02
-      hsa.miR.7.5p.8            2.201124e-03
-      hsa.miR.7.5p.10           5.896510e-03
-      hsa.miR.7.5p.13           3.333239e-02
-      hsa.miR.7.5p.15           1.818739e-04
-      hsa.miR.7.5p.17           9.142211e-05
-      hsa.miR.7.5p.19           3.307586e-03
-      hsa.miR.7.5p.20           2.165076e-02
-      hsa.miR.7.5p.21           4.438894e-03
-      hsa.miR.7.5p.23           1.185102e-03
-      hsa.miR.7.5p.24           4.502912e-04
-      hsa.miR.7.5p.25           3.020664e-02
-      hsa.miR.7.5p.26           4.792260e-02
-      hsa.miR.7.5p.28           4.386349e-02
-      hsa.miR.7.5p.29           1.120910e-04
-      hsa.miR.7.5p.30           1.353835e-03
-      hsa.miR.7.5p.31           2.447370e-03
-      hsa.miR.7.5p.32           2.156930e-04
-      hsa.miR.7.5p.34           1.495606e-03
-      hsa.miR.7.5p.36           2.692201e-05
-      hsa.miR.7.5p.37           2.093358e-03
-      hsa.miR.7.5p.38           2.551875e-03
-      hsa.miR.7.5p.39           1.270137e-03
-      hsa.miR.7.5p.40           1.788861e-02
-      hsa.miR.7.5p.41           2.397676e-02
-      hsa.miR.7.5p.42           1.270137e-03
-      hsa.miR.7.5p.43           2.243550e-05
-      hsa.miR.7.5p.45           5.691381e-03
-      hsa.miR.7.5p.46           2.236317e-02
-      hsa.miR.873.3p            1.626919e-04
-      hsa.miR.873.3p.1          3.835415e-03
-      hsa.miR.873.3p.2          4.133598e-04
-      hsa.miR.873.3p.3          6.916186e-04
-      hsa.miR.873.3p.4          2.538039e-02
-      hsa.miR.873.5p            2.464779e-02
-      hsa.miR.873.5p.1          1.626919e-04
-      hsa.miR.873.5p.2          4.438894e-03
-      hsa.miR.873.5p.3          5.406901e-04
-      hsa.miR.873.5p.4          7.175633e-04
-      hsa.miR.873.5p.5          7.175633e-04
-      hsa.miR.873.5p.6          1.441833e-03
-      hsa.miR.873.5p.7          4.796891e-04
-      hsa.miR.873.5p.8          3.451653e-03
-      hsa.miR.873.5p.9          2.305148e-03
-      hsa.miR.873.5p.10         2.640829e-04
-      hsa.miR.873.5p.11         5.109460e-04
-      hsa.miR.873.5p.12         7.175633e-04
-      hsa.miR.873.5p.13         1.120910e-04
-      hsa.miR.873.5p.14         1.185102e-03
-      hsa.miR.873.5p.15         1.417814e-05
-      hsa.miR.873.5p.17         5.896510e-03
-      hsa.miR.873.5p.18         5.406901e-04
-      hsa.miR.873.5p.19         7.982415e-03
-      hsa.miR.873.5p.20         1.981269e-04
-      hsa.miR.873.5p.21         1.549055e-02
-      hsa.miR.873.5p.22         1.626919e-04
-      hsa.miR.874.3p            7.175633e-04
-      hsa.miR.874.3p.1          3.906494e-04
-      hsa.miR.874.3p.2          5.406901e-04
-      hsa.miR.874.3p.3          1.136484e-03
-      hsa.miR.874.3p.4          1.774492e-03
-      hsa.miR.9.5p              7.621449e-04
-      hsa.miR.9.5p.1            1.507089e-02
-      hsa.miR.9.5p.3            1.923356e-06
-      hsa.miR.9.5p.5            3.665249e-04
-      hsa.miR.9.5p.7            1.293151e-02
-      hsa.miR.9.5p.8            7.621449e-04
-      hsa.miR.9.5p.9            7.175633e-04
-      hsa.miR.9.5p.10           1.495606e-03
-      hsa.miR.9.5p.11           2.297581e-04
-      hsa.miR.9.5p.12           2.696464e-03
-      hsa.miR.9.5p.13           7.399557e-03
-      hsa.miR.9.5p.14           6.780912e-03
-      hsa.miR.9.5p.15           2.087155e-02
-      hsa.miR.9.5p.16           3.442419e-02
-      hsa.miR.9.5p.17           5.896510e-03
-      hsa.miR.9.5p.18           2.538039e-02
-      hsa.miR.9.5p.19           4.256609e-02
-      hsa.miR.9.5p.20           3.835415e-03
-      hsa.miR.9.5p.21           2.464779e-02
-      hsa.miR.9.5p.22           4.213548e-03
-      hsa.miR.9.5p.24           5.691381e-03
-      hsa.miR.9.5p.25           4.144487e-02
-      hsa.miR.9.5p.26           1.151282e-02
-      hsa.miR.9.5p.27           2.397676e-02
-      hsa.miR.9.5p.28           2.027048e-05
-      hsa.miR.96.5p.2           1.626919e-04
-      hsa.miR.96.5p.3           4.619829e-03
-      hsa.miR.96.5p.4           1.495606e-03
-      hsa.miR.96.5p.5           1.345106e-02
-      hsa.miR.96.5p.6           4.133598e-04
-      hsa.miR.96.5p.7           6.780912e-03
-      hsa.miR.96.5p.8           1.353835e-03
-      hsa.miR.96.5p.9           2.791497e-03
-      hsa.miR.96.5p.10          1.293151e-02
-      hsa.miR.96.5p.11          2.696464e-03
-      hsa.miR.96.5p.12          1.053478e-03
-      hsa.miR.96.5p.13          1.495606e-03
-      hsa.miR.96.5p.14          2.551875e-03
-      hsa.miR.96.5p.15          9.295519e-04
-      hsa.miR.96.5p.16          1.981269e-04
-      hsa.miR.96.5p.17          1.403047e-04
-      hsa.miR.96.5p.18          3.451653e-03
-      hsa.miR.96.5p.19          8.326044e-03
-      hsa.miR.96.5p.20          3.835415e-03
-      hsa.miR.96.5p.21          4.972485e-03
-      hsa.miR.96.5p.22          1.012694e-04
+                                 microRNA   Target microRNA.Direction
+      hsa.miR.1179.5         hsa-miR-1179    NOC2L      downregulated
+      hsa.miR.1179.6         hsa-miR-1179   NPEPPS      downregulated
+      hsa.miR.1275.1         hsa-miR-1275   COL1A2      downregulated
+      hsa.miR.138.1.3p.1 hsa-miR-138-1-3p    CCND2      downregulated
+      hsa.miR.138.5p.3     hsa-miR-138-5p     LMO3      downregulated
+      hsa.miR.138.5p.4     hsa-miR-138-5p     CD44      downregulated
+      hsa.miR.138.5p.7     hsa-miR-138-5p     CTSA      downregulated
+      hsa.miR.138.5p.10    hsa-miR-138-5p   KIF20A      downregulated
+      hsa.miR.139.5p.1     hsa-miR-139-5p   DCBLD2      downregulated
+      hsa.miR.139.5p.2     hsa-miR-139-5p   TSPAN3      downregulated
+      hsa.miR.139.5p.5     hsa-miR-139-5p    CCND2      downregulated
+      hsa.miR.139.5p.12    hsa-miR-139-5p   VPS37A      downregulated
+      hsa.miR.144.3p.1     hsa-miR-144-3p   DCBLD2      downregulated
+      hsa.miR.144.3p.8     hsa-miR-144-3p    BEST1      downregulated
+      hsa.miR.144.5p.3     hsa-miR-144-5p    ITGA3      downregulated
+      hsa.miR.146b.3p.1   hsa-miR-146b-3p  ZFP36L2        upregulated
+      hsa.miR.146b.3p.3   hsa-miR-146b-3p     CANX        upregulated
+      hsa.miR.146b.3p.5   hsa-miR-146b-3p    LIMD1        upregulated
+      hsa.miR.146b.5p     hsa-miR-146b-5p    FBXL3        upregulated
+      hsa.miR.146b.5p.1   hsa-miR-146b-5p    HYOU1        upregulated
+      hsa.miR.146b.5p.3   hsa-miR-146b-5p   CYBRD1        upregulated
+      hsa.miR.146b.5p.4   hsa-miR-146b-5p     IER2        upregulated
+      hsa.miR.146b.5p.5   hsa-miR-146b-5p      JUN        upregulated
+      hsa.miR.146b.5p.7   hsa-miR-146b-5p     PAX8        upregulated
+      hsa.miR.182.5p.1     hsa-miR-182-5p   CITED2        upregulated
+      hsa.miR.182.5p.2     hsa-miR-182-5p     CUL5        upregulated
+      hsa.miR.182.5p.3     hsa-miR-182-5p     BCL2        upregulated
+      hsa.miR.182.5p.5     hsa-miR-182-5p     TOB1        upregulated
+      hsa.miR.182.5p.7     hsa-miR-182-5p    SYNE2        upregulated
+      hsa.miR.182.5p.10    hsa-miR-182-5p   MED12L        upregulated
+      hsa.miR.182.5p.12    hsa-miR-182-5p  ZMYND11        upregulated
+      hsa.miR.182.5p.14    hsa-miR-182-5p  ANKRD28        upregulated
+      hsa.miR.182.5p.16    hsa-miR-182-5p  CCDC152        upregulated
+      hsa.miR.182.5p.17    hsa-miR-182-5p     IRS1        upregulated
+      hsa.miR.182.5p.21    hsa-miR-182-5p   SLC5A6        upregulated
+      hsa.miR.182.5p.23    hsa-miR-182-5p  ZFP36L2        upregulated
+      hsa.miR.182.5p.24    hsa-miR-182-5p    AIF1L        upregulated
+      hsa.miR.182.5p.25    hsa-miR-182-5p     ATF3        upregulated
+      hsa.miR.182.5p.26    hsa-miR-182-5p     BEX4        upregulated
+      hsa.miR.182.5p.29    hsa-miR-182-5p     CANX        upregulated
+      hsa.miR.182.5p.30    hsa-miR-182-5p    CCL21        upregulated
+      hsa.miR.182.5p.31    hsa-miR-182-5p    CFDP1        upregulated
+      hsa.miR.182.5p.33    hsa-miR-182-5p      DCN        upregulated
+      hsa.miR.182.5p.34    hsa-miR-182-5p  DENND1C        upregulated
+      hsa.miR.182.5p.36    hsa-miR-182-5p     EEF2        upregulated
+      hsa.miR.182.5p.37    hsa-miR-182-5p     EGR1        upregulated
+      hsa.miR.182.5p.39    hsa-miR-182-5p     GJA1        upregulated
+      hsa.miR.182.5p.41    hsa-miR-182-5p    GPBP1        upregulated
+      hsa.miR.182.5p.42    hsa-miR-182-5p     GPX3        upregulated
+      hsa.miR.182.5p.43    hsa-miR-182-5p      ID4        upregulated
+      hsa.miR.182.5p.44    hsa-miR-182-5p    MAPK7        upregulated
+      hsa.miR.182.5p.49    hsa-miR-182-5p  SLC26A4        upregulated
+      hsa.miR.182.5p.50    hsa-miR-182-5p  SMARCA2        upregulated
+      hsa.miR.182.5p.52    hsa-miR-182-5p    TAF9B        upregulated
+      hsa.miR.182.5p.55    hsa-miR-182-5p    UBXN6        upregulated
+      hsa.miR.182.5p.56    hsa-miR-182-5p     URI1        upregulated
+      hsa.miR.183.5p       hsa-miR-183-5p      EZR        upregulated
+      hsa.miR.183.5p.1     hsa-miR-183-5p     EEF2        upregulated
+      hsa.miR.183.5p.2     hsa-miR-183-5p     EGR1        upregulated
+      hsa.miR.183.5p.3     hsa-miR-183-5p     IRS1        upregulated
+      hsa.miR.183.5p.6     hsa-miR-183-5p  ANKRD28        upregulated
+      hsa.miR.183.5p.7     hsa-miR-183-5p     CANX        upregulated
+      hsa.miR.183.5p.10    hsa-miR-183-5p     FOSB        upregulated
+      hsa.miR.183.5p.11    hsa-miR-183-5p   HNRNPM        upregulated
+      hsa.miR.183.5p.12    hsa-miR-183-5p    HYOU1        upregulated
+      hsa.miR.183.5p.15    hsa-miR-183-5p  ZFP36L2        upregulated
+      hsa.miR.204.5p.2     hsa-miR-204-5p    CCND2      downregulated
+      hsa.miR.204.5p.6     hsa-miR-204-5p     MDM2      downregulated
+      hsa.miR.204.5p.7     hsa-miR-204-5p    SYTL4      downregulated
+      hsa.miR.204.5p.9     hsa-miR-204-5p     CD44      downregulated
+      hsa.miR.204.5p.11    hsa-miR-204-5p   DCBLD2      downregulated
+      hsa.miR.204.5p.14    hsa-miR-204-5p HLA-DRB5      downregulated
+      hsa.miR.21.3p         hsa-miR-21-3p     SDC2        upregulated
+      hsa.miR.21.3p.1       hsa-miR-21-3p      DEK        upregulated
+      hsa.miR.21.3p.5       hsa-miR-21-3p    AIF1L        upregulated
+      hsa.miR.21.3p.6       hsa-miR-21-3p  ANKRD28        upregulated
+      hsa.miR.21.3p.10      hsa-miR-21-3p     CD24        upregulated
+      hsa.miR.21.3p.18      hsa-miR-21-3p  EIF2AK4        upregulated
+      hsa.miR.21.3p.21      hsa-miR-21-3p      JUN        upregulated
+      hsa.miR.21.3p.22      hsa-miR-21-3p     JUND        upregulated
+      hsa.miR.21.3p.25      hsa-miR-21-3p    NUPR1        upregulated
+      hsa.miR.21.3p.29      hsa-miR-21-3p  SLC20A2        upregulated
+      hsa.miR.21.3p.30      hsa-miR-21-3p   SLC5A6        upregulated
+      hsa.miR.21.3p.31      hsa-miR-21-3p    SMAD2        upregulated
+      hsa.miR.21.3p.32      hsa-miR-21-3p    SMPD4        upregulated
+      hsa.miR.21.3p.34      hsa-miR-21-3p   SORBS2        upregulated
+      hsa.miR.21.3p.35      hsa-miR-21-3p    SYNE2        upregulated
+      hsa.miR.21.3p.37      hsa-miR-21-3p    UBXN6        upregulated
+      hsa.miR.21.3p.39      hsa-miR-21-3p  ZMYND11        upregulated
+      hsa.miR.21.5p         hsa-miR-21-5p ARHGAP24        upregulated
+      hsa.miR.21.5p.1       hsa-miR-21-5p     BCL2        upregulated
+      hsa.miR.21.5p.4       hsa-miR-21-5p    APAF1        upregulated
+      hsa.miR.21.5p.5       hsa-miR-21-5p  ANKRD28        upregulated
+      hsa.miR.21.5p.6       hsa-miR-21-5p   CYBRD1        upregulated
+      hsa.miR.21.5p.9       hsa-miR-21-5p    SYNE2        upregulated
+      hsa.miR.21.5p.13      hsa-miR-21-5p      DEK        upregulated
+      hsa.miR.21.5p.15      hsa-miR-21-5p     EGR1        upregulated
+      hsa.miR.21.5p.16      hsa-miR-21-5p      EZR        upregulated
+      hsa.miR.21.5p.17      hsa-miR-21-5p    FBXL3        upregulated
+      hsa.miR.21.5p.19      hsa-miR-21-5p   GIGYF2        upregulated
+      hsa.miR.21.5p.22      hsa-miR-21-5p     SDC2        upregulated
+      hsa.miR.21.5p.23      hsa-miR-21-5p  SMARCA2        upregulated
+      hsa.miR.21.5p.24      hsa-miR-21-5p   SPTBN1        upregulated
+      hsa.miR.21.5p.27      hsa-miR-21-5p  ZMYND11        upregulated
+      hsa.miR.2110.1         hsa-miR-2110     EEF2        upregulated
+      hsa.miR.221.3p       hsa-miR-221-3p  ANKRD28        upregulated
+      hsa.miR.221.3p.2     hsa-miR-221-3p    APAF1        upregulated
+      hsa.miR.221.3p.3     hsa-miR-221-3p    GPBP1        upregulated
+      hsa.miR.221.3p.4     hsa-miR-221-3p     SDC2        upregulated
+      hsa.miR.221.3p.5     hsa-miR-221-3p  ZFP36L2        upregulated
+      hsa.miR.221.3p.9     hsa-miR-221-3p     GJA1        upregulated
+      hsa.miR.221.3p.10    hsa-miR-221-3p    TAF9B        upregulated
+      hsa.miR.221.3p.11    hsa-miR-221-3p     CANX        upregulated
+      hsa.miR.221.3p.12    hsa-miR-221-3p      DEK        upregulated
+      hsa.miR.221.3p.13    hsa-miR-221-3p    HYOU1        upregulated
+      hsa.miR.221.3p.15    hsa-miR-221-3p PPP1R15A        upregulated
+      hsa.miR.221.3p.18    hsa-miR-221-3p  SMARCA2        upregulated
+      hsa.miR.221.5p.2     hsa-miR-221-5p    APAF1        upregulated
+      hsa.miR.221.5p.3     hsa-miR-221-5p   CITED2        upregulated
+      hsa.miR.221.5p.7     hsa-miR-221-5p      EZR        upregulated
+      hsa.miR.221.5p.8     hsa-miR-221-5p    FBXL3        upregulated
+      hsa.miR.221.5p.9     hsa-miR-221-5p    FCGBP        upregulated
+      hsa.miR.221.5p.11    hsa-miR-221-5p   RAB11B        upregulated
+      hsa.miR.221.5p.16    hsa-miR-221-5p    SYNE2        upregulated
+      hsa.miR.221.5p.18    hsa-miR-221-5p     URI1        upregulated
+      hsa.miR.222.3p       hsa-miR-222-3p    GPBP1        upregulated
+      hsa.miR.222.3p.1     hsa-miR-222-3p     SDC2        upregulated
+      hsa.miR.222.3p.2     hsa-miR-222-3p  ZFP36L2        upregulated
+      hsa.miR.222.3p.6     hsa-miR-222-3p     CANX        upregulated
+      hsa.miR.222.3p.7     hsa-miR-222-3p     GJA1        upregulated
+      hsa.miR.222.3p.8     hsa-miR-222-3p      DCN        upregulated
+      hsa.miR.222.3p.9     hsa-miR-222-3p      DEK        upregulated
+      hsa.miR.222.3p.10    hsa-miR-222-3p     EEF2        upregulated
+      hsa.miR.222.3p.11    hsa-miR-222-3p      EZR        upregulated
+      hsa.miR.222.3p.12    hsa-miR-222-3p   GIGYF2        upregulated
+      hsa.miR.222.3p.13    hsa-miR-222-3p    HYOU1        upregulated
+      hsa.miR.222.3p.14    hsa-miR-222-3p    MATN2        upregulated
+      hsa.miR.222.3p.15    hsa-miR-222-3p PPP1R15A        upregulated
+      hsa.miR.222.3p.20    hsa-miR-222-3p  ZMYND11        upregulated
+      hsa.miR.31.3p         hsa-miR-31-3p     TOB1        upregulated
+      hsa.miR.31.5p.2       hsa-miR-31-5p   GIGYF2        upregulated
+      hsa.miR.31.5p.6       hsa-miR-31-5p     EGR2        upregulated
+      hsa.miR.31.5p.7       hsa-miR-31-5p      FBL        upregulated
+      hsa.miR.31.5p.8       hsa-miR-31-5p     GJA1        upregulated
+      hsa.miR.31.5p.10      hsa-miR-31-5p     MICA        upregulated
+      hsa.miR.31.5p.11      hsa-miR-31-5p    MTCH1        upregulated
+      hsa.miR.34a.5p       hsa-miR-34a-5p     BCL2        upregulated
+      hsa.miR.34a.5p.2     hsa-miR-34a-5p  ZMYND11        upregulated
+      hsa.miR.34a.5p.5     hsa-miR-34a-5p     CD24        upregulated
+      hsa.miR.34a.5p.6     hsa-miR-34a-5p   CITED2        upregulated
+      hsa.miR.34a.5p.7     hsa-miR-34a-5p   CYBRD1        upregulated
+      hsa.miR.34a.5p.9     hsa-miR-34a-5p   GIGYF2        upregulated
+      hsa.miR.34a.5p.10    hsa-miR-34a-5p   IL17RC        upregulated
+      hsa.miR.34a.5p.14    hsa-miR-34a-5p   SPTBN1        upregulated
+      hsa.miR.34a.5p.15    hsa-miR-34a-5p    SYNE2        upregulated
+      hsa.miR.34a.5p.16    hsa-miR-34a-5p    AIF1L        upregulated
+      hsa.miR.34a.5p.17    hsa-miR-34a-5p  ANKRD28        upregulated
+      hsa.miR.34a.5p.18    hsa-miR-34a-5p    APAF1        upregulated
+      hsa.miR.34a.5p.20    hsa-miR-34a-5p ARHGAP24        upregulated
+      hsa.miR.34a.5p.21    hsa-miR-34a-5p     ATF3        upregulated
+      hsa.miR.34a.5p.22    hsa-miR-34a-5p     BCAM        upregulated
+      hsa.miR.34a.5p.24    hsa-miR-34a-5p     BEX4        upregulated
+      hsa.miR.34a.5p.33    hsa-miR-34a-5p     EGR1        upregulated
+      hsa.miR.34a.5p.34    hsa-miR-34a-5p  EIF2AK4        upregulated
+      hsa.miR.34a.5p.35    hsa-miR-34a-5p      FBL        upregulated
+      hsa.miR.34a.5p.36    hsa-miR-34a-5p    FBXL3        upregulated
+      hsa.miR.34a.5p.37    hsa-miR-34a-5p    FCGBP        upregulated
+      hsa.miR.34a.5p.38    hsa-miR-34a-5p     FHL1        upregulated
+      hsa.miR.34a.5p.42    hsa-miR-34a-5p     GJA1        upregulated
+      hsa.miR.34a.5p.43    hsa-miR-34a-5p   HNRNPM        upregulated
+      hsa.miR.34a.5p.44    hsa-miR-34a-5p   HNRNPR        upregulated
+      hsa.miR.34a.5p.46    hsa-miR-34a-5p      ID1        upregulated
+      hsa.miR.34a.5p.47    hsa-miR-34a-5p      ID4        upregulated
+      hsa.miR.34a.5p.50    hsa-miR-34a-5p    JMJD4        upregulated
+      hsa.miR.34a.5p.51    hsa-miR-34a-5p      JUN        upregulated
+      hsa.miR.34a.5p.61    hsa-miR-34a-5p     PAX8        upregulated
+      hsa.miR.34a.5p.62    hsa-miR-34a-5p     PCP4        upregulated
+      hsa.miR.34a.5p.64    hsa-miR-34a-5p PPP1R15A        upregulated
+      hsa.miR.34a.5p.68    hsa-miR-34a-5p   SCPEP1        upregulated
+      hsa.miR.34a.5p.70    hsa-miR-34a-5p  SMARCA2        upregulated
+      hsa.miR.34a.5p.74    hsa-miR-34a-5p    TAF9B        upregulated
+      hsa.miR.34a.5p.75    hsa-miR-34a-5p    TFB1M        upregulated
+      hsa.miR.34a.5p.77    hsa-miR-34a-5p     TOB1        upregulated
+      hsa.miR.34a.5p.78    hsa-miR-34a-5p      TPO        upregulated
+      hsa.miR.34a.5p.81    hsa-miR-34a-5p    UFSP2        upregulated
+      hsa.miR.34a.5p.82    hsa-miR-34a-5p     URI1        upregulated
+      hsa.miR.34a.5p.86    hsa-miR-34a-5p  ZFP36L2        upregulated
+      hsa.miR.3613.5p     hsa-miR-3613-5p      EZR        upregulated
+      hsa.miR.3613.5p.2   hsa-miR-3613-5p     SDC2        upregulated
+      hsa.miR.3613.5p.3   hsa-miR-3613-5p  SLC20A2        upregulated
+      hsa.miR.3613.5p.5   hsa-miR-3613-5p   SPTBN1        upregulated
+      hsa.miR.375             hsa-miR-375     BCL2        upregulated
+      hsa.miR.375.1           hsa-miR-375     CUL5        upregulated
+      hsa.miR.375.6           hsa-miR-375  ZFP36L2        upregulated
+      hsa.miR.375.8           hsa-miR-375  ANKRD28        upregulated
+      hsa.miR.375.12          hsa-miR-375      DEK        upregulated
+      hsa.miR.375.13          hsa-miR-375   DEPTOR        upregulated
+      hsa.miR.375.15          hsa-miR-375     EGR1        upregulated
+      hsa.miR.375.16          hsa-miR-375   HNRNPR        upregulated
+      hsa.miR.375.17          hsa-miR-375     IRS1        upregulated
+      hsa.miR.375.18          hsa-miR-375      JUN        upregulated
+      hsa.miR.375.23          hsa-miR-375   SPTBN1        upregulated
+      hsa.miR.375.24          hsa-miR-375    SYNE2        upregulated
+      hsa.miR.375.25          hsa-miR-375  ZMYND11        upregulated
+      hsa.miR.451a.2         hsa-miR-451a   DCBLD2      downregulated
+      hsa.miR.486.3p.2     hsa-miR-486-3p    BEST1      downregulated
+      hsa.miR.486.5p.3     hsa-miR-486-5p     ECE1      downregulated
+      hsa.miR.551b.3p     hsa-miR-551b-3p   HNRNPM        upregulated
+      hsa.miR.577.1           hsa-miR-577     WSB2      downregulated
+      hsa.miR.577.3           hsa-miR-577     MDM2      downregulated
+      hsa.miR.577.5           hsa-miR-577    CCND2      downregulated
+      hsa.miR.652.3p       hsa-miR-652-3p    LLGL1      downregulated
+      hsa.miR.652.3p.5     hsa-miR-652-3p    CCND2      downregulated
+      hsa.miR.652.3p.6     hsa-miR-652-3p    MGST1      downregulated
+      hsa.miR.653.5p.5     hsa-miR-653-5p  HTATSF1        upregulated
+      hsa.miR.653.5p.7     hsa-miR-653-5p  ZMYND11        upregulated
+      hsa.miR.7.5p.2         hsa-miR-7-5p   COL1A2      downregulated
+      hsa.miR.7.5p.4         hsa-miR-7-5p      AGK      downregulated
+      hsa.miR.7.5p.5         hsa-miR-7-5p      AHR      downregulated
+      hsa.miR.7.5p.10        hsa-miR-7-5p    CCND2      downregulated
+      hsa.miR.7.5p.17        hsa-miR-7-5p C10orf55      downregulated
+      hsa.miR.7.5p.19        hsa-miR-7-5p     CTNS      downregulated
+      hsa.miR.7.5p.24        hsa-miR-7-5p      FN1      downregulated
+      hsa.miR.7.5p.25        hsa-miR-7-5p    GAPDH      downregulated
+      hsa.miR.7.5p.32        hsa-miR-7-5p    ITGA6      downregulated
+      hsa.miR.7.5p.34        hsa-miR-7-5p     MDM2      downregulated
+      hsa.miR.7.5p.36        hsa-miR-7-5p     NPC2      downregulated
+      hsa.miR.7.5p.37        hsa-miR-7-5p     NUMB      downregulated
+      hsa.miR.7.5p.39        hsa-miR-7-5p   PKMYT1      downregulated
+      hsa.miR.7.5p.45        hsa-miR-7-5p   VPS37A      downregulated
+      hsa.miR.7.5p.46        hsa-miR-7-5p  ZFP36L1      downregulated
+      hsa.miR.873.3p       hsa-miR-873-3p    CCND2      downregulated
+      hsa.miR.873.3p.3     hsa-miR-873-3p     MDM2      downregulated
+      hsa.miR.873.5p.1     hsa-miR-873-5p     DDR1      downregulated
+      hsa.miR.873.5p.2     hsa-miR-873-5p   NPEPPS      downregulated
+      hsa.miR.873.5p.4     hsa-miR-873-5p    CCND2      downregulated
+      hsa.miR.873.5p.6     hsa-miR-873-5p     CTSA      downregulated
+      hsa.miR.873.5p.9     hsa-miR-873-5p   EFTUD2      downregulated
+      hsa.miR.873.5p.12    hsa-miR-873-5p     MDM2      downregulated
+      hsa.miR.873.5p.15    hsa-miR-873-5p    RBMS2      downregulated
+      hsa.miR.873.5p.17    hsa-miR-873-5p   SPIRE1      downregulated
+      hsa.miR.873.5p.20    hsa-miR-873-5p   TNRC6C      downregulated
+      hsa.miR.873.5p.21    hsa-miR-873-5p    TRAF7      downregulated
+      hsa.miR.873.5p.22    hsa-miR-873-5p  TXNDC11      downregulated
+      hsa.miR.874.3p       hsa-miR-874-3p     THRA      downregulated
+      hsa.miR.874.3p.2     hsa-miR-874-3p   TNRC6C      downregulated
+      hsa.miR.874.3p.3     hsa-miR-874-3p     DDR1      downregulated
+      hsa.miR.874.3p.4     hsa-miR-874-3p   SPTBN5      downregulated
+      hsa.miR.9.5p           hsa-miR-9-5p   MTHFD2      downregulated
+      hsa.miR.9.5p.3         hsa-miR-9-5p     SIX5      downregulated
+      hsa.miR.9.5p.7         hsa-miR-9-5p    MCTP2      downregulated
+      hsa.miR.9.5p.8         hsa-miR-9-5p   PPP4R2      downregulated
+      hsa.miR.9.5p.14        hsa-miR-9-5p   TNRC6C      downregulated
+      hsa.miR.9.5p.15        hsa-miR-9-5p   TSPAN3      downregulated
+      hsa.miR.9.5p.22        hsa-miR-9-5p     LMO3      downregulated
+      hsa.miR.9.5p.24        hsa-miR-9-5p     MDM2      downregulated
+      hsa.miR.9.5p.26        hsa-miR-9-5p     NUMB      downregulated
+      hsa.miR.96.5p.2       hsa-miR-96-5p     BCL2        upregulated
+      hsa.miR.96.5p.3       hsa-miR-96-5p     IRS1        upregulated
+      hsa.miR.96.5p.7       hsa-miR-96-5p   MED12L        upregulated
+      hsa.miR.96.5p.8       hsa-miR-96-5p      DEK        upregulated
+      hsa.miR.96.5p.9       hsa-miR-96-5p     EEF2        upregulated
+      hsa.miR.96.5p.12      hsa-miR-96-5p    LIMD1        upregulated
+      hsa.miR.96.5p.14      hsa-miR-96-5p   RAB11B        upregulated
+      hsa.miR.96.5p.16      hsa-miR-96-5p  SMARCA2        upregulated
+      hsa.miR.96.5p.17      hsa-miR-96-5p    SMPD4        upregulated
+      hsa.miR.96.5p.18      hsa-miR-96-5p   SPTBN1        upregulated
+      hsa.miR.96.5p.22      hsa-miR-96-5p  ZFP36L2        upregulated
+                         Corr.Coefficient Corr.P.Value Corr.Adjusted.P.Val
+      hsa.miR.1179.5           -0.6529412 3.051023e-03        9.110098e-03
+      hsa.miR.1179.6           -0.8000000 9.928549e-05        6.717614e-04
+      hsa.miR.1275.1           -0.7647059 2.798381e-04        1.446968e-03
+      hsa.miR.138.1.3p.1       -0.9176471 2.764327e-07        1.255794e-05
+      hsa.miR.138.5p.3         -0.6882353 1.601954e-03        5.448358e-03
+      hsa.miR.138.5p.4         -0.8264706 3.961774e-05        3.359585e-04
+      hsa.miR.138.5p.7         -0.7558824 3.529453e-04        1.740102e-03
+      hsa.miR.138.5p.10        -0.8294118 3.544227e-05        3.220183e-04
+      hsa.miR.139.5p.1         -0.5323529 1.688431e-02        4.037001e-02
+      hsa.miR.139.5p.2         -0.6882353 1.601954e-03        5.448358e-03
+      hsa.miR.139.5p.5         -0.7117647 9.920216e-04        3.894603e-03
+      hsa.miR.139.5p.12        -0.6176471 5.393992e-03        1.498069e-02
+      hsa.miR.144.3p.1         -0.6058824 6.430149e-03        1.696919e-02
+      hsa.miR.144.3p.8         -0.7558824 3.529453e-04        1.740102e-03
+      hsa.miR.144.5p.3         -0.6323529 4.288792e-03        1.228681e-02
+      hsa.miR.146b.3p.1        -0.7911765 1.309732e-04        8.087279e-04
+      hsa.miR.146b.3p.3        -0.9058824 6.817567e-07        2.282091e-05
+      hsa.miR.146b.3p.5        -0.8823529 3.047810e-06        5.873961e-05
+      hsa.miR.146b.5p          -0.8970588 1.246188e-06        3.302398e-05
+      hsa.miR.146b.5p.1        -0.7852941 1.564270e-04        9.385618e-04
+      hsa.miR.146b.5p.3        -0.8705882 5.749467e-06        9.622793e-05
+      hsa.miR.146b.5p.4        -0.8500000 1.526130e-05        1.617698e-04
+      hsa.miR.146b.5p.5        -0.8117647 6.716119e-05        4.966804e-04
+      hsa.miR.146b.5p.7        -0.6735294 2.116370e-03        6.696573e-03
+      hsa.miR.182.5p.1         -0.6882353 1.601954e-03        5.448358e-03
+      hsa.miR.182.5p.2         -0.7235294 7.672406e-04        3.127981e-03
+      hsa.miR.182.5p.3         -0.8647059 7.721170e-06        1.067536e-04
+      hsa.miR.182.5p.5         -0.7411765 5.092348e-04        2.313381e-03
+      hsa.miR.182.5p.7         -0.5470588 1.415054e-02        3.448178e-02
+      hsa.miR.182.5p.10        -0.5852941 8.612643e-03        2.208726e-02
+      hsa.miR.182.5p.12        -0.5705882 1.049535e-02        2.617663e-02
+      hsa.miR.182.5p.14        -0.5647059 1.133160e-02        2.815195e-02
+      hsa.miR.182.5p.16        -0.8264706 3.961774e-05        3.359585e-04
+      hsa.miR.182.5p.17        -0.6176471 5.393992e-03        1.498069e-02
+      hsa.miR.182.5p.21        -0.8000000 9.928549e-05        6.717614e-04
+      hsa.miR.182.5p.23        -0.8176471 5.468154e-05        4.293514e-04
+      hsa.miR.182.5p.24        -0.8470588 1.734023e-05        1.750538e-04
+      hsa.miR.182.5p.25        -0.6147059 5.639737e-03        1.559510e-02
+      hsa.miR.182.5p.26        -0.7647059 2.798381e-04        1.446968e-03
+      hsa.miR.182.5p.29        -0.6647059 2.483693e-03        7.668101e-03
+      hsa.miR.182.5p.30        -0.7588235 3.270151e-04        1.650648e-03
+      hsa.miR.182.5p.31        -0.7941176 1.195955e-04        7.457129e-04
+      hsa.miR.182.5p.33        -0.5235294 1.870632e-02        4.439262e-02
+      hsa.miR.182.5p.34        -0.8558824 1.172458e-05        1.406949e-04
+      hsa.miR.182.5p.36        -0.7352941 5.858078e-04        2.551875e-03
+      hsa.miR.182.5p.37        -0.5735294 1.009552e-02        2.537846e-02
+      hsa.miR.182.5p.39        -0.7794118 1.858401e-04        1.064814e-03
+      hsa.miR.182.5p.41        -0.7058824 1.122950e-03        4.201155e-03
+      hsa.miR.182.5p.42        -0.6294118 4.494045e-03        1.275988e-02
+      hsa.miR.182.5p.43        -0.5823529 8.966367e-03        2.281044e-02
+      hsa.miR.182.5p.44        -0.7764706 2.021754e-04        1.137908e-03
+      hsa.miR.182.5p.49        -0.5941176 7.616200e-03        1.977103e-02
+      hsa.miR.182.5p.50        -0.8000000 9.928549e-05        6.717614e-04
+      hsa.miR.182.5p.52        -0.6323529 4.288792e-03        1.228681e-02
+      hsa.miR.182.5p.55        -0.7294118 6.715393e-04        2.791497e-03
+      hsa.miR.182.5p.56        -0.7294118 6.715393e-04        2.791497e-03
+      hsa.miR.183.5p           -0.6176471 5.393992e-03        1.498069e-02
+      hsa.miR.183.5p.1         -0.6970588 1.345295e-03        4.833940e-03
+      hsa.miR.183.5p.2         -0.5970588 7.304866e-03        1.911891e-02
+      hsa.miR.183.5p.3         -0.6058824 6.430149e-03        1.696919e-02
+      hsa.miR.183.5p.6         -0.6617647 2.616877e-03        8.001604e-03
+      hsa.miR.183.5p.7         -0.7411765 5.092348e-04        2.313381e-03
+      hsa.miR.183.5p.10        -0.6117647 5.894203e-03        1.602014e-02
+      hsa.miR.183.5p.11        -0.8470588 1.734023e-05        1.750538e-04
+      hsa.miR.183.5p.12        -0.5382353 1.574661e-02        3.807926e-02
+      hsa.miR.183.5p.15        -0.8911765 1.809324e-06        4.261964e-05
+      hsa.miR.204.5p.2         -0.9294118 9.700595e-08        7.711973e-06
+      hsa.miR.204.5p.6         -0.7441176 4.741414e-04        2.217308e-03
+      hsa.miR.204.5p.7         -0.7764706 2.021754e-04        1.137908e-03
+      hsa.miR.204.5p.9         -0.8529412 1.339537e-05        1.521331e-04
+      hsa.miR.204.5p.11        -0.6941176 1.426853e-03        5.013693e-03
+      hsa.miR.204.5p.14        -0.6941176 1.426853e-03        5.013693e-03
+      hsa.miR.21.3p            -0.7970588 1.090490e-04        7.005574e-04
+      hsa.miR.21.3p.1          -0.6970588 1.345295e-03        4.833940e-03
+      hsa.miR.21.3p.5          -0.8147059 6.065475e-05        4.647762e-04
+      hsa.miR.21.3p.6          -0.8882353 2.163125e-06        4.437896e-05
+      hsa.miR.21.3p.10         -0.6205882 5.156758e-03        1.451194e-02
+      hsa.miR.21.3p.18         -0.5941176 7.616200e-03        1.977103e-02
+      hsa.miR.21.3p.21         -0.6058824 6.430149e-03        1.696919e-02
+      hsa.miR.21.3p.22         -0.5617647 1.176851e-02        2.912362e-02
+      hsa.miR.21.3p.25         -0.6441176 3.540762e-03        1.047407e-02
+      hsa.miR.21.3p.29         -0.7117647 9.920216e-04        3.894603e-03
+      hsa.miR.21.3p.30         -0.6000000 7.003561e-03        1.840605e-02
+      hsa.miR.21.3p.31         -0.8323529 3.164062e-05        2.959329e-04
+      hsa.miR.21.3p.32         -0.7264706 7.180913e-04        2.946491e-03
+      hsa.miR.21.3p.34         -0.8264706 3.961774e-05        3.359585e-04
+      hsa.miR.21.3p.35         -0.6382353 3.900569e-03        1.137964e-02
+      hsa.miR.21.3p.37         -0.6676471 2.355991e-03        7.381331e-03
+      hsa.miR.21.3p.39         -0.9264706 1.280699e-07        9.050270e-06
+      hsa.miR.21.5p            -0.9705882 2.361701e-10        7.510208e-08
+      hsa.miR.21.5p.1          -0.7352941 5.858078e-04        2.551875e-03
+      hsa.miR.21.5p.4          -0.7705882 2.384112e-04        1.295979e-03
+      hsa.miR.21.5p.5          -0.9235294 1.671950e-07        9.666911e-06
+      hsa.miR.21.5p.6          -0.6823529 1.793985e-03        5.911785e-03
+      hsa.miR.21.5p.9          -0.6705882 2.233604e-03        7.032536e-03
+      hsa.miR.21.5p.13         -0.6941176 1.426853e-03        5.013693e-03
+      hsa.miR.21.5p.15         -0.8029412 9.025840e-05        6.523221e-04
+      hsa.miR.21.5p.16         -0.8647059 7.721170e-06        1.067536e-04
+      hsa.miR.21.5p.17         -0.7970588 1.090490e-04        7.005574e-04
+      hsa.miR.21.5p.19         -0.7088235 1.055841e-03        4.069786e-03
+      hsa.miR.21.5p.22         -0.8647059 7.721170e-06        1.067536e-04
+      hsa.miR.21.5p.23         -0.6647059 2.483693e-03        7.668101e-03
+      hsa.miR.21.5p.24         -0.8235294 4.419570e-05        3.603649e-04
+      hsa.miR.21.5p.27         -0.9352941 5.360084e-08        4.870019e-06
+      hsa.miR.2110.1           -0.7058824 1.122950e-03        4.201155e-03
+      hsa.miR.221.3p           -0.7500000 4.098820e-04        1.974886e-03
+      hsa.miR.221.3p.2         -0.8705882 5.749467e-06        9.622793e-05
+      hsa.miR.221.3p.3         -0.7588235 3.270151e-04        1.650648e-03
+      hsa.miR.221.3p.4         -0.6529412 3.051023e-03        9.110098e-03
+      hsa.miR.221.3p.5         -0.9147059 3.505901e-07        1.486502e-05
+      hsa.miR.221.3p.9         -0.7470588 4.410535e-04        2.077852e-03
+      hsa.miR.221.3p.10        -0.7294118 6.715393e-04        2.791497e-03
+      hsa.miR.221.3p.11        -0.8882353 2.163125e-06        4.437896e-05
+      hsa.miR.221.3p.12        -0.9529412 6.048290e-09        9.616781e-07
+      hsa.miR.221.3p.13        -0.6323529 4.288792e-03        1.228681e-02
+      hsa.miR.221.3p.15        -0.7264706 7.180913e-04        2.946491e-03
+      hsa.miR.221.3p.18        -0.9941176 3.216999e-15        2.046011e-12
+      hsa.miR.221.5p.2         -0.8882353 2.163125e-06        4.437896e-05
+      hsa.miR.221.5p.3         -0.8294118 3.544227e-05        3.220183e-04
+      hsa.miR.221.5p.7         -0.8647059 7.721170e-06        1.067536e-04
+      hsa.miR.221.5p.8         -0.8441176 1.965121e-05        1.922796e-04
+      hsa.miR.221.5p.9         -0.7294118 6.715393e-04        2.791497e-03
+      hsa.miR.221.5p.11        -0.5764706 9.707570e-03        2.459767e-02
+      hsa.miR.221.5p.16        -0.9000000 1.025545e-06        2.835855e-05
+      hsa.miR.221.5p.18        -0.8647059 7.721170e-06        1.067536e-04
+      hsa.miR.222.3p           -0.6882353 1.601954e-03        5.448358e-03
+      hsa.miR.222.3p.1         -0.6294118 4.494045e-03        1.275988e-02
+      hsa.miR.222.3p.2         -0.8911765 1.809324e-06        4.261964e-05
+      hsa.miR.222.3p.6         -0.9117647 4.409493e-07        1.752773e-05
+      hsa.miR.222.3p.7         -0.7588235 3.270151e-04        1.650648e-03
+      hsa.miR.222.3p.8         -0.7705882 2.384112e-04        1.295979e-03
+      hsa.miR.222.3p.9         -0.9176471 2.764327e-07        1.255794e-05
+      hsa.miR.222.3p.10        -0.7000000 1.267547e-03        4.633104e-03
+      hsa.miR.222.3p.11        -0.8588235 1.023220e-05        1.251477e-04
+      hsa.miR.222.3p.12        -0.6970588 1.345295e-03        4.833940e-03
+      hsa.miR.222.3p.13        -0.7088235 1.055841e-03        4.069786e-03
+      hsa.miR.222.3p.14        -0.7411765 5.092348e-04        2.313381e-03
+      hsa.miR.222.3p.15        -0.6558824 2.900368e-03        8.783973e-03
+      hsa.miR.222.3p.20        -0.7882353 1.432328e-04        8.675818e-04
+      hsa.miR.31.3p            -0.7176471 8.737675e-04        3.495070e-03
+      hsa.miR.31.5p.2          -0.6411765 3.717210e-03        1.089468e-02
+      hsa.miR.31.5p.6          -0.5323529 1.688431e-02        4.037001e-02
+      hsa.miR.31.5p.7          -0.6941176 1.426853e-03        5.013693e-03
+      hsa.miR.31.5p.8          -0.8500000 1.526130e-05        1.617698e-04
+      hsa.miR.31.5p.10         -0.7823529 1.706104e-04        9.954881e-04
+      hsa.miR.31.5p.11         -0.6823529 1.793985e-03        5.911785e-03
+      hsa.miR.34a.5p           -0.7823529 1.706104e-04        9.954881e-04
+      hsa.miR.34a.5p.2         -0.8235294 4.419570e-05        3.603649e-04
+      hsa.miR.34a.5p.5         -0.6411765 3.717210e-03        1.089468e-02
+      hsa.miR.34a.5p.6         -0.8647059 7.721170e-06        1.067536e-04
+      hsa.miR.34a.5p.7         -0.8882353 2.163125e-06        4.437896e-05
+      hsa.miR.34a.5p.9         -0.5882353 8.269861e-03        2.129406e-02
+      hsa.miR.34a.5p.10        -0.6117647 5.894203e-03        1.602014e-02
+      hsa.miR.34a.5p.14        -0.8117647 6.716119e-05        4.966804e-04
+      hsa.miR.34a.5p.15        -0.6647059 2.483693e-03        7.668101e-03
+      hsa.miR.34a.5p.16        -0.8588235 1.023220e-05        1.251477e-04
+      hsa.miR.34a.5p.17        -0.7970588 1.090490e-04        7.005574e-04
+      hsa.miR.34a.5p.18        -0.7058824 1.122950e-03        4.201155e-03
+      hsa.miR.34a.5p.20        -0.8352941 2.818566e-05        2.675534e-04
+      hsa.miR.34a.5p.21        -0.7000000 1.267547e-03        4.633104e-03
+      hsa.miR.34a.5p.22        -0.9058824 6.817567e-07        2.282091e-05
+      hsa.miR.34a.5p.24        -0.7294118 6.715393e-04        2.791497e-03
+      hsa.miR.34a.5p.33        -0.8441176 1.965121e-05        1.922796e-04
+      hsa.miR.34a.5p.34        -0.6117647 5.894203e-03        1.602014e-02
+      hsa.miR.34a.5p.35        -0.8176471 5.468154e-05        4.293514e-04
+      hsa.miR.34a.5p.36        -0.7352941 5.858078e-04        2.551875e-03
+      hsa.miR.34a.5p.37        -0.6588235 2.755711e-03        8.385800e-03
+      hsa.miR.34a.5p.38        -0.8235294 4.419570e-05        3.603649e-04
+      hsa.miR.34a.5p.42        -0.6735294 2.116370e-03        6.696573e-03
+      hsa.miR.34a.5p.43        -0.6058824 6.430149e-03        1.696919e-02
+      hsa.miR.34a.5p.44        -0.6764706 2.004126e-03        6.536535e-03
+      hsa.miR.34a.5p.46        -0.8264706 3.961774e-05        3.359585e-04
+      hsa.miR.34a.5p.47        -0.7882353 1.432328e-04        8.675818e-04
+      hsa.miR.34a.5p.50        -0.6529412 3.051023e-03        9.110098e-03
+      hsa.miR.34a.5p.51        -0.8264706 3.961774e-05        3.359585e-04
+      hsa.miR.34a.5p.61        -0.6735294 2.116370e-03        6.696573e-03
+      hsa.miR.34a.5p.62        -0.8676471 6.674341e-06        1.067536e-04
+      hsa.miR.34a.5p.64        -0.6735294 2.116370e-03        6.696573e-03
+      hsa.miR.34a.5p.68        -0.5352941 1.630793e-02        3.928729e-02
+      hsa.miR.34a.5p.70        -0.8470588 1.734023e-05        1.750538e-04
+      hsa.miR.34a.5p.74        -0.7941176 1.195955e-04        7.457129e-04
+      hsa.miR.34a.5p.75        -0.8500000 1.526130e-05        1.617698e-04
+      hsa.miR.34a.5p.77        -0.8705882 5.749467e-06        9.622793e-05
+      hsa.miR.34a.5p.78        -0.6794118 1.896716e-03        6.218101e-03
+      hsa.miR.34a.5p.81        -0.8941176 1.505655e-06        3.830386e-05
+      hsa.miR.34a.5p.82        -0.6882353 1.601954e-03        5.448358e-03
+      hsa.miR.34a.5p.86        -0.8382353 2.505171e-05        2.414074e-04
+      hsa.miR.3613.5p          -0.9382353 3.901110e-08        4.135176e-06
+      hsa.miR.3613.5p.2        -0.7352941 5.858078e-04        2.551875e-03
+      hsa.miR.3613.5p.3        -0.7529412 3.805405e-04        1.847510e-03
+      hsa.miR.3613.5p.5        -0.9470588 1.357866e-08        1.727205e-06
+      hsa.miR.375              -0.7058824 1.122950e-03        4.201155e-03
+      hsa.miR.375.1            -0.7088235 1.055841e-03        4.069786e-03
+      hsa.miR.375.6            -0.5705882 1.049535e-02        2.617663e-02
+      hsa.miR.375.8            -0.9029412 8.388622e-07        2.540554e-05
+      hsa.miR.375.12           -0.7294118 6.715393e-04        2.791497e-03
+      hsa.miR.375.13           -0.6058824 6.430149e-03        1.696919e-02
+      hsa.miR.375.15           -0.6088235 6.157602e-03        1.659421e-02
+      hsa.miR.375.16           -0.6470588 3.371039e-03        1.001860e-02
+      hsa.miR.375.17           -0.8823529 3.047810e-06        5.873961e-05
+      hsa.miR.375.18           -0.5470588 1.415054e-02        3.448178e-02
+      hsa.miR.375.23           -0.7470588 4.410535e-04        2.077852e-03
+      hsa.miR.375.24           -0.6617647 2.616877e-03        8.001604e-03
+      hsa.miR.375.25           -0.8147059 6.065475e-05        4.647762e-04
+      hsa.miR.451a.2           -0.7941176 1.195955e-04        7.457129e-04
+      hsa.miR.486.3p.2         -0.7676471 2.584418e-04        1.381252e-03
+      hsa.miR.486.5p.3         -0.6911765 1.512359e-03        5.284948e-03
+      hsa.miR.551b.3p          -0.7352941 5.858078e-04        2.551875e-03
+      hsa.miR.577.1            -0.5294118 1.747600e-02        4.162823e-02
+      hsa.miR.577.3            -0.5470588 1.415054e-02        3.448178e-02
+      hsa.miR.577.5            -0.7117647 9.920216e-04        3.894603e-03
+      hsa.miR.652.3p           -0.9176471 2.764327e-07        1.255794e-05
+      hsa.miR.652.3p.5         -0.9000000 1.025545e-06        2.835855e-05
+      hsa.miR.652.3p.6         -0.7529412 3.805405e-04        1.847510e-03
+      hsa.miR.653.5p.5         -0.5382353 1.574661e-02        3.807926e-02
+      hsa.miR.653.5p.7         -0.6088235 6.157602e-03        1.659421e-02
+      hsa.miR.7.5p.2           -0.7647059 2.798381e-04        1.446968e-03
+      hsa.miR.7.5p.4           -0.5735294 1.009552e-02        2.537846e-02
+      hsa.miR.7.5p.5           -0.9029412 8.388622e-07        2.540554e-05
+      hsa.miR.7.5p.10          -0.6823529 1.793985e-03        5.911785e-03
+      hsa.miR.7.5p.17          -0.8794118 3.593637e-06        6.722214e-05
+      hsa.miR.7.5p.19          -0.7205882 8.190956e-04        3.318120e-03
+      hsa.miR.7.5p.24          -0.8205882 4.920635e-05        3.961423e-04
+      hsa.miR.7.5p.25          -0.5558824 1.268109e-02        3.126036e-02
+      hsa.miR.7.5p.32          -0.8500000 1.526130e-05        1.617698e-04
+      hsa.miR.7.5p.34          -0.7647059 2.798381e-04        1.446968e-03
+      hsa.miR.7.5p.36          -0.9088235 5.502926e-07        2.058742e-05
+      hsa.miR.7.5p.37          -0.7470588 4.410535e-04        2.077852e-03
+      hsa.miR.7.5p.39          -0.7735294 2.196778e-04        1.225571e-03
+      hsa.miR.7.5p.45          -0.6852941 1.695781e-03        5.706437e-03
+      hsa.miR.7.5p.46          -0.5823529 8.966367e-03        2.281044e-02
+      hsa.miR.873.3p           -0.8588235 1.023220e-05        1.251477e-04
+      hsa.miR.873.3p.3         -0.8029412 9.025840e-05        6.523221e-04
+      hsa.miR.873.5p.1         -0.8588235 1.023220e-05        1.251477e-04
+      hsa.miR.873.5p.2         -0.7029412 1.193476e-03        4.438894e-03
+      hsa.miR.873.5p.4         -0.8000000 9.928549e-05        6.717614e-04
+      hsa.miR.873.5p.6         -0.7676471 2.584418e-04        1.381252e-03
+      hsa.miR.873.5p.9         -0.7411765 5.092348e-04        2.313381e-03
+      hsa.miR.873.5p.12        -0.8000000 9.928549e-05        6.717614e-04
+      hsa.miR.873.5p.15        -0.9235294 1.671950e-07        9.666911e-06
+      hsa.miR.873.5p.17        -0.6823529 1.793985e-03        5.911785e-03
+      hsa.miR.873.5p.20        -0.8529412 1.339537e-05        1.521331e-04
+      hsa.miR.873.5p.21        -0.6117647 5.894203e-03        1.602014e-02
+      hsa.miR.873.5p.22        -0.8588235 1.023220e-05        1.251477e-04
+      hsa.miR.874.3p           -0.8000000 9.928549e-05        6.717614e-04
+      hsa.miR.874.3p.2         -0.8117647 6.716119e-05        4.966804e-04
+      hsa.miR.874.3p.3         -0.7794118 1.858401e-04        1.064814e-03
+      hsa.miR.874.3p.4         -0.7558824 3.529453e-04        1.740102e-03
+      hsa.miR.9.5p             -0.7970588 1.090490e-04        7.005574e-04
+      hsa.miR.9.5p.3           -0.9529412 6.048290e-09        9.616781e-07
+      hsa.miR.9.5p.7           -0.6264706 4.706989e-03        1.330509e-02
+      hsa.miR.9.5p.8           -0.7970588 1.090490e-04        7.005574e-04
+      hsa.miR.9.5p.14          -0.6735294 2.116370e-03        6.696573e-03
+      hsa.miR.9.5p.15          -0.5882353 8.269861e-03        2.129406e-02
+      hsa.miR.9.5p.22          -0.7058824 1.122950e-03        4.201155e-03
+      hsa.miR.9.5p.24          -0.6852941 1.695781e-03        5.706437e-03
+      hsa.miR.9.5p.26          -0.6352941 4.091032e-03        1.188081e-02
+      hsa.miR.96.5p.2          -0.8588235 1.023220e-05        1.251477e-04
+      hsa.miR.96.5p.3          -0.7000000 1.267547e-03        4.633104e-03
+      hsa.miR.96.5p.7          -0.6735294 2.116370e-03        6.696573e-03
+      hsa.miR.96.5p.8          -0.7705882 2.384112e-04        1.295979e-03
+      hsa.miR.96.5p.9          -0.7294118 6.715393e-04        2.791497e-03
+      hsa.miR.96.5p.12         -0.7823529 1.706104e-04        9.954881e-04
+      hsa.miR.96.5p.14         -0.7352941 5.858078e-04        2.551875e-03
+      hsa.miR.96.5p.16         -0.8529412 1.339537e-05        1.521331e-04
+      hsa.miR.96.5p.17         -0.8647059 7.721170e-06        1.067536e-04
+      hsa.miR.96.5p.18         -0.7176471 8.737675e-04        3.495070e-03
+      hsa.miR.96.5p.22         -0.8764706 4.219559e-06        7.667542e-05
 
 ---
 
@@ -1990,554 +821,280 @@
       hsa.miR.96.5p.17      hsa-miR-96-5p    SMPD4        upregulated
       hsa.miR.96.5p.18      hsa-miR-96-5p   SPTBN1        upregulated
       hsa.miR.96.5p.22      hsa-miR-96-5p  ZFP36L2        upregulated
-                         Correlation.Type Corr.Coefficient Corr.P.Value
-      hsa.miR.1179.5             negative       -0.6151203 5.604592e-03
-      hsa.miR.1179.6             negative       -0.8230376 4.500254e-05
-      hsa.miR.1275.1             negative       -0.8265431 3.951015e-05
-      hsa.miR.138.1.3p           negative       -0.5006047 2.413271e-02
-      hsa.miR.138.1.3p.1         negative       -0.9219059 1.928320e-07
-      hsa.miR.138.5p.3           negative       -0.6366280 4.003763e-03
-      hsa.miR.138.5p.4           negative       -0.8429522 2.063555e-05
-      hsa.miR.138.5p.7           negative       -0.7632500 2.909563e-04
-      hsa.miR.138.5p.10          negative       -0.7590856 3.247825e-04
-      hsa.miR.139.5p.2           negative       -0.6575616 2.817052e-03
-      hsa.miR.139.5p.5           negative       -0.6384107 3.889434e-03
-      hsa.miR.139.5p.12          negative       -0.5168806 2.017442e-02
-      hsa.miR.139.5p.13          negative       -0.5660263 1.113957e-02
-      hsa.miR.144.3p.1           negative       -0.7361623 5.739493e-04
-      hsa.miR.144.3p.8           negative       -0.7634078 2.897338e-04
-      hsa.miR.144.3p.9           negative       -0.5595762 1.210193e-02
-      hsa.miR.144.5p.3           negative       -0.6209810 5.125709e-03
-      hsa.miR.146b.3p.1          negative       -0.8169369 5.607684e-05
-      hsa.miR.146b.3p.3          negative       -0.9394079 3.422052e-08
-      hsa.miR.146b.3p.5          negative       -0.9231398 1.730677e-07
-      hsa.miR.146b.5p            negative       -0.8767147 4.164347e-06
-      hsa.miR.146b.5p.1          negative       -0.8656823 7.359362e-06
-      hsa.miR.146b.5p.3          negative       -0.9320148 7.509757e-08
-      hsa.miR.146b.5p.4          negative       -0.8396928 2.361010e-05
-      hsa.miR.146b.5p.5          negative       -0.8118747 6.690779e-05
-      hsa.miR.146b.5p.7          negative       -0.7699926 2.423604e-04
-      hsa.miR.182.5p.1           negative       -0.6929407 1.460588e-03
-      hsa.miR.182.5p.2           negative       -0.7963220 1.116158e-04
-      hsa.miR.182.5p.3           negative       -0.9208024 2.120987e-07
-      hsa.miR.182.5p.5           negative       -0.8487682 1.610496e-05
-      hsa.miR.182.5p.7           negative       -0.5798894 9.271237e-03
-      hsa.miR.182.5p.10          negative       -0.6096244 6.084981e-03
-      hsa.miR.182.5p.12          negative       -0.6097287 6.075570e-03
-      hsa.miR.182.5p.14          negative       -0.5785329 9.442501e-03
-      hsa.miR.182.5p.16          negative       -0.8008909 9.647559e-05
-      hsa.miR.182.5p.17          negative       -0.6303176 4.430021e-03
-      hsa.miR.182.5p.21          negative       -0.8106340 6.981218e-05
-      hsa.miR.182.5p.23          negative       -0.7959685 1.128649e-04
-      hsa.miR.182.5p.24          negative       -0.8375368 2.576819e-05
-      hsa.miR.182.5p.25          negative       -0.5978083 7.227139e-03
-      hsa.miR.182.5p.26          negative       -0.7920773 1.273971e-04
-      hsa.miR.182.5p.29          negative       -0.6803209 1.864468e-03
-      hsa.miR.182.5p.30          negative       -0.7681581 2.548653e-04
-      hsa.miR.182.5p.31          negative       -0.8136818 6.285782e-05
-      hsa.miR.182.5p.33          negative       -0.5994501 7.059145e-03
-      hsa.miR.182.5p.34          negative       -0.8533508 1.315137e-05
-      hsa.miR.182.5p.36          negative       -0.7760082 2.048479e-04
-      hsa.miR.182.5p.37          negative       -0.5383186 1.573093e-02
-      hsa.miR.182.5p.39          negative       -0.8183117 5.340202e-05
-      hsa.miR.182.5p.41          negative       -0.7730965 2.223564e-04
-      hsa.miR.182.5p.42          negative       -0.7365634 5.685374e-04
-      hsa.miR.182.5p.43          negative       -0.7460563 4.521117e-04
-      hsa.miR.182.5p.44          negative       -0.7793651 1.860903e-04
-      hsa.miR.182.5p.49          negative       -0.6346707 4.132332e-03
-      hsa.miR.182.5p.50          negative       -0.8457468 1.834130e-05
-      hsa.miR.182.5p.52          negative       -0.5962858 7.385713e-03
-      hsa.miR.182.5p.55          negative       -0.7508394 4.013256e-04
-      hsa.miR.182.5p.56          negative       -0.7767610 2.005114e-04
-      hsa.miR.183.5p             negative       -0.6531512 3.040064e-03
-      hsa.miR.183.5p.1           negative       -0.7653314 2.751701e-04
-      hsa.miR.183.5p.2           negative       -0.5720964 1.028883e-02
-      hsa.miR.183.5p.3           negative       -0.5386991 1.565945e-02
-      hsa.miR.183.5p.6           negative       -0.5981948 7.187312e-03
-      hsa.miR.183.5p.7           negative       -0.6370794 3.974565e-03
-      hsa.miR.183.5p.10          negative       -0.6117285 5.897387e-03
-      hsa.miR.183.5p.11          negative       -0.8037933 8.777426e-05
-      hsa.miR.183.5p.15          negative       -0.8963700 1.303287e-06
-      hsa.miR.204.5p.2           negative       -0.9411663 2.797775e-08
-      hsa.miR.204.5p.6           negative       -0.8203150 4.969491e-05
-      hsa.miR.204.5p.7           negative       -0.7979568 1.059873e-04
-      hsa.miR.204.5p.9           negative       -0.9279164 1.118855e-07
-      hsa.miR.204.5p.11          negative       -0.7257127 7.305041e-04
-      hsa.miR.204.5p.14          negative       -0.5981262 7.194374e-03
-      hsa.miR.21.3p              negative       -0.8343450 2.926428e-05
-      hsa.miR.21.3p.1            negative       -0.6794851 1.894097e-03
-      hsa.miR.21.3p.5            negative       -0.8381458 2.514252e-05
-      hsa.miR.21.3p.6            negative       -0.8703131 5.831146e-06
-      hsa.miR.21.3p.10           negative       -0.5349832 1.636814e-02
-      hsa.miR.21.3p.18           negative       -0.5422381 1.500643e-02
-      hsa.miR.21.3p.21           negative       -0.6348499 4.120429e-03
-      hsa.miR.21.3p.22           negative       -0.5869513 8.418179e-03
-      hsa.miR.21.3p.25           negative       -0.6007244 6.930863e-03
-      hsa.miR.21.3p.26           negative       -0.5166582 2.022498e-02
-      hsa.miR.21.3p.29           negative       -0.8032469 8.936041e-05
-      hsa.miR.21.3p.31           negative       -0.8737371 4.881178e-06
-      hsa.miR.21.3p.32           negative       -0.7204746 8.211550e-04
-      hsa.miR.21.3p.34           negative       -0.8187091 5.264874e-05
-      hsa.miR.21.3p.35           negative       -0.5413384 1.517045e-02
-      hsa.miR.21.3p.37           negative       -0.5997670 7.027069e-03
-      hsa.miR.21.3p.39           negative       -0.8079433 7.647231e-05
-      hsa.miR.21.5p              negative       -0.9348900 5.592755e-08
-      hsa.miR.21.5p.1            negative       -0.7865724 1.505743e-04
-      hsa.miR.21.5p.4            negative       -0.8004151 9.796789e-05
-      hsa.miR.21.5p.5            negative       -0.9038511 7.872908e-07
-      hsa.miR.21.5p.6            negative       -0.7423766 4.946671e-04
-      hsa.miR.21.5p.9            negative       -0.5958078 7.436054e-03
-      hsa.miR.21.5p.13           negative       -0.7302150 6.592629e-04
-      hsa.miR.21.5p.15           negative       -0.7520717 3.890292e-04
-      hsa.miR.21.5p.16           negative       -0.8477317 1.684485e-05
-      hsa.miR.21.5p.17           negative       -0.7562740 3.493983e-04
-      hsa.miR.21.5p.19           negative       -0.6482130 3.306231e-03
-      hsa.miR.21.5p.22           negative       -0.8672100 6.821906e-06
-      hsa.miR.21.5p.23           negative       -0.6574596 2.822058e-03
-      hsa.miR.21.5p.24           negative       -0.7458546 4.543645e-04
-      hsa.miR.21.5p.27           negative       -0.8265486 3.950198e-05
-      hsa.miR.2110.1             negative       -0.5978969 7.217999e-03
-      hsa.miR.221.3p             negative       -0.8271032 3.868661e-05
-      hsa.miR.221.3p.2           negative       -0.9682645 3.996800e-10
-      hsa.miR.221.3p.3           negative       -0.8836187 2.835410e-06
-      hsa.miR.221.3p.4           negative       -0.8060405 8.149385e-05
-      hsa.miR.221.3p.5           negative       -0.9016678 9.158077e-07
-      hsa.miR.221.3p.9           negative       -0.7979791 1.059122e-04
-      hsa.miR.221.3p.10          negative       -0.7445973 4.686104e-04
-      hsa.miR.221.3p.11          negative       -0.8990897 1.089986e-06
-      hsa.miR.221.3p.12          negative       -0.9721570 1.615836e-10
-      hsa.miR.221.3p.13          negative       -0.7747753 2.121175e-04
-      hsa.miR.221.3p.15          negative       -0.6727824 2.145665e-03
-      hsa.miR.221.3p.18          negative       -0.9629604 1.162597e-09
-      hsa.miR.221.5p.2           negative       -0.9569534 3.276238e-09
-      hsa.miR.221.5p.3           negative       -0.8634435 8.210987e-06
-      hsa.miR.221.5p.7           negative       -0.9145138 3.559677e-07
-      hsa.miR.221.5p.8           negative       -0.7897700 1.367226e-04
-      hsa.miR.221.5p.9           negative       -0.7573069 3.401834e-04
-      hsa.miR.221.5p.11          negative       -0.9123236 4.224074e-07
-      hsa.miR.221.5p.16          negative       -0.8677802 6.629937e-06
-      hsa.miR.221.5p.18          negative       -0.8916575 1.756391e-06
-      hsa.miR.222.3p             negative       -0.8828314 2.966009e-06
-      hsa.miR.222.3p.1           negative       -0.7934985 1.219200e-04
-      hsa.miR.222.3p.2           negative       -0.8848857 2.635447e-06
-      hsa.miR.222.3p.6           negative       -0.9066518 6.450378e-07
-      hsa.miR.222.3p.7           negative       -0.7863119 1.517520e-04
-      hsa.miR.222.3p.8           negative       -0.7464140 4.481408e-04
-      hsa.miR.222.3p.9           negative       -0.9644357 8.781504e-10
-      hsa.miR.222.3p.10          negative       -0.7933879 1.223388e-04
-      hsa.miR.222.3p.11          negative       -0.9283739 1.071405e-07
-      hsa.miR.222.3p.12          negative       -0.7877426 1.453764e-04
-      hsa.miR.222.3p.13          negative       -0.8019246 9.329792e-05
-      hsa.miR.222.3p.14          negative       -0.9171929 2.869290e-07
-      hsa.miR.222.3p.15          negative       -0.6382420 3.900144e-03
-      hsa.miR.222.3p.20          negative       -0.8430577 2.054484e-05
-      hsa.miR.31.3p              negative       -0.8071788 7.845800e-05
-      hsa.miR.31.5p.2            negative       -0.7790283 1.879057e-04
-      hsa.miR.31.5p.6            negative       -0.6606953 2.666696e-03
-      hsa.miR.31.5p.7            negative       -0.8296694 3.509477e-05
-      hsa.miR.31.5p.8            negative       -0.8901134 1.931094e-06
-      hsa.miR.31.5p.10           negative       -0.8027196 9.091377e-05
-      hsa.miR.31.5p.11           negative       -0.7393860 5.316198e-04
-      hsa.miR.34a.5p             negative       -0.9502065 8.916077e-09
-      hsa.miR.34a.5p.2           negative       -0.7666598 2.654681e-04
-      hsa.miR.34a.5p.5           negative       -0.6536406 3.014646e-03
-      hsa.miR.34a.5p.6           negative       -0.8691184 6.197171e-06
-      hsa.miR.34a.5p.7           negative       -0.9309567 8.343230e-08
-      hsa.miR.34a.5p.9           negative       -0.7099706 1.030567e-03
-      hsa.miR.34a.5p.10          negative       -0.6361011 4.038057e-03
-      hsa.miR.34a.5p.14          negative       -0.7620579 3.003285e-04
-      hsa.miR.34a.5p.15          negative       -0.6946389 1.412115e-03
-      hsa.miR.34a.5p.16          negative       -0.9415725 2.668230e-08
-      hsa.miR.34a.5p.17          negative       -0.8112903 6.826307e-05
-      hsa.miR.34a.5p.18          negative       -0.8974003 1.218679e-06
-      hsa.miR.34a.5p.20          negative       -0.8726481 5.168013e-06
-      hsa.miR.34a.5p.21          negative       -0.6792473 1.902596e-03
-      hsa.miR.34a.5p.22          negative       -0.9219931 1.913759e-07
-      hsa.miR.34a.5p.24          negative       -0.8358820 2.753438e-05
-      hsa.miR.34a.5p.29          negative       -0.6837485 1.746832e-03
-      hsa.miR.34a.5p.33          negative       -0.7943731 1.186472e-04
-      hsa.miR.34a.5p.34          negative       -0.7395695 5.292889e-04
-      hsa.miR.34a.5p.35          negative       -0.8955966 1.370005e-06
-      hsa.miR.34a.5p.36          negative       -0.7111994 1.004038e-03
-      hsa.miR.34a.5p.37          negative       -0.7448925 4.652340e-04
-      hsa.miR.34a.5p.38          negative       -0.8796832 3.540037e-06
-      hsa.miR.34a.5p.42          negative       -0.7676763 2.582358e-04
-      hsa.miR.34a.5p.43          negative       -0.7735109 2.197917e-04
-      hsa.miR.34a.5p.44          negative       -0.7371161 5.611484e-04
-      hsa.miR.34a.5p.46          negative       -0.8914295 1.781312e-06
-      hsa.miR.34a.5p.47          negative       -0.9155620 3.274486e-07
-      hsa.miR.34a.5p.50          negative       -0.7217333 7.985781e-04
-      hsa.miR.34a.5p.51          negative       -0.8066374 7.988996e-05
-      hsa.miR.34a.5p.61          negative       -0.7411982 5.089675e-04
-      hsa.miR.34a.5p.62          negative       -0.7472917 4.385164e-04
-      hsa.miR.34a.5p.64          negative       -0.6506908 3.170453e-03
-      hsa.miR.34a.5p.68          negative       -0.6423235 3.647582e-03
-      hsa.miR.34a.5p.70          negative       -0.9157395 3.228147e-07
-      hsa.miR.34a.5p.74          negative       -0.7734802 2.199808e-04
-      hsa.miR.34a.5p.75          negative       -0.8264936 3.958349e-05
-      hsa.miR.34a.5p.77          negative       -0.9321393 7.416468e-08
-      hsa.miR.34a.5p.78          negative       -0.6651221 2.465291e-03
-      hsa.miR.34a.5p.81          negative       -0.8469022 1.745726e-05
-      hsa.miR.34a.5p.82          negative       -0.7685641 2.520530e-04
-      hsa.miR.34a.5p.86          negative       -0.8513900 1.435406e-05
-      hsa.miR.3613.5p            negative       -0.8863769 2.415445e-06
-      hsa.miR.3613.5p.2          negative       -0.7269067 7.110272e-04
-      hsa.miR.3613.5p.3          negative       -0.7847873 1.587991e-04
-      hsa.miR.3613.5p.5          negative       -0.9299654 9.194130e-08
-      hsa.miR.375                negative       -0.8354596 2.800105e-05
-      hsa.miR.375.1              negative       -0.8203976 4.954671e-05
-      hsa.miR.375.6              negative       -0.5546805 1.287404e-02
-      hsa.miR.375.8              negative       -0.8410832 2.230021e-05
-      hsa.miR.375.12             negative       -0.7454090 4.593727e-04
-      hsa.miR.375.13             negative       -0.5614019 1.182329e-02
-      hsa.miR.375.15             negative       -0.5898867 8.082109e-03
-      hsa.miR.375.16             negative       -0.6678283 2.348299e-03
-      hsa.miR.375.17             negative       -0.8880464 2.187717e-06
-      hsa.miR.375.18             negative       -0.5541195 1.296487e-02
-      hsa.miR.375.23             negative       -0.6611249 2.646593e-03
-      hsa.miR.375.24             negative       -0.6151476 5.602276e-03
-      hsa.miR.375.25             negative       -0.7902098 1.349028e-04
-      hsa.miR.451a.2             negative       -0.8236990 4.392023e-05
-      hsa.miR.486.3p.2           negative       -0.6933875 1.447707e-03
-      hsa.miR.486.3p.5           negative       -0.5788829 9.398081e-03
-      hsa.miR.486.5p.3           negative       -0.7180555 8.660035e-04
-      hsa.miR.504.5p.1           negative       -0.4887722 2.735417e-02
-      hsa.miR.551b.3p            negative       -0.7993993 1.012182e-04
-      hsa.miR.577.1              negative       -0.5144230 2.073841e-02
-      hsa.miR.577.3              negative       -0.5496347 1.370877e-02
-      hsa.miR.577.5              negative       -0.7004070 1.257080e-03
-      hsa.miR.577.6              negative       -0.5621840 1.170545e-02
-      hsa.miR.652.3p             negative       -0.9126788 4.109690e-07
-      hsa.miR.652.3p.5           negative       -0.8964974 1.292560e-06
-      hsa.miR.652.3p.6           negative       -0.7321824 6.299676e-04
-      hsa.miR.653.5p.7           negative       -0.5311078 1.713292e-02
-      hsa.miR.7.5p.2             negative       -0.7491461 4.187393e-04
-      hsa.miR.7.5p.4             negative       -0.5744888 9.967678e-03
-      hsa.miR.7.5p.5             negative       -0.9103638 4.904802e-07
-      hsa.miR.7.5p.10            negative       -0.6113266 5.932867e-03
-      hsa.miR.7.5p.11            negative       -0.4914902 2.658756e-02
-      hsa.miR.7.5p.17            negative       -0.8827272 2.983662e-06
-      hsa.miR.7.5p.19            negative       -0.7377695 5.525145e-04
-      hsa.miR.7.5p.24            negative       -0.8051561 8.391951e-05
-      hsa.miR.7.5p.25            negative       -0.5121205 2.127749e-02
-      hsa.miR.7.5p.32            negative       -0.8450008 1.893173e-05
-      hsa.miR.7.5p.34            negative       -0.7370428 5.621239e-04
-      hsa.miR.7.5p.36            negative       -0.8409762 2.239877e-05
-      hsa.miR.7.5p.37            negative       -0.6221552 5.033772e-03
-      hsa.miR.7.5p.39            negative       -0.7704674 2.392081e-04
-      hsa.miR.7.5p.45            negative       -0.6643185 2.500919e-03
-      hsa.miR.7.5p.46            negative       -0.7380499 5.488424e-04
-      hsa.miR.873.3p             negative       -0.8795075 3.574665e-06
-      hsa.miR.873.3p.3           negative       -0.7923740 1.262370e-04
-      hsa.miR.873.5p.1           negative       -0.8658649 7.293310e-06
-      hsa.miR.873.5p.2           negative       -0.7099609 1.030778e-03
-      hsa.miR.873.5p.4           negative       -0.8175214 5.492624e-05
-      hsa.miR.873.5p.6           negative       -0.8080307 7.624792e-05
-      hsa.miR.873.5p.9           negative       -0.6907336 1.525585e-03
-      hsa.miR.873.5p.12          negative       -0.8363430 2.703250e-05
-      hsa.miR.873.5p.15          negative       -0.8953773 1.389447e-06
-      hsa.miR.873.5p.17          negative       -0.8014011 9.489613e-05
-      hsa.miR.873.5p.20          negative       -0.8386686 2.461568e-05
-      hsa.miR.873.5p.21          negative       -0.6411939 3.716144e-03
-      hsa.miR.873.5p.22          negative       -0.8816653 3.168709e-06
-      hsa.miR.874.3p             negative       -0.8280366 3.734632e-05
-      hsa.miR.874.3p.2           negative       -0.8394156 2.387884e-05
-      hsa.miR.874.3p.3           negative       -0.8318147 3.230960e-05
-      hsa.miR.874.3p.4           negative       -0.7025511 1.203093e-03
-      hsa.miR.9.5p               negative       -0.8800703 3.464778e-06
-      hsa.miR.9.5p.3             negative       -0.9418866 2.571601e-08
-      hsa.miR.9.5p.7             negative       -0.6402421 3.774701e-03
-      hsa.miR.9.5p.8             negative       -0.7698536 2.432903e-04
-      hsa.miR.9.5p.14            negative       -0.7619747 3.009919e-04
-      hsa.miR.9.5p.15            negative       -0.6545818 2.966237e-03
-      hsa.miR.9.5p.22            negative       -0.7086580 1.059530e-03
-      hsa.miR.9.5p.24            negative       -0.6197267 5.225381e-03
-      hsa.miR.9.5p.26            negative       -0.7362312 5.730161e-04
-      hsa.miR.96.5p.2            negative       -0.9093282 5.300509e-07
-      hsa.miR.96.5p.3            negative       -0.6566941 2.859851e-03
-      hsa.miR.96.5p.7            negative       -0.6254706 4.781177e-03
-      hsa.miR.96.5p.8            negative       -0.9020796 8.902984e-07
-      hsa.miR.96.5p.9            negative       -0.7640720 2.846350e-04
-      hsa.miR.96.5p.12           negative       -0.8314430 3.277850e-05
-      hsa.miR.96.5p.14           negative       -0.8863549 2.418565e-06
-      hsa.miR.96.5p.16           negative       -0.8797381 3.529285e-06
-      hsa.miR.96.5p.17           negative       -0.9288038 1.028390e-07
-      hsa.miR.96.5p.18           negative       -0.6264495 4.708547e-03
-      hsa.miR.96.5p.22           negative       -0.8558764 1.172775e-05
-                         Corr.Adjusted.P.Val
-      hsa.miR.1179.5            5.604592e-03
-      hsa.miR.1179.6            4.500254e-05
-      hsa.miR.1275.1            3.951015e-05
-      hsa.miR.138.1.3p          2.413271e-02
-      hsa.miR.138.1.3p.1        1.928320e-07
-      hsa.miR.138.5p.3          4.003763e-03
-      hsa.miR.138.5p.4          2.063555e-05
-      hsa.miR.138.5p.7          2.909563e-04
-      hsa.miR.138.5p.10         3.247825e-04
-      hsa.miR.139.5p.2          2.817052e-03
-      hsa.miR.139.5p.5          3.889434e-03
-      hsa.miR.139.5p.12         2.017442e-02
-      hsa.miR.139.5p.13         1.113957e-02
-      hsa.miR.144.3p.1          5.739493e-04
-      hsa.miR.144.3p.8          2.897338e-04
-      hsa.miR.144.3p.9          1.210193e-02
-      hsa.miR.144.5p.3          5.125709e-03
-      hsa.miR.146b.3p.1         5.607684e-05
-      hsa.miR.146b.3p.3         3.422052e-08
-      hsa.miR.146b.3p.5         1.730677e-07
-      hsa.miR.146b.5p           4.164347e-06
-      hsa.miR.146b.5p.1         7.359362e-06
-      hsa.miR.146b.5p.3         7.509757e-08
-      hsa.miR.146b.5p.4         2.361010e-05
-      hsa.miR.146b.5p.5         6.690779e-05
-      hsa.miR.146b.5p.7         2.423604e-04
-      hsa.miR.182.5p.1          1.460588e-03
-      hsa.miR.182.5p.2          1.116158e-04
-      hsa.miR.182.5p.3          2.120987e-07
-      hsa.miR.182.5p.5          1.610496e-05
-      hsa.miR.182.5p.7          9.271237e-03
-      hsa.miR.182.5p.10         6.084981e-03
-      hsa.miR.182.5p.12         6.075570e-03
-      hsa.miR.182.5p.14         9.442501e-03
-      hsa.miR.182.5p.16         9.647559e-05
-      hsa.miR.182.5p.17         4.430021e-03
-      hsa.miR.182.5p.21         6.981218e-05
-      hsa.miR.182.5p.23         1.128649e-04
-      hsa.miR.182.5p.24         2.576819e-05
-      hsa.miR.182.5p.25         7.227139e-03
-      hsa.miR.182.5p.26         1.273971e-04
-      hsa.miR.182.5p.29         1.864468e-03
-      hsa.miR.182.5p.30         2.548653e-04
-      hsa.miR.182.5p.31         6.285782e-05
-      hsa.miR.182.5p.33         7.059145e-03
-      hsa.miR.182.5p.34         1.315137e-05
-      hsa.miR.182.5p.36         2.048479e-04
-      hsa.miR.182.5p.37         1.573093e-02
-      hsa.miR.182.5p.39         5.340202e-05
-      hsa.miR.182.5p.41         2.223564e-04
-      hsa.miR.182.5p.42         5.685374e-04
-      hsa.miR.182.5p.43         4.521117e-04
-      hsa.miR.182.5p.44         1.860903e-04
-      hsa.miR.182.5p.49         4.132332e-03
-      hsa.miR.182.5p.50         1.834130e-05
-      hsa.miR.182.5p.52         7.385713e-03
-      hsa.miR.182.5p.55         4.013256e-04
-      hsa.miR.182.5p.56         2.005114e-04
-      hsa.miR.183.5p            3.040064e-03
-      hsa.miR.183.5p.1          2.751701e-04
-      hsa.miR.183.5p.2          1.028883e-02
-      hsa.miR.183.5p.3          1.565945e-02
-      hsa.miR.183.5p.6          7.187312e-03
-      hsa.miR.183.5p.7          3.974565e-03
-      hsa.miR.183.5p.10         5.897387e-03
-      hsa.miR.183.5p.11         8.777426e-05
-      hsa.miR.183.5p.15         1.303287e-06
-      hsa.miR.204.5p.2          2.797775e-08
-      hsa.miR.204.5p.6          4.969491e-05
-      hsa.miR.204.5p.7          1.059873e-04
-      hsa.miR.204.5p.9          1.118855e-07
-      hsa.miR.204.5p.11         7.305041e-04
-      hsa.miR.204.5p.14         7.194374e-03
-      hsa.miR.21.3p             2.926428e-05
-      hsa.miR.21.3p.1           1.894097e-03
-      hsa.miR.21.3p.5           2.514252e-05
-      hsa.miR.21.3p.6           5.831146e-06
-      hsa.miR.21.3p.10          1.636814e-02
-      hsa.miR.21.3p.18          1.500643e-02
-      hsa.miR.21.3p.21          4.120429e-03
-      hsa.miR.21.3p.22          8.418179e-03
-      hsa.miR.21.3p.25          6.930863e-03
-      hsa.miR.21.3p.26          2.022498e-02
-      hsa.miR.21.3p.29          8.936041e-05
-      hsa.miR.21.3p.31          4.881178e-06
-      hsa.miR.21.3p.32          8.211550e-04
-      hsa.miR.21.3p.34          5.264874e-05
-      hsa.miR.21.3p.35          1.517045e-02
-      hsa.miR.21.3p.37          7.027069e-03
-      hsa.miR.21.3p.39          7.647231e-05
-      hsa.miR.21.5p             5.592755e-08
-      hsa.miR.21.5p.1           1.505743e-04
-      hsa.miR.21.5p.4           9.796789e-05
-      hsa.miR.21.5p.5           7.872908e-07
-      hsa.miR.21.5p.6           4.946671e-04
-      hsa.miR.21.5p.9           7.436054e-03
-      hsa.miR.21.5p.13          6.592629e-04
-      hsa.miR.21.5p.15          3.890292e-04
-      hsa.miR.21.5p.16          1.684485e-05
-      hsa.miR.21.5p.17          3.493983e-04
-      hsa.miR.21.5p.19          3.306231e-03
-      hsa.miR.21.5p.22          6.821906e-06
-      hsa.miR.21.5p.23          2.822058e-03
-      hsa.miR.21.5p.24          4.543645e-04
-      hsa.miR.21.5p.27          3.950198e-05
-      hsa.miR.2110.1            7.217999e-03
-      hsa.miR.221.3p            3.868661e-05
-      hsa.miR.221.3p.2          3.996800e-10
-      hsa.miR.221.3p.3          2.835410e-06
-      hsa.miR.221.3p.4          8.149385e-05
-      hsa.miR.221.3p.5          9.158077e-07
-      hsa.miR.221.3p.9          1.059122e-04
-      hsa.miR.221.3p.10         4.686104e-04
-      hsa.miR.221.3p.11         1.089986e-06
-      hsa.miR.221.3p.12         1.615836e-10
-      hsa.miR.221.3p.13         2.121175e-04
-      hsa.miR.221.3p.15         2.145665e-03
-      hsa.miR.221.3p.18         1.162597e-09
-      hsa.miR.221.5p.2          3.276238e-09
-      hsa.miR.221.5p.3          8.210987e-06
-      hsa.miR.221.5p.7          3.559677e-07
-      hsa.miR.221.5p.8          1.367226e-04
-      hsa.miR.221.5p.9          3.401834e-04
-      hsa.miR.221.5p.11         4.224074e-07
-      hsa.miR.221.5p.16         6.629937e-06
-      hsa.miR.221.5p.18         1.756391e-06
-      hsa.miR.222.3p            2.966009e-06
-      hsa.miR.222.3p.1          1.219200e-04
-      hsa.miR.222.3p.2          2.635447e-06
-      hsa.miR.222.3p.6          6.450378e-07
-      hsa.miR.222.3p.7          1.517520e-04
-      hsa.miR.222.3p.8          4.481408e-04
-      hsa.miR.222.3p.9          8.781504e-10
-      hsa.miR.222.3p.10         1.223388e-04
-      hsa.miR.222.3p.11         1.071405e-07
-      hsa.miR.222.3p.12         1.453764e-04
-      hsa.miR.222.3p.13         9.329792e-05
-      hsa.miR.222.3p.14         2.869290e-07
-      hsa.miR.222.3p.15         3.900144e-03
-      hsa.miR.222.3p.20         2.054484e-05
-      hsa.miR.31.3p             7.845800e-05
-      hsa.miR.31.5p.2           1.879057e-04
-      hsa.miR.31.5p.6           2.666696e-03
-      hsa.miR.31.5p.7           3.509477e-05
-      hsa.miR.31.5p.8           1.931094e-06
-      hsa.miR.31.5p.10          9.091377e-05
-      hsa.miR.31.5p.11          5.316198e-04
-      hsa.miR.34a.5p            8.916077e-09
-      hsa.miR.34a.5p.2          2.654681e-04
-      hsa.miR.34a.5p.5          3.014646e-03
-      hsa.miR.34a.5p.6          6.197171e-06
-      hsa.miR.34a.5p.7          8.343230e-08
-      hsa.miR.34a.5p.9          1.030567e-03
-      hsa.miR.34a.5p.10         4.038057e-03
-      hsa.miR.34a.5p.14         3.003285e-04
-      hsa.miR.34a.5p.15         1.412115e-03
-      hsa.miR.34a.5p.16         2.668230e-08
-      hsa.miR.34a.5p.17         6.826307e-05
-      hsa.miR.34a.5p.18         1.218679e-06
-      hsa.miR.34a.5p.20         5.168013e-06
-      hsa.miR.34a.5p.21         1.902596e-03
-      hsa.miR.34a.5p.22         1.913759e-07
-      hsa.miR.34a.5p.24         2.753438e-05
-      hsa.miR.34a.5p.29         1.746832e-03
-      hsa.miR.34a.5p.33         1.186472e-04
-      hsa.miR.34a.5p.34         5.292889e-04
-      hsa.miR.34a.5p.35         1.370005e-06
-      hsa.miR.34a.5p.36         1.004038e-03
-      hsa.miR.34a.5p.37         4.652340e-04
-      hsa.miR.34a.5p.38         3.540037e-06
-      hsa.miR.34a.5p.42         2.582358e-04
-      hsa.miR.34a.5p.43         2.197917e-04
-      hsa.miR.34a.5p.44         5.611484e-04
-      hsa.miR.34a.5p.46         1.781312e-06
-      hsa.miR.34a.5p.47         3.274486e-07
-      hsa.miR.34a.5p.50         7.985781e-04
-      hsa.miR.34a.5p.51         7.988996e-05
-      hsa.miR.34a.5p.61         5.089675e-04
-      hsa.miR.34a.5p.62         4.385164e-04
-      hsa.miR.34a.5p.64         3.170453e-03
-      hsa.miR.34a.5p.68         3.647582e-03
-      hsa.miR.34a.5p.70         3.228147e-07
-      hsa.miR.34a.5p.74         2.199808e-04
-      hsa.miR.34a.5p.75         3.958349e-05
-      hsa.miR.34a.5p.77         7.416468e-08
-      hsa.miR.34a.5p.78         2.465291e-03
-      hsa.miR.34a.5p.81         1.745726e-05
-      hsa.miR.34a.5p.82         2.520530e-04
-      hsa.miR.34a.5p.86         1.435406e-05
-      hsa.miR.3613.5p           2.415445e-06
-      hsa.miR.3613.5p.2         7.110272e-04
-      hsa.miR.3613.5p.3         1.587991e-04
-      hsa.miR.3613.5p.5         9.194130e-08
-      hsa.miR.375               2.800105e-05
-      hsa.miR.375.1             4.954671e-05
-      hsa.miR.375.6             1.287404e-02
-      hsa.miR.375.8             2.230021e-05
-      hsa.miR.375.12            4.593727e-04
-      hsa.miR.375.13            1.182329e-02
-      hsa.miR.375.15            8.082109e-03
-      hsa.miR.375.16            2.348299e-03
-      hsa.miR.375.17            2.187717e-06
-      hsa.miR.375.18            1.296487e-02
-      hsa.miR.375.23            2.646593e-03
-      hsa.miR.375.24            5.602276e-03
-      hsa.miR.375.25            1.349028e-04
-      hsa.miR.451a.2            4.392023e-05
-      hsa.miR.486.3p.2          1.447707e-03
-      hsa.miR.486.3p.5          9.398081e-03
-      hsa.miR.486.5p.3          8.660035e-04
-      hsa.miR.504.5p.1          2.735417e-02
-      hsa.miR.551b.3p           1.012182e-04
-      hsa.miR.577.1             2.073841e-02
-      hsa.miR.577.3             1.370877e-02
-      hsa.miR.577.5             1.257080e-03
-      hsa.miR.577.6             1.170545e-02
-      hsa.miR.652.3p            4.109690e-07
-      hsa.miR.652.3p.5          1.292560e-06
-      hsa.miR.652.3p.6          6.299676e-04
-      hsa.miR.653.5p.7          1.713292e-02
-      hsa.miR.7.5p.2            4.187393e-04
-      hsa.miR.7.5p.4            9.967678e-03
-      hsa.miR.7.5p.5            4.904802e-07
-      hsa.miR.7.5p.10           5.932867e-03
-      hsa.miR.7.5p.11           2.658756e-02
-      hsa.miR.7.5p.17           2.983662e-06
-      hsa.miR.7.5p.19           5.525145e-04
-      hsa.miR.7.5p.24           8.391951e-05
-      hsa.miR.7.5p.25           2.127749e-02
-      hsa.miR.7.5p.32           1.893173e-05
-      hsa.miR.7.5p.34           5.621239e-04
-      hsa.miR.7.5p.36           2.239877e-05
-      hsa.miR.7.5p.37           5.033772e-03
-      hsa.miR.7.5p.39           2.392081e-04
-      hsa.miR.7.5p.45           2.500919e-03
-      hsa.miR.7.5p.46           5.488424e-04
-      hsa.miR.873.3p            3.574665e-06
-      hsa.miR.873.3p.3          1.262370e-04
-      hsa.miR.873.5p.1          7.293310e-06
-      hsa.miR.873.5p.2          1.030778e-03
-      hsa.miR.873.5p.4          5.492624e-05
-      hsa.miR.873.5p.6          7.624792e-05
-      hsa.miR.873.5p.9          1.525585e-03
-      hsa.miR.873.5p.12         2.703250e-05
-      hsa.miR.873.5p.15         1.389447e-06
-      hsa.miR.873.5p.17         9.489613e-05
-      hsa.miR.873.5p.20         2.461568e-05
-      hsa.miR.873.5p.21         3.716144e-03
-      hsa.miR.873.5p.22         3.168709e-06
-      hsa.miR.874.3p            3.734632e-05
-      hsa.miR.874.3p.2          2.387884e-05
-      hsa.miR.874.3p.3          3.230960e-05
-      hsa.miR.874.3p.4          1.203093e-03
-      hsa.miR.9.5p              3.464778e-06
-      hsa.miR.9.5p.3            2.571601e-08
-      hsa.miR.9.5p.7            3.774701e-03
-      hsa.miR.9.5p.8            2.432903e-04
-      hsa.miR.9.5p.14           3.009919e-04
-      hsa.miR.9.5p.15           2.966237e-03
-      hsa.miR.9.5p.22           1.059530e-03
-      hsa.miR.9.5p.24           5.225381e-03
-      hsa.miR.9.5p.26           5.730161e-04
-      hsa.miR.96.5p.2           5.300509e-07
-      hsa.miR.96.5p.3           2.859851e-03
-      hsa.miR.96.5p.7           4.781177e-03
-      hsa.miR.96.5p.8           8.902984e-07
-      hsa.miR.96.5p.9           2.846350e-04
-      hsa.miR.96.5p.12          3.277850e-05
-      hsa.miR.96.5p.14          2.418565e-06
-      hsa.miR.96.5p.16          3.529285e-06
-      hsa.miR.96.5p.17          1.028390e-07
-      hsa.miR.96.5p.18          4.708547e-03
-      hsa.miR.96.5p.22          1.172775e-05
+                         Corr.Coefficient Corr.P.Value Corr.Adjusted.P.Val
+      hsa.miR.1179.5           -0.6151203 5.604592e-03        5.604592e-03
+      hsa.miR.1179.6           -0.8230376 4.500254e-05        4.500254e-05
+      hsa.miR.1275.1           -0.8265431 3.951015e-05        3.951015e-05
+      hsa.miR.138.1.3p         -0.5006047 2.413271e-02        2.413271e-02
+      hsa.miR.138.1.3p.1       -0.9219059 1.928320e-07        1.928320e-07
+      hsa.miR.138.5p.3         -0.6366280 4.003763e-03        4.003763e-03
+      hsa.miR.138.5p.4         -0.8429522 2.063555e-05        2.063555e-05
+      hsa.miR.138.5p.7         -0.7632500 2.909563e-04        2.909563e-04
+      hsa.miR.138.5p.10        -0.7590856 3.247825e-04        3.247825e-04
+      hsa.miR.139.5p.2         -0.6575616 2.817052e-03        2.817052e-03
+      hsa.miR.139.5p.5         -0.6384107 3.889434e-03        3.889434e-03
+      hsa.miR.139.5p.12        -0.5168806 2.017442e-02        2.017442e-02
+      hsa.miR.139.5p.13        -0.5660263 1.113957e-02        1.113957e-02
+      hsa.miR.144.3p.1         -0.7361623 5.739493e-04        5.739493e-04
+      hsa.miR.144.3p.8         -0.7634078 2.897338e-04        2.897338e-04
+      hsa.miR.144.3p.9         -0.5595762 1.210193e-02        1.210193e-02
+      hsa.miR.144.5p.3         -0.6209810 5.125709e-03        5.125709e-03
+      hsa.miR.146b.3p.1        -0.8169369 5.607684e-05        5.607684e-05
+      hsa.miR.146b.3p.3        -0.9394079 3.422052e-08        3.422052e-08
+      hsa.miR.146b.3p.5        -0.9231398 1.730677e-07        1.730677e-07
+      hsa.miR.146b.5p          -0.8767147 4.164347e-06        4.164347e-06
+      hsa.miR.146b.5p.1        -0.8656823 7.359362e-06        7.359362e-06
+      hsa.miR.146b.5p.3        -0.9320148 7.509757e-08        7.509757e-08
+      hsa.miR.146b.5p.4        -0.8396928 2.361010e-05        2.361010e-05
+      hsa.miR.146b.5p.5        -0.8118747 6.690779e-05        6.690779e-05
+      hsa.miR.146b.5p.7        -0.7699926 2.423604e-04        2.423604e-04
+      hsa.miR.182.5p.1         -0.6929407 1.460588e-03        1.460588e-03
+      hsa.miR.182.5p.2         -0.7963220 1.116158e-04        1.116158e-04
+      hsa.miR.182.5p.3         -0.9208024 2.120987e-07        2.120987e-07
+      hsa.miR.182.5p.5         -0.8487682 1.610496e-05        1.610496e-05
+      hsa.miR.182.5p.7         -0.5798894 9.271237e-03        9.271237e-03
+      hsa.miR.182.5p.10        -0.6096244 6.084981e-03        6.084981e-03
+      hsa.miR.182.5p.12        -0.6097287 6.075570e-03        6.075570e-03
+      hsa.miR.182.5p.14        -0.5785329 9.442501e-03        9.442501e-03
+      hsa.miR.182.5p.16        -0.8008909 9.647559e-05        9.647559e-05
+      hsa.miR.182.5p.17        -0.6303176 4.430021e-03        4.430021e-03
+      hsa.miR.182.5p.21        -0.8106340 6.981218e-05        6.981218e-05
+      hsa.miR.182.5p.23        -0.7959685 1.128649e-04        1.128649e-04
+      hsa.miR.182.5p.24        -0.8375368 2.576819e-05        2.576819e-05
+      hsa.miR.182.5p.25        -0.5978083 7.227139e-03        7.227139e-03
+      hsa.miR.182.5p.26        -0.7920773 1.273971e-04        1.273971e-04
+      hsa.miR.182.5p.29        -0.6803209 1.864468e-03        1.864468e-03
+      hsa.miR.182.5p.30        -0.7681581 2.548653e-04        2.548653e-04
+      hsa.miR.182.5p.31        -0.8136818 6.285782e-05        6.285782e-05
+      hsa.miR.182.5p.33        -0.5994501 7.059145e-03        7.059145e-03
+      hsa.miR.182.5p.34        -0.8533508 1.315137e-05        1.315137e-05
+      hsa.miR.182.5p.36        -0.7760082 2.048479e-04        2.048479e-04
+      hsa.miR.182.5p.37        -0.5383186 1.573093e-02        1.573093e-02
+      hsa.miR.182.5p.39        -0.8183117 5.340202e-05        5.340202e-05
+      hsa.miR.182.5p.41        -0.7730965 2.223564e-04        2.223564e-04
+      hsa.miR.182.5p.42        -0.7365634 5.685374e-04        5.685374e-04
+      hsa.miR.182.5p.43        -0.7460563 4.521117e-04        4.521117e-04
+      hsa.miR.182.5p.44        -0.7793651 1.860903e-04        1.860903e-04
+      hsa.miR.182.5p.49        -0.6346707 4.132332e-03        4.132332e-03
+      hsa.miR.182.5p.50        -0.8457468 1.834130e-05        1.834130e-05
+      hsa.miR.182.5p.52        -0.5962858 7.385713e-03        7.385713e-03
+      hsa.miR.182.5p.55        -0.7508394 4.013256e-04        4.013256e-04
+      hsa.miR.182.5p.56        -0.7767610 2.005114e-04        2.005114e-04
+      hsa.miR.183.5p           -0.6531512 3.040064e-03        3.040064e-03
+      hsa.miR.183.5p.1         -0.7653314 2.751701e-04        2.751701e-04
+      hsa.miR.183.5p.2         -0.5720964 1.028883e-02        1.028883e-02
+      hsa.miR.183.5p.3         -0.5386991 1.565945e-02        1.565945e-02
+      hsa.miR.183.5p.6         -0.5981948 7.187312e-03        7.187312e-03
+      hsa.miR.183.5p.7         -0.6370794 3.974565e-03        3.974565e-03
+      hsa.miR.183.5p.10        -0.6117285 5.897387e-03        5.897387e-03
+      hsa.miR.183.5p.11        -0.8037933 8.777426e-05        8.777426e-05
+      hsa.miR.183.5p.15        -0.8963700 1.303287e-06        1.303287e-06
+      hsa.miR.204.5p.2         -0.9411663 2.797775e-08        2.797775e-08
+      hsa.miR.204.5p.6         -0.8203150 4.969491e-05        4.969491e-05
+      hsa.miR.204.5p.7         -0.7979568 1.059873e-04        1.059873e-04
+      hsa.miR.204.5p.9         -0.9279164 1.118855e-07        1.118855e-07
+      hsa.miR.204.5p.11        -0.7257127 7.305041e-04        7.305041e-04
+      hsa.miR.204.5p.14        -0.5981262 7.194374e-03        7.194374e-03
+      hsa.miR.21.3p            -0.8343450 2.926428e-05        2.926428e-05
+      hsa.miR.21.3p.1          -0.6794851 1.894097e-03        1.894097e-03
+      hsa.miR.21.3p.5          -0.8381458 2.514252e-05        2.514252e-05
+      hsa.miR.21.3p.6          -0.8703131 5.831146e-06        5.831146e-06
+      hsa.miR.21.3p.10         -0.5349832 1.636814e-02        1.636814e-02
+      hsa.miR.21.3p.18         -0.5422381 1.500643e-02        1.500643e-02
+      hsa.miR.21.3p.21         -0.6348499 4.120429e-03        4.120429e-03
+      hsa.miR.21.3p.22         -0.5869513 8.418179e-03        8.418179e-03
+      hsa.miR.21.3p.25         -0.6007244 6.930863e-03        6.930863e-03
+      hsa.miR.21.3p.26         -0.5166582 2.022498e-02        2.022498e-02
+      hsa.miR.21.3p.29         -0.8032469 8.936041e-05        8.936041e-05
+      hsa.miR.21.3p.31         -0.8737371 4.881178e-06        4.881178e-06
+      hsa.miR.21.3p.32         -0.7204746 8.211550e-04        8.211550e-04
+      hsa.miR.21.3p.34         -0.8187091 5.264874e-05        5.264874e-05
+      hsa.miR.21.3p.35         -0.5413384 1.517045e-02        1.517045e-02
+      hsa.miR.21.3p.37         -0.5997670 7.027069e-03        7.027069e-03
+      hsa.miR.21.3p.39         -0.8079433 7.647231e-05        7.647231e-05
+      hsa.miR.21.5p            -0.9348900 5.592755e-08        5.592755e-08
+      hsa.miR.21.5p.1          -0.7865724 1.505743e-04        1.505743e-04
+      hsa.miR.21.5p.4          -0.8004151 9.796789e-05        9.796789e-05
+      hsa.miR.21.5p.5          -0.9038511 7.872908e-07        7.872908e-07
+      hsa.miR.21.5p.6          -0.7423766 4.946671e-04        4.946671e-04
+      hsa.miR.21.5p.9          -0.5958078 7.436054e-03        7.436054e-03
+      hsa.miR.21.5p.13         -0.7302150 6.592629e-04        6.592629e-04
+      hsa.miR.21.5p.15         -0.7520717 3.890292e-04        3.890292e-04
+      hsa.miR.21.5p.16         -0.8477317 1.684485e-05        1.684485e-05
+      hsa.miR.21.5p.17         -0.7562740 3.493983e-04        3.493983e-04
+      hsa.miR.21.5p.19         -0.6482130 3.306231e-03        3.306231e-03
+      hsa.miR.21.5p.22         -0.8672100 6.821906e-06        6.821906e-06
+      hsa.miR.21.5p.23         -0.6574596 2.822058e-03        2.822058e-03
+      hsa.miR.21.5p.24         -0.7458546 4.543645e-04        4.543645e-04
+      hsa.miR.21.5p.27         -0.8265486 3.950198e-05        3.950198e-05
+      hsa.miR.2110.1           -0.5978969 7.217999e-03        7.217999e-03
+      hsa.miR.221.3p           -0.8271032 3.868661e-05        3.868661e-05
+      hsa.miR.221.3p.2         -0.9682645 3.996800e-10        3.996800e-10
+      hsa.miR.221.3p.3         -0.8836187 2.835410e-06        2.835410e-06
+      hsa.miR.221.3p.4         -0.8060405 8.149385e-05        8.149385e-05
+      hsa.miR.221.3p.5         -0.9016678 9.158077e-07        9.158077e-07
+      hsa.miR.221.3p.9         -0.7979791 1.059122e-04        1.059122e-04
+      hsa.miR.221.3p.10        -0.7445973 4.686104e-04        4.686104e-04
+      hsa.miR.221.3p.11        -0.8990897 1.089986e-06        1.089986e-06
+      hsa.miR.221.3p.12        -0.9721570 1.615836e-10        1.615836e-10
+      hsa.miR.221.3p.13        -0.7747753 2.121175e-04        2.121175e-04
+      hsa.miR.221.3p.15        -0.6727824 2.145665e-03        2.145665e-03
+      hsa.miR.221.3p.18        -0.9629604 1.162597e-09        1.162597e-09
+      hsa.miR.221.5p.2         -0.9569534 3.276238e-09        3.276238e-09
+      hsa.miR.221.5p.3         -0.8634435 8.210987e-06        8.210987e-06
+      hsa.miR.221.5p.7         -0.9145138 3.559677e-07        3.559677e-07
+      hsa.miR.221.5p.8         -0.7897700 1.367226e-04        1.367226e-04
+      hsa.miR.221.5p.9         -0.7573069 3.401834e-04        3.401834e-04
+      hsa.miR.221.5p.11        -0.9123236 4.224074e-07        4.224074e-07
+      hsa.miR.221.5p.16        -0.8677802 6.629937e-06        6.629937e-06
+      hsa.miR.221.5p.18        -0.8916575 1.756391e-06        1.756391e-06
+      hsa.miR.222.3p           -0.8828314 2.966009e-06        2.966009e-06
+      hsa.miR.222.3p.1         -0.7934985 1.219200e-04        1.219200e-04
+      hsa.miR.222.3p.2         -0.8848857 2.635447e-06        2.635447e-06
+      hsa.miR.222.3p.6         -0.9066518 6.450378e-07        6.450378e-07
+      hsa.miR.222.3p.7         -0.7863119 1.517520e-04        1.517520e-04
+      hsa.miR.222.3p.8         -0.7464140 4.481408e-04        4.481408e-04
+      hsa.miR.222.3p.9         -0.9644357 8.781504e-10        8.781504e-10
+      hsa.miR.222.3p.10        -0.7933879 1.223388e-04        1.223388e-04
+      hsa.miR.222.3p.11        -0.9283739 1.071405e-07        1.071405e-07
+      hsa.miR.222.3p.12        -0.7877426 1.453764e-04        1.453764e-04
+      hsa.miR.222.3p.13        -0.8019246 9.329792e-05        9.329792e-05
+      hsa.miR.222.3p.14        -0.9171929 2.869290e-07        2.869290e-07
+      hsa.miR.222.3p.15        -0.6382420 3.900144e-03        3.900144e-03
+      hsa.miR.222.3p.20        -0.8430577 2.054484e-05        2.054484e-05
+      hsa.miR.31.3p            -0.8071788 7.845800e-05        7.845800e-05
+      hsa.miR.31.5p.2          -0.7790283 1.879057e-04        1.879057e-04
+      hsa.miR.31.5p.6          -0.6606953 2.666696e-03        2.666696e-03
+      hsa.miR.31.5p.7          -0.8296694 3.509477e-05        3.509477e-05
+      hsa.miR.31.5p.8          -0.8901134 1.931094e-06        1.931094e-06
+      hsa.miR.31.5p.10         -0.8027196 9.091377e-05        9.091377e-05
+      hsa.miR.31.5p.11         -0.7393860 5.316198e-04        5.316198e-04
+      hsa.miR.34a.5p           -0.9502065 8.916077e-09        8.916077e-09
+      hsa.miR.34a.5p.2         -0.7666598 2.654681e-04        2.654681e-04
+      hsa.miR.34a.5p.5         -0.6536406 3.014646e-03        3.014646e-03
+      hsa.miR.34a.5p.6         -0.8691184 6.197171e-06        6.197171e-06
+      hsa.miR.34a.5p.7         -0.9309567 8.343230e-08        8.343230e-08
+      hsa.miR.34a.5p.9         -0.7099706 1.030567e-03        1.030567e-03
+      hsa.miR.34a.5p.10        -0.6361011 4.038057e-03        4.038057e-03
+      hsa.miR.34a.5p.14        -0.7620579 3.003285e-04        3.003285e-04
+      hsa.miR.34a.5p.15        -0.6946389 1.412115e-03        1.412115e-03
+      hsa.miR.34a.5p.16        -0.9415725 2.668230e-08        2.668230e-08
+      hsa.miR.34a.5p.17        -0.8112903 6.826307e-05        6.826307e-05
+      hsa.miR.34a.5p.18        -0.8974003 1.218679e-06        1.218679e-06
+      hsa.miR.34a.5p.20        -0.8726481 5.168013e-06        5.168013e-06
+      hsa.miR.34a.5p.21        -0.6792473 1.902596e-03        1.902596e-03
+      hsa.miR.34a.5p.22        -0.9219931 1.913759e-07        1.913759e-07
+      hsa.miR.34a.5p.24        -0.8358820 2.753438e-05        2.753438e-05
+      hsa.miR.34a.5p.29        -0.6837485 1.746832e-03        1.746832e-03
+      hsa.miR.34a.5p.33        -0.7943731 1.186472e-04        1.186472e-04
+      hsa.miR.34a.5p.34        -0.7395695 5.292889e-04        5.292889e-04
+      hsa.miR.34a.5p.35        -0.8955966 1.370005e-06        1.370005e-06
+      hsa.miR.34a.5p.36        -0.7111994 1.004038e-03        1.004038e-03
+      hsa.miR.34a.5p.37        -0.7448925 4.652340e-04        4.652340e-04
+      hsa.miR.34a.5p.38        -0.8796832 3.540037e-06        3.540037e-06
+      hsa.miR.34a.5p.42        -0.7676763 2.582358e-04        2.582358e-04
+      hsa.miR.34a.5p.43        -0.7735109 2.197917e-04        2.197917e-04
+      hsa.miR.34a.5p.44        -0.7371161 5.611484e-04        5.611484e-04
+      hsa.miR.34a.5p.46        -0.8914295 1.781312e-06        1.781312e-06
+      hsa.miR.34a.5p.47        -0.9155620 3.274486e-07        3.274486e-07
+      hsa.miR.34a.5p.50        -0.7217333 7.985781e-04        7.985781e-04
+      hsa.miR.34a.5p.51        -0.8066374 7.988996e-05        7.988996e-05
+      hsa.miR.34a.5p.61        -0.7411982 5.089675e-04        5.089675e-04
+      hsa.miR.34a.5p.62        -0.7472917 4.385164e-04        4.385164e-04
+      hsa.miR.34a.5p.64        -0.6506908 3.170453e-03        3.170453e-03
+      hsa.miR.34a.5p.68        -0.6423235 3.647582e-03        3.647582e-03
+      hsa.miR.34a.5p.70        -0.9157395 3.228147e-07        3.228147e-07
+      hsa.miR.34a.5p.74        -0.7734802 2.199808e-04        2.199808e-04
+      hsa.miR.34a.5p.75        -0.8264936 3.958349e-05        3.958349e-05
+      hsa.miR.34a.5p.77        -0.9321393 7.416468e-08        7.416468e-08
+      hsa.miR.34a.5p.78        -0.6651221 2.465291e-03        2.465291e-03
+      hsa.miR.34a.5p.81        -0.8469022 1.745726e-05        1.745726e-05
+      hsa.miR.34a.5p.82        -0.7685641 2.520530e-04        2.520530e-04
+      hsa.miR.34a.5p.86        -0.8513900 1.435406e-05        1.435406e-05
+      hsa.miR.3613.5p          -0.8863769 2.415445e-06        2.415445e-06
+      hsa.miR.3613.5p.2        -0.7269067 7.110272e-04        7.110272e-04
+      hsa.miR.3613.5p.3        -0.7847873 1.587991e-04        1.587991e-04
+      hsa.miR.3613.5p.5        -0.9299654 9.194130e-08        9.194130e-08
+      hsa.miR.375              -0.8354596 2.800105e-05        2.800105e-05
+      hsa.miR.375.1            -0.8203976 4.954671e-05        4.954671e-05
+      hsa.miR.375.6            -0.5546805 1.287404e-02        1.287404e-02
+      hsa.miR.375.8            -0.8410832 2.230021e-05        2.230021e-05
+      hsa.miR.375.12           -0.7454090 4.593727e-04        4.593727e-04
+      hsa.miR.375.13           -0.5614019 1.182329e-02        1.182329e-02
+      hsa.miR.375.15           -0.5898867 8.082109e-03        8.082109e-03
+      hsa.miR.375.16           -0.6678283 2.348299e-03        2.348299e-03
+      hsa.miR.375.17           -0.8880464 2.187717e-06        2.187717e-06
+      hsa.miR.375.18           -0.5541195 1.296487e-02        1.296487e-02
+      hsa.miR.375.23           -0.6611249 2.646593e-03        2.646593e-03
+      hsa.miR.375.24           -0.6151476 5.602276e-03        5.602276e-03
+      hsa.miR.375.25           -0.7902098 1.349028e-04        1.349028e-04
+      hsa.miR.451a.2           -0.8236990 4.392023e-05        4.392023e-05
+      hsa.miR.486.3p.2         -0.6933875 1.447707e-03        1.447707e-03
+      hsa.miR.486.3p.5         -0.5788829 9.398081e-03        9.398081e-03
+      hsa.miR.486.5p.3         -0.7180555 8.660035e-04        8.660035e-04
+      hsa.miR.504.5p.1         -0.4887722 2.735417e-02        2.735417e-02
+      hsa.miR.551b.3p          -0.7993993 1.012182e-04        1.012182e-04
+      hsa.miR.577.1            -0.5144230 2.073841e-02        2.073841e-02
+      hsa.miR.577.3            -0.5496347 1.370877e-02        1.370877e-02
+      hsa.miR.577.5            -0.7004070 1.257080e-03        1.257080e-03
+      hsa.miR.577.6            -0.5621840 1.170545e-02        1.170545e-02
+      hsa.miR.652.3p           -0.9126788 4.109690e-07        4.109690e-07
+      hsa.miR.652.3p.5         -0.8964974 1.292560e-06        1.292560e-06
+      hsa.miR.652.3p.6         -0.7321824 6.299676e-04        6.299676e-04
+      hsa.miR.653.5p.7         -0.5311078 1.713292e-02        1.713292e-02
+      hsa.miR.7.5p.2           -0.7491461 4.187393e-04        4.187393e-04
+      hsa.miR.7.5p.4           -0.5744888 9.967678e-03        9.967678e-03
+      hsa.miR.7.5p.5           -0.9103638 4.904802e-07        4.904802e-07
+      hsa.miR.7.5p.10          -0.6113266 5.932867e-03        5.932867e-03
+      hsa.miR.7.5p.11          -0.4914902 2.658756e-02        2.658756e-02
+      hsa.miR.7.5p.17          -0.8827272 2.983662e-06        2.983662e-06
+      hsa.miR.7.5p.19          -0.7377695 5.525145e-04        5.525145e-04
+      hsa.miR.7.5p.24          -0.8051561 8.391951e-05        8.391951e-05
+      hsa.miR.7.5p.25          -0.5121205 2.127749e-02        2.127749e-02
+      hsa.miR.7.5p.32          -0.8450008 1.893173e-05        1.893173e-05
+      hsa.miR.7.5p.34          -0.7370428 5.621239e-04        5.621239e-04
+      hsa.miR.7.5p.36          -0.8409762 2.239877e-05        2.239877e-05
+      hsa.miR.7.5p.37          -0.6221552 5.033772e-03        5.033772e-03
+      hsa.miR.7.5p.39          -0.7704674 2.392081e-04        2.392081e-04
+      hsa.miR.7.5p.45          -0.6643185 2.500919e-03        2.500919e-03
+      hsa.miR.7.5p.46          -0.7380499 5.488424e-04        5.488424e-04
+      hsa.miR.873.3p           -0.8795075 3.574665e-06        3.574665e-06
+      hsa.miR.873.3p.3         -0.7923740 1.262370e-04        1.262370e-04
+      hsa.miR.873.5p.1         -0.8658649 7.293310e-06        7.293310e-06
+      hsa.miR.873.5p.2         -0.7099609 1.030778e-03        1.030778e-03
+      hsa.miR.873.5p.4         -0.8175214 5.492624e-05        5.492624e-05
+      hsa.miR.873.5p.6         -0.8080307 7.624792e-05        7.624792e-05
+      hsa.miR.873.5p.9         -0.6907336 1.525585e-03        1.525585e-03
+      hsa.miR.873.5p.12        -0.8363430 2.703250e-05        2.703250e-05
+      hsa.miR.873.5p.15        -0.8953773 1.389447e-06        1.389447e-06
+      hsa.miR.873.5p.17        -0.8014011 9.489613e-05        9.489613e-05
+      hsa.miR.873.5p.20        -0.8386686 2.461568e-05        2.461568e-05
+      hsa.miR.873.5p.21        -0.6411939 3.716144e-03        3.716144e-03
+      hsa.miR.873.5p.22        -0.8816653 3.168709e-06        3.168709e-06
+      hsa.miR.874.3p           -0.8280366 3.734632e-05        3.734632e-05
+      hsa.miR.874.3p.2         -0.8394156 2.387884e-05        2.387884e-05
+      hsa.miR.874.3p.3         -0.8318147 3.230960e-05        3.230960e-05
+      hsa.miR.874.3p.4         -0.7025511 1.203093e-03        1.203093e-03
+      hsa.miR.9.5p             -0.8800703 3.464778e-06        3.464778e-06
+      hsa.miR.9.5p.3           -0.9418866 2.571601e-08        2.571601e-08
+      hsa.miR.9.5p.7           -0.6402421 3.774701e-03        3.774701e-03
+      hsa.miR.9.5p.8           -0.7698536 2.432903e-04        2.432903e-04
+      hsa.miR.9.5p.14          -0.7619747 3.009919e-04        3.009919e-04
+      hsa.miR.9.5p.15          -0.6545818 2.966237e-03        2.966237e-03
+      hsa.miR.9.5p.22          -0.7086580 1.059530e-03        1.059530e-03
+      hsa.miR.9.5p.24          -0.6197267 5.225381e-03        5.225381e-03
+      hsa.miR.9.5p.26          -0.7362312 5.730161e-04        5.730161e-04
+      hsa.miR.96.5p.2          -0.9093282 5.300509e-07        5.300509e-07
+      hsa.miR.96.5p.3          -0.6566941 2.859851e-03        2.859851e-03
+      hsa.miR.96.5p.7          -0.6254706 4.781177e-03        4.781177e-03
+      hsa.miR.96.5p.8          -0.9020796 8.902984e-07        8.902984e-07
+      hsa.miR.96.5p.9          -0.7640720 2.846350e-04        2.846350e-04
+      hsa.miR.96.5p.12         -0.8314430 3.277850e-05        3.277850e-05
+      hsa.miR.96.5p.14         -0.8863549 2.418565e-06        2.418565e-06
+      hsa.miR.96.5p.16         -0.8797381 3.529285e-06        3.529285e-06
+      hsa.miR.96.5p.17         -0.9288038 1.028390e-07        1.028390e-07
+      hsa.miR.96.5p.18         -0.6264495 4.708547e-03        4.708547e-03
+      hsa.miR.96.5p.22         -0.8558764 1.172775e-05        1.172775e-05
 
 # basic Fisher's association works
 

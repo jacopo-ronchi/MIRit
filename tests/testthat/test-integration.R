@@ -14,8 +14,7 @@ test_that("basic correlation works", {
                                      pCutoff = 0.03,
                                      pAdjustment = "none",
                                      corMethod = "pearson",
-                                     corCutoff = 0.4,
-                                     corDirection = "less")
+                                     corCutoff = 0.4)
   
   ## test correlation results with non-default arguments
   expect_snapshot(mirnaTargetsIntegration(corrParam))
