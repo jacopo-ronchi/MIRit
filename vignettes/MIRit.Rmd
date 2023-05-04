@@ -387,12 +387,10 @@ normalized expression levels we need to use the `cpm()` function.
 
 ```{r counts}
 ## extract normalized counts for gene expression
-geneExpr <- cpm(geneTest, normalized.lib.sizes = TRUE)
-colnames(geneExpr) <- colnames(geneCounts)
+geneExpr <- cpm(genes, normalized.lib.sizes = TRUE, log = TRUE)
 
 ## extract normalized counts for miRNA expression
-mirnaExpr <- cpm(mirnaTest, normalized.lib.sizes = TRUE)
-colnames(mirnaExpr) <- colnames(mirnaCounts)
+mirnaExpr <- cpm(mirnas, normalized.lib.sizes = TRUE, log = TRUE)
 ```
 
 Eventually, the expression matrices required by MIRit should appear as displayed
@@ -475,6 +473,8 @@ geneSignificant <- rownames(geneResults[abs(geneResults$logFC) > 1 &
 mirnaSignificant <- rownames(mirnaResults[abs(mirnaResults$logFC) > 1 &
                                             mirnaResults$FDR < 0.05, ])
 ```
+
+In the end, the analysis reported 265 differentially expressed genes, and 40 differentially expressed miRNAs.
 
 ### Paired vs unpaired data
 
