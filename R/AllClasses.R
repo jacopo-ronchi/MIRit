@@ -266,16 +266,21 @@ setValidity("MirnaExperiment", function(object) {
 #' `DESeq2` object with `counts(obj, normalized = TRUE)`, or from an `edgeR`
 #' object through `cpm(obj, normalized.lib.sizes = TRUE)`.
 #'
-#' ## mirnaMetadata and geneMetadata
+#' ## samplesMetadata
 #'
-#' `mirnaMetadata` and `geneMetadata` must be two `data.frame` objects
-#' containing information about samples used for miRNA profiling and for gene
-#' expression analysis, respectively. Specifically they must contain:
+#' `samplesMetadata` must be a `data.frame` object containing information about
+#' samples used for miRNA profiling and for gene expression analysis.
+#' Specifically, this data.frame must contain:
 #' * A column named `primary`, specifying an identifier for each sample;
-#' * A column named `colName`, containing the column names used for each sample
-#' in the `mirnaExpr`/`geneExpr` object;
-#' * Other eventual columns that define specific sample metadata, such as age,
-#' sex and so on...
+#' * A column named `mirnaCol`, containing the column names used for each
+#' sample in the `mirnaExpr` object;
+#' * A column named `geneCol`, containing the column names used for each
+#' sample in the `geneExpr` object;
+#' * Other eventual columns that define specific sample metadata, such as
+#' disease condition, age, sex and so on...
+#' 
+#' For unpaired samples, NAs can be used for missing entries in
+#' `mirnaCol`/`geneCol`.
 #'
 #' ## mirnaDE and geneDE
 #'
@@ -318,9 +323,7 @@ setValidity("MirnaExperiment", function(object) {
 #' `pairedSamples` is a `logical` parameter that defines the relationship
 #' between miRNA and gene expression measurements. It must be `TRUE` if data
 #' derive from the same individuals, while it must be `FALSE` when data derive
-#' from different subjects. It is important to note that, for paired samples,
-#' the sample IDs contained in the `primary` column of `mirnaMetadata` should
-#' match those contained in the `primary` column of `geneMetadata`.
+#' from different subjects.
 #'
 #' @param mirnaExpr A `matrix` object containing microRNA expression levels.
 #' Other objects coercible to `matrix` are also accepted (e.g. `data.frame`).
@@ -328,12 +331,9 @@ setValidity("MirnaExperiment", function(object) {
 #' @param geneExpr A `matrix` object containing gene expression levels.
 #' Other objects coercible to `matrix` are also accepted (e.g. `data.frame`).
 #' This object must be structured as specified in the *details* section
-#' @param mirnaMetadata A `data.frame` object containing information about
-#' samples used for microRNA profiling. For further information see the
-#' *details* section
-#' @param geneMetadata A `data.frame` object containing information about
-#' samples used for gene expression analysis. For further information see the
-#' *details* section
+#' @param samplesMetadata A `data.frame` object containing information about
+#' samples used for microRNA and gene expression profiling. For further
+#' information see the *details* section
 #' @param mirnaDE A `data.frame` containing the output of miRNA differential
 #' expression analysis. Check the *details* section to see the required format
 #' @param geneDE A `data.frame` containing the output of gene differential
@@ -361,16 +361,16 @@ setValidity("MirnaExperiment", function(object) {
 #' sig_g <- gene_de$ID[abs(gene_de$logFC) > 1 & gene_de$FDR < 0.05]
 #' gene_expr <- loadExamples("geneExpr")
 #' 
-#' # create sample maps
-#' geneMap <- data.frame("primary" = colnames(gene_expr),
-#'                       "colName" = colnames(gene_expr))
-#' mirnaMap <- data.frame("primary" = colnames(mirna_expr),
-#'                        "colName" = colnames(mirna_expr))
+#' # create samples metadata
+#' meta <- data.frame("primary" = colnames(gene_expr),
+#'                    "mirnaCol" = colnames(mirna_expr),
+#'                    "geneCol" = colnames(gene_expr),
+#'                    "disease" = c(rep("PTC", 8), rep("NTH", 8)))
 #'
 #' # create a 'MirnaExperiment' object after DE analysis
 #' obj <- MirnaExperiment(mirnaExpr = mirna_expr, geneExpr = gene_expr,
-#' mirnaMetadata = mirnaMap, geneMetadata = geneMap, mirnaDE = mirna_de,
-#' geneDE = gene_de, significantMirnas = sig_m, significantGenes = sig_g,
+#' samplesMetadata = meta, mirnaDE = mirna_de, geneDE = gene_de,
+#' significantMirnas = sig_m, significantGenes = sig_g,
 #' pairedSamples = TRUE)
 #'
 #' @author
@@ -381,14 +381,13 @@ setValidity("MirnaExperiment", function(object) {
 MirnaExperiment <- function(
     mirnaExpr,
     geneExpr,
-    mirnaMetadata,
-    geneMetadata,
+    samplesMetadata,
     mirnaDE,
     geneDE,
     significantMirnas,
     significantGenes,
     pairedSamples = TRUE) {
-
+  
   ## check expression matrices validity
   if (!is.matrix(mirnaExpr) &
       canCoerce(mirnaExpr, "matrix") == FALSE) {
@@ -422,32 +421,31 @@ MirnaExperiment <- function(
                "genes as rows. See ?MirnaExperiment for additional details"),
          call. = FALSE)
   }
-
-  ## check differential expression inputs
-  if (!is.data.frame(mirnaMetadata) |
-      is.null(mirnaMetadata$primary) |
-      is.null(mirnaMetadata$colName) |
-      !identical(sort(mirnaMetadata$colName), sort(colnames(mirnaExpr)))) {
-    stop(paste("'mirnaMetadata' must be a data.frame object with:\n",
-               "\t- one column named 'primary', which contains the sample ID\n",
-               "\t- one column named 'colName', which contains the column",
+  
+  ## check metadata provided
+  if (!is.data.frame(samplesMetadata) |
+      is.null(samplesMetadata$primary) |
+      is.null(samplesMetadata$mirnaCol) |
+      is.null(samplesMetadata$geneCol) |
+      !identical(sort(na.omit(samplesMetadata$mirnaCol)),
+                 sort(colnames(mirnaExpr))) |
+      !identical(sort(na.omit(samplesMetadata$geneCol)),
+                 sort(colnames(geneExpr)))) {
+    stop(paste("'samplesMetadata' must be a data.frame object with:\n",
+               "\t- one column named 'primary', which contains sample IDs\n",
+               "\t- one column named 'mirnaCol', which contains the column",
                "name corresponding to this sample in the expression",
                "table 'mirnaExpr'\n",
-               "\t- other columns specifying other information abut samples,",
-               "such as age, sex, ecc."), call. = FALSE)
-  }
-  if (!is.data.frame(geneMetadata) |
-      is.null(geneMetadata$primary) |
-      is.null(geneMetadata$colName) |
-      !identical(sort(geneMetadata$colName), sort(colnames(geneExpr)))) {
-    stop(paste("'geneMetadata' must be a data.frame object with:\n",
-               "\t- one column named 'primary', which contains the sample ID\n",
-               "\t- one column named 'colName', which contains the column",
+               "\t- one column named 'geneCol', which contains the column",
                "name corresponding to this sample in the expression",
                "table 'geneExpr'\n",
                "\t- other columns specifying other information abut samples,",
-               "such as age, sex, ecc."), call. = FALSE)
+               "such as age, sex, ecc.\n",
+               "For unpaired data, NAs must be used for missing entries",
+               "in 'mirnaCol'/'geneCol'"), call. = FALSE)
   }
+  
+  ## check differential expression inputs
   if (!is.data.frame(mirnaDE)) {
     stop(paste("'mirnaDE' slot must be a data.frame object with miRNA",
                "differential expression results, such as the output of",
@@ -458,7 +456,7 @@ MirnaExperiment <- function(
                "differential expression results, such as the output of",
                "'topTable' in limma"), call. = FALSE)
   }
-
+  
   ## check if samples are paired
   if (!is.logical(pairedSamples) |
       length(pairedSamples) != 1) {
@@ -468,18 +466,19 @@ MirnaExperiment <- function(
                "from different cohorts of samples"), call. = FALSE)
   }
   if (pairedSamples == TRUE &
-      length(intersect(mirnaMetadata$primary, geneMetadata$primary)) < 3) {
-    warning(paste("There are few or no common sample names in the 'primary'",
-                  "columns of 'mirnaMetadata' and 'geneMetadata'.",
-                  "Thus, pairedSamples will be set to FALSE..."),
+      sum(!is.na(samplesMetadata$mirnaCol) &
+          !is.na(samplesMetadata$geneCol)) < 3) {
+    warning(paste("There are few or no common sample names in",
+                  "'samplesMetadata'. Thus, 'pairedSamples' will be set",
+                  "to FALSE..."),
             call. = FALSE)
     pairedSamples <- FALSE
   }
-
+  
   ## check and set accepted column names in DE data.frames
   mirnaDE <- identifyColNames(mirnaDE, "miRNA")
   geneDE <- identifyColNames(geneDE, "gene")
-
+  
   ## check that miRNA and gene names are the same across data
   if (!identical(sort(rownames(mirnaExpr)), sort(mirnaDE$ID))) {
     stop(paste("Row names of 'mirnaExpr' data.frame must match the miRNA",
@@ -489,7 +488,7 @@ MirnaExperiment <- function(
     stop(paste("Row names of 'geneExpr' data.frame must match the gene",
                "identifiers present in 'geneDE'"), call. = FALSE)
   }
-
+  
   ## check that significant miRNAs/genes are a subset of all miRNA/genes tested
   if (!is.character(significantMirnas) |
       !all(significantMirnas %in% mirnaDE$ID)) {
@@ -505,28 +504,29 @@ MirnaExperiment <- function(
                "They must match the identifiers present in 'geneDE'."),
          call. = FALSE)
   }
-
-  ## create a MultiAssayExperiment object based on user's input
-  mirnaMap <- data.frame("primary"=mirnaMetadata$primary,
-                         "colname"=mirnaMetadata$colName)
-  genesMap <- data.frame("primary"=geneMetadata$primary,
-                         "colname"=geneMetadata$colName)
-  mapList <- list("microRNA"=mirnaMap, "genes"=genesMap)
+  
+  ## create a sample map for the MultiAssayExperiment object
+  mirnaMap <- samplesMetadata[!is.na(samplesMetadata$mirnaCol), ]
+  mirnaMap$geneCol <- NULL
+  geneMap <- samplesMetadata[!is.na(samplesMetadata$geneCol), ]
+  geneMap$mirnaCol <- NULL
+  colnames(mirnaMap)[which(colnames(mirnaMap) == "mirnaCol")] <- "colname"
+  colnames(geneMap)[which(colnames(geneMap) == "geneCol")] <- "colname"
+  mapList <- list("microRNA"=mirnaMap, "genes"=geneMap)
   sMap <- MultiAssayExperiment::listToMap(mapList)
-  colnames(mirnaMetadata)[which(colnames(mirnaMetadata)
-                                == "colName")] <- "mirnaColName"
-  colnames(geneMetadata)[which(colnames(geneMetadata)
-                                == "colName")] <- "geneColName"
-  samplesMetadata <- suppressMessages(dplyr::full_join(mirnaMetadata,
-                                                       geneMetadata,
-                                                       by = "primary"))
+  
+  ## add rownames to metadata table
   rownames(samplesMetadata) <- samplesMetadata$primary
+  
+  ## create a list with experimental assays
   expList <- list("microRNA" = mirnaExpr, "genes" = geneExpr)
+  
+  ## create a MultiAssayExperiment object based on user's input
   objMulti <- MultiAssayExperiment::MultiAssayExperiment(
     experiments = expList,
     colData = samplesMetadata,
     sampleMap = sMap)
-
+  
   ## create MirnaExperiment object
   object <- new("MirnaExperiment",
                 objMulti,
@@ -535,10 +535,10 @@ MirnaExperiment <- function(
                 significantMirnas=significantMirnas,
                 significantGenes=significantGenes,
                 pairedSamples=pairedSamples)
-
+  
   ## return the created object
   return(object)
-
+  
 }
 
 

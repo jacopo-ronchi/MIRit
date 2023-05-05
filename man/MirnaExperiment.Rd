@@ -7,8 +7,7 @@
 MirnaExperiment(
   mirnaExpr,
   geneExpr,
-  mirnaMetadata,
-  geneMetadata,
+  samplesMetadata,
   mirnaDE,
   geneDE,
   significantMirnas,
@@ -25,13 +24,9 @@ This object must be structured as specified in the \emph{details} section}
 Other objects coercible to \code{matrix} are also accepted (e.g. \code{data.frame}).
 This object must be structured as specified in the \emph{details} section}
 
-\item{mirnaMetadata}{A \code{data.frame} object containing information about
-samples used for microRNA profiling. For further information see the
-\emph{details} section}
-
-\item{geneMetadata}{A \code{data.frame} object containing information about
-samples used for gene expression analysis. For further information see the
-\emph{details} section}
+\item{samplesMetadata}{A \code{data.frame} object containing information about
+samples used for microRNA and gene expression profiling. For further
+information see the \emph{details} section}
 
 \item{mirnaDE}{A \code{data.frame} containing the output of miRNA differential
 expression analysis. Check the \emph{details} section to see the required format}
@@ -80,18 +75,23 @@ For instance, normalized values for NGS experiments can be extracted from a
 object through \code{cpm(obj, normalized.lib.sizes = TRUE)}.
 }
 
-\subsection{mirnaMetadata and geneMetadata}{
+\subsection{samplesMetadata}{
 
-\code{mirnaMetadata} and \code{geneMetadata} must be two \code{data.frame} objects
-containing information about samples used for miRNA profiling and for gene
-expression analysis, respectively. Specifically they must contain:
+\code{samplesMetadata} must be a \code{data.frame} object containing information about
+samples used for miRNA profiling and for gene expression analysis.
+Specifically, this data.frame must contain:
 \itemize{
 \item A column named \code{primary}, specifying an identifier for each sample;
-\item A column named \code{colName}, containing the column names used for each sample
-in the \code{mirnaExpr}/\code{geneExpr} object;
-\item Other eventual columns that define specific sample metadata, such as age,
-sex and so on...
+\item A column named \code{mirnaCol}, containing the column names used for each
+sample in the \code{mirnaExpr} object;
+\item A column named \code{geneCol}, containing the column names used for each
+sample in the \code{geneExpr} object;
+\item Other eventual columns that define specific sample metadata, such as
+disease condition, age, sex and so on...
 }
+
+For unpaired samples, NAs can be used for missing entries in
+\code{mirnaCol}/\code{geneCol}.
 }
 
 \subsection{mirnaDE and geneDE}{
@@ -139,9 +139,7 @@ and gene expression retrieved from a different group of samples).
 \code{pairedSamples} is a \code{logical} parameter that defines the relationship
 between miRNA and gene expression measurements. It must be \code{TRUE} if data
 derive from the same individuals, while it must be \code{FALSE} when data derive
-from different subjects. It is important to note that, for paired samples,
-the sample IDs contained in the \code{primary} column of \code{mirnaMetadata} should
-match those contained in the \code{primary} column of \code{geneMetadata}.
+from different subjects.
 }
 }
 \examples{
@@ -153,16 +151,16 @@ gene_de <- loadExamples("geneDE")
 sig_g <- gene_de$ID[abs(gene_de$logFC) > 1 & gene_de$FDR < 0.05]
 gene_expr <- loadExamples("geneExpr")
 
-# create sample maps
-geneMap <- data.frame("primary" = colnames(gene_expr),
-                      "colName" = colnames(gene_expr))
-mirnaMap <- data.frame("primary" = colnames(mirna_expr),
-                       "colName" = colnames(mirna_expr))
+# create samples metadata
+meta <- data.frame("primary" = colnames(gene_expr),
+                   "mirnaCol" = colnames(mirna_expr),
+                   "geneCol" = colnames(gene_expr),
+                   "disease" = c(rep("PTC", 8), rep("NTH", 8)))
 
 # create a 'MirnaExperiment' object after DE analysis
 obj <- MirnaExperiment(mirnaExpr = mirna_expr, geneExpr = gene_expr,
-mirnaMetadata = mirnaMap, geneMetadata = geneMap, mirnaDE = mirna_de,
-geneDE = gene_de, significantMirnas = sig_m, significantGenes = sig_g,
+samplesMetadata = meta, mirnaDE = mirna_de, geneDE = gene_de,
+significantMirnas = sig_m, significantGenes = sig_g,
 pairedSamples = TRUE)
 
 }

@@ -338,8 +338,10 @@ correlateMirnaTargets <- function(mirnaObj,
   geneExpr <- mirnaObj[["genes"]]
 
   ## check if samples are paired, otherwise exclude unpaired samples
-  mirnaSamples <- colnames(mirnaExpr)
-  geneSamples <- colnames(geneExpr)
+  sMap <- MultiAssayExperiment::sampleMap(mirnaObj)
+  mirnaSamples <- sMap$primary[sMap$assay == "microRNA"]
+  geneSamples <- sMap$primary[sMap$assay == "genes"]
+  
   if (!identical(mirnaSamples, geneSamples)) {
 
     ## determine common and uncommon samples
@@ -354,16 +356,25 @@ correlateMirnaTargets <- function(mirnaObj,
 
     ## remove samples without measurments of both miRNAs and genes
     if (length(unpaired) > 0) {
-      mirnaExpr <- mirnaExpr[, colnames(mirnaExpr) %in% common]
-      geneExpr <- geneExpr[, colnames(geneExpr) %in% common]
+      
+      mirnaExpr <- mirnaExpr[, sMap$colname[sMap$assay == "microRNA" &
+                                              sMap$primary %in% common]]
+      geneExpr <- geneExpr[, sMap$colname[sMap$assay == "genes" &
+                                            sMap$primary %in% common]]
+      
       warning(paste("Some samples don't have expression values for both",
                     "miRNAs and genes, thus they have been excluded from the",
                     "correlation analysis. Removed samples are:",
                     paste(unpaired, collapse = ", ")))
     }
 
-    ## order the columns of geneExpr according to those of mirnaExpr
-    geneExpr <- geneExpr[, colnames(mirnaExpr)]
+    ## order the columns of expression matrices in the same way
+    mirnaMap = sMap[sMap$assay == "microRNA", ]
+    geneMap = sMap[sMap$assay == "genes", ]
+    mirnaOrder <- mirnaMap$primary[order(match(mirnaMap$colname,
+                                               colnames(mirnaExpr)))]
+    geneExpr <- geneExpr[, geneMap$colname[order(match(geneMap$primary,
+                                                       mirnaOrder))]]
 
   }
 

@@ -501,33 +501,38 @@ create a valid `MirnaExperiment` object is to use the `MirnaExperiment()`
 function, which automatically handles the formatting of input data and the
 creation of the object.
 
-Firstly, we need to inform this function about samples analyzed in the study. We
-need to provide two `data.frame` objects, one for miRNA expression and one for
-gene expression, containing two columns, namely `primary` and `colName`. The
-`primary` column must contain the subject identifier, whereas `colName` must
-hold the column names used for that sample in the miRNA/gene expression matrix.
-It is important to highlight that for paired samples, subject identifiers in the
-`primary` column must be equal for both miRNA and gene expression.
+Firstly, we need to inform this function about samples analyzed in the study.
+To do so, we need to create a `data.frame` object containing information about
+samples used for miRNA profiling and for gene expression analysis. Specifically, this data.frame must contain:
+
+- A column named `primary`, specifying an identifier for each sample;
+- A column named `mirnaCol`, containing the column names used for each sample in the `mirnaExpr` object;
+- A column named `geneCol`, containing the column names used for each sample in the `geneExpr` object;
+- Other eventual columns that define specific sample metadata, such as disease condition, age, sex and so on...
+
+For unpaired samples, NAs must be used for missing entries in `mirnaCol`/`geneCol`.
 
 ```{r sampleMap}
-## create a sample map for gene expression
-geneMap <- data.frame("primary" = colnames(geneExpr),
-                      "colName" = colnames(geneExpr))
-
-## create a sample map for miRNA expression
-mirnaMap <- data.frame("primary" = colnames(mirnaExpr),
-                       "colName" = colnames(mirnaExpr))
+## create a sample map for miRNA and gene expression
+meta <- data.frame("primary" = colnames(mirnaExpr),
+                   "mirnaCol" = colnames(mirnaExpr),
+                   "geneCol" = colnames(geneExpr),
+                   "disease" = c(rep("PTC", 8), rep("NTH", 8)))
 ```
 
-Now we are ready to create a `MirnaExperiment` object, which will be the only
-thing needed for performing the integrative analysis with MIRit.
+In our simple example, both miRNA and gene expression matrices have the same column names. However, the final `data.frame` containing sample metadata should look like this:
+
+```{r sampleMap, echo=FALSE}
+meta
+```
+
+Now we are ready to create a `MirnaExperiment` object, which will be the only thing needed for performing the integrative analysis with MIRit.
 
 ```{r mirnaObj}
 ## create the MirnaExperiment object
 experiment <- MirnaExperiment(mirnaExpr = mirnaExpr,
                               geneExpr = geneExpr,
-                              mirnaMetadata = mirnaMap,
-                              geneMetadata = geneMap,
+                              samplesMetadata = meta,
                               mirnaDE = mirnaResults,
                               geneDE = geneResults,
                               significantMirnas = mirnaSignificant,
