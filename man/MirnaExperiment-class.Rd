@@ -186,11 +186,10 @@ expression is negatively associated with miRNA expression.
 Instead, when a correlation analysis is performed, \code{mirnaTargetsIntegration}
 has seven columns:
 \item \code{microRNA}: the miRNA ID;
-\item \code{target}: the correlated target gene;
+\item \code{Target}: the correlated target gene;
 \item \code{microRNA.Direction}: the fold change direction of the DE-miRNA;
-\item \code{Correlation.Type}: specifies the correlation direction, either \code{positive}
-or \code{negative};
-\item \code{Corr.Coefficient}: the value of the correlation coefficient used;
+\item \code{Pearson/Spearman/Kendall.Coeff}: the value of the correlation coefficient
+used;
 \item \code{Corr.P.Value}: the p-value resulting from the correlation analysis;
 \item \code{Corr.Adjusted.P.Val}: contains the correlation p-values corrected for
 multiple testing.

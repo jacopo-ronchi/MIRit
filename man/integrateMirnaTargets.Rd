@@ -64,7 +64,7 @@ expression is negatively associated with miRNA expression.
 Instead, when a correlation analysis is performed, \code{mirnaTargetsIntegration}
 has seven columns:
 \item \code{microRNA}: the miRNA ID;
-\item \code{target}: the correlated target gene;
+\item \code{Target}: the correlated target gene;
 \item \code{microRNA.Direction}: the fold change direction of the DE-miRNA;
 \item \code{Pearson/Spearman/Kendall.Coeff}: the value of the correlation coefficient
 used;

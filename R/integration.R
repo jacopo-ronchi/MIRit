@@ -81,7 +81,7 @@
 #' Instead, when a correlation analysis is performed, `mirnaTargetsIntegration`
 #' has seven columns:
 #' * `microRNA`: the miRNA ID;
-#' * `target`: the correlated target gene;
+#' * `Target`: the correlated target gene;
 #' * `microRNA.Direction`: the fold change direction of the DE-miRNA;
 #' * `Pearson/Spearman/Kendall.Coeff`: the value of the correlation coefficient
 #' used;

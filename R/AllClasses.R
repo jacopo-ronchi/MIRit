@@ -140,11 +140,10 @@ NULL
 #' Instead, when a correlation analysis is performed, `mirnaTargetsIntegration`
 #' has seven columns:
 #' * `microRNA`: the miRNA ID;
-#' * `target`: the correlated target gene;
+#' * `Target`: the correlated target gene;
 #' * `microRNA.Direction`: the fold change direction of the DE-miRNA;
-#' * `Correlation.Type`: specifies the correlation direction, either `positive`
-#' or `negative`;
-#' * `Corr.Coefficient`: the value of the correlation coefficient used;
+#' * `Pearson/Spearman/Kendall.Coeff`: the value of the correlation coefficient
+#' used;
 #' * `Corr.P.Value`: the p-value resulting from the correlation analysis;
 #' * `Corr.Adjusted.P.Val`: contains the correlation p-values corrected for
 #' multiple testing.

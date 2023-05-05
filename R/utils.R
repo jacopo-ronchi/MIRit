@@ -68,9 +68,9 @@ selectTargets <- function(mirnaObj, integratedTargets, direction) {
 
     ## extract integrated targets
     intRes <- mirnaTargetsIntegration(mirnaObj)
-    if (colnames(intRes)[4] == "Correlation.Type") {
+    if (colnames(intRes)[2] == "Target") {
       targets <- unique(intRes$Target[intRes$microRNA.Direction == direction])
-    } else if (colnames(intRes)[4] == "n_NON_DE_targets") {
+    } else if (colnames(intRes)[2] == "direction") {
       targets <- intRes$DE_targets[intRes$direction == direction]
       targets <- paste(targets, collapse = "/")
       targets <- stringr::str_split(targets, "/")
