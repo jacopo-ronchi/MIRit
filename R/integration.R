@@ -83,7 +83,8 @@
 #' * `microRNA`: the miRNA ID;
 #' * `target`: the correlated target gene;
 #' * `microRNA.Direction`: the fold change direction of the DE-miRNA;
-#' * `Corr.Coefficient`: the value of the correlation coefficient used;
+#' * `Pearson/Spearman/Kendall.Coeff`: the value of the correlation coefficient
+#' used;
 #' * `Corr.P.Value`: the p-value resulting from the correlation analysis;
 #' * `Corr.Adjusted.P.Val`: contains the correlation p-values corrected for
 #' multiple testing.
@@ -425,6 +426,13 @@ correlateMirnaTargets <- function(mirnaObj,
   ## select statistically significant associations
   corRes <- corRes[corRes$Corr.Adjusted.P.Val < pCutoff &
                      abs(corRes$Corr.Coefficient) > corCutoff, ]
+  
+  ## rename coefficient column with the correlation coefficient used
+  usedCoef <- gsub("(^)([[:alpha:]])", "\\1\\U\\2", corMethod, perl=TRUE)
+  colnames(corRes)[which(colnames(corRes) ==
+                           "Corr.Coefficient")] <- paste(usedCoef,
+                                                         "Coeff",
+                                                         sep = ".")
 
   ## report the results of the correlation analysis
   if (nrow(corRes) >= 1) {

@@ -66,7 +66,8 @@ has seven columns:
 \item \code{microRNA}: the miRNA ID;
 \item \code{target}: the correlated target gene;
 \item \code{microRNA.Direction}: the fold change direction of the DE-miRNA;
-\item \code{Corr.Coefficient}: the value of the correlation coefficient used;
+\item \code{Pearson/Spearman/Kendall.Coeff}: the value of the correlation coefficient
+used;
 \item \code{Corr.P.Value}: the p-value resulting from the correlation analysis;
 \item \code{Corr.Adjusted.P.Val}: contains the correlation p-values corrected for
 multiple testing.
@@ -102,6 +103,10 @@ values. This can be handled by \code{spearman} method as it computes a
 tie-corrected version of Spearman's coefficients. However, another
 correlation method that is suitable to perform rank correlation on tied data
 is the Kendall's tau-b method, usable with \code{kendall}.
+
+Regarding correlation direction, since miRNAs mainly act as negative
+regulators, only negatively correlated miRNA-target pairs are evaluated, and
+statistical significance is calculated through a one-tailed t-test.
 
 Finally, if gene expression data and miRNA expression data derive from
 different samples (unpaired data), a correlation analysis can't be
