@@ -1018,3 +1018,383 @@ mirVariantPlot <- function(variantId,
 
 }
 
+
+
+
+
+#' Plot correlation between miRNAs and genes within biological groups
+#' 
+#' This function creates a scatter plot that shows the correlation between
+#' miRNA and gene expression levels. This is useful after correlation
+#' analysis performed through the [integrateMirnaTargets()] function, to
+#' graphically visualize the quantitative effect of miRNA dysregulations on
+#' target gene expression. Furthermore, this function performs linear/monotonic
+#' regression to better represent the relationships between miRNA-target pairs.
+#' 
+#' When non-parametric correlation has been performed with the
+#' [integrateMirnaTargets()] function, a regression line can be fitted through
+#' monotonic regression on expression levels, or through linear regression
+#' performed on rank-transformed data. Since, ranks do not correspond to real
+#' expression values, the default option is to perform monotonic regression
+#' to fit a monotonic curve. To do so, this function makes use of the `MonoPoly`
+#' R package, which implements the algorithm proposed by Murray et al. in 2016.
+#' 
+#' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
+#' containing miRNA and gene data
+#' @param mirna The name of the miRNA for which we want to observe the
+#' correlation
+#' @param gene The name of the gene for which we want to observe the
+#' correlation
+#' @param condition It must be the column name of a variable specified in the
+#' metadata (colData) of a [`MirnaExperiment`][MirnaExperiment-class] object;
+#' or, alternatively, it must be a character/factor object that specifies
+#' group memberships (eg. c("healthy, "healthy", "disease", "disease"))
+#' @param showCoeff Logical, whether to show the correlation coeffficient or
+#' not. Note that the "R" is used for Pearson's correlation", "rho" for
+#' Spearman's correlation, and "tau" for Kendall's correlation. Default is TRUE
+#' @param regression Logical, whether to display a linear/monotonic regression
+#' line that fits miRNA-gene correlation data. Default is TRUE
+#' @param useRanks Logical, whether to represent non-parametric correlation
+#' analyses (Spearman's and Kendall's correlations) through rank-transformed
+#' data. Note that in this case, linear regression is performed on ranked
+#' data instead of monotonic regression. Default is FALSE
+#' @param lineCol It must be an R color name that specifies the color of
+#' the regression line. Default is `red`. All available colors can be listed
+#' with [grDevices::colors()]
+#' @param lineType It specifies the line type used for th regression line. It
+#' must be either 'blank', 'solid', 'dashed' (default), 'dotted', 'dotdash',
+#' 'longdash' or 'twodash'
+#' @param lineWidth The width of the fitted regression line (default is 0.8)
+#' @param pointSize The size of points in the correlation plot (default is 3)
+#' @param colorScale It must be a named character vector where values
+#' correspond to R colors, while names coincide with the groups specified in
+#' the `condition` parameter (eg. c("healthy" = "green", "disease" = "red")).
+#' Default is NULL, in order to use the default color scale
+#' 
+#' @references
+#' K. Murray, S. Müller & B. A. Turlach (2016) Fast and flexible methods for
+#' monotone polynomial fitting, Journal of Statistical Computation and
+#' Simulation, 86:15, 2946-2966, DOI: \url{10.1080/00949655.2016.1139582}.
+#'
+#' @returns
+#' An object of class `ggplot` containing the correlation scatter plot.
+#'
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform miRNA-target integration
+#' obj <- integrateMirnaTargets(obj)
+#'
+#' # plot correlation between miR-34a and PAX8 with monotonic regression curve
+#' plotCorrelation(obj, "hsa-miR-34a-5p", "PAX8", condition = "disease")
+#'
+#' @author
+#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#'
+#' @export
+plotCorrelation <- function(mirnaObj,
+                            mirna,
+                            gene,
+                            condition,
+                            showCoeff = TRUE,
+                            regression = TRUE,
+                            useRanks = FALSE,
+                            lineCol = "red",
+                            lineType = "dashed",
+                            lineWidth = 0.8,
+                            pointSize = 3,
+                            colorScale = NULL) {
+  
+  ## input checks
+  if (!is(mirnaObj, "MirnaExperiment")) {
+    stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
+         call. = FALSE)
+  }
+  if (pairedSamples(mirnaObj) == FALSE) {
+    stop(paste("Correlation analysis can only be performed for paired",
+               "samples! See ?mirnaTargetsIntegration"), call. = FALSE)
+  }
+  if (!is.character(mirna) |
+      length(mirna) != 1 |
+      !mirna %in% rownames(mirnaObj[["microRNA"]])) {
+    stop(paste("'mirna' must be a valid miRNA name that is present in",
+               "miRNA expression matrix."),
+         call. = FALSE)
+  }
+  if (!is.character(gene) |
+      length(gene) != 1 |
+      !gene %in% rownames(mirnaObj[["genes"]])) {
+    stop(paste("'gene' must be a valid gene name that is present in",
+               "gene expression matrix."),
+         call. = FALSE)
+  }
+  if (length(condition) == 1) {
+    if (!is.character(condition) |
+        !condition %in%
+        colnames(MultiAssayExperiment::colData(exampleObject))) {
+      stop(paste("'condition' must be the column name of a variable specified",
+                 "in the metadata (colData) of a MirnaExperiment object; or,",
+                 "alternatively, it must be a character/factor object that",
+                 "specifies group memberships."),
+           call. = FALSE)
+    }
+  } else {
+    if ((!is.character(condition) & !is.factor(condition)) |
+        length(condition) != nrow(MultiAssayExperiment::colData(mirnaObj))) {
+      stop(paste("'condition' must be the column name of a variable specified",
+                 "in the metadata (colData) of a MirnaExperiment object; or,",
+                 "alternatively, it must be a character/factor object that",
+                 "specifies group memberships."),
+           call. = FALSE)
+    }
+  }
+  if (!is.logical(showCoeff) |
+      length(showCoeff) != 1) {
+    stop("'showCoeff' must be logical (TRUE/FALSE)!", call. = FALSE)
+  }
+  if (!is.logical(regression) |
+      length(regression) != 1) {
+    stop("'regression' must be logical (TRUE/FALSE)!", call. = FALSE)
+  }
+  if (!is.logical(useRanks) |
+      length(useRanks) != 1) {
+    stop("'useRanks' must be logical (TRUE/FALSE)!", call. = FALSE)
+  }
+  if (!is.character(lineCol) |
+      length(lineCol) != 1 |
+      !lineCol %in% grDevices::colors()) {
+    stop(paste("'lineCol' must be an R color name. All available colors",
+               "can be listed with 'colors()'."),
+         call. = FALSE)
+  }
+  if (!is.character(lineType) |
+      length(lineType) != 1 |
+      !lineType %in% c("blank", "solid", "dashed", "dotted", "dotdash",
+                       "longdash", "twodash")) {
+    stop(paste("'lineType' must be either 'blank', 'solid', 'dashed'",
+               "(default), 'dotted', 'dotdash', 'longdash' or 'twodash'.",
+               "For additional details see ?plotCorrelation"),
+         call. = FALSE)
+  }
+  if (!is.numeric(lineWidth) |
+      length(lineWidth) != 1 |
+      lineWidth < 0) {
+    stop("'lineWidth' must be a non-neagtive number! (default is 0.8)",
+         call. = FALSE)
+  }
+  if (!is.numeric(pointSize) |
+      length(pointSize) != 1 |
+      pointSize < 0) {
+    stop("'pointSize' must be a non-neagtive number! (default is 3)",
+         call. = FALSE)
+  }
+  if (length(condition) == 1 & !is.null(colorScale)) {
+    if ((!is.null(colorScale) & !is.character(colorScale)) |
+        any(!colorScale %in% grDevices::colors()) |
+        !identical(
+          sort(names(colorScale)),
+          sort(unique(MultiAssayExperiment::colData(mirnaObj)[, condition])))) {
+      stop(paste("'colorScale' must be a named character vector where values",
+                 "consist of R colors, whereas names coincide to the different",
+                 "conditions. For additional details see ?plotCorrelation."),
+           call. = FALSE)
+    }
+  } else if (length(condition) != 1 & !is.null(colorScale)) {
+    if ((!is.null(colorScale) & !is.character(colorScale)) |
+        any(!colorScale %in% grDevices::colors()) |
+        !identical(sort(names(colorScale)),
+                   as.character(sort(unique(condition))))) {
+      stop(paste("'colorScale' must be a named character vector where values",
+                 "consist of R colors, whereas names coincide to the different",
+                 "conditions. For additional details see ?plotCorrelation."),
+           call. = FALSE)
+    }
+  }
+  
+  ## get integration results
+  intRes <- mirnaTargetsIntegration(mirnaObj)
+  
+  ## verify that correlation analysis has been performed
+  if (colnames(intRes)[2] != "Target") {
+    stop(paste("Correlation analysis must be performed before using this",
+               "function! See ?mirnaTargetsIntegration"), call. = FALSE)
+  }
+  
+  ## check if the specified miRNA-target pair is present
+  if (nrow(intRes[intRes$microRNA == mirna &
+                  intRes$Target == gene, ]) == 0) {
+    stop("This miRNA-Target pair doesn't show any significant correlation!",
+         call. = FALSE)
+  }
+  
+  ## determine the correlation coefficient used
+  corMethod <- colnames(mirnaTargetsIntegration(mirnaObj))[4]
+  corMethod <- tolower(strsplit(corMethod, ".", fixed = TRUE)[[1]][1])
+  
+  ## inform the user about using Pearson's correlation with rank data
+  if (useRanks == TRUE & corMethod == "pearson") {
+    warning(paste("It's not possible to represent Pearson's correlation",
+                  "using rank data! Ignoring 'useRanks'..."), call. = FALSE)
+  }
+  
+  ## extract miRNA and gene expression values
+  mirnaExpr <- mirnaObj[["microRNA"]]
+  geneExpr <- mirnaObj[["genes"]]
+  
+  ## define condition vector
+  if (is.character(condition) & length(condition) == 1) {
+    cond <- MultiAssayExperiment::colData(mirnaObj)[, condition]
+  } else if (is.factor(condition)) {
+    cond <- as.character(condition)
+  } else {
+    cond <- condition
+  }
+  names(cond) <- MultiAssayExperiment::colData(mirnaObj)[, "primary"]
+  
+  ## check if samples are paired, otherwise exclude unpaired samples
+  sMap <- MultiAssayExperiment::sampleMap(mirnaObj)
+  mirnaSamples <- sMap$primary[sMap$assay == "microRNA"]
+  geneSamples <- sMap$primary[sMap$assay == "genes"]
+  
+  if (!identical(mirnaSamples, geneSamples)) {
+    
+    ## determine common and uncommon samples
+    common <- intersect(mirnaSamples, geneSamples)
+    unpaired  <- setdiff(mirnaSamples, geneSamples)
+    
+    ## remove samples without measurments of both miRNAs and genes
+    if (length(unpaired) > 0) {
+      
+      mirnaExpr <- mirnaExpr[, sMap$colname[sMap$assay == "microRNA" &
+                                              sMap$primary %in% common]]
+      geneExpr <- geneExpr[, sMap$colname[sMap$assay == "genes" &
+                                            sMap$primary %in% common]]
+      
+    }
+    
+    ## order the columns of expression matrices in the same way
+    mirnaMap = sMap[sMap$assay == "microRNA", ]
+    geneMap = sMap[sMap$assay == "genes", ]
+    mirnaOrder <- mirnaMap$primary[order(match(mirnaMap$colname,
+                                               colnames(mirnaExpr)))]
+    geneExpr <- geneExpr[, geneMap$colname[order(match(geneMap$primary,
+                                                       mirnaOrder))]]
+    
+    ## re-define condition vector without removed samples
+    cond <- cond[mirnaOrder]
+    
+    ## re-define colorScale without removed conditions
+    colorScale <- colorScale[names(colorScale) %in% cond]
+    
+  }
+  
+  ## select the specified miRNA-target pair
+  mirnaExpr <- mirnaExpr[mirna, ]
+  geneExpr <- geneExpr[gene, ]
+  
+  ## convert to ranks if desired by the user
+  if (useRanks == TRUE & corMethod != "pearson") {
+    mirnaExpr <- rank(mirnaExpr)
+    geneExpr <- rank(geneExpr)
+  }
+  
+  ## create a dataframe with miRNA and gene expression
+  corDf <- data.frame("miRNA" = mirnaExpr,
+                      "gene" = geneExpr,
+                      "Condition" = cond)
+  
+  ## define plot labels
+  xlab <- paste(mirna, "expression")
+  ylab <- paste(gene, "expression")
+  
+  ## define miRNA-mRNA direction
+  selPair <- intRes[intRes$microRNA == mirna &
+                      intRes$Target == gene, ]
+  dir <- selPair$microRNA.Direction
+  monoDir <- ifelse(dir == "upregulated", "decreasing", "increasing")
+  coeffPos <- ifelse(dir == "upregulated", 1, 0)
+  
+  ## create correlation plot
+  corPlot <- ggplot2::ggplot(corDf,
+                             ggplot2::aes(miRNA, gene)) +
+    ggplot2::geom_point(ggplot2::aes(color = Condition), size = pointSize)
+  
+  ## fit regression line/curve
+  if (regression == TRUE) {
+    if (useRanks == TRUE | corMethod == "pearson") {
+      
+      ## add regression line to the plot
+      corPlot <- corPlot +
+        ggplot2::geom_smooth(method = "lm",
+                             formula = y ~ x,
+                             se = FALSE, color = lineCol,
+                             linewidth = lineWidth, linetype = lineType)
+      
+    } else {
+      
+      ## compute a monotonic regression curve
+      x = mirnaExpr
+      y = geneExpr
+      monoFit <- MonoPoly::monpol(y ~ x,
+                                  plot.it = FALSE,
+                                  monotone = monoDir,
+                                  algorithm = "Hawkins")
+      
+      ## create a sequence of values for x-axis
+      xSeq <- seq(min(corDf$miRNA), max(corDf$miRNA), length.out = 100)
+      
+      ## predict the y values using the fitted model
+      ySeq <- stats::predict(monoFit, newdata = data.frame(x = xSeq))
+      
+      ## create a data.frame for the fitted curve
+      fitDf <- data.frame("xFit" = xSeq, "yFit" = ySeq[, "x"])
+      
+      ## add the monotonic curve to the plot
+      corPlot <- corPlot +
+        ggplot2::geom_line(data = fitDf,
+                           ggplot2::aes(x = xFit, y = yFit),
+                           color = lineCol,
+                           linewidth = lineWidth,
+                           linetype = lineType)
+    }
+  }
+  
+  ## add correlation coefficient to the plot
+  if (showCoeff == TRUE) {
+    
+    ## determine coefficient symbol
+    if (corMethod == "pearson") {
+      corCoeff <- "R"
+    } else if (corMethod == "spearman") {
+      corCoeff <- "rho"
+    } else if (corMethod == "kendall") {
+      corCoeff <- "tau"
+    }
+    
+    ## add correlation coefficient through ggpubr::stat_cor()
+    corPlot <- corPlot +
+      ggpubr::stat_cor(ggplot2::aes(label = ggplot2::after_stat(r.label)),
+                       method = corMethod,
+                       cor.coef.name = corCoeff,
+                       label.x.npc = coeffPos, label.y.npc = 1,
+                       hjust = coeffPos, vjust = 1)
+    
+  }
+  
+  ## add colorScale to ggplot2 graph
+  if (!is.null(colorScale)) {
+    corPlot <- corPlot +
+      ggplot2::scale_color_manual(values = colorScale)
+  }
+  
+  ## rename plot labels and set ggplot2 theme
+  corPlot <- corPlot +
+    ggplot2::labs(x = xlab, y = ylab) +
+    ggplot2::theme_bw()
+  
+  ## return the generated plot
+  return(corPlot)
+  
+}
+

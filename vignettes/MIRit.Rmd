@@ -996,11 +996,11 @@ experiment <- integrateMirnaTargets(experiment)
 ```
 
 As we can see from the results of the integration analysis, a statistically
-significant correlation between 268 miRNA-target pairs has been found.
-Among the 265 differentially expressed genes, 121 are significantly correlated
+significant correlation between 204 miRNA-target pairs has been found.
+Among the 265 differentially expressed genes, 100 are significantly correlated
 with at least one differentially expressed miRNA. This is particularly
 interesting because it tells us that miRNA dysregulations account for nearly
-46% of gene alterations found in thyroid cancer.
+50% of gene alterations found in thyroid cancer.
 
 Before moving on to the identification of the altered miRNAs regulatory
 networks, we can explore the results of the integration analysis thanks to the
@@ -1190,6 +1190,28 @@ for the reduction of PAX8, which in turn is not able to activate the
 transcription of numerous thyroid factors, including thyroid hormone. This
 compromised regulatory axis may account for radioactive iodine-resistance in
 thyroid cancer, as highlighted by the authors of the study.
+
+Additionally, MIRit allows to produce a scatter plot that shows miRNA-target
+correlation. Indeed, we can use the `plotCorrelation()` function to create a
+scatter plot for miRNA and gene expression values, and to fit a linear/monotonic
+regression line, as reported in Figure \@ref(fig:corPlot).
+
+```{r corPlot, fig.cap="Correlation between hsa-miR-34a-5p, hsa-miR-146b-5p and PAX8 expression values.", warning=FALSE, fig.dim=c(8, 4)}
+## plot the correlation between miR-34a-5p and PAX8
+plotA <- plotCorrelation(experiment,
+                mirna = "hsa-miR-34a-5p",
+                gene = "PAX8",
+                condition = "disease")
+
+## plot the correlation between miR-146b-5p and PAX8
+plotB <- plotCorrelation(experiment,
+                mirna = "hsa-miR-146b-5p",
+                gene = "PAX8",
+                condition = "disease")
+
+## plot graphs side by side
+ggpubr::ggarrange(plotA, plotB, common.legend = TRUE)
+```
 
 Lastly, we can do the same thing to visualize the effects of miRNA
 dysregulations on the thyroid hormone signaling pathway.
