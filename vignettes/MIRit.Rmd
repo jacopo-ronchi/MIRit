@@ -474,7 +474,8 @@ mirnaSignificant <- rownames(mirnaResults[abs(mirnaResults$logFC) > 1 &
                                             mirnaResults$FDR < 0.05, ])
 ```
 
-In the end, the analysis reported 265 differentially expressed genes, and 40 differentially expressed miRNAs.
+In the end, the analysis reported 265 differentially expressed genes, and 40
+differentially expressed miRNAs.
 
 ### Paired vs unpaired data
 
@@ -503,14 +504,19 @@ creation of the object.
 
 Firstly, we need to inform this function about samples analyzed in the study.
 To do so, we need to create a `data.frame` object containing information about
-samples used for miRNA profiling and for gene expression analysis. Specifically, this data.frame must contain:
+samples used for miRNA profiling and for gene expression analysis. Specifically,
+this data.frame must contain:
 
 - A column named `primary`, specifying an identifier for each sample;
-- A column named `mirnaCol`, containing the column names used for each sample in the `mirnaExpr` object;
-- A column named `geneCol`, containing the column names used for each sample in the `geneExpr` object;
-- Other eventual columns that define specific sample metadata, such as disease condition, age, sex and so on...
+- A column named `mirnaCol`, containing the column names used for each sample in
+the `mirnaExpr` object;
+- A column named `geneCol`, containing the column names used for each sample in
+the `geneExpr` object;
+- Other eventual columns that define specific sample metadata, such as disease
+condition, age, sex and so on...
 
-For unpaired samples, NAs must be used for missing entries in `mirnaCol`/`geneCol`.
+For unpaired samples, NAs must be used for missing entries in
+`mirnaCol`/`geneCol`.
 
 ```{r sampleMap}
 ## create a sample map for miRNA and gene expression
@@ -520,13 +526,16 @@ meta <- data.frame("primary" = colnames(mirnaExpr),
                    "disease" = c(rep("PTC", 8), rep("NTH", 8)))
 ```
 
-In our simple example, both miRNA and gene expression matrices have the same column names. However, the final `data.frame` containing sample metadata should look like this:
+In our simple example, both miRNA and gene expression matrices have the same
+column names. However, the final `data.frame` containing sample metadata should
+look like this:
 
 ```{r sampleMap, echo=FALSE}
 meta
 ```
 
-Now we are ready to create a `MirnaExperiment` object, which will be the only thing needed for performing the integrative analysis with MIRit.
+Now we are ready to create a `MirnaExperiment` object, which will be the only
+thing needed for performing the integrative analysis with MIRit.
 
 ```{r mirnaObj}
 ## create the MirnaExperiment object
