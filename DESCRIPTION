@@ -2,7 +2,7 @@ Package: MIRit
 Title: Integrate microRNA and gene expression to decipher pathway complexity
 Version: 0.99.0
 Authors@R: 
-    person("Jacopo", "Ronchi", email = "j.ronchi2@campus.unimib.it",
+    person("Jacopo", "Ronchi", email = "jacopo.ronchi@unimib.it",
            role = c("aut", "cre"), comment = c(ORCID = "0000-0001-5520-4631"))
 Description: MIRit is an R package that provides several methods for
     investigating the relationships between miRNAs and genes in different

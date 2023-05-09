@@ -40,7 +40,7 @@
 #' \url{https://doi.org/10.1093/nar/gkaa309}
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 listCategories <- function(organism = "Homo sapiens",
@@ -182,7 +182,7 @@ listCategories <- function(organism = "Homo sapiens",
 #' \url{https://doi.org/10.1093/bioinformatics/btac172}
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 enrichMirnas <- function(mirnaObj,
@@ -484,7 +484,7 @@ enrichMirnas <- function(mirnaObj,
 #' \url{https://doi.org/10.1093/bioinformatics/btac172}
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 gseaMirnas <- function(mirnaObj,
@@ -721,7 +721,7 @@ setMethod("[", c("MirnaGsea", "character", "missing", "missing"),
 #' \url{https://doi.org/10.1093/nar/gkaa1024}
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 supportedOrganisms <- function(database) {
@@ -877,7 +877,7 @@ supportedOrganisms <- function(database) {
 #' \url{https://doi.org/10.1093/nar/gkaa1024}
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 enrichTargets <- function(mirnaObj,
@@ -1155,7 +1155,7 @@ enrichTargets <- function(mirnaObj,
 #' \url{https://doi.org/10.1093/nar/gkaa1024}
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 enrichGenes <- function(mirnaObj,
@@ -1524,7 +1524,7 @@ enrichInternal <- function(targets,
 #' \url{https://doi.org/10.1093/nar/gkaa1024}
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 gseaGenes <- function(mirnaObj,

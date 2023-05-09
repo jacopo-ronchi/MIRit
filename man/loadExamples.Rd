@@ -40,5 +40,5 @@ mirna_expr <- loadExamples("geneDE")
 
 }
 \author{
-Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}
+Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
 }

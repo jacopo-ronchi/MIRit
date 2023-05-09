@@ -86,5 +86,5 @@ For additional details on how to handle \code{\link[tidygraph:tbl_graph]{tidygra
 refer to the \code{tidygraph} package.
 }
 \author{
-Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}
+Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
 }

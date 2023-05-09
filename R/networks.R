@@ -31,7 +31,7 @@
 #' \url{https://doi.org/10.1186/1471-2105-13-20}
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 listPathways <- function(organism, database) {
@@ -153,7 +153,7 @@ listPathways <- function(organism, database) {
 #' \url{https://doi.org/10.1093/nar/gkaa1024}
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @importFrom rlang .data
 #' @export

@@ -75,5 +75,5 @@ in Molecular Biology, vol 1418. Humana Press, New York, NY.
 \url{https://doi.org/10.1007/978-1-4939-3578-9_16}
 }
 \author{
-Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}
+Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
 }

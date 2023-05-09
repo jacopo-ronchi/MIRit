@@ -36,5 +36,5 @@ and wrangle GWAS catalog data, Bioinformatics, Volume 36, Issue 2, January
 2020, Pages 649–650, \url{https://doi.org/10.1093/bioinformatics/btz605}.
 }
 \author{
-Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}
+Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
 }

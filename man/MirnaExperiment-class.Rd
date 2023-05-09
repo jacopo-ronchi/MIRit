@@ -206,5 +206,5 @@ See \code{\link[MultiAssayExperiment:MultiAssayExperiment-class]{MultiAssayExper
 for additional information.
 }
 \author{
-Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}
+Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
 }

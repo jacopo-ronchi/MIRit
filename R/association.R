@@ -24,7 +24,7 @@
 #' 2020, Pages 649–650, \url{https://doi.org/10.1093/bioinformatics/btz605}.
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 searchDisease <- function(diseaseName) {
@@ -142,7 +142,7 @@ searchDisease <- function(diseaseName) {
 #' 2020, Pages 649–650, \url{https://doi.org/10.1093/bioinformatics/btz605}
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @importFrom rlang .data
 #' @export
@@ -264,7 +264,7 @@ findMirnaSNPs <- function(mirnaObj,
 #' 2020, Pages 649–650, \url{https://doi.org/10.1093/bioinformatics/btz605}.
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 getEvidence <- function(variant,

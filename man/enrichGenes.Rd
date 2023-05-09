@@ -135,5 +135,5 @@ Issue D1, 8 January 2021, Pages D613–D621,
 \url{https://doi.org/10.1093/nar/gkaa1024}
 }
 \author{
-Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}
+Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
 }

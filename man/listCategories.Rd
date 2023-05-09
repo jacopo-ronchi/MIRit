@@ -50,5 +50,5 @@ Volume 48, Issue W1, 02 July 2020, Pages W521–W528,
 \url{https://doi.org/10.1093/nar/gkaa309}
 }
 \author{
-Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}
+Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
 }

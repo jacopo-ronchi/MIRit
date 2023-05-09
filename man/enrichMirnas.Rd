@@ -142,5 +142,5 @@ Volume 38, Issue 10, 15 May 2022, Pages 2952–2953,
 \url{https://doi.org/10.1093/bioinformatics/btac172}
 }
 \author{
-Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}
+Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
 }

@@ -164,7 +164,7 @@ NULL
 #' \url{10.1158/0008-5472.CAN-17-0344}
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @seealso
 #' See [`MultiAssayExperiment-class`][MultiAssayExperiment::MultiAssayExperiment-class]
@@ -374,7 +374,7 @@ setValidity("MirnaExperiment", function(object) {
 #' pairedSamples = TRUE)
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
@@ -705,7 +705,7 @@ setReplaceMethod("mirnaTargetsIntegration",
 #' analysis. Bioinformatics 2015 31(4):608-609
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @name MirnaEnrichment-class
 #' @docType class
@@ -806,7 +806,7 @@ setReplaceMethod("enrichmentDatabase", "MirnaEnrichment", function(object, value
 #' analysis. Bioinformatics 2015 31(4):608-609
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @name MirnaGsea-class
 #' @docType class

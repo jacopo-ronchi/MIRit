@@ -41,5 +41,5 @@ BMC Bioinformatics 13, 20 (2012).
 \url{https://doi.org/10.1186/1471-2105-13-20}
 }
 \author{
-Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}
+Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
 }

@@ -66,7 +66,7 @@
 #' visualizeNetwork(net, layout = "circle", node = "point")
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @importFrom rlang .data
 #' @export
@@ -686,7 +686,7 @@ mirnaDotplot.MirnaGsea <- function(mirnaGsea,
 #' mirnaRidgeplot(gse_res)
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @importFrom rlang .data
 #' @export
@@ -869,7 +869,7 @@ theme_enr <- function() {
 #' # mirVariantPlot(variantId = varId, snpAssociation = association)
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 mirVariantPlot <- function(variantId,
@@ -1090,7 +1090,7 @@ mirVariantPlot <- function(variantId,
 #' plotCorrelation(obj, "hsa-miR-34a-5p", "PAX8", condition = "disease")
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 plotCorrelation <- function(mirnaObj,

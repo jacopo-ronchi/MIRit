@@ -49,7 +49,7 @@
 #' \url{10.1093/nar/gku631}
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 getTargets <- function(mirnaObj,

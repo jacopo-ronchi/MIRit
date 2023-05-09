@@ -88,5 +88,5 @@ R/Bioconductor package for Disease Ontology Semantic and Enrichment
 analysis. Bioinformatics 2015 31(4):608-609
 }
 \author{
-Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}
+Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
 }

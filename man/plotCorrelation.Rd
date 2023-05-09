@@ -100,5 +100,5 @@ monotone polynomial fitting, Journal of Statistical Computation and
 Simulation, 86:15, 2946-2966, DOI: \url{10.1080/00949655.2016.1139582}.
 }
 \author{
-Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}
+Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
 }

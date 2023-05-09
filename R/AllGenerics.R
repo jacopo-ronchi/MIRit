@@ -31,7 +31,7 @@
 #' all <- mirnaDE(obj, onlySignificant = FALSE)
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 setGeneric("mirnaDE", function(object, onlySignificant = TRUE)
@@ -66,7 +66,7 @@ setGeneric("mirnaDE", function(object, onlySignificant = TRUE)
 #' all <- geneDE(obj, onlySignificant = FALSE)
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 setGeneric("geneDE", function(object, onlySignificant = TRUE)
@@ -95,7 +95,7 @@ setGeneric("geneDE", function(object, onlySignificant = TRUE)
 #' sigMirnas <- significantMirnas(obj)
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 setGeneric("significantMirnas", function(object)
@@ -124,7 +124,7 @@ setGeneric("significantMirnas", function(object)
 #' sigGenes <- significantGenes(obj)
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 setGeneric("significantGenes", function(object)
@@ -155,7 +155,7 @@ setGeneric("significantGenes", function(object)
 #' pairedSamples(obj)
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 setGeneric("pairedSamples", function(object) standardGeneric("pairedSamples"))
@@ -186,7 +186,7 @@ setGeneric("pairedSamples", function(object) standardGeneric("pairedSamples"))
 #' targets_df <- mirnaTargets(obj)
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 setGeneric("mirnaTargets", function(object) standardGeneric("mirnaTargets"))
@@ -220,7 +220,7 @@ setGeneric("mirnaTargets", function(object) standardGeneric("mirnaTargets"))
 #' res
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 setGeneric("mirnaTargetsIntegration",
@@ -315,7 +315,7 @@ setGeneric("mirnaTargetsIntegration<-", function(object, value)
 #' mirnaDotplot(gse)
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 setGeneric("mirnaDotplot",
@@ -363,7 +363,7 @@ setGeneric("mirnaDotplot",
 #' mirnaDotplot(gse)
 #'
 #' @author
-#' Jacopo Ronchi, \email{j.ronchi2@@campus.unimib.it}
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 setGeneric("enrichmentResults", function(object)

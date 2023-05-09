@@ -3,7 +3,7 @@ title: "Integrate miRNA and gene expression data with MIRit"
 author:
 - name: Jacopo Ronchi
   affiliation: University of Milano-Bicocca, Italy
-  email: j.ronchi2@campus.unimib.it
+  email: jacopo.ronchi@unimib.it
 package: MIRit
 output:
   BiocStyle::html_document:

@@ -70,5 +70,5 @@ drug associations. Nucleic Acids Res 2014; 42 (17): e133. doi:
 \url{10.1093/nar/gku631}
 }
 \author{
-Jacopo Ronchi, \email{j.ronchi2@campus.unimib.it}
+Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
 }
