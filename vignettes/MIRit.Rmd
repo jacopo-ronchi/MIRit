@@ -716,7 +716,39 @@ After the analyses, as we can appreciate from ORA results in Figure
 of hormone levels and a diminished metabolism of thyroid hormone. Accordingly,
 GSEA results reported in Figure \@ref(fig:ridgeGenes) suggest a decreased
 production of thyroid hormone in cancer cells compared to healthy thyroid
-tissue.
+tissue. Indeed, we observe that several genes involved in this pathway, such as
+TPO, TG, PAX8, SLC26A4, and CANX, result heavily downregulated in thyroid 
+cancer. In this regard, we can use the `plotDE` function included in MIRit to
+visualize miRNA/gene dysregulations through boxplots, barplots, or violinplots,
+as shown in Figure \@ref(fig:deBox).
+
+```{r deBox, fig.cap="DEGs boxplot. A boxplot displaying downregulated genes involved in thyroid hormone production.", fig.dim=c(8, 6.5)}
+## produce a boxplot with significance levels
+plotDE(experiment, features = c("TPO", "TG", "PAX8", "SLC26A4", "CANX"), condition = "disease", graph = "boxplot")
+```
+
+Moreover, in addition to show gene dysregulations, the `plotDE()` function can 
+be used to represent miRNA dysregulations as well, or also a combination of 
+miRNA and gene dysregulation. For example, in Figure \@ref(fig:deBoxMirna) we 
+reported the most upregulated and the most downregulated miRNA.
+
+```{r deBoxMirna, fig.cap="Differentially expressed miRNAs in thyroid cancer. The left figure represents the most upregulated miRNA in thyroid cancer, while the figure on the right reports the most repressed one.", fig.dim=c(8, 6.5)}
+## extract miRNA differential expression
+mirDf <- mirnaDE(experiment)
+
+## get the most upregulated and the most downregulated miRNA
+upMir <- mirDf$ID[mirDf$logFC == max(mirDf$logFC)]
+downMir <- mirDf$ID[mirDf$logFC == min(mirDf$logFC)]
+
+## produce a baplot with significance levels for the most upregulated miRNA
+topMir <- plotDE(experiment, features = upMir, condition = "disease", graph = "barplot")
+
+## produce a baplot with significance levels for the most downregulated miRNA
+botMir <- plotDE(experiment, features = downMir, condition = "disease", graph = "barplot", colorScale = c("hsa-miR-873-5p" = "steelblue"))
+
+## plot the two figures side by side
+ggpubr::ggarrange(topMir, botMir)
+```
 
 ## Enrichment of miRNAs {#mirna-enrichment}
 
@@ -1184,12 +1216,15 @@ emerges that PAX8, a transcription factor essential for thyroid differentiation
 and iodine uptake, results downregulated in thyroid cancer cells, leading to a
 decreased production of thyreoglobulin. Furthermore, we can notice that the
 downregulation of PAX8 negatively correlates with the expression of two miRNAs,
-namely hsa-miR-146b-5p and hsa-miR-34a-5p. Based on these interactions, we could
-conclude that a dysregulation engendered by these two miRNAs may be responsible
-for the reduction of PAX8, which in turn is not able to activate the
-transcription of numerous thyroid factors, including thyroid hormone. This
-compromised regulatory axis may account for radioactive iodine-resistance in
-thyroid cancer, as highlighted by the authors of the study.
+namely hsa-miR-146b-5p and hsa-miR-34a-5p, as reported in \@ref(fig:paxBar). 
+Based on these interactions, we could conclude that a dysregulation engendered 
+by these two miRNAs may be responsible for the reduction of PAX8, which in turn
+is not able to activate the transcription of numerous thyroid factors, including thyroid hormone. This compromised regulatory axis may account for radioactive iodine-resistance in thyroid cancer, as highlighted by the authors of the study.
+
+```{r paxBar, fig.cap="PAX8, miR-146b-5p and miR-34a-5p differential expression. A barplot showing the differential expression of these miRNA-target pairs in thyroid cancer.", fig.dim=c(8, 6.5)}
+## produce a barplot with significance levels
+plotDE(experiment, features = c("PAX8", "hsa-miR-146b-5p", "hsa-miR-34a-5p"), condition = "disease", graph = "barplot")
+```
 
 Additionally, MIRit allows to produce a scatter plot that shows miRNA-target
 correlation. Indeed, we can use the `plotCorrelation()` function to create a

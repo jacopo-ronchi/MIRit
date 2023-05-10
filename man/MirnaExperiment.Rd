@@ -145,10 +145,10 @@ from different subjects.
 \examples{
 # load example data
 mirna_de <- loadExamples("mirnaDE")
-sig_m <- mirna_de$ID[abs(mirna_de$logFC) > 1 & mirna_de$FDR < 0.05]
+sig_m <- mirna_de$ID[abs(mirna_de$logFC) > 1 & mirna_de$adj.P.Val < 0.05]
 mirna_expr <- loadExamples("mirnaExpr")
 gene_de <- loadExamples("geneDE")
-sig_g <- gene_de$ID[abs(gene_de$logFC) > 1 & gene_de$FDR < 0.05]
+sig_g <- gene_de$ID[abs(gene_de$logFC) > 1 & gene_de$adj.P.Val < 0.05]
 gene_expr <- loadExamples("geneExpr")
 
 # create samples metadata

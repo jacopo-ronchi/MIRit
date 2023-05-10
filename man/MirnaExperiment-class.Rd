@@ -122,7 +122,7 @@ factor in the \code{sampleMap} do not match the names in the
 \item \code{AveExpr}: represents the average expression of each miRNA;
 \item \code{P.Value}: indicates the p-value resulting from differential expression
 analysis;
-\item \code{FDR}: contains the p-values adjusted for multiple testing.
+\item \code{adj.P.Val}: contains the p-values adjusted for multiple testing.
 }
 
 \code{geneDE} consists of a \code{data.frame} with five columns:
@@ -132,7 +132,7 @@ analysis;
 \item \code{AveExpr}: represents the average expression of each gene;
 \item \code{P.Value}: indicates the p-value resulting from differential expression
 analysis;
-\item \code{FDR}: contains the p-values adjusted for multiple testing.
+\item \code{adj.P.Val}: contains the p-values adjusted for multiple testing.
 }
 }
 

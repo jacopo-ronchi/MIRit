@@ -18,7 +18,7 @@ identifyColNames <- function(tabOutput, tabID) {
   pvalCol <- grep(pvalAccepted, dfNames)
   fdrCol <- grep(fdrAccepted, dfNames)
   tableCols <- list(idCol, fcCol, exprCol, pvalCol, fdrCol)
-  tableNames <- c("ID", "logFC", "AveExpr", "P.Value", "FDR")
+  tableNames <- c("ID", "logFC", "AveExpr", "P.Value", "adj.P.Val")
 
   ## check if columns are correctly identified
   if (any(lengths(tableCols) == 0)) {

@@ -90,7 +90,7 @@ NULL
 #' * `AveExpr`: represents the average expression of each miRNA;
 #' * `P.Value`: indicates the p-value resulting from differential expression
 #' analysis;
-#' * `FDR`: contains the p-values adjusted for multiple testing.
+#' * `adj.P.Val`: contains the p-values adjusted for multiple testing.
 #'
 #' `geneDE` consists of a `data.frame` with five columns:
 #' * `ID`: indicates the name of the gene;
@@ -98,7 +98,7 @@ NULL
 #' * `AveExpr`: represents the average expression of each gene;
 #' * `P.Value`: indicates the p-value resulting from differential expression
 #' analysis;
-#' * `FDR`: contains the p-values adjusted for multiple testing.
+#' * `adj.P.Val`: contains the p-values adjusted for multiple testing.
 #'
 #' @section significantMirnas and significantGenes:
 #'
@@ -200,10 +200,13 @@ setValidity("MirnaExperiment", function(object) {
     return(paste("'geneDE' slot must be a data.frame object with gene",
                  "differential expression results, such as the output of",
                  "'topTable' in limma"))
-  } else if (!identical(colnames(mirnaDE(object)), c("ID", "logFC", "AveExpr", "P.Value", "FDR")) |
-             !identical(colnames(geneDE(object)), c("ID", "logFC", "AveExpr", "P.Value", "FDR"))) {
+  } else if (!identical(colnames(mirnaDE(object)), c("ID", "logFC", "AveExpr",
+                                                     "P.Value", "adj.P.Val")) |
+             !identical(colnames(geneDE(object)), c("ID", "logFC", "AveExpr",
+                                                    "P.Value", "adj.P.Val"))) {
     return(paste("'mirnaDE' and 'geneDE' slots must be dataframes with",
-                 "column names: 'ID', 'logFC', 'AveExpr', 'P.Value', 'FDR'."))
+                 "column names: 'ID', 'logFC', 'AveExpr', 'P.Value',",
+                 "'adj.P.Val'."))
   } else if (!is.character(significantMirnas(object))  |
              !all(significantMirnas(object) %in% mirnaDE(object,
                                                          onlySignificant = FALSE)$ID)) {
@@ -355,10 +358,10 @@ setValidity("MirnaExperiment", function(object) {
 #' @examples
 #' # load example data
 #' mirna_de <- loadExamples("mirnaDE")
-#' sig_m <- mirna_de$ID[abs(mirna_de$logFC) > 1 & mirna_de$FDR < 0.05]
+#' sig_m <- mirna_de$ID[abs(mirna_de$logFC) > 1 & mirna_de$adj.P.Val < 0.05]
 #' mirna_expr <- loadExamples("mirnaExpr")
 #' gene_de <- loadExamples("geneDE")
-#' sig_g <- gene_de$ID[abs(gene_de$logFC) > 1 & gene_de$FDR < 0.05]
+#' sig_g <- gene_de$ID[abs(gene_de$logFC) > 1 & gene_de$adj.P.Val < 0.05]
 #' gene_expr <- loadExamples("geneExpr")
 #' 
 #' # create samples metadata
