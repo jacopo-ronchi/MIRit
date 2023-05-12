@@ -154,6 +154,11 @@ findMirnaSNPs <- function(mirnaObj,
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
          call. = FALSE)
   }
+  if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0) {
+    stop(paste("MiRNA differential expression results are not present in",
+               "'mirnaObj'. Please, use 'performMirnaDE()' before using",
+               "this function. See ?performMirnaDE"), call. = FALSE)
+  }
   if (!is.character(diseaseEFO) | length(diseaseEFO) != 1) {
     stop(paste("'diseaseEFO' must be a string of length 1",
                "containing the EFO ID of the disease. You can obtain the",

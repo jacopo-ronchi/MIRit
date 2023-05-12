@@ -45,17 +45,11 @@ participants}
 
 \item{\code{drops}}{A metadata \code{list} of dropped information}
 
-\item{\code{mirnaDE}}{A \code{data.frame} object containing miRNA differential expression
-results}
+\item{\code{mirnaDE}}{A \code{list} object containing the results of miRNA differential
+expression}
 
-\item{\code{geneDE}}{A \code{data.frame} object containing gene differential expression
-results}
-
-\item{\code{significantMirnas}}{A \code{character} vector containing the names of
-significantly differentially expressed miRNAs}
-
-\item{\code{significantGenes}}{A \code{character} vector containing the names of
-significantly differentially expressed genes}
+\item{\code{geneDE}}{A \code{list} object containing the results of gene differential
+expression}
 
 \item{\code{pairedSamples}}{A \code{logical} parameter that specifies whether miRNA and
 gene expression measurements derive from the same individuals (\code{TRUE}) or
@@ -72,8 +66,7 @@ slot is commonly populated by the \code{\link[=integrateMirnaTargets]{integrateM
 \note{
 To create a \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object, you can use
 the \code{\link[=MirnaExperiment]{MirnaExperiment()}} constructor function, which allows to easily build
-and verify a valid object starting from the results of differential
-expression analysis.
+and verify a valid object starting from miRNA and gene expression matrices.
 }
 \section{ExperimentList}{
 
@@ -115,34 +108,31 @@ factor in the \code{sampleMap} do not match the names in the
 \section{mirnaDE and geneDE}{
 
 
-\code{mirnaDE} consists of a \code{data.frame} with five columns:
+\code{mirnaDE} and \code{geneDE} consist of two \code{list} objects storing information
+regarding miRNA and gene differential expression, including:
 \itemize{
-\item \code{ID}: indicates the name of the miRNA;
-\item \code{logFC}: indicates the fold change of each miRNA in logarithmic scale;
-\item \code{AveExpr}: represents the average expression of each miRNA;
-\item \code{P.Value}: indicates the p-value resulting from differential expression
-analysis;
+\item \code{data}, which contains differential expression results in a \code{data.frame}
+with five columns:
+\itemize{
+\item \code{ID}: indicates the name of the miRNA/gene;
+\item \code{logFC}: indicates the fold change of each feature in logarithmic scale;
+\item \code{AveExpr}: represents the average expression of each miRNA/gene;
+\item \code{P.Value}: indicates the resulting p-value;
 \item \code{adj.P.Val}: contains the p-values adjusted for multiple testing.
 }
-
-\code{geneDE} consists of a \code{data.frame} with five columns:
-\itemize{
-\item \code{ID}: indicates the name of the gene;
-\item \code{logFC}: indicates the fold change of each gene in logarithmic scale;
-\item \code{AveExpr}: represents the average expression of each gene;
-\item \code{P.Value}: indicates the p-value resulting from differential expression
-analysis;
-\item \code{adj.P.Val}: contains the p-values adjusted for multiple testing.
-}
+\item \code{significant}, which is a \code{character} vector containing the names of
+significantly differentially expressed miRNAs/genes that passed the
+thresholds;
+\item \code{method}, which specifies the procedure used to determine differentially
+expressed miRNAs/gens (eg. "limma-voom", "edgeR", "DESeq2", "limma");
+\item \code{deObject}, an object deriving from limma/edgeR/DESeq2, that holds
+additional information regarding data processing.
 }
 
-\section{significantMirnas and significantGenes}{
-
-
-\code{significantMirnas} and \code{significantGenes} are \code{character} vectors of
-miRNA/gene IDs that are considered as statistically differentially expressed.
-The IDs contained in these vectors must be present in the \code{ID} columns of
-\code{mirnaDE} and \code{geneDE}.
+MiRNA differential expression results can be accessed through the \code{\link[=mirnaDE]{mirnaDE()}}
+function, for additional details see \code{?mirnaDE}. Similarly, gene
+differential expression results can be accessed through the \code{\link[=geneDE]{geneDE()}}
+function, for additional details see \code{?geneDE}.
 }
 
 \section{pairedSamples}{

@@ -64,6 +64,11 @@ getTargets <- function(mirnaObj,
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
          call. = FALSE)
   }
+  if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0) {
+    stop(paste("MiRNA differential expression results are not present in",
+               "'mirnaObj'. Please, use 'performMirnaDE()' before using",
+               "this function. See ?performMirnaDE"), call. = FALSE)
+  }
   if (!organism %in% convertOrganism("multiMiR", "all")) {
     stop(paste("'organism' must be one of:",
                paste(convertOrganism("multiMiR", "all"), collapse = ", ")),

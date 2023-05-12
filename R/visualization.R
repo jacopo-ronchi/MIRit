@@ -1111,6 +1111,14 @@ plotCorrelation <- function(mirnaObj,
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
          call. = FALSE)
   }
+  if (integratedTargets == TRUE &
+      max(dim(mirnaTargetsIntegration(mirnaObj))) == 0) {
+    stop(paste("Integration analysis is not detected in 'mirnaObj'!",
+               "Before using this function, expression levels of miRNAs and",
+               "genes must be integrated with the 'integrateMirnaTargets()'",
+               "function. See '?integrateMirnaTargets' for the details."),
+         call. = FALSE)
+  }
   if (pairedSamples(mirnaObj) == FALSE) {
     stop(paste("Correlation analysis can only be performed for paired",
                "samples! See ?mirnaTargetsIntegration"), call. = FALSE)
@@ -1131,8 +1139,8 @@ plotCorrelation <- function(mirnaObj,
   }
   if (length(condition) == 1) {
     if (!is.character(condition) |
-        !condition %in%
-        colnames(MultiAssayExperiment::colData(exampleObject))) {
+        !(condition %in% colnames(MultiAssayExperiment::colData(mirnaObj)) &
+          !condition %in% c("primary", "mirnaCol", "geneCol"))) {
       stop(paste("'condition' must be the column name of a variable specified",
                  "in the metadata (colData) of a MirnaExperiment object; or,",
                  "alternatively, it must be a character/factor object that",
@@ -1483,6 +1491,16 @@ plotDE <- function(mirnaObj,
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
          call. = FALSE)
   }
+  if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0) {
+    stop(paste("MiRNA differential expression results are not present in",
+               "'mirnaObj'. Please, use 'performMirnaDE()' before using",
+               "this function. See ?performMirnaDE"), call. = FALSE)
+  }
+  if (nrow(geneDE(mirnaObj, onlySignificant = FALSE)) == 0) {
+    stop(paste("Gene differential expression results are not present in",
+               "'mirnaObj'. Please, use 'performGeneDE()' before using",
+               "this function. See ?performGeneDE"), call. = FALSE)
+  }
   if (!is.character(features) |
       length(features) > 10 |
       any(!features %in% rownames(mirnaObj[["microRNA"]]) &
@@ -1494,8 +1512,8 @@ plotDE <- function(mirnaObj,
   }
   if (length(condition) == 1) {
     if (!is.character(condition) |
-        !condition %in%
-        colnames(MultiAssayExperiment::colData(exampleObject))) {
+        !(condition %in% colnames(MultiAssayExperiment::colData(mirnaObj)) &
+          !condition %in% c("primary", "mirnaCol", "geneCol"))) {
       stop(paste("'condition' must be the column name of a variable specified",
                  "in the metadata (colData) of a MirnaExperiment object; or,",
                  "alternatively, it must be a character/factor object that",

@@ -203,6 +203,11 @@ enrichMirnas <- function(mirnaObj,
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
          call. = FALSE)
   }
+  if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0) {
+    stop(paste("MiRNA differential expression results are not present in",
+               "'mirnaObj'. Please, use 'performMirnaDE()' before using",
+               "this function. See ?performMirnaDE"), call. = FALSE)
+  }
   if (!organism %in% convertOrganism("miEAA", "all")) {
     stop(paste("'organism' must be one of:",
                paste(convertOrganism("miEAA", "all"), collapse = ", ")),
@@ -504,6 +509,11 @@ gseaMirnas <- function(mirnaObj,
   if (!is(mirnaObj, "MirnaExperiment")) {
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
          call. = FALSE)
+  }
+  if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0) {
+    stop(paste("MiRNA differential expression results are not present in",
+               "'mirnaObj'. Please, use 'performMirnaDE()' before using",
+               "this function. See ?performMirnaDE"), call. = FALSE)
   }
   if (!organism %in% convertOrganism("miEAA", "all")) {
     stop(paste("'organism' must be one of:",
@@ -895,6 +905,24 @@ enrichTargets <- function(mirnaObj,
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
          call. = FALSE)
   }
+  if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0) {
+    stop(paste("MiRNA differential expression results are not present in",
+               "'mirnaObj'. Please, use 'performMirnaDE()' before using",
+               "this function. See ?performMirnaDE"), call. = FALSE)
+  }
+  if (nrow(geneDE(mirnaObj, onlySignificant = FALSE)) == 0) {
+    stop(paste("Gene differential expression results are not present in",
+               "'mirnaObj'. Please, use 'performGeneDE()' before using",
+               "this function. See ?performGeneDE"), call. = FALSE)
+  }
+  if (integratedTargets == TRUE &
+      max(dim(mirnaTargetsIntegration(mirnaObj))) == 0) {
+    stop(paste("Integration analysis is not detected in 'mirnaObj'!",
+               "Before using this function, expression levels of miRNAs and",
+               "genes must be integrated with the 'integrateMirnaTargets()'",
+               "function. See '?integrateMirnaTargets' for the details."),
+         call. = FALSE)
+  }
   if (!is.character(database) |
       length(database) != 1 |
       !database %in% c("GO", "KEGG", "Reactome", "DisGeNet", "WikiPathways")) {
@@ -1171,6 +1199,11 @@ enrichGenes <- function(mirnaObj,
   if (!is(mirnaObj, "MirnaExperiment")) {
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
          call. = FALSE)
+  }
+  if (nrow(geneDE(mirnaObj, onlySignificant = FALSE)) == 0) {
+    stop(paste("Gene differential expression results are not present in",
+               "'mirnaObj'. Please, use 'performGeneDE()' before using",
+               "this function. See ?performGeneDE"), call. = FALSE)
   }
   if (!is.character(database) |
       length(database) != 1 |
@@ -1542,6 +1575,11 @@ gseaGenes <- function(mirnaObj,
   if (!is(mirnaObj, "MirnaExperiment")) {
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
          call. = FALSE)
+  }
+  if (nrow(geneDE(mirnaObj, onlySignificant = FALSE)) == 0) {
+    stop(paste("Gene differential expression results are not present in",
+               "'mirnaObj'. Please, use 'performGeneDE()' before using",
+               "this function. See ?performGeneDE"), call. = FALSE)
   }
   if (!is.character(database) |
       length(database) != 1 |

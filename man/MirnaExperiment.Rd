@@ -4,16 +4,7 @@
 \alias{MirnaExperiment}
 \title{The constructor function for \linkS4class{MirnaExperiment}}
 \usage{
-MirnaExperiment(
-  mirnaExpr,
-  geneExpr,
-  samplesMetadata,
-  mirnaDE,
-  geneDE,
-  significantMirnas,
-  significantGenes,
-  pairedSamples = TRUE
-)
+MirnaExperiment(mirnaExpr, geneExpr, samplesMetadata, pairedSamples = TRUE)
 }
 \arguments{
 \item{mirnaExpr}{A \code{matrix} object containing microRNA expression levels.
@@ -28,21 +19,7 @@ This object must be structured as specified in the \emph{details} section}
 samples used for microRNA and gene expression profiling. For further
 information see the \emph{details} section}
 
-\item{mirnaDE}{A \code{data.frame} containing the output of miRNA differential
-expression analysis. Check the \emph{details} section to see the required format}
-
-\item{geneDE}{A \code{data.frame} containing the output of gene differential
-expression analysis. Check the \emph{details} section to see the required format}
-
-\item{significantMirnas}{A \code{character} vector containing the IDs of
-statistically differentially expressed miRNAs. See the \emph{details} section for
-further information}
-
-\item{significantGenes}{A \code{character} vector containing the IDs of
-statistically differentially expressed genes. See the \emph{details} section for
-further information}
-
-\item{pairedSamples}{Logical, wheteher miRNA and gene expression levels
+\item{pairedSamples}{Logical, whether miRNA and gene expression levels
 derive from the same subjects or not. Check the \emph{details} section for
 additional instructions. Default is \code{TRUE}}
 }
@@ -53,8 +30,7 @@ information about miRNA and gene expression.
 \description{
 This is the constructor function that allows to easily create objects of
 class \code{\link[=MirnaExperiment-class]{MirnaExperiment}}. This function requires as
-inputs miRNA and gene expression matrices as well as the results of miRNA
-and gene differential expression analysis.
+inputs miRNA and gene expression matrices, as well as sample metadata.
 }
 \details{
 This function requires data to be prepared as described below.
@@ -62,17 +38,16 @@ This function requires data to be prepared as described below.
 
 \code{mirnaExpr} and \code{geneExpr} must be \code{matrix} objects (or objects coercible
 to one) that contain miRNA and gene expression values, respectively.
-Rows must represent the different miRNAs/genes assayed while columns must
-represent the different samples analyzed. For \code{mirnaExpr}, row names must
+Rows must represent the different miRNAs/genes analyzed while columns must
+represent the different samples in study. For \code{mirnaExpr}, row names must
 contain miRNA names according to miRBase nomenclature, whereas for
 \code{geneExpr}, row names must contain gene symbols according to hgnc
 nomenclature. The values contained in these objects can derive from both
-microarray and RNA-Seq experiments. For microarray experiments, data should
-be normalized and log2 transformed, for example with the RMA algorithm,
-while for NGS experiments, data should consist of normalized counts/CPM.
-For instance, normalized values for NGS experiments can be extracted from a
-\code{DESeq2} object with \code{counts(obj, normalized = TRUE)}, or from an \code{edgeR}
-object through \code{cpm(obj, normalized.lib.sizes = TRUE)}.
+microarray and RNA-Seq experiments.
+
+For NGS experiments, \code{mirnaExpr} and \code{geneExpr} should just be un-normalized
+count matrices. Instead, for microarray experiments, data should be
+normalized and log2 transformed, for example with the RMA algorithm.
 }
 
 \subsection{samplesMetadata}{
@@ -94,42 +69,6 @@ For unpaired samples, NAs can be used for missing entries in
 \code{mirnaCol}/\code{geneCol}.
 }
 
-\subsection{mirnaDE and geneDE}{
-
-\code{mirnaDE} and \code{geneDE} are two objects of class \code{data.frame} containing
-the results of miRNA and gene differential expression analysis respectively.
-These tables should contain the differential expression results for all
-miRNAs/genes analyzed, not just for statistically significant species.
-This function directly supports the output of the most common functions
-used by different packages for differential expression, such as
-\code{\link[limma:toptable]{limma::topTable()}}, \code{\link[DESeq2:results]{DESeq2::results()}} and \code{\link[edgeR:topTags]{edgeR::topTags()}}.
-However, other \code{data.frame} objects can be used, as long as they have:
-\itemize{
-\item One column containing miRNA/gene names (according to miRBase/hgnc
-nomenclature). Accepted column names are: \code{ID}, \code{Symbol}, \code{Gene_Symbol},
-\code{Mirna}, \code{mir}, \code{Gene}, \code{gene.symbol}, \code{Gene.symbol};
-\item One column with log2 fold changes. Accepted column names are: \code{logFC},
-\code{log2FoldChange}, \code{FC}, \code{lFC};
-\item One column with average expression. Accepted column names are: \code{AveExpr},
-\code{baseMean}, \code{logCPM};
-\item One column with the p-values resulting from the differential expression
-analysis. Accepted column names are: \code{P.Value}, \code{pvalue}, \code{PValue},
-\code{Pvalue};
-\item One column containing p-values adjusted for multiple testing. Accepted
-column names are: \code{adj.P.Val}, \code{padj}, \code{FDR}, \code{fdr}, \code{adj}, \code{adj.p}, \code{adjp}.
-}
-}
-
-\subsection{significantMirnas and significantGenes}{
-
-\code{significantMirnas} and \code{significantGenes} are two \code{character} vectors that
-specifies the IDs of miRNAs and genes considered to be significantly
-differentially expressed. The miRNA IDs contained in \code{significantMirnas}
-must be present in the \code{ID} column of \code{mirnaDE}, in the same way as gene
-symbols in \code{significantGenes} must be present in the \code{ID} column
-of \code{geneDE}.
-}
-
 \subsection{pairedSamples}{
 
 MicroRNA and gene expression measurements may derive from the same subjects
@@ -144,24 +83,18 @@ from different subjects.
 }
 \examples{
 # load example data
-mirna_de <- loadExamples("mirnaDE")
-sig_m <- mirna_de$ID[abs(mirna_de$logFC) > 1 & mirna_de$adj.P.Val < 0.05]
-mirna_expr <- loadExamples("mirnaExpr")
-gene_de <- loadExamples("geneDE")
-sig_g <- gene_de$ID[abs(gene_de$logFC) > 1 & gene_de$adj.P.Val < 0.05]
-gene_expr <- loadExamples("geneExpr")
+data(geneCounts, package = "MIRit")
+data(mirnaCounts, package = "MIRit")
 
 # create samples metadata
-meta <- data.frame("primary" = colnames(gene_expr),
-                   "mirnaCol" = colnames(mirna_expr),
-                   "geneCol" = colnames(gene_expr),
+meta <- data.frame("primary" = colnames(geneCounts),
+                   "mirnaCol" = colnames(mirnaCounts),
+                   "geneCol" = colnames(geneCounts),
                    "disease" = c(rep("PTC", 8), rep("NTH", 8)))
 
-# create a 'MirnaExperiment' object after DE analysis
-obj <- MirnaExperiment(mirnaExpr = mirna_expr, geneExpr = gene_expr,
-samplesMetadata = meta, mirnaDE = mirna_de, geneDE = gene_de,
-significantMirnas = sig_m, significantGenes = sig_g,
-pairedSamples = TRUE)
+# create a 'MirnaExperiment' object
+obj <- MirnaExperiment(mirnaExpr = mirnaCounts, geneExpr = geneCounts,
+samplesMetadata = meta, pairedSamples = TRUE)
 
 }
 \author{

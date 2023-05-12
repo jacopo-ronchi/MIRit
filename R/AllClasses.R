@@ -34,14 +34,10 @@ NULL
 #' participants
 #' @slot metadata Additional data describing the object
 #' @slot drops A metadata `list` of dropped information
-#' @slot mirnaDE A `data.frame` object containing miRNA differential expression
-#' results
-#' @slot geneDE A `data.frame` object containing gene differential expression
-#' results
-#' @slot significantMirnas A `character` vector containing the names of
-#' significantly differentially expressed miRNAs
-#' @slot significantGenes A `character` vector containing the names of
-#' significantly differentially expressed genes
+#' @slot mirnaDE A `list` object containing the results of miRNA differential
+#' expression
+#' @slot geneDE A `list` object containing the results of gene differential
+#' expression
 #' @slot pairedSamples A `logical` parameter that specifies whether miRNA and
 #' gene expression measurements derive from the same individuals (`TRUE`) or
 #' from different subjects (`FALSE`)
@@ -83,29 +79,31 @@ NULL
 #' [`ExperimentList`][MultiAssayExperiment::ExperimentList].
 #'
 #' @section mirnaDE and geneDE:
-#'
-#' `mirnaDE` consists of a `data.frame` with five columns:
-#' * `ID`: indicates the name of the miRNA;
-#' * `logFC`: indicates the fold change of each miRNA in logarithmic scale;
-#' * `AveExpr`: represents the average expression of each miRNA;
-#' * `P.Value`: indicates the p-value resulting from differential expression
-#' analysis;
-#' * `adj.P.Val`: contains the p-values adjusted for multiple testing.
-#'
-#' `geneDE` consists of a `data.frame` with five columns:
-#' * `ID`: indicates the name of the gene;
-#' * `logFC`: indicates the fold change of each gene in logarithmic scale;
-#' * `AveExpr`: represents the average expression of each gene;
-#' * `P.Value`: indicates the p-value resulting from differential expression
-#' analysis;
-#' * `adj.P.Val`: contains the p-values adjusted for multiple testing.
-#'
-#' @section significantMirnas and significantGenes:
-#'
-#' `significantMirnas` and `significantGenes` are `character` vectors of
-#' miRNA/gene IDs that are considered as statistically differentially expressed.
-#' The IDs contained in these vectors must be present in the `ID` columns of
-#' `mirnaDE` and `geneDE`.
+#' 
+#' `mirnaDE` and `geneDE` consist of two `list` objects storing information
+#' regarding miRNA and gene differential expression, including:
+#' 
+#' * `data`, which contains differential expression results in a `data.frame`
+#' with five columns:
+#' 
+#'    + `ID`: indicates the name of the miRNA/gene;
+#'    + `logFC`: indicates the fold change of each feature in logarithmic scale;
+#'    + `AveExpr`: represents the average expression of each miRNA/gene;
+#'    + `P.Value`: indicates the resulting p-value;
+#'    + `adj.P.Val`: contains the p-values adjusted for multiple testing.
+#' 
+#' * `significant`, which is a `character` vector containing the names of
+#' significantly differentially expressed miRNAs/genes that passed the
+#' thresholds;
+#' * `method`, which specifies the procedure used to determine differentially
+#' expressed miRNAs/gens (eg. "limma-voom", "edgeR", "DESeq2", "limma");
+#' * `deObject`, an object deriving from limma/edgeR/DESeq2, that holds
+#' additional information regarding data processing.
+#' 
+#' MiRNA differential expression results can be accessed through the [mirnaDE()]
+#' function, for additional details see `?mirnaDE`. Similarly, gene
+#' differential expression results can be accessed through the [geneDE()]
+#' function, for additional details see `?geneDE`.
 #'
 #' @section pairedSamples:
 #'
@@ -151,8 +149,7 @@ NULL
 #' @note
 #' To create a [`MirnaExperiment`][MirnaExperiment-class] object, you can use
 #' the [MirnaExperiment()] constructor function, which allows to easily build
-#' and verify a valid object starting from the results of differential
-#' expression analysis.
+#' and verify a valid object starting from miRNA and gene expression matrices.
 #' 
 #' @param object An object of class [`MirnaExperiment`][MirnaExperiment-class]
 #'
@@ -175,15 +172,35 @@ NULL
 #' @import methods
 #' @importClassesFrom MultiAssayExperiment MultiAssayExperiment
 setClass("MirnaExperiment",
-         contains="MultiAssayExperiment",
-         slots=representation(
-           mirnaDE="data.frame",
-           significantMirnas="character",
-           geneDE="data.frame",
-           significantGenes="character",
-           pairedSamples="logical",
-           targets="data.frame",
-           mirnaTargetsIntegration="data.frame"))
+         contains = "MultiAssayExperiment",
+         slots = representation(
+           mirnaDE = "list",
+           geneDE = "list",
+           pairedSamples = "logical",
+           targets = "data.frame",
+           mirnaTargetsIntegration = "data.frame"))
+
+
+## -----------------
+## Initialize method
+## -----------------
+
+
+setMethod("initialize",
+          signature(.Object = "MirnaExperiment"),
+          function(.Object, ...) {
+            requiredObjects <- c("data", "significant", "method", "deObject")
+            deList <- list(data = data.frame(),
+                           significant = character(),
+                           method = character(),
+                           deObject = NULL)
+            
+            .Object <- callNextMethod(.Object,
+                                      ...,
+                                      mirnaDE = deList,
+                                      geneDE = deList)
+            .Object
+          })
 
 
 ## --------
@@ -191,32 +208,42 @@ setClass("MirnaExperiment",
 ## --------
 
 setValidity("MirnaExperiment", function(object) {
-
-  if (!is.data.frame(mirnaDE(object))) {
-    return(paste("'mirnaDE' slot must be a data.frame object with miRNA",
-                 "differential expression results, such as the output of",
-                 "'topTable' in limma"))
+  
+  if (!is.list(object@mirnaDE)) {
+    return(paste("'mirnaDE' slot must be a list object with miRNA",
+                 "differential expression results. Please see",
+                 "?MirnaExperiment-class"))
+  } else if (!is.list(object@geneDE)) {
+    return(paste("'geneDE' slot must be a list object with gene",
+                 "differential expression results. Please see",
+                 "?MirnaExperiment-class"))
+  } else if (!identical(sort(names(object@mirnaDE)),
+                        sort(c("data", "significant", "method", "deObject"))) |
+             !identical(sort(names(object@geneDE)),
+                        sort(c("data", "significant", "method", "deObject")))) {
+    return(paste("'mirnaDE' and 'geneDE' slots must be list objects",
+                 "containing: 'data', 'significant', 'method', and 'deObject'.",
+                 "Please see ?MirnaExperiment-class"))
+  } else if (!is.data.frame(mirnaDE(object))) {
+    return(paste("'data' within mirnaDE slot must be a data.frame object with",
+                 "miRNA differential expression results. Please see",
+                 "?MirnaExperiment-class"))
   } else if (!is.data.frame(geneDE(object))) {
-    return(paste("'geneDE' slot must be a data.frame object with gene",
-                 "differential expression results, such as the output of",
-                 "'topTable' in limma"))
-  } else if (!identical(colnames(mirnaDE(object)), c("ID", "logFC", "AveExpr",
-                                                     "P.Value", "adj.P.Val")) |
-             !identical(colnames(geneDE(object)), c("ID", "logFC", "AveExpr",
-                                                    "P.Value", "adj.P.Val"))) {
-    return(paste("'mirnaDE' and 'geneDE' slots must be dataframes with",
-                 "column names: 'ID', 'logFC', 'AveExpr', 'P.Value',",
-                 "'adj.P.Val'."))
+    return(paste("'data' within geneDE slot must be a data.frame object with",
+                 "gene differential expression results. Please see",
+                 "?MirnaExperiment-class"))
   } else if (!is.character(significantMirnas(object))  |
-             !all(significantMirnas(object) %in% mirnaDE(object,
-                                                         onlySignificant = FALSE)$ID)) {
-    return(paste("'significantMirnas' must be a character with IDs of",
-                 "statiscally significantly differentially expressed miRNAs."))
+             !all(significantMirnas(object) %in%
+                  mirnaDE(object, onlySignificant = FALSE)$ID)) {
+    return(paste("'significant' object within 'mirnaDE' slot must be a",
+                 "character with IDs of statiscally significantly",
+                 "differentially expressed miRNAs."))
   } else if (!is.character(significantGenes(object))  |
-             !all(significantGenes(object) %in% geneDE(object,
-                                                       onlySignificant = FALSE)$ID)) {
-    return(paste("'significantGenes' must be a character with IDs of",
-                 "statiscally significantly differentially expressed genes"))
+             !all(significantGenes(object)
+                  %in% geneDE(object, onlySignificant = FALSE)$ID)) {
+    return(paste("'significant' object within 'geneDE' slot must be a",
+                 "character with IDs of statiscally significantly",
+                 "differentially expressed genes."))
   } else if (!is.data.frame(mirnaTargets(object))) {
     return(paste("'targets' slot must be a data.frame object with miRNAs and",
                  "their relative targets. The end user typically avoids",
@@ -247,8 +274,7 @@ setValidity("MirnaExperiment", function(object) {
 #'
 #' This is the constructor function that allows to easily create objects of
 #' class [`MirnaExperiment`][MirnaExperiment-class]. This function requires as
-#' inputs miRNA and gene expression matrices as well as the results of miRNA
-#' and gene differential expression analysis.
+#' inputs miRNA and gene expression matrices, as well as sample metadata.
 #'
 #' @details
 #' This function requires data to be prepared as described below.
@@ -257,17 +283,16 @@ setValidity("MirnaExperiment", function(object) {
 #'
 #' `mirnaExpr` and `geneExpr` must be `matrix` objects (or objects coercible
 #' to one) that contain miRNA and gene expression values, respectively.
-#' Rows must represent the different miRNAs/genes assayed while columns must
-#' represent the different samples analyzed. For `mirnaExpr`, row names must
+#' Rows must represent the different miRNAs/genes analyzed while columns must
+#' represent the different samples in study. For `mirnaExpr`, row names must
 #' contain miRNA names according to miRBase nomenclature, whereas for
 #' `geneExpr`, row names must contain gene symbols according to hgnc
 #' nomenclature. The values contained in these objects can derive from both
-#' microarray and RNA-Seq experiments. For microarray experiments, data should
-#' be normalized and log2 transformed, for example with the RMA algorithm,
-#' while for NGS experiments, data should consist of normalized counts/CPM.
-#' For instance, normalized values for NGS experiments can be extracted from a
-#' `DESeq2` object with `counts(obj, normalized = TRUE)`, or from an `edgeR`
-#' object through `cpm(obj, normalized.lib.sizes = TRUE)`.
+#' microarray and RNA-Seq experiments.
+#' 
+#' For NGS experiments, `mirnaExpr` and `geneExpr` should just be un-normalized
+#' count matrices. Instead, for microarray experiments, data should be
+#' normalized and log2 transformed, for example with the RMA algorithm.
 #'
 #' ## samplesMetadata
 #'
@@ -284,38 +309,6 @@ setValidity("MirnaExperiment", function(object) {
 #' 
 #' For unpaired samples, NAs can be used for missing entries in
 #' `mirnaCol`/`geneCol`.
-#'
-#' ## mirnaDE and geneDE
-#'
-#' `mirnaDE` and `geneDE` are two objects of class `data.frame` containing
-#' the results of miRNA and gene differential expression analysis respectively.
-#' These tables should contain the differential expression results for all
-#' miRNAs/genes analyzed, not just for statistically significant species.
-#' This function directly supports the output of the most common functions
-#' used by different packages for differential expression, such as
-#' [limma::topTable()], [DESeq2::results()] and [edgeR::topTags()].
-#' However, other `data.frame` objects can be used, as long as they have:
-#' * One column containing miRNA/gene names (according to miRBase/hgnc
-#' nomenclature). Accepted column names are: `ID`, `Symbol`, `Gene_Symbol`,
-#' `Mirna`, `mir`, `Gene`, `gene.symbol`, `Gene.symbol`;
-#' * One column with log2 fold changes. Accepted column names are: `logFC`,
-#' `log2FoldChange`, `FC`, `lFC`;
-#' * One column with average expression. Accepted column names are: `AveExpr`,
-#' `baseMean`, `logCPM`;
-#' * One column with the p-values resulting from the differential expression
-#' analysis. Accepted column names are: `P.Value`, `pvalue`, `PValue`,
-#' `Pvalue`;
-#' * One column containing p-values adjusted for multiple testing. Accepted
-#' column names are: `adj.P.Val`, `padj`, `FDR`, `fdr`, `adj`, `adj.p`, `adjp`.
-#'
-#' ## significantMirnas and significantGenes
-#'
-#' `significantMirnas` and `significantGenes` are two `character` vectors that
-#' specifies the IDs of miRNAs and genes considered to be significantly
-#' differentially expressed. The miRNA IDs contained in `significantMirnas`
-#' must be present in the `ID` column of `mirnaDE`, in the same way as gene
-#' symbols in `significantGenes` must be present in the `ID` column
-#' of `geneDE`.
 #'
 #' ## pairedSamples
 #'
@@ -337,17 +330,7 @@ setValidity("MirnaExperiment", function(object) {
 #' @param samplesMetadata A `data.frame` object containing information about
 #' samples used for microRNA and gene expression profiling. For further
 #' information see the *details* section
-#' @param mirnaDE A `data.frame` containing the output of miRNA differential
-#' expression analysis. Check the *details* section to see the required format
-#' @param geneDE A `data.frame` containing the output of gene differential
-#' expression analysis. Check the *details* section to see the required format
-#' @param significantMirnas A `character` vector containing the IDs of
-#' statistically differentially expressed miRNAs. See the *details* section for
-#' further information
-#' @param significantGenes A `character` vector containing the IDs of
-#' statistically differentially expressed genes. See the *details* section for
-#' further information
-#' @param pairedSamples Logical, wheteher miRNA and gene expression levels
+#' @param pairedSamples Logical, whether miRNA and gene expression levels
 #' derive from the same subjects or not. Check the *details* section for
 #' additional instructions. Default is `TRUE`
 #'
@@ -357,24 +340,18 @@ setValidity("MirnaExperiment", function(object) {
 #'
 #' @examples
 #' # load example data
-#' mirna_de <- loadExamples("mirnaDE")
-#' sig_m <- mirna_de$ID[abs(mirna_de$logFC) > 1 & mirna_de$adj.P.Val < 0.05]
-#' mirna_expr <- loadExamples("mirnaExpr")
-#' gene_de <- loadExamples("geneDE")
-#' sig_g <- gene_de$ID[abs(gene_de$logFC) > 1 & gene_de$adj.P.Val < 0.05]
-#' gene_expr <- loadExamples("geneExpr")
+#' data(geneCounts, package = "MIRit")
+#' data(mirnaCounts, package = "MIRit")
 #' 
 #' # create samples metadata
-#' meta <- data.frame("primary" = colnames(gene_expr),
-#'                    "mirnaCol" = colnames(mirna_expr),
-#'                    "geneCol" = colnames(gene_expr),
+#' meta <- data.frame("primary" = colnames(geneCounts),
+#'                    "mirnaCol" = colnames(mirnaCounts),
+#'                    "geneCol" = colnames(geneCounts),
 #'                    "disease" = c(rep("PTC", 8), rep("NTH", 8)))
 #'
-#' # create a 'MirnaExperiment' object after DE analysis
-#' obj <- MirnaExperiment(mirnaExpr = mirna_expr, geneExpr = gene_expr,
-#' samplesMetadata = meta, mirnaDE = mirna_de, geneDE = gene_de,
-#' significantMirnas = sig_m, significantGenes = sig_g,
-#' pairedSamples = TRUE)
+#' # create a 'MirnaExperiment' object
+#' obj <- MirnaExperiment(mirnaExpr = mirnaCounts, geneExpr = geneCounts,
+#' samplesMetadata = meta, pairedSamples = TRUE)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -385,10 +362,6 @@ MirnaExperiment <- function(
     mirnaExpr,
     geneExpr,
     samplesMetadata,
-    mirnaDE,
-    geneDE,
-    significantMirnas,
-    significantGenes,
     pairedSamples = TRUE) {
   
   ## check expression matrices validity
@@ -448,16 +421,18 @@ MirnaExperiment <- function(
                "in 'mirnaCol'/'geneCol'"), call. = FALSE)
   }
   
-  ## check differential expression inputs
-  if (!is.data.frame(mirnaDE)) {
-    stop(paste("'mirnaDE' slot must be a data.frame object with miRNA",
-               "differential expression results, such as the output of",
-               "'topTable' in limma"), call. = FALSE)
-  }
-  if (!is.data.frame(geneDE)) {
-    stop(paste("'geneDE' slot must be a data.frame object with gene",
-               "differential expression results, such as the output of",
-               "'topTable' in limma"), call. = FALSE)
+  ## check for valid names in samplesMetadata
+  if (any(!colnames(samplesMetadata) %in%
+          make.names(colnames(samplesMetadata)))) {
+    wrongNames <- which(!colnames(samplesMetadata) %in%
+                          make.names(colnames(samplesMetadata)))
+    warning(paste("Some variables in the column names of 'samplesMetadata'",
+                  "don't have valid R names!", "Therefore,",
+                  paste(colnames(samplesMetadata)[wrongNames],
+                        collapse = ", "), "will be renamed to:",
+                  paste(make.names(colnames(samplesMetadata)[wrongNames]),
+                        collapse = ", ")), call. = FALSE)
+    colnames(samplesMetadata) <- make.names(colnames(samplesMetadata))
   }
   
   ## check if samples are paired
@@ -478,36 +453,6 @@ MirnaExperiment <- function(
     pairedSamples <- FALSE
   }
   
-  ## check and set accepted column names in DE data.frames
-  mirnaDE <- identifyColNames(mirnaDE, "miRNA")
-  geneDE <- identifyColNames(geneDE, "gene")
-  
-  ## check that miRNA and gene names are the same across data
-  if (!identical(sort(rownames(mirnaExpr)), sort(mirnaDE$ID))) {
-    stop(paste("Row names of 'mirnaExpr' data.frame must match the miRNA",
-               "identifiers present in 'mirnaDE'"), call. = FALSE)
-  }
-  if (!identical(sort(rownames(geneExpr)), sort(geneDE$ID))) {
-    stop(paste("Row names of 'geneExpr' data.frame must match the gene",
-               "identifiers present in 'geneDE'"), call. = FALSE)
-  }
-  
-  ## check that significant miRNAs/genes are a subset of all miRNA/genes tested
-  if (!is.character(significantMirnas) |
-      !all(significantMirnas %in% mirnaDE$ID)) {
-    stop(paste("'significantMirnas' must be a character with IDs of",
-               "statiscally significantly differentially expressed miRNAs.",
-               "They must match the identifiers present in 'mirnaDE'."),
-         call. = FALSE)
-  }
-  if (!is.character(significantGenes) |
-      !all(significantGenes %in% geneDE$ID)) {
-    stop(paste("'significantGenes' must be a character with IDs of",
-               "statiscally significantly differentially expressed genes.",
-               "They must match the identifiers present in 'geneDE'."),
-         call. = FALSE)
-  }
-  
   ## create a sample map for the MultiAssayExperiment object
   mirnaMap <- samplesMetadata[!is.na(samplesMetadata$mirnaCol), ]
   mirnaMap$geneCol <- NULL
@@ -515,7 +460,7 @@ MirnaExperiment <- function(
   geneMap$mirnaCol <- NULL
   colnames(mirnaMap)[which(colnames(mirnaMap) == "mirnaCol")] <- "colname"
   colnames(geneMap)[which(colnames(geneMap) == "geneCol")] <- "colname"
-  mapList <- list("microRNA"=mirnaMap, "genes"=geneMap)
+  mapList <- list("microRNA" = mirnaMap, "genes" = geneMap)
   sMap <- MultiAssayExperiment::listToMap(mapList)
   
   ## add rownames to metadata table
@@ -533,11 +478,7 @@ MirnaExperiment <- function(
   ## create MirnaExperiment object
   object <- new("MirnaExperiment",
                 objMulti,
-                mirnaDE=mirnaDE,
-                geneDE=geneDE,
-                significantMirnas=significantMirnas,
-                significantGenes=significantGenes,
-                pairedSamples=pairedSamples)
+                pairedSamples = pairedSamples)
   
   ## return the created object
   return(object)
@@ -553,11 +494,14 @@ MirnaExperiment <- function(
 #' @export
 setMethod("mirnaDE",
           "MirnaExperiment",
-          function(object, onlySignificant) {
-            if (onlySignificant == TRUE) {
-              object@mirnaDE[object@mirnaDE$ID %in% object@significantMirnas, ]
+          function(object, onlySignificant, returnObject) {
+            if (onlySignificant == TRUE & returnObject == FALSE) {
+              object@mirnaDE$data[object@mirnaDE$data$ID %in%
+                                    object@mirnaDE$significant, ]
+            } else if (onlySignificant == FALSE & returnObject == FALSE){
+              object@mirnaDE$data
             } else {
-              object@mirnaDE
+              object@mirnaDE$deObject
             }
           })
 
@@ -565,24 +509,27 @@ setMethod("mirnaDE",
 #' @export
 setMethod("geneDE",
           "MirnaExperiment",
-          function(object, onlySignificant) {
-            if (onlySignificant == TRUE) {
-              object@geneDE[object@geneDE$ID %in% object@significantGenes, ]
+          function(object, onlySignificant, returnObject) {
+            if (onlySignificant == TRUE & returnObject == FALSE) {
+              object@geneDE$data[object@geneDE$data$ID %in%
+                                   object@geneDE$significant, ]
+            } else if (onlySignificant == FALSE & returnObject == FALSE){
+              object@geneDE$data
             } else {
-              object@geneDE
+              object@geneDE$deObject
             }
           })
 
 #' @rdname significantMirnas
 #' @export
 setMethod("significantMirnas", "MirnaExperiment", function(object) {
-  object@significantMirnas
+  object@mirnaDE$significant
 })
 
 #' @rdname significantGenes
 #' @export
 setMethod("significantGenes", "MirnaExperiment", function(object) {
-  object@significantGenes
+  object@geneDE$significant
 })
 
 #' @rdname pairedSamples
@@ -616,18 +563,6 @@ setReplaceMethod("mirnaDE", "MirnaExperiment", function(object, value) {
 
 setReplaceMethod("geneDE", "MirnaExperiment", function(object, value) {
   object@geneDE <- value
-  validObject(object)
-  object
-})
-
-setReplaceMethod("significantMirnas", "MirnaExperiment", function(object, value) {
-  object@significantMirnas <- value
-  validObject(object)
-  object
-})
-
-setReplaceMethod("significantGenes", "MirnaExperiment", function(object, value) {
-  object@significantGenes <- value
   validObject(object)
   object
 })

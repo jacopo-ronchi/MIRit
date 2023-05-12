@@ -167,6 +167,16 @@ mirnaPathway <- function(mirnaObj,
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
          call. = FALSE)
   }
+  if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0) {
+    stop(paste("MiRNA differential expression results are not present in",
+               "'mirnaObj'. Please, use 'performMirnaDE()' before using",
+               "this function. See ?performMirnaDE"), call. = FALSE)
+  }
+  if (nrow(geneDE(mirnaObj, onlySignificant = FALSE)) == 0) {
+    stop(paste("Gene differential expression results are not present in",
+               "'mirnaObj'. Please, use 'performGeneDE()' before using",
+               "this function. See ?performGeneDE"), call. = FALSE)
+  }
   if (max(dim(mirnaTargetsIntegration(mirnaObj))) == 0) {
     stop(paste("Integration analysis is not detected in 'mirnaObj'!",
                "Before using this function, expression levels of miRNAs and",

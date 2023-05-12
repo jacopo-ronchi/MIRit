@@ -18,9 +18,9 @@ A \code{character} vector of miRNA IDs (e.g. 'hsa-miR-16-5p',
 'hsa-miR-29a-3p'...).
 }
 \description{
-This function is an accessor of the \code{significantMirnas} slot of a
-\code{\link[=MirnaExperiment-class]{MirnaExperiment}} object and can be used to obtain
-the IDs of statistically differentially expressed miRNAs.
+This function accesses the \code{significant} features contained in the \code{mirnaDE}
+slot of a \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object, and can be used
+to obtain the IDs of statistically differentially expressed miRNAs.
 }
 \examples{
 # load example MirnaExperiment object

@@ -18,9 +18,9 @@ A \code{character} vector of gene symbols (e.g. 'TP53', 'FOXP2', 'TIGAR'
 'CASP1'...).
 }
 \description{
-This function is an accessor of the \code{significantGenes} slot of a
-\code{\link[=MirnaExperiment-class]{MirnaExperiment}} object and can be used to obtain
-the IDs of statistically differentially expressed genes.
+This function accesses the \code{significant} features contained in the \code{geneDE}
+slot of a \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object, and can be used
+to obtain the IDs of statistically differentially expressed genes.
 }
 \examples{
 # load example MirnaExperiment object

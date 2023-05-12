@@ -38,7 +38,7 @@ setMethod("show", "MirnaExperiment", function(object) {
       "\t- microRNA targets: ", class(mirnaTargets(object)), " with ",
       nrow(mirnaTargets(object)), " rows and ", ncol(mirnaTargets(object)),
       " columns\n",
-      "\t- miRNAs - gene integrative analysis: ",
+      "\t- miRNA - gene integrative analysis: ",
       class(mirnaTargetsIntegration(object)), " with ",
       nrow(mirnaTargetsIntegration(object)), " rows and ",
       ncol(mirnaTargetsIntegration(object)), " columns\n",

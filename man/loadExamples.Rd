@@ -4,39 +4,19 @@
 \alias{loadExamples}
 \title{Create example \code{\link[=MirnaExperiment-class]{MirnaExperiment}} objects}
 \usage{
-loadExamples(objSlot = "all")
-}
-\arguments{
-\item{objSlot}{It must be one of \code{all} (default), \code{mirnaDE}, \code{geneDE},
-\code{mirnaExpr}, \code{geneExpr}}
+loadExamples()
 }
 \value{
-An example \code{MirnaExperiment} object, or one of its slots.
+An example \code{MirnaExperiment} object.
 }
 \description{
 This helper function allows to create a
 \code{\link[=MirnaExperiment-class]{MirnaExperiment}} containing miRNA and gene
-expression data deriving from Riesco-Eizaguirre et al (2015). Moroever,
-the user can specify the slots to extract in order to explore the inner
-structure of \code{\link[=MirnaExperiment-class]{MirnaExperiment}} class.
-}
-\details{
-The default value of the \code{objSlot} parameter is set to \code{all} in order to
-return the example \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object.
-However, the user can set this parameter to \code{mirnaDE} or \code{geneDE} to retrieve
-miRNA and gene differential expression results, respectively. Moreover,
-\code{objSlot} can also be set to \code{mirnaExpr} or \code{geneExpr} to access example
-expression matrices.
+expression data deriving from Riesco-Eizaguirre et al (2015).
 }
 \examples{
 # load example MirnaExperiment object
 obj <- loadExamples()
-
-# load example mirna expression matrix from MirnaExperiment object
-mirna_expr <- loadExamples("mirnaExpr")
-
-# load example gene differential expression from MirnaExperiment object
-mirna_expr <- loadExamples("geneDE")
 
 }
 \author{

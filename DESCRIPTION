@@ -47,6 +47,7 @@ Collate:
     'AllClasses.R'
     'association.R'
     'data.R'
+    'differential-expression.R'
     'enrichment.R'
     'integration.R'
     'networks.R'

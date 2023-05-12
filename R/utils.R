@@ -1,5 +1,5 @@
 ## identify column names
-identifyColNames <- function(tabOutput, tabID) {
+identifyColNames <- function(tabOutput, tabID = "") {
 
   # define accepted column names
   idAccepted <- "ID|Symbol|Gene_Symbol|Mirna|mir|Gene|gene.symbol|Gene.symbol"
@@ -189,51 +189,23 @@ convertOrganism <- function(col, orgId) {
 #' 
 #' This helper function allows to create a
 #' [`MirnaExperiment`][MirnaExperiment-class] containing miRNA and gene
-#' expression data deriving from Riesco-Eizaguirre et al (2015). Moroever,
-#' the user can specify the slots to extract in order to explore the inner
-#' structure of [`MirnaExperiment`][MirnaExperiment-class] class.
-#' 
-#' The default value of the `objSlot` parameter is set to `all` in order to
-#' return the example [`MirnaExperiment`][MirnaExperiment-class] object.
-#' However, the user can set this parameter to `mirnaDE` or `geneDE` to retrieve
-#' miRNA and gene differential expression results, respectively. Moreover,
-#' `objSlot` can also be set to `mirnaExpr` or `geneExpr` to access example
-#' expression matrices.
-#' 
-#' @param objSlot It must be one of `all` (default), `mirnaDE`, `geneDE`,
-#' `mirnaExpr`, `geneExpr`
+#' expression data deriving from Riesco-Eizaguirre et al (2015).
 #'
 #' @returns
-#' An example `MirnaExperiment` object, or one of its slots.
+#' An example `MirnaExperiment` object.
 #'
 #' @examples
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
-#' 
-#' # load example mirna expression matrix from MirnaExperiment object
-#' mirna_expr <- loadExamples("mirnaExpr")
-#' 
-#' # load example gene differential expression from MirnaExperiment object
-#' mirna_expr <- loadExamples("geneDE")
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-loadExamples <- function(objSlot = "all") {
+loadExamples <- function() {
   
-  ## return the desired slot
-  if (objSlot == "all") {
-    return(exampleObject)
-  } else if (objSlot == "mirnaDE") {
-    return(exampleObject@mirnaDE)
-  } else if (objSlot == "geneDE") {
-    return(exampleObject@geneDE)
-  } else if (objSlot == "mirnaExpr") {
-    return(exampleObject@ExperimentList$microRNA)
-  } else if (objSlot == "geneExpr") {
-    return(exampleObject@ExperimentList$genes)
-  }
+  ## return the example object
+  return(exampleObject)
   
 }
 

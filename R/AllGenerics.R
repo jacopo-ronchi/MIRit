@@ -18,6 +18,8 @@
 #' will be returned just for statistically significant miRNAs, if `FALSE` the
 #' full table of miRNA differential expression will be provided. Default is
 #' `TRUE` to only report significant miRNAs
+#' @param returnObject Logical, if `TRUE` this function will return the
+#' limma/edgeR/DESeq2 object used for differential expression analysis
 #'
 #' @returns
 #' A `data.frame` with miRNA differential expression.
@@ -34,7 +36,9 @@
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-setGeneric("mirnaDE", function(object, onlySignificant = TRUE)
+setGeneric("mirnaDE", function(object,
+                               onlySignificant = TRUE,
+                               returnObject = FALSE)
   standardGeneric("mirnaDE"))
 
 
@@ -53,6 +57,8 @@ setGeneric("mirnaDE", function(object, onlySignificant = TRUE)
 #' will be returned just for statistically significant genes, if `FALSE` the
 #' full table of gene differential expression will be provided. Default is
 #' `TRUE` to only report significant genes
+#' @param returnObject Logical, if `TRUE` this function will return the
+#' limma/edgeR/DESeq2 object used for differential expression analysis
 #'
 #' @returns
 #' A `data.frame` with gene differential expression.
@@ -69,16 +75,18 @@ setGeneric("mirnaDE", function(object, onlySignificant = TRUE)
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-setGeneric("geneDE", function(object, onlySignificant = TRUE)
+setGeneric("geneDE", function(object,
+                              onlySignificant = TRUE,
+                              returnObject = FALSE)
   standardGeneric("geneDE"))
 
 
 
 #' Get the IDs of statistically differentially expressed miRNAs
 #'
-#' This function is an accessor of the `significantMirnas` slot of a
-#' [`MirnaExperiment`][MirnaExperiment-class] object and can be used to obtain
-#' the IDs of statistically differentially expressed miRNAs.
+#' This function accesses the `significant` features contained in the `mirnaDE`
+#' slot of a [`MirnaExperiment`][MirnaExperiment-class] object, and can be used
+#' to obtain the IDs of statistically differentially expressed miRNAs.
 #'
 #' @param object A [`MirnaExperiment`][MirnaExperiment-class] object containing
 #' miRNA and gene data
@@ -105,9 +113,9 @@ setGeneric("significantMirnas", function(object)
 
 #' Get the IDs of statistically differentially expressed genes
 #'
-#' This function is an accessor of the `significantGenes` slot of a
-#' [`MirnaExperiment`][MirnaExperiment-class] object and can be used to obtain
-#' the IDs of statistically differentially expressed genes.
+#' This function accesses the `significant` features contained in the `geneDE`
+#' slot of a [`MirnaExperiment`][MirnaExperiment-class] object, and can be used
+#' to obtain the IDs of statistically differentially expressed genes.
 #'
 #' @param object A [`MirnaExperiment`][MirnaExperiment-class] object containing
 #' miRNA and gene data
@@ -234,14 +242,6 @@ setGeneric("mirnaDE<-", function(object, value)
 
 setGeneric("geneDE<-", function(object, value)
   standardGeneric("geneDE<-")
-)
-
-setGeneric("significantMirnas<-", function(object, value)
-  standardGeneric("significantMirnas<-")
-)
-
-setGeneric("significantGenes<-", function(object, value)
-  standardGeneric("significantGenes<-")
 )
 
 setGeneric("pairedSamples<-", function(object, value)
