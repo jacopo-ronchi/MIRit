@@ -72,8 +72,8 @@ for additional information see the \emph{details} section}
 
 \item{design}{An R \code{formula} that indicates the model to fit. It must
 include the variable of interest (\code{group}) together with eventual
-covariates (e.g. '~ 0 + disease + sex'). See the \emph{details} section for
-additional information}
+covariates (e.g. '~ 0 + disease + sex'). Please note that \code{group} variable
+must be the first one. See the \emph{details} section for additional information}
 
 \item{method}{The statistical package used to compute differential
 expression. For NGS experiments, it must be one of \code{edgeR} (default),
@@ -174,12 +174,15 @@ that defines the levels to compare separated by a dash. For example, if we
 have a variable named 'condition', with two levels, namely 'disease' and
 'healthy', we can identify differentially expressed genes in 'disease'
 samples compared to 'healthy' subjects by specifying: \code{group = 'condition'}
-and \code{contrast = 'disease-healthy'}. Furthermore, the user can also model
-other sources of variation by specifying covariates that will be taken into
-account. To do so, the user has to state the model formula in the \code{design}
-parameter. In the previous example, if we want to compare 'disease' subjects
+and \code{contrast = 'disease-healthy'}. Furthermore, the user needs to specify
+the model to fit expression values. To do so, the user has to state the
+model formula in the \code{design} parameter. Please note that for a correct
+inner working of these functions, the \code{group} variable of interest must be
+the \emph{first} variable in model formula. Moreover, the user can include in the
+design any other sources of variation by specifying covariates that will be
+taken into account. For instance, if we want to compare 'disease' subjects
 against 'healthy' individuals, without the influence of sex differences,
-we may specify \code{design = ~ 0 + condition + sex}, where 'sex' is also a
+we may specify \code{design = ~ condition + sex}, where 'sex' is also a
 variable present in the metadata (colData) of \code{mirnaObj}.
 
 Notably, for all the methods available, the user can supply additional

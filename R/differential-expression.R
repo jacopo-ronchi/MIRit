@@ -24,12 +24,15 @@
 #' have a variable named 'condition', with two levels, namely 'disease' and
 #' 'healthy', we can identify differentially expressed genes in 'disease'
 #' samples compared to 'healthy' subjects by specifying: `group = 'condition'`
-#' and `contrast = 'disease-healthy'`. Furthermore, the user can also model
-#' other sources of variation by specifying covariates that will be taken into
-#' account. To do so, the user has to state the model formula in the `design`
-#' parameter. In the previous example, if we want to compare 'disease' subjects
+#' and `contrast = 'disease-healthy'`. Furthermore, the user needs to specify
+#' the model to fit expression values. To do so, the user has to state the
+#' model formula in the `design` parameter. Please note that for a correct
+#' inner working of these functions, the `group` variable of interest must be
+#' the *first* variable in model formula. Moreover, the user can include in the
+#' design any other sources of variation by specifying covariates that will be
+#' taken into account. For instance, if we want to compare 'disease' subjects
 #' against 'healthy' individuals, without the influence of sex differences,
-#' we may specify `design = ~ 0 + condition + sex`, where 'sex' is also a
+#' we may specify `design = ~ condition + sex`, where 'sex' is also a
 #' variable present in the metadata (colData) of `mirnaObj`.
 #' 
 #' Notably, for all the methods available, the user can supply additional
@@ -55,8 +58,8 @@
 #' for additional information see the *details* section
 #' @param design An R `formula` that indicates the model to fit. It must
 #' include the variable of interest (`group`) together with eventual
-#' covariates (e.g. '~ 0 + disease + sex'). See the *details* section for
-#' additional information
+#' covariates (e.g. '~ 0 + disease + sex'). Please note that `group` variable
+#' must be the first one. See the *details* section for additional information
 #' @param method The statistical package used to compute differential
 #' expression. For NGS experiments, it must be one of `edgeR` (default),
 #' `DESeq2`, and `voom` (for limma-voom). Instead, for microarray data, only
@@ -530,6 +533,12 @@ edgeR.DE <- function(counts,
                      glmQLFit.args,
                      glmQLFTest.args) {
   
+  ## identify numerator level and reference level
+  contrast <- strsplit(contrast, "-")[[1]]
+  
+  ## convert group variable to factor with specified reference level
+  meta[, group] <- stats::relevel(factor(meta[, group]), ref = contrast[2])
+  
   ## create edgeR object from counts
   features <- edgeR::DGEList(counts = counts,
                              group = meta[, group],
@@ -547,23 +556,42 @@ edgeR.DE <- function(counts,
   ## design the model
   des <- stats::model.matrix(design, data = meta)
   
-  ## reconstruct the user-defined contrast
-  contrast <- strsplit(contrast, "-")[[1]]
-  contrast <- paste(group, contrast, sep = "")
-  contrast <- paste(contrast, collapse = "-")
-  
-  ## set the contrast of interest
-  con <- limma::makeContrasts(contrasts = contrast,
-                              levels = des)
-  
   ## estimate dispersion and fit negative binomial distribution
   features <- do.call(edgeR::estimateDisp,
                       c(list(features, des), estimateDisp.args))
   fit <- do.call(edgeR::glmQLFit, c(list(features, des), glmQLFit.args))
   
+  ## determine if the supplied model has intercept
+  intercept <- attributes(terms(design))["intercept"] == 1
+  
+  ## identify the comparison for DE analysis
+  if (intercept == FALSE) {
+    
+    ## build the contrast of interest
+    contrast <- paste(group, contrast, sep = "")
+    contrast <- paste(contrast, collapse = "-")
+    
+    ## fit the contrast
+    con <- limma::makeContrasts(contrasts = contrast,
+                                levels = des)
+    
+    ## set contrast parameter for DE
+    comparison <- list(contrast = con)
+    
+  } else {
+    
+    ## set the coefficient name for the appropriate comparison
+    cf <- contrast[1]
+    cf <- paste(group, cf, sep = "")
+    
+    ## set contrast parameter for DE
+    comparison <- list(coef = cf)
+    
+  }
+  
   ## perform differential expression
   de <- do.call(edgeR::glmQLFTest,
-                c(list(fit, contrast = con), glmQLFTest.args))
+                c(list(fit), comparison, glmQLFTest.args))
   
   ## extract normalized expression matrix
   normExpr <- edgeR::cpm(features, normalized.lib.sizes = TRUE, log = TRUE)
@@ -685,6 +713,12 @@ voom.DE <- function(counts,
                     lmFit.args,
                     eBayes.args) {
   
+  ## identify numerator level and reference level
+  contrast <- strsplit(contrast, "-")[[1]]
+  
+  ## convert group variable to factor with specified reference level
+  meta[, group] <- stats::relevel(factor(meta[, group]), ref = contrast[2])
+  
   ## create edgeR object from counts
   features <- edgeR::DGEList(counts = counts,
                              group = meta[, group],
@@ -716,24 +750,44 @@ voom.DE <- function(counts,
   ## fit a linear model for each gene
   fit <- do.call(limma::lmFit, c(list(v, design = des), lmFit.args))
   
-  ## reconstruct the user-defined contrast
-  contrast <- strsplit(contrast, "-")[[1]]
-  contrast <- paste(group, contrast, sep = "")
-  contrast <- paste(contrast, collapse = "-")
+  ## determine if the supplied model has intercept
+  intercept <- attributes(terms(design))["intercept"] == 1
   
-  ## set the contrast of interest
-  con <- limma::makeContrasts(contrasts = contrast,
-                              levels = des)
+  ## identify the comparison for DE analysis
+  if (intercept == FALSE) {
+    
+    ## build the contrast of interest
+    contrast <- paste(group, contrast, sep = "")
+    contrast <- paste(contrast, collapse = "-")
+    
+    ## fit the contrast
+    con <- limma::makeContrasts(contrasts = contrast,
+                                levels = des)
+    
+    ## set contrast parameter for DE
+    comparison <- list(contrast = con)
+    
+  } else {
+    
+    ## set the coefficient name for the appropriate comparison
+    cf <- contrast[1]
+    cf <- paste(group, cf, sep = "")
+    
+    ## set contrast parameter for DE
+    comparison <- list(coef = cf)
+    
+  }
   
   ## fit the contrast matrix
-  fit <- limma::contrasts.fit(fit, contrasts = con)
+  fit <- do.call(limma::contrasts.fit, c(list(fit), comparison))
   
   ## perform empirical Bayes smoothing
   fit <- do.call(limma::eBayes, c(list(fit), eBayes.args))
   
   ## retrieve differentially expressed features
+  compName <-ifelse(intercept == TRUE, comparison[[1]], contrast)
   deRes <- limma::topTable(fit,
-                           coef = contrast,
+                           coef = compName,
                            number = Inf,
                            adjust.method = pAdjustment)
   
@@ -783,6 +837,12 @@ limma.DE <- function(expr,
                      lmFit.args,
                      eBayes.args) {
   
+  ## identify numerator level and reference level
+  contrast <- strsplit(contrast, "-")[[1]]
+  
+  ## convert group variable to factor with specified reference level
+  meta[, group] <- stats::relevel(factor(meta[, group]), ref = contrast[2])
+  
   ## design the linear model
   des <- stats::model.matrix(design, data = meta)
   
@@ -801,24 +861,44 @@ limma.DE <- function(expr,
     fit <- do.call(limma::lmFit, c(list(expr, design = des), lmFit.args))
   }
   
-  ## reconstruct the user-defined contrast
-  contrast <- strsplit(contrast, "-")[[1]]
-  contrast <- paste(group, contrast, sep = "")
-  contrast <- paste(contrast, collapse = "-")
+  ## determine if the supplied model has intercept
+  intercept <- attributes(terms(design))["intercept"] == 1
   
-  ## set the contrast of interest
-  con <- limma::makeContrasts(contrasts = contrast,
-                              levels = des)
+  ## identify the comparison for DE analysis
+  if (intercept == FALSE) {
+    
+    ## build the contrast of interest
+    contrast <- paste(group, contrast, sep = "")
+    contrast <- paste(contrast, collapse = "-")
+    
+    ## fit the contrast
+    con <- limma::makeContrasts(contrasts = contrast,
+                                levels = des)
+    
+    ## set contrast parameter for DE
+    comparison <- list(contrast = con)
+    
+  } else {
+    
+    ## set the coefficient name for the appropriate comparison
+    cf <- contrast[1]
+    cf <- paste(group, cf, sep = "")
+    
+    ## set contrast parameter for DE
+    comparison <- list(coef = cf)
+    
+  }
   
   ## fit the contrast matrix
-  fit <- limma::contrasts.fit(fit, contrasts = con)
+  fit <- do.call(limma::contrasts.fit, c(list(fit), comparison))
   
   ## perform empirical Bayes smoothing
   fit <- do.call(limma::eBayes, c(list(fit), eBayes.args))
   
   ## retrieve differentially expressed features
+  compName <-ifelse(intercept == TRUE, comparison[[1]], contrast)
   deRes <- limma::topTable(fit,
-                           coef = contrast,
+                           coef = compName,
                            number = Inf,
                            adjust.method = pAdjustment)
   
