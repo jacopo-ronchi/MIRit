@@ -1,8 +1,269 @@
-performDE <- function(mirnaObj,
+#' Perform differential expression analysis
+#' 
+#' `performMirnaDE()` and `performGeneDE()` are two functions provided by MIRit
+#' to conduct miRNA and gene differential expression analysis, respectively.
+#' In particular, these functions allow the user to compute differential
+#' expression through different methods, namely `edgeR`, `DESeq2`, `limma-voom`
+#' and `limma`. Data deriving from NGS experiments and microarray technology
+#' are all suitable for these functions. For precise indications about how to
+#' use these functions, please refer to the *details* section.
+#' 
+#' @details
+#' When performing differential expression for NGS experiments, count matrices
+#' are detected and `method` parameter must be one of `edgeR`, `DESeq2`,
+#' and `voom`. On the other hand, when dealing with microarray studies, only
+#' `limma` can be used.
+#' 
+#' To calculate differential expression, MIRit must be informed about the
+#' variable of interest and the desired contrast. In particular, the `group`
+#' parameter must be the name of a variable present in the metadata (colData)
+#' of a [`MirnaExperiment`][MirnaExperiment-class] object, which specifies the
+#' variable used to compute differential expression analysis, between the groups
+#' indicated in `contrast`. Specifically, `contrast` must be a character vector
+#' that defines the levels to compare separated by a dash. For example, if we
+#' have a variable named 'condition', with two levels, namely 'disease' and
+#' 'healthy', we can identify differentially expressed genes in 'disease'
+#' samples compared to 'healthy' subjects by specifying: `group = 'condition'`
+#' and `contrast = 'disease-healthy'`. Furthermore, the user can also model
+#' other sources of variation by specifying covariates that will be taken into
+#' account. To do so, the user has to state the model formula in the `design`
+#' parameter. In the previous example, if we want to compare 'disease' subjects
+#' against 'healthy' individuals, without the influence of sex differences,
+#' we may specify `design = ~ 0 + condition + sex`, where 'sex' is also a
+#' variable present in the metadata (colData) of `mirnaObj`.
+#' 
+#' Notably, for all the methods available, the user can supply additional
+#' arguments to the functions implemented in `edgeR`, `DESeq2` and `limma`.
+#' Therefore, the user has finer control over how the differential expression
+#' analysis is performed. In this regard, for microarray studies, the user
+#' may opt to include weighted surrogate variable analysis (WSVA) to correct
+#' for unknown sources of variation (`useWsva = TRUE`). Moreover, for
+#' microarray data, the `arrayWeights()` function in `limma` can be used to
+#' assess differential expression with respect to array qualities. Additionally,
+#' when using `limma-voom`, the user may estimate voom trasformation with or
+#' without quality weights (by specifying `useVoomWithQualityWeights = TRUE`).
+#' 
+#' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
+#' containing miRNA and gene data
+#' @param group The variable of interest for differential expression analysis.
+#' It must be the column name of a variable present in the metadata (colData)
+#' of a [`MirnaExperiment`][MirnaExperiment-class] object. See the *details*
+#' section for additional information
+#' @param contrast A `character` object that specifies the groups to be
+#' compared during differential expression analysis, separated by a dash
+#' (e.g. 'disease-healthy'). Note that reference group must be the last one,
+#' for additional information see the *details* section
+#' @param design An R `formula` that indicates the model to fit. It must
+#' include the variable of interest (`group`) together with eventual
+#' covariates (e.g. '~ 0 + disease + sex'). See the *details* section for
+#' additional information
+#' @param method The statistical package used to compute differential
+#' expression. For NGS experiments, it must be one of `edgeR` (default),
+#' `DESeq2`, and `voom` (for limma-voom). Instead, for microarray data, only
+#' `limma` can be used
+#' @param logFC The minimum log2 fold change required to consider a gene as
+#' differentially expressed. Default is 1, to retain only two-fold differences
+#' @param pCutoff The adjusted p-value cutoff to use for statistical
+#' significance. The default value is `0.05`
+#' @param pAdjustment The p-value correction method for multiple testing. It
+#' must be one of: `fdr` (default), `BH`, `none`, `holm`, `hochberg`, `hommel`,
+#' `bonferroni`, `BY`
+#' @param filterByExpr.args A `list` object containing additional arguments
+#' passed to [edgeR::filterByExpr()] function. It is used when `method` is set
+#' to `edgeR` or `voom`
+#' @param calcNormFactors.args A `list` object containing additional arguments
+#' passed to [edgeR::calcNormFactors()] function. It is used when `method` is
+#' set to `edgeR` or `voom`
+#' @param estimateDisp.args A `list` object containing additional arguments
+#' passed to [edgeR::estimateDisp()] function. It is used when `method` is
+#' set to `edgeR`. Default is `list(robust = TRUE)` to use the robust parameter
+#' @param glmQLFit.args A `list` object containing additional arguments
+#' passed to [edgeR::glmQLFit()] function. It is used when `method` is
+#' set to `edgeR`
+#' @param glmQLFTest.args A `list` object containing additional arguments
+#' passed to [edgeR::glmQLFTest()] function. It is used when `method` is
+#' set to `edgeR`
+#' @param DESeq.args A `list` object containing additional arguments
+#' passed to [DESeq2::DESeq()] function. It is used when `method` is
+#' set to `DESeq`
+#' @param useVoomWithQualityWeights Logical, whether to use the
+#' [limma::voomWithQualityWeights()] function or just the [limma::voom()]
+#' function. It is used when `method` is set to `voom`. Default is TRUE
+#' @param voom.args A `list` object containing additional arguments
+#' passed to [limma::voom()] function or [limma::voomWithQualityWeights()]
+#' function. It is used when `method` is set to `voom`
+#' @param lmFit.args A `list` object containing additional arguments
+#' passed to [limma::lmFit()] function. It is used when `method` is set
+#' to `voom` or `limma`
+#' @param eBayes.args A `list` object containing additional arguments
+#' passed to [limma::eBayes()] function. It is used when `method` is set
+#' to `voom` or `limma`
+#' @param useArrayWeights Logical, whether to use the [limma::arrayWeights()]
+#' function or not. It is used when `method` is set to `limma`. Default is TRUE
+#' @param useWsva Logical, whether to use the [limma::wsva()] function or not.
+#' It is used when `method` is set to `limma`. Default is FALSE
+#' @param arrayWeights.args A `list` object containing additional arguments
+#' passed to [limma::arrayWeights()] function. It is used when `method` is set
+#' to `limma`
+#' @param wsva.args A `list` object containing additional arguments
+#' passed to [limma::wsva()] function. It is used when `method` is set
+#' to `limma`
+#' 
+#' @returns
+#' A [`MirnaExperiment`][MirnaExperiment-class] object containing differential
+#' expression results. To access these results, the user may run the
+#' [mirnaDE()] and [geneDE()] functions for miRNAs and genes, respectively.
+#' 
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform miRNA DE with edgeR
+#' obj <- performMirnaDE(obj, group = "disease", contrast = "PTC-NTH",
+#' design = ~ 0 + disease + patient, method = "edgeR")
+#' 
+#' # perform miRNA DE with DESeq2
+#' obj <- performMirnaDE(obj, group = "disease", contrast = "PTC-NTH",
+#' design = ~ 0 + disease + patient, method = "DESeq2")
+#' 
+#' # perform gene DE with limma-voom
+#' obj <- performGeneDE(obj, group = "disease", contrast = "PTC-NTH",
+#' design = ~ 0 + disease + patient, method = "voom")
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @name deAnalysis
+NULL
+
+
+
+
+
+#' @describeIn deAnalysis Perform differential expression analysis for miRNAs
+#' @export
+performMirnaDE <- function(mirnaObj,
+                           group,
+                           contrast,
+                           design,
+                           method = "edgeR",
+                           logFC = 1,
+                           pCutoff = 0.05,
+                           pAdjustment = "fdr",
+                           filterByExpr.args = list(),
+                           calcNormFactors.args = list(),
+                           estimateDisp.args = list(robust = TRUE),
+                           glmQLFit.args = list(),
+                           glmQLFTest.args = list(),
+                           DESeq.args = list(),
+                           useVoomWithQualityWeights = TRUE,
+                           voom.args = list(),
+                           lmFit.args = list(),
+                           eBayes.args = list(),
+                           useArrayWeights = TRUE,
+                           useWsva = FALSE,
+                           wsva.args = list(),
+                           arrayWeights.args = list()) {
+  
+  ## perform differential expression analyis for miRNAs
+  mirnaObj <- performDE(assay = "miRNAs",
+                        mirnaObj = mirnaObj,
+                        group = group,
+                        contrast = contrast,
+                        design = design,
+                        method = method,
+                        logFC = logFC,
+                        pCutoff = pCutoff,
+                        pAdjustment = pAdjustment,
+                        filterByExpr.args = filterByExpr.args,
+                        calcNormFactors.args = calcNormFactors.args,
+                        estimateDisp.args = estimateDisp.args,
+                        glmQLFit.args = glmQLFit.args,
+                        glmQLFTest.args = glmQLFTest.args,
+                        DESeq.args = DESeq.args,
+                        useVoomWithQualityWeights = useVoomWithQualityWeights,
+                        voom.args = voom.args,
+                        lmFit.args = lmFit.args,
+                        eBayes.args = eBayes.args,
+                        useArrayWeights = useArrayWeights,
+                        useWsva = useWsva,
+                        wsva.args = wsva.args,
+                        arrayWeights.args = arrayWeights.args)
+  
+  ## return mirnaObj
+  return(mirnaObj)
+  
+}
+
+
+
+
+
+#' @describeIn deAnalysis Perform differential expression analysis for genes
+#' @export
+performGeneDE <- function(mirnaObj,
+                          group,
+                          contrast,
+                          design,
+                          method = "edgeR",
+                          logFC = 1,
+                          pCutoff = 0.05,
+                          pAdjustment = "fdr",
+                          filterByExpr.args = list(),
+                          calcNormFactors.args = list(),
+                          estimateDisp.args = list(robust = TRUE),
+                          glmQLFit.args = list(),
+                          glmQLFTest.args = list(),
+                          DESeq.args = list(),
+                          useVoomWithQualityWeights = TRUE,
+                          voom.args = list(),
+                          lmFit.args = list(),
+                          eBayes.args = list(),
+                          useArrayWeights = TRUE,
+                          useWsva = FALSE,
+                          wsva.args = list(),
+                          arrayWeights.args = list()) {
+  
+  ## perform differential expression analyis for genes
+  mirnaObj <- performDE(assay = "genes",
+                        mirnaObj = mirnaObj,
+                        group = group,
+                        contrast = contrast,
+                        design = design,
+                        method = method,
+                        logFC = logFC,
+                        pCutoff = pCutoff,
+                        pAdjustment = pAdjustment,
+                        filterByExpr.args = filterByExpr.args,
+                        calcNormFactors.args = calcNormFactors.args,
+                        estimateDisp.args = estimateDisp.args,
+                        glmQLFit.args = glmQLFit.args,
+                        glmQLFTest.args = glmQLFTest.args,
+                        DESeq.args = DESeq.args,
+                        useVoomWithQualityWeights = useVoomWithQualityWeights,
+                        voom.args = voom.args,
+                        lmFit.args = lmFit.args,
+                        eBayes.args = eBayes.args,
+                        useArrayWeights = useArrayWeights,
+                        useWsva = useWsva,
+                        wsva.args = wsva.args,
+                        arrayWeights.args = arrayWeights.args)
+  
+  ## return mirnaObj
+  return(mirnaObj)
+  
+}
+
+
+
+
+
+## internal function to perform differential expression analysis
+performDE <- function(assay,
+                      mirnaObj,
                       group,
                       contrast,
                       design,
-                      assay = "miRNAs",
                       method = "edgeR",
                       logFC = 1,
                       pCutoff = 0.05,
@@ -42,7 +303,8 @@ performDE <- function(mirnaObj,
            MultiAssayExperiment::colData(mirnaObj)[, group])) {
     stop(paste("'contrast' must be a character that specifies the groups",
                "for which you want to calculate differential expression",
-               "(e.g. 'PTC-NTH'). For details, see ?performDE"),
+               "(e.g. 'PTC-NTH'). For details, see ?performMirnaDE or",
+               "?performGeneDE"),
          call. = FALSE)
   }
   if (!rlang::is_formula(design) |
@@ -52,21 +314,15 @@ performDE <- function(mirnaObj,
            c("primary", "mirnaCol", "geneCol"))) {
     stop(paste("'design' must be an R formula that specifies the variables",
                "in colData that will be used to model expression. For",
-               "details, see ?performDE"),
-         call. = FALSE)
-  }
-  if (!is.character(assay) |
-      length(assay) != 1 |
-      !assay %in% c("miRNAs", "genes")) {
-    stop(paste("'assay' must be either 'miRNAs' or 'genes'.",
-               "For additional details, see ?performDE"),
+               "details, see ?performMirnaDE or ?performGeneDE"),
          call. = FALSE)
   }
   if (!is.character(method) |
       length(method) != 1 |
       !method %in% c("limma", "edgeR", "DESeq2", "voom")) {
     stop(paste("'method' must be  one of: 'limma', 'edgeR' (default),",
-               "'DESeq2', 'voom'. For additional details, see ?performDE"),
+               "'DESeq2', 'voom'. For additional details, see ?performMirnaDE",
+               "ord ?performGeneDE"),
          call. = FALSE)
   }
   if (!is.numeric(logFC) |
@@ -119,7 +375,8 @@ performDE <- function(mirnaObj,
       !is.list(wsva.args) |
       !is.list(arrayWeights.args)) {
     stop(paste("Additional arguments passed to the limma, edgeR and DESeq2",
-               "functions must be passed as lists! See ?performDE"),
+               "functions must be passed as lists! See ?performMirnaDE",
+               "or ?performGeneDE"),
          call. = FALSE)
   }
   
@@ -127,32 +384,21 @@ performDE <- function(mirnaObj,
   if (assay == "miRNAs") {
     assayName <- "microRNA"
     assayFunc <- "'mirnaDE()'"
+    featCol <- "mirnaCol"
     prevDe <- mirnaDE(mirnaObj, returnObject = TRUE)
   } else if (assay == "genes") {
     assayName <- "genes"
     assayFunc <- "'geneDE()'"
+    featCol <- "geneCol"
     prevDe <- geneDE(mirnaObj, returnObject = TRUE)
   }
   
   ## check if differential expression has already been carried out
   if (!is.null(prevDe)) {
     
-    ## remove previous results and set expression back to counts
-    if (assay == "miRNAs") {
-      mirnaDE(mirnaObj) <- list(data = data.frame(),
-                                significant = character(),
-                                method = character(),
-                                deObject = NULL)
-      mirnaObj[[assayName]] <-
-        MultiAssayExperiment::metadata(mirnaObj)[["oldCounts"]][[assayName]]
-    } else if (assay == "genes") {
-      geneDE(mirnaObj) <- list(data = data.frame(),
-                               significant = character(),
-                               method = character(),
-                               deObject = NULL)
-      mirnaObj[[assayName]] <-
-        MultiAssayExperiment::metadata(mirnaObj)[["oldCounts"]][[assayName]]
-    }
+    ## set expression back to counts
+    mirnaObj[[assayName]] <-
+      MultiAssayExperiment::metadata(mirnaObj)[["oldCounts"]][[assayName]]
     
   } else {
     
@@ -168,11 +414,7 @@ performDE <- function(mirnaObj,
   
   ## extract sample metadata
   samplesMetadata <- MultiAssayExperiment::colData(mirnaObj)
-  if (assay == "miRNAs") {
-    meta <- samplesMetadata[which(!is.na(samplesMetadata$mirnaCol)), ]
-  } else if (assay == "genes") {
-    meta <- samplesMetadata[which(!is.na(samplesMetadata$geneCol)), ]
-  }
+  meta <- samplesMetadata[which(!is.na(samplesMetadata[, featCol])), ]
   
   ## determine if data derive from RNA-Seq or microarray experiments
   if (!all(featExpr%%1 == 0) & method != "limma") {
@@ -184,7 +426,7 @@ performDE <- function(mirnaObj,
     warning(paste(method, "is not suitable for NGS experiments!",
                   "Instead, 'limma-voom' will be used",
                   "to assess differential expression..."), call. = FALSE)
-    method <- "limma"
+    method <- "voom"
   } else {
     message(paste("Performing differential expression analysis with ",
                   method, "...", sep = ""))
@@ -603,6 +845,177 @@ limma.DE <- function(expr,
   
   ## return differential expression results
   return(deList)
+  
+}
+
+
+
+
+
+#' Manually add differential expression results to a MirnaExperiment object
+#' 
+#' This function allows to add miRNA and gene differential expression results
+#' to a [`MirnaExperiment`][MirnaExperiment-class] object. Instead of running
+#' [performMirnaDE()] and [performGeneDE()] functions, this one allows to use
+#' differential expression analyses carried out in other ways. This is
+#' particularly useful in order to use the pipeline implemented in MIRit for
+#' proteomic data and for expression data deriving from different technologies.
+#' 
+#' @details
+#' The following paragraphs briefly explain the formats needed for mirnaDE,
+#' geneDE, significantMirnas and significantGenes.
+#' 
+#' ## mirnaDE and geneDE
+#'
+#' `mirnaDE` and `geneDE` are two objects of class `data.frame` containing
+#' the results of miRNA and gene differential expression analysis respectively.
+#' These tables should contain the differential expression results for all
+#' miRNAs/genes analyzed, not just for statistically significant species.
+#' All `data.frame` objects can be used, as long as they have:
+#' * One column containing miRNA/gene names (according to miRBase/hgnc
+#' nomenclature). Accepted column names are: `ID`, `Symbol`, `Gene_Symbol`,
+#' `Mirna`, `mir`, `Gene`, `gene.symbol`, `Gene.symbol`;
+#' * One column with log2 fold changes. Accepted column names are: `logFC`,
+#' `log2FoldChange`, `FC`, `lFC`;
+#' * One column with average expression. Accepted column names are: `AveExpr`,
+#' `baseMean`, `logCPM`;
+#' * One column with the p-values resulting from the differential expression
+#' analysis. Accepted column names are: `P.Value`, `pvalue`, `PValue`,
+#' `Pvalue`;
+#' * One column containing p-values adjusted for multiple testing. Accepted
+#' column names are: `adj.P.Val`, `padj`, `FDR`, `fdr`, `adj`, `adj.p`, `adjp`.
+#'
+#' ## significantMirnas and significantGenes
+#'
+#' `significantMirnas` and `significantGenes` are two `character` vectors that
+#' specifies the IDs of miRNAs and genes considered to be significantly
+#' differentially expressed. The miRNA IDs contained in `significantMirnas`
+#' must be present in the `ID` column of `mirnaDE`, in the same way as gene
+#' symbols in `significantGenes` must be present in the `ID` column of `geneDE`.
+#' 
+#' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
+#' containing miRNA and gene data
+#' @param mirnaDE A `data.frame` containing the output of miRNA differential
+#' expression analysis. Check the *details* section to see the required format
+#' @param geneDE A `data.frame` containing the output of gene differential
+#' expression analysis. Check the *details* section to see the required format
+#' @param significantMirnas A `character` vector containing the IDs of
+#' statistically differentially expressed miRNAs. See the *details* section for
+#' further information
+#' @param significantGenes A `character` vector containing the IDs of
+#' statistically differentially expressed genes. See the *details* section for
+#' further information
+#' 
+#' @returns
+#' A [`MirnaExperiment`][MirnaExperiment-class] object containing differential
+#' expression results. To access these results, the user may run the
+#' [mirnaDE()] and [geneDE()] functions for miRNAs and genes, respectively.
+#' 
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # create samples metadata
+#' meta <- data.frame("primary" = colnames(geneCounts),
+#' "mirnaCol" = colnames(mirnaCounts), "geneCol" = colnames(geneCounts),
+#' "disease" = c(rep("PTC", 8), rep("NTH", 8)), 
+#' "patient" = c(rep(paste("Sample_", seq(8), sep = ""), 2)))
+#' 
+#' # perform miRNA DE with DESeq2 separately
+#' dds_m <- DESeq2::DESeqDataSetFromMatrix(countData = obj[["microRNA"]],
+#' colData = meta, design = ~ 0 + disease + patient)
+#' dds_m <- DESeq2::DESeq(dds_m)
+#' de_m <- as.data.frame(DESeq2::results(dds_m,
+#' contrast = c("disease", "PTC", "NTH"), pAdjustMethod = "fdr"))
+#' 
+#' # perform gene DE with DESeq2 separately
+#' dds_g <- DESeq2::DESeqDataSetFromMatrix(countData = obj[["genes"]],
+#' colData = meta, design = ~ 0 + disease + patient)
+#' dds_g <- DESeq2::DESeq(dds_g)
+#' de_g <- as.data.frame(DESeq2::results(dds_g,
+#' contrast = c("disease", "PTC", "NTH"), pAdjustMethod = "fdr"))
+#' 
+#' # prepare DE tables
+#' de_m$ID <- rownames(de_m)
+#' de_m <- na.omit(de_m)
+#' de_g$ID <- rownames(de_g)
+#' de_g <- na.omit(de_g)
+#' 
+#' # define significant features
+#' sig_m <- de_m$ID[de_m$padj < 0.05, ]
+#' sig_g <- de_g$ID[de_g$padj < 0.05, ]
+#' 
+#' # add DE results to MirnaExperiment object
+#' obj <- addDifferentialExpression(obj, de_m, de_g, sig_m, sig_g)
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#' 
+#' @export
+addDifferentialExpression <- function(mirnaObj,
+                                      mirnaDE,
+                                      geneDE,
+                                      significantMirnas,
+                                      significantGenes) {
+  
+  ## check inputs
+  if (!is(mirnaObj, "MirnaExperiment")) {
+    stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
+         call. = FALSE)
+  }
+  if (!is.data.frame(mirnaDE)) {
+    stop(paste("'mirnaDE' slot must be a data.frame object with miRNA",
+               "differential expression results, such as the output of",
+               "'topTable' in limma"), call. = FALSE)
+  }
+  if (!is.data.frame(geneDE)) {
+    stop(paste("'geneDE' slot must be a data.frame object with gene",
+               "differential expression results, such as the output of",
+               "'topTable' in limma"), call. = FALSE)
+  }
+  
+  ## check and set accepted column names in DE data.frames
+  mirnaDE <- identifyColNames(mirnaDE, "miRNA")
+  geneDE <- identifyColNames(geneDE, "gene")
+  
+  ## check that miRNA and gene names are the same across data
+  if (!identical(sort(rownames(mirnaObj[["microRNA"]])), sort(mirnaDE$ID))) {
+    stop(paste("Row names of 'mirnaObj[['microRNA']]' must match the miRNA",
+               "identifiers present in 'mirnaDE'"), call. = FALSE)
+  }
+  if (!identical(sort(rownames(mirnaObj[["microRNA"]])), sort(geneDE$ID))) {
+    stop(paste("Row names of 'mirnaObj[['genes']]' must match the gene",
+               "identifiers present in 'geneDE'"), call. = FALSE)
+  }
+  
+  ## check that significant miRNAs/genes are a subset of all miRNA/genes tested
+  if (!is.character(significantMirnas) |
+      !all(significantMirnas %in% mirnaDE$ID)) {
+    stop(paste("'significantMirnas' must be a character with IDs of",
+               "statiscally significantly differentially expressed miRNAs.",
+               "They must match the identifiers present in 'mirnaDE'."),
+         call. = FALSE)
+  }
+  if (!is.character(significantGenes) |
+      !all(significantGenes %in% geneDE$ID)) {
+    stop(paste("'significantGenes' must be a character with IDs of",
+               "statiscally significantly differentially expressed genes.",
+               "They must match the identifiers present in 'geneDE'."),
+         call. = FALSE)
+  }
+  
+  ## add miRNA and gene differential expression results to mirnaObj
+  mirnaDE(mirnaObj) <- list(data = mirnaDE,
+                            significant = significantMirnas,
+                            method = "manually added",
+                            deObject = NULL)
+  geneDE(mirnaObj) <- list(data = geneDE,
+                           significant = significantGenes,
+                           method = "manually added",
+                           deObject = NULL)
+  
+  ## return mirnaObj
+  return(mirnaObj)
   
 }
 
