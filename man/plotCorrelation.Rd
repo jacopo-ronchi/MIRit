@@ -50,7 +50,7 @@ data instead of monotonic regression. Default is FALSE}
 the regression line. Default is \code{red}. All available colors can be listed
 with \code{\link[grDevices:colors]{grDevices::colors()}}}
 
-\item{lineType}{It specifies the line type used for th regression line. It
+\item{lineType}{It specifies the line type used for the regression line. It
 must be either 'blank', 'solid', 'dashed' (default), 'dotted', 'dotdash',
 'longdash' or 'twodash'}
 

@@ -8,8 +8,12 @@ addDifferentialExpression(
   mirnaObj,
   mirnaDE,
   geneDE,
-  significantMirnas,
-  significantGenes
+  mirna.logFC = 1,
+  mirna.pCutoff = 0.05,
+  mirna.pAdjustment = "fdr",
+  gene.logFC = 1,
+  gene.pCutoff = 0.05,
+  gene.pAdjustment = "fdr"
 )
 }
 \arguments{
@@ -22,13 +26,26 @@ expression analysis. Check the \emph{details} section to see the required format
 \item{geneDE}{A \code{data.frame} containing the output of gene differential
 expression analysis. Check the \emph{details} section to see the required format}
 
-\item{significantMirnas}{A \code{character} vector containing the IDs of
-statistically differentially expressed miRNAs. See the \emph{details} section for
-further information}
+\item{mirna.logFC}{The minimum log2 fold change required to consider a miRNA
+as differentially expressed. Default is 1, to retain only two-fold
+differences}
 
-\item{significantGenes}{A \code{character} vector containing the IDs of
-statistically differentially expressed genes. See the \emph{details} section for
-further information}
+\item{mirna.pCutoff}{The adjusted p-value cutoff to use for miRNA statistical
+significance. The default value is \code{0.05}}
+
+\item{mirna.pAdjustment}{The p-value correction method for miRNA multiple
+testing. It must be one of: \code{fdr} (default), \code{BH}, \code{none}, \code{holm},
+\code{hochberg}, \code{hommel}, \code{bonferroni}, \code{BY}}
+
+\item{gene.logFC}{The minimum log2 fold change required to consider a gene as
+differentially expressed. Default is 1, to retain only two-fold differences}
+
+\item{gene.pCutoff}{The adjusted p-value cutoff to use for gene statistical
+significance. The default value is \code{0.05}}
+
+\item{gene.pAdjustment}{The p-value correction method for gene multiple
+testing. It must be one of: \code{fdr} (default), \code{BH}, \code{none}, \code{holm},
+\code{hochberg}, \code{hommel}, \code{bonferroni}, \code{BY}}
 }
 \value{
 A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing differential
@@ -69,13 +86,13 @@ column names are: \code{adj.P.Val}, \code{padj}, \code{FDR}, \code{fdr}, \code{a
 }
 }
 
-\subsection{significantMirnas and significantGenes}{
+\subsection{Differential expression cutoffs}{
 
-\code{significantMirnas} and \code{significantGenes} are two \code{character} vectors that
-specifies the IDs of miRNAs and genes considered to be significantly
-differentially expressed. The miRNA IDs contained in \code{significantMirnas}
-must be present in the \code{ID} column of \code{mirnaDE}, in the same way as gene
-symbols in \code{significantGenes} must be present in the \code{ID} column of \code{geneDE}.
+\code{mirna.logFC}, \code{mirna.pCutoff}, \code{mirna.pAdjustment}, and \code{gene.logFC},
+\code{gene.pCutoff}, \code{gene.pAdjustment} represent the parameters used to define
+the significance of differential expression results. These are needed in
+order to inform MIRit about the features that are considered as
+differentially expressed.
 }
 }
 \examples{
@@ -108,12 +125,8 @@ de_m <- na.omit(de_m)
 de_g$ID <- rownames(de_g)
 de_g <- na.omit(de_g)
 
-# define significant features
-sig_m <- de_m$ID[de_m$padj < 0.05, ]
-sig_g <- de_g$ID[de_g$padj < 0.05, ]
-
 # add DE results to MirnaExperiment object
-obj <- addDifferentialExpression(obj, de_m, de_g, sig_m, sig_g)
+obj <- addDifferentialExpression(obj, de_m, de_g, 0.05, 1, 0.05, 1)
 
 }
 \author{

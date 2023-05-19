@@ -97,6 +97,9 @@ NULL
 #' thresholds;
 #' * `method`, which specifies the procedure used to determine differentially
 #' expressed miRNAs/gens (eg. "limma-voom", "edgeR", "DESeq2", "limma");
+#' * `pCutoff`, which indicates the p-value cutoff used for DE analysis;
+#' * `pAdjustment`, the approach used for multiple testing correction;
+#' * `logFC`, which states the log2 Fold Change cutoff used for DE analysis;
 #' * `deObject`, an object deriving from limma/edgeR/DESeq2, that holds
 #' additional information regarding data processing.
 #' 
@@ -189,10 +192,14 @@ setClass("MirnaExperiment",
 setMethod("initialize",
           signature(.Object = "MirnaExperiment"),
           function(.Object, ...) {
-            requiredObjects <- c("data", "significant", "method", "deObject")
+            requiredObjects <- c("data", "significant", "method", "pCutoff",
+                                 "pAdjustment", "logFC", "deObject")
             deList <- list(data = data.frame(),
                            significant = character(),
                            method = character(),
+                           pCutoff = numeric(),
+                           pAdjustment = character(),
+                           logFC = numeric(),
                            deObject = NULL)
             
             .Object <- callNextMethod(.Object,
@@ -218,11 +225,14 @@ setValidity("MirnaExperiment", function(object) {
                  "differential expression results. Please see",
                  "?MirnaExperiment-class"))
   } else if (!identical(sort(names(object@mirnaDE)),
-                        sort(c("data", "significant", "method", "deObject"))) |
+                        sort(c("data", "significant", "method", "pCutoff",
+                               "pAdjustment", "logFC", "deObject"))) |
              !identical(sort(names(object@geneDE)),
-                        sort(c("data", "significant", "method", "deObject")))) {
+                        sort(c("data", "significant", "method", "pCutoff",
+                               "pAdjustment", "logFC", "deObject")))) {
     return(paste("'mirnaDE' and 'geneDE' slots must be list objects",
-                 "containing: 'data', 'significant', 'method', and 'deObject'.",
+                 "containing: 'data', 'significant', 'method', 'pCutoff'",
+                 "'pAdjustment', 'logFC', and 'deObject'.",
                  "Please see ?MirnaExperiment-class"))
   } else if (!is.data.frame(mirnaDE(object))) {
     return(paste("'data' within mirnaDE slot must be a data.frame object with",

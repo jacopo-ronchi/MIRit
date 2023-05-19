@@ -125,6 +125,9 @@ significantly differentially expressed miRNAs/genes that passed the
 thresholds;
 \item \code{method}, which specifies the procedure used to determine differentially
 expressed miRNAs/gens (eg. "limma-voom", "edgeR", "DESeq2", "limma");
+\item \code{pCutoff}, which indicates the p-value cutoff used for DE analysis;
+\item \code{pAdjustment}, the approach used for multiple testing correction;
+\item \code{logFC}, which states the log2 Fold Change cutoff used for DE analysis;
 \item \code{deObject}, an object deriving from limma/edgeR/DESeq2, that holds
 additional information regarding data processing.
 }

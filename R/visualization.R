@@ -1061,7 +1061,7 @@ mirVariantPlot <- function(variantId,
 #' @param lineCol It must be an R color name that specifies the color of
 #' the regression line. Default is `red`. All available colors can be listed
 #' with [grDevices::colors()]
-#' @param lineType It specifies the line type used for th regression line. It
+#' @param lineType It specifies the line type used for the regression line. It
 #' must be either 'blank', 'solid', 'dashed' (default), 'dotted', 'dotdash',
 #' 'longdash' or 'twodash'
 #' @param lineWidth The width of the fitted regression line (default is 0.8)
@@ -1709,6 +1709,253 @@ plotDE <- function(mirnaObj,
   
   ## return the plot object
   return(dePlot)
+  
+}
+
+
+
+
+
+#' Produce volcano plots to display miRNA/gene differential expression
+#' 
+#' This function allows the user to create publication-quality volcano plots to
+#' represent the results of miRNA/gene differential expression. In this kind of
+#' plots, the x-axis is relative to the log2 fold change between biological
+#' conditions, while the y-axis contains the negative base-10 logarithm of the
+#' p-value. Note, that even if volcano plots display unadjusted p-values on the
+#' y-axis, the cutoff level shown in this plot derive from the adjusted p-value
+#' cutoff used for differential expression analysis.
+#' 
+#' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
+#' containing miRNA and gene data
+#' @param assay The results to display. It must be either 'miRNAs', to plot
+#' miRNA differential expression, or 'genes', to show he results for genes
+#' @param labels The labels to show on the graph. Default is NULL not to
+#' include labels. This parameter can be a character vector containing the IDs
+#' of the features that you want to display. Alternatively, this parameter can
+#' also be the number of most significant features for which we want to plot
+#' labels
+#' @param boxedLabel Logical, whether to show labels inside a rectangular shape
+#' (default) or just as text elements
+#' @param pointSize The size of points in the volcano plot (default is 3)
+#' @param pointAlpha The transparency of points in the volcano plot (default
+#' is 0.4)
+#' @param interceptWidth The width of cutoff intercepts (default is 0.6)
+#' @param interceptColor It must be an R color name that specifies the color of
+#' cutoff intercepts. Default is `black`. All available colors can be listed
+#' with [grDevices::colors()]
+#' @param interceptType It specifies the line type used for cutoff intercepts.
+#' It must be either 'blank', 'solid', 'dashed' (default), 'dotted', 'dotdash',
+#' 'longdash' or 'twodash'
+#' @param borderWidth The width of plot borders (default is 1)
+#' @param colorScale It must be a character vector of length 3 containing valid
+#' R color names for downregulated, non significant, and upregulated features,
+#' respectively. Default value is `c('blue', 'grey', 'red')`. All available
+#' colors can be listed with [grDevices::colors()]
+#' @param title The title of the plot. Default is `NULL` not to include a plot
+#' title
+#'
+#' @returns
+#' An object of class `ggplot` containing the plot.
+#'
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#'
+#' # produce a volcano plot for miRNAs with labels
+#' plotVolcano(obj, "miRNAs", labels = 5)
+#' 
+#' # produce a volcano plot for genes
+#' plotVolcano(obj, "genes")
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
+plotVolcano <- function(mirnaObj,
+                        assay,
+                        labels = NULL,
+                        boxedLabel = TRUE,
+                        pointSize = 3,
+                        pointAlpha = 0.4,
+                        interceptWidth = 0.6,
+                        interceptColor = "black",
+                        interceptType = "dashed",
+                        borderWidth = 1,
+                        colorScale = c("blue", "grey","red"),
+                        title = NULL) {
+  
+  ## input checks
+  if (!is(mirnaObj, "MirnaExperiment")) {
+    stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
+         call. = FALSE)
+  }
+  if (!assay %in% c("miRNAs", "genes")) {
+    stop("'assay' must be either 'miRNAs' or 'genes'!", call. = FALSE)
+  }
+  if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0 &
+      assay == "miRNAs") {
+    stop(paste("MiRNA differential expression results are not present in",
+               "'mirnaObj'. Please, use 'performMirnaDE()' before using",
+               "this function. See ?performMirnaDE"), call. = FALSE)
+  }
+  if (nrow(geneDE(mirnaObj, onlySignificant = FALSE)) == 0 &
+      assay == "genes") {
+    stop(paste("Gene differential expression results are not present in",
+               "'mirnaObj'. Please, use 'performGeneDE()' before using",
+               "this function. See ?performGeneDE"), call. = FALSE)
+  }
+  if (!is.null(labels)) {
+    if (!is.numeric(labels) &
+        !is.character(labels)) {
+      stop(paste("'labels' must be a character vector indicating the features",
+                 "to plot; or, alternatively, it must be a number indicating",
+                 "the top significant features to show. Default is NULL, not",
+                 "to include labels. For details see ?plotVolcano"),
+           call. = FALSE)
+    }
+  }
+  if (!is.logical(boxedLabel) |
+      length(boxedLabel) != 1) {
+    stop("'boxedLabel' must be logical (TRUE/FALSE)! See ?plotVolcano",
+         call. = FALSE)
+  }
+  if (!is.numeric(pointSize) |
+      length(pointSize) != 1 |
+      pointSize < 0) {
+    stop("'pointSize' must be a non-neagtive number! (default is 3)",
+         call. = FALSE)
+  }
+  if (!is.numeric(pointAlpha) |
+      length(pointAlpha) != 1 |
+      pointAlpha < 0 |
+      pointAlpha > 1) {
+    stop("'pointAlpha' must be a number between 0 and 1! (default is 0.4)",
+         call. = FALSE)
+  }
+  if (!is.numeric(interceptWidth) |
+      length(interceptWidth) != 1 |
+      interceptWidth < 0) {
+    stop("'interceptWidth' must be a non-neagtive number! (default is 0.6)",
+         call. = FALSE)
+  }
+  if (!is.character(interceptColor) |
+      length(interceptColor) != 1 |
+      !interceptColor %in% grDevices::colors()) {
+    stop(paste("'interceptColor' must be an R color name. All available colors",
+               "can be listed with 'colors()'."),
+         call. = FALSE)
+  }
+  if (!is.character(interceptType) |
+      length(interceptType) != 1 |
+      !interceptType %in% c("blank", "solid", "dashed", "dotted", "dotdash",
+                            "longdash", "twodash")) {
+    stop(paste("'interceptType' must be either 'blank', 'solid', 'dashed'",
+               "(default), 'dotted', 'dotdash', 'longdash' or 'twodash'.",
+               "For additional details see ?plotCorrelation"),
+         call. = FALSE)
+  }
+  if (!is.numeric(borderWidth) |
+      length(borderWidth) != 1 |
+      borderWidth < 0) {
+    stop("'borderWidth' must be a non-neagtive number! (default is 1)",
+         call. = FALSE)
+  }
+  if (length(colorScale) != 3 |
+      any(!colorScale %in% grDevices::colors())) {
+    stop(paste("'colorScale' must be a vector with R color names for",
+               "downregulated features, non significant features, and",
+               "upregulated features. The default value is",
+               "c('blue', 'grey', 'red'). All available colors",
+               "can be listed with 'colors()'."), call. = FALSE)
+  }
+  if (!(is.character(title) | is.null(title)) |
+      !length(title) %in% c(0, 1)) {
+    stop(paste("'title' must be the title of the plot.",
+               "For additional details see ?plotVolcano"),
+         call. = FALSE)
+  }
+  
+  ## extract miRNA/gene differential expression and cutoffs
+  if (assay == "miRNAs") {
+    featDE <- mirnaDE(mirnaObj, onlySignificant = FALSE)
+    pCut <- mirnaObj@mirnaDE$pCutoff
+    lCut <- mirnaObj@mirnaDE$logFC
+  } else if (assay == "genes") {
+    featDE <- geneDE(mirnaObj, onlySignificant = FALSE)
+    pCut <- mirnaObj@geneDE$pCutoff
+    lCut <- mirnaObj@geneDE$logFC
+  }
+  
+  ## determine p-value cutoff based on adjusted p-value
+  if (identical(featDE$P.Value, featDE$adj.P.Val)) {
+    pCutoff <- pCut
+  } else {
+    pCutoff <- max(featDE$P.Value[featDE$adj.P.Val <= pCut])
+  }
+  
+  ## determine Up and Downregulated features
+  featDE$Change <- "Stable"
+  featDE$Change[which(featDE$logFC > lCut &
+                        featDE$adj.P.Val < pCut)] <- "Up"
+  featDE$Change[which(featDE$logFC < -lCut &
+                        featDE$adj.P.Val < pCut)] <- "Down"
+  
+  ## determine the labels to show
+  if (is.character(labels)) {
+    if (!all(labels %in% featDE$ID)) {
+      stop("Not all specified labels are present in this assay!",
+           call. = FALSE)
+    } else {
+      featDE$ID[which(!featDE$ID %in% labels)] <- ""
+    }
+  } else if (is.numeric(labels)) {
+    fcFeat <- featDE[abs(featDE$logFC) > lCut, ]
+    featDE$ID[which(!featDE$ID %in% fcFeat$ID[seq(labels)])] <- ""
+  }
+  
+  ## produce a volcano plot
+  pVol <- ggplot2::ggplot(data = featDE, 
+                          ggplot2::aes(x = logFC, 
+                                       y = -log10(P.Value), 
+                                       colour = Change,
+                                       label = ID)) +
+    ggplot2::geom_point(alpha = pointAlpha, size = pointSize) +
+    ggplot2::scale_color_manual(values = colorScale) +
+    ggplot2::geom_vline(xintercept = c(-lCut, lCut), lty = interceptType,
+                        col = interceptColor, lwd = interceptWidth) +
+    ggplot2::geom_hline(yintercept = -log10(pCutoff), lty = interceptType,
+                        col = interceptColor, lwd = interceptWidth) +
+    ggplot2::labs(x = "log2(fold change)",
+                  y = "-log10 (p-value)")  +
+    ggplot2::theme_bw() +
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5), 
+                   legend.position = "right", 
+                   legend.title = ggplot2::element_blank(),
+                   panel.grid.major = ggplot2::element_blank(),
+                   panel.grid.minor = ggplot2::element_blank(),
+                   panel.background = ggplot2::element_rect(
+                     colour = "black", linewidth = borderWidth))
+  
+  ## add desired labels through ggrepel
+  if (!is.null(labels)) {
+    if (boxedLabel == TRUE) {
+      pVol <- pVol +
+        ggrepel::geom_label_repel(show.legend = FALSE)
+    } else {
+      pVol <- pVol +
+        ggrepel::geom_text_repel(show.legend = FALSE)
+    }
+  }
+  
+  ## add title if desired by the user
+  if (!is.null(title)) {
+    pVol <- pVol +
+      ggplot2::ggtitle(title)
+  }
+  
+  ## return plot
+  return(pVol)
   
 }
 

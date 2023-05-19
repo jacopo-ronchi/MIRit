@@ -29,6 +29,7 @@ Imports:
     ggplot2,
     ggpubr,
     ggraph,
+    ggrepel,
     ggridges,
     graph,
     graphite,

@@ -497,9 +497,9 @@ performDE <- function(assay,
   
   ## add differential expression results to mirnaObj
   if (assay == "miRNAs") {
-    mirnaDE(mirnaObj) <- deList[seq(4)]
+    mirnaDE(mirnaObj) <- deList[seq(7)]
   } else if (assay == "genes") {
-    geneDE(mirnaObj) <- deList[seq(4)]
+    geneDE(mirnaObj) <- deList[seq(7)]
   }
   
   ## inform the user about differential expression results
@@ -610,14 +610,13 @@ edgeR.DE <- function(counts,
   sig <- rownames(deRes[abs(deRes$logFC) > logFC &
                           deRes$adj.P.Val < pCutoff, ])
   
-  ## define the parameters used
-  met <- paste("edgeR (p < ", pCutoff, ", correction: ",
-               pAdjustment, ")", sep = "")
-  
   ## create a list with DE results
   deList <- list(data = deRes,
                  significant = sig,
-                 method = met,
+                 method = "edgeR",
+                 pCutoff = pCutoff,
+                 pAdjustment = pAdjustment,
+                 logFC = logFC,
                  deObject = features,
                  normExpr = normExpr)
   
@@ -677,14 +676,13 @@ DESeq2.DE <- function(counts,
   sig <- rownames(deRes[abs(deRes$logFC) > logFC &
                           deRes$adj.P.Val < pCutoff, ])
   
-  ## define the parameters used
-  met <- paste("DESeq2 (p < ", pCutoff, ", correction: ",
-               pAdjustment, ")", sep = "")
-  
   ## create a list with DE results
   deList <- list(data = deRes,
                  significant = sig,
-                 method = met,
+                 method = "DESeq2",
+                 pCutoff = pCutoff,
+                 pAdjustment = pAdjustment,
+                 logFC = logFC,
                  deObject = dds,
                  normExpr = normExpr)
   
@@ -801,14 +799,13 @@ voom.DE <- function(counts,
   sig <- rownames(deRes[abs(deRes$logFC) > logFC &
                           deRes$adj.P.Val < pCutoff, ])
   
-  ## define the parameters used
-  met <- paste("limma-voom (p < ", pCutoff, ", correction: ",
-               pAdjustment, ")", sep = "")
-  
   ## create a list with DE results
   deList <- list(data = deRes,
                  significant = sig,
-                 method = met,
+                 method = "limma-voom",
+                 pCutoff = pCutoff,
+                 pAdjustment = pAdjustment,
+                 logFC = logFC,
                  deObject = features,
                  normExpr = normExpr)
   
@@ -912,14 +909,13 @@ limma.DE <- function(expr,
   sig <- rownames(deRes[abs(deRes$logFC) > logFC &
                           deRes$adj.P.Val < pCutoff, ])
   
-  ## define the parameters used
-  met <- paste("limma (p < ", pCutoff, ", correction: ",
-               pAdjustment, ")", sep = "")
-  
   ## create a list with DE results
   deList <- list(data = deRes,
                  significant = sig,
-                 method = met,
+                 method = "limma",
+                 pCutoff = pCutoff,
+                 pAdjustment = pAdjustment,
+                 logFC = logFC,
                  deObject = fit,
                  normExpr = normExpr)
   
@@ -965,13 +961,13 @@ limma.DE <- function(expr,
 #' * One column containing p-values adjusted for multiple testing. Accepted
 #' column names are: `adj.P.Val`, `padj`, `FDR`, `fdr`, `adj`, `adj.p`, `adjp`.
 #'
-#' ## significantMirnas and significantGenes
+#' ## Differential expression cutoffs
 #'
-#' `significantMirnas` and `significantGenes` are two `character` vectors that
-#' specifies the IDs of miRNAs and genes considered to be significantly
-#' differentially expressed. The miRNA IDs contained in `significantMirnas`
-#' must be present in the `ID` column of `mirnaDE`, in the same way as gene
-#' symbols in `significantGenes` must be present in the `ID` column of `geneDE`.
+#' `mirna.logFC`, `mirna.pCutoff`, `mirna.pAdjustment`, and `gene.logFC`,
+#' `gene.pCutoff`, `gene.pAdjustment` represent the parameters used to define
+#' the significance of differential expression results. These are needed in
+#' order to inform MIRit about the features that are considered as
+#' differentially expressed.
 #' 
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
 #' containing miRNA and gene data
@@ -979,12 +975,21 @@ limma.DE <- function(expr,
 #' expression analysis. Check the *details* section to see the required format
 #' @param geneDE A `data.frame` containing the output of gene differential
 #' expression analysis. Check the *details* section to see the required format
-#' @param significantMirnas A `character` vector containing the IDs of
-#' statistically differentially expressed miRNAs. See the *details* section for
-#' further information
-#' @param significantGenes A `character` vector containing the IDs of
-#' statistically differentially expressed genes. See the *details* section for
-#' further information
+#' @param mirna.logFC The minimum log2 fold change required to consider a miRNA
+#' as differentially expressed. Default is 1, to retain only two-fold
+#' differences
+#' @param mirna.pCutoff The adjusted p-value cutoff to use for miRNA statistical
+#' significance. The default value is `0.05`
+#' @param mirna.pAdjustment The p-value correction method for miRNA multiple
+#' testing. It must be one of: `fdr` (default), `BH`, `none`, `holm`,
+#' `hochberg`, `hommel`, `bonferroni`, `BY`
+#' @param gene.logFC The minimum log2 fold change required to consider a gene as
+#' differentially expressed. Default is 1, to retain only two-fold differences
+#' @param gene.pCutoff The adjusted p-value cutoff to use for gene statistical
+#' significance. The default value is `0.05`
+#' @param gene.pAdjustment The p-value correction method for gene multiple
+#' testing. It must be one of: `fdr` (default), `BH`, `none`, `holm`,
+#' `hochberg`, `hommel`, `bonferroni`, `BY`
 #' 
 #' @returns
 #' A [`MirnaExperiment`][MirnaExperiment-class] object containing differential
@@ -1021,12 +1026,8 @@ limma.DE <- function(expr,
 #' de_g$ID <- rownames(de_g)
 #' de_g <- na.omit(de_g)
 #' 
-#' # define significant features
-#' sig_m <- de_m$ID[de_m$padj < 0.05, ]
-#' sig_g <- de_g$ID[de_g$padj < 0.05, ]
-#' 
 #' # add DE results to MirnaExperiment object
-#' obj <- addDifferentialExpression(obj, de_m, de_g, sig_m, sig_g)
+#' obj <- addDifferentialExpression(obj, de_m, de_g, 0.05, 1, 0.05, 1)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -1035,8 +1036,12 @@ limma.DE <- function(expr,
 addDifferentialExpression <- function(mirnaObj,
                                       mirnaDE,
                                       geneDE,
-                                      significantMirnas,
-                                      significantGenes) {
+                                      mirna.logFC = 1,
+                                      mirna.pCutoff = 0.05,
+                                      mirna.pAdjustment = "fdr",
+                                      gene.logFC = 1,
+                                      gene.pCutoff = 0.05,
+                                      gene.pAdjustment = "fdr") {
   
   ## check inputs
   if (!is(mirnaObj, "MirnaExperiment")) {
@@ -1068,30 +1073,74 @@ addDifferentialExpression <- function(mirnaObj,
                "identifiers present in 'geneDE'"), call. = FALSE)
   }
   
-  ## check that significant miRNAs/genes are a subset of all miRNA/genes tested
-  if (!is.character(significantMirnas) |
-      !all(significantMirnas %in% mirnaDE$ID)) {
-    stop(paste("'significantMirnas' must be a character with IDs of",
-               "statiscally significantly differentially expressed miRNAs.",
-               "They must match the identifiers present in 'mirnaDE'."),
+  ## check validity of DE parameters
+  if (!is.numeric(mirna.logFC) |
+      length(mirna.logFC) != 1 |
+      mirna.logFC < 0) {
+    stop(paste("'mirna.logFC' must be a non-neagtive number that specifies the",
+               "minimum absolute significant fold change (default is 1)"),
          call. = FALSE)
   }
-  if (!is.character(significantGenes) |
-      !all(significantGenes %in% geneDE$ID)) {
-    stop(paste("'significantGenes' must be a character with IDs of",
-               "statiscally significantly differentially expressed genes.",
-               "They must match the identifiers present in 'geneDE'."),
+  if (!is.numeric(mirna.pCutoff) |
+      length(mirna.pCutoff) != 1 |
+      mirna.pCutoff > 1 |
+      mirna.pCutoff < 0) {
+    stop("'mirna.pCutoff' must be a number between 0 and 1! (default is 0.05)",
          call. = FALSE)
   }
+  if (!is.character(mirna.pAdjustment) |
+      length(mirna.pAdjustment) != 1 |
+      !mirna.pAdjustment %in% c("none", "fdr", "bonferroni", "BY", "hochberg",
+                                "holm", "hommel", "BH")) {
+    stop(paste("'mirna.pAdjustment' must be  one of: 'none', 'fdr' (default),",
+               "'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg',",
+               "'holm', 'hommel'"),
+         call. = FALSE)
+  }
+  if (!is.numeric(gene.logFC) |
+      length(gene.logFC) != 1 |
+      gene.logFC < 0) {
+    stop(paste("'gene.logFC' must be a non-neagtive number that specifies the",
+               "minimum absolute significant fold change (default is 1)"),
+         call. = FALSE)
+  }
+  if (!is.numeric(gene.pCutoff) |
+      length(gene.pCutoff) != 1 |
+      gene.pCutoff > 1 |
+      gene.pCutoff < 0) {
+    stop("'gene.pCutoff' must be a number between 0 and 1! (default is 0.05)",
+         call. = FALSE)
+  }
+  if (!is.character(gene.pAdjustment) |
+      length(gene.pAdjustment) != 1 |
+      !gene.pAdjustment %in% c("none", "fdr", "bonferroni", "BY", "hochberg",
+                               "holm", "hommel", "BH")) {
+    stop(paste("'gene.pAdjustment' must be  one of: 'none', 'fdr' (default),",
+               "'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg',",
+               "'holm', 'hommel'"),
+         call. = FALSE)
+  }
+  
+  ## define significantly differentially expressed miRNAs and genes
+  significantMirnas <- mirnaDE$ID[abs(mirnaDE$logFC) > mirna.logFC &
+                                    mirnaDE$adj.P.Val < mirna.pCutoff, ]
+  significantgenes <- geneDE$ID[abs(geneDE$logFC) > gene.logFC &
+                                  geneDE$adj.P.Val < gene.pCutoff, ]
   
   ## add miRNA and gene differential expression results to mirnaObj
   mirnaDE(mirnaObj) <- list(data = mirnaDE,
                             significant = significantMirnas,
-                            method = "manually added",
+                            method = "Manually added",
+                            pCutoff = mirna.pCutoff,
+                            pAdjustment = mirna.pAdjustment,
+                            logFC = mirna.logFC,
                             deObject = NULL)
   geneDE(mirnaObj) <- list(data = geneDE,
                            significant = significantGenes,
-                           method = "manually added",
+                           method = "Manually added",
+                           pCutoff = gene.pCutoff,
+                           pAdjustment = gene.pAdjustment,
+                           logFC = gene.logFC,
                            deObject = NULL)
   
   ## return mirnaObj
