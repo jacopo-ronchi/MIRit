@@ -23,8 +23,8 @@ plotVolcano(
 \item{mirnaObj}{A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object
 containing miRNA and gene data}
 
-\item{assay}{The results to display. It must be either 'miRNAs', to plot
-miRNA differential expression, or 'genes', to show he results for genes}
+\item{assay}{The results to display. It must be either 'microRNA', to plot
+miRNA differential expression, or 'genes', to show the results for genes}
 
 \item{labels}{The labels to show on the graph. Default is NULL not to
 include labels. This parameter can be a character vector containing the IDs
@@ -77,7 +77,7 @@ cutoff used for differential expression analysis.
 obj <- loadExamples()
 
 # produce a volcano plot for miRNAs with labels
-plotVolcano(obj, "miRNAs", labels = 5)
+plotVolcano(obj, "microRNA", labels = 5)
 
 # produce a volcano plot for genes
 plotVolcano(obj, "genes")

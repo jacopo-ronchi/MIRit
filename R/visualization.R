@@ -1728,8 +1728,8 @@ plotDE <- function(mirnaObj,
 #' 
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
 #' containing miRNA and gene data
-#' @param assay The results to display. It must be either 'miRNAs', to plot
-#' miRNA differential expression, or 'genes', to show he results for genes
+#' @param assay The results to display. It must be either 'microRNA', to plot
+#' miRNA differential expression, or 'genes', to show the results for genes
 #' @param labels The labels to show on the graph. Default is NULL not to
 #' include labels. This parameter can be a character vector containing the IDs
 #' of the features that you want to display. Alternatively, this parameter can
@@ -1763,7 +1763,7 @@ plotDE <- function(mirnaObj,
 #' obj <- loadExamples()
 #'
 #' # produce a volcano plot for miRNAs with labels
-#' plotVolcano(obj, "miRNAs", labels = 5)
+#' plotVolcano(obj, "microRNA", labels = 5)
 #' 
 #' # produce a volcano plot for genes
 #' plotVolcano(obj, "genes")
@@ -1790,11 +1790,11 @@ plotVolcano <- function(mirnaObj,
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
          call. = FALSE)
   }
-  if (!assay %in% c("miRNAs", "genes")) {
-    stop("'assay' must be either 'miRNAs' or 'genes'!", call. = FALSE)
+  if (!assay %in% c("microRNA", "genes")) {
+    stop("'assay' must be either 'microRNA' or 'genes'!", call. = FALSE)
   }
   if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0 &
-      assay == "miRNAs") {
+      assay == "microRNA") {
     stop(paste("MiRNA differential expression results are not present in",
                "'mirnaObj'. Please, use 'performMirnaDE()' before using",
                "this function. See ?performMirnaDE"), call. = FALSE)
@@ -1877,7 +1877,7 @@ plotVolcano <- function(mirnaObj,
   }
   
   ## extract miRNA/gene differential expression and cutoffs
-  if (assay == "miRNAs") {
+  if (assay == "microRNA") {
     featDE <- mirnaDE(mirnaObj, onlySignificant = FALSE)
     pCut <- mirnaObj@mirnaDE$pCutoff
     lCut <- mirnaObj@mirnaDE$logFC
@@ -1956,6 +1956,288 @@ plotVolcano <- function(mirnaObj,
   
   ## return plot
   return(pVol)
+  
+}
+
+
+
+
+
+#' Generate multidimensional scaling (MDS) plots to explore miRNA/gene
+#' expression distances
+#' 
+#' This function performs multidimensional scaling in order to produce a simple
+#' scatterplot that shows miRNA/gene expression variations among samples. In
+#' particular, starting from a [`MirnaExperiment`][MirnaExperiment-class]
+#' object, this functions allows to visualize both miRNA and gene expression in
+#' the multidimensional space. Moreover, it is possible to color samples on the
+#' basis of specific variables, and this is extremely useful to assess
+#' miRNA/gene expression variations between distinct biological groups.
+#' 
+#' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
+#' containing miRNA and gene data
+#' @param assay The results to display. It must be either 'microRNA', to plot
+#' miRNA expression, or 'genes', to produce MDS plot for genes
+#' @param condition It must be the column name of a variable specified in the
+#' metadata (colData) of a [`MirnaExperiment`][MirnaExperiment-class] object;
+#' or, alternatively, it must be a character/factor object that specifies
+#' group memberships (eg. c("healthy, "healthy", "disease", "disease"))
+#' @param dimensions It is a numeric vector of length 2 that indicates the two
+#' dimensions to represent on the plot. Default is `c(1, 2)` to plot the two
+#' dimensions that account for the highest portion of variability
+#' @param labels Logical, whether to display labels or not. Default is FALSE
+#' @param boxedLabel Logical, whether to show labels inside a rectangular shape
+#' (default) or just as text elements
+#' @param pointSize The size of points in the MDS plot (default is 3)
+#' @param pointAlpha The transparency of points in the MDS plot (default
+#' is 1)
+#' @param borderWidth The width of plot borders (default is 1)
+#' @param colorScale It must be a named character vector where values
+#' correspond to R colors, while names coincide with the groups specified in
+#' the `condition` parameter (eg. c("healthy" = "green", "disease" = "red")).
+#' Default is NULL, in order to use the default color scale
+#' @param title The title of the plot. Default is `NULL` not to include a plot
+#' title
+#' @param ... Other parameters that can be passed to [limma::plotMDS()] function
+#'
+#' @returns
+#' An object of class `ggplot` containing the plot.
+#' 
+#' @note
+#' To perform multidimensional scaling, this function internally uses
+#' [limma::plotMDS()] function provided by `limma` package.
+#'
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#'
+#' # produce MDS plot for miRNA expression with labels
+#' plotDimensions(obj, "microRNA", condition = "disease", labels = TRUE)
+#' 
+#' # produce MDS plot for genes without condition color
+#' plotDimensions(obj, "genes")
+#' 
+#' @references
+#' Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015). “limma
+#' powers differential expression analyses for RNA-sequencing and microarray
+#' studies.” Nucleic Acids Research, 43(7), e47. \url{doi:10.1093/nar/gkv007}.
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
+plotDimensions <- function(mirnaObj,
+                           assay,
+                           condition = NULL,
+                           dimensions = c(1, 2),
+                           labels = FALSE,
+                           boxedLabel = TRUE,
+                           pointSize = 3,
+                           pointAlpha = 1,
+                           borderWidth = 1,
+                           colorScale = NULL,
+                           title = NULL,
+                           ...) {
+  
+  ## input checks
+  if (!is(mirnaObj, "MirnaExperiment")) {
+    stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
+         call. = FALSE)
+  }
+  if (!assay %in% c("microRNA", "genes")) {
+    stop("'assay' must be either 'microRNA' or 'genes'!", call. = FALSE)
+  }
+  if (length(condition) == 1) {
+    if (!is.character(condition) |
+        !(condition %in% colnames(MultiAssayExperiment::colData(mirnaObj)) &
+          !condition %in% c("primary", "mirnaCol", "geneCol"))) {
+      stop(paste("'condition' must be the column name of a variable specified",
+                 "in the metadata (colData) of a MirnaExperiment object; or,",
+                 "alternatively, it must be a character/factor object that",
+                 "specifies group memberships."),
+           call. = FALSE)
+    }
+  } else {
+    if ((!is.character(condition) & !is.factor(condition)) |
+        length(condition) != nrow(MultiAssayExperiment::colData(mirnaObj))) {
+      stop(paste("'condition' must be the column name of a variable specified",
+                 "in the metadata (colData) of a MirnaExperiment object; or,",
+                 "alternatively, it must be a character/factor object that",
+                 "specifies group memberships."),
+           call. = FALSE)
+    }
+  }
+  if (!is.numeric(dimensions) |
+      length(dimensions) != 2 |
+      any(dimensions%%1!=0) |
+      any(dimensions <= 0)) {
+    stop(paste("'dimensions' must be a numeric vector of length 2, that",
+               "specifies the dimensions to be represented in the MDS plot!",
+               "(e.g. 'c(1, 2)')"),
+         call. = FALSE)
+  }
+  if (dimensions[1] > dimensions[2]) {
+    dimensions <- c(dimensions[2], dimensions[1])
+  }
+  if (!is.logical(labels) |
+      length(labels) != 1) {
+    stop("'labels' must be logical (TRUE/FALSE)! See ?plotDimensions",
+         call. = FALSE)
+  }
+  if (!is.logical(boxedLabel) |
+      length(boxedLabel) != 1) {
+    stop("'boxedLabel' must be logical (TRUE/FALSE)! See ?plotDimensions",
+         call. = FALSE)
+  }
+  if (!is.numeric(pointSize) |
+      length(pointSize) != 1 |
+      pointSize < 0) {
+    stop("'pointSize' must be a non-neagtive number! (default is 3)",
+         call. = FALSE)
+  }
+  if (!is.numeric(pointAlpha) |
+      length(pointAlpha) != 1 |
+      pointAlpha < 0 |
+      pointAlpha > 1) {
+    stop("'pointAlpha' must be a number between 0 and 1! (default is 1)",
+         call. = FALSE)
+  }
+  if (!is.numeric(borderWidth) |
+      length(borderWidth) != 1 |
+      borderWidth < 0) {
+    stop("'borderWidth' must be a non-neagtive number! (default is 1)",
+         call. = FALSE)
+  }
+  if (length(condition) == 1 & !is.null(colorScale)) {
+    if ((!is.null(colorScale) & !is.character(colorScale)) |
+        any(!colorScale %in% grDevices::colors()) |
+        !identical(
+          sort(names(colorScale)),
+          sort(unique(MultiAssayExperiment::colData(mirnaObj)[, condition])))) {
+      stop(paste("'colorScale' must be a named character vector where values",
+                 "consist of R colors, whereas names coincide to the different",
+                 "conditions. For additional details see ?plotDimensions"),
+           call. = FALSE)
+    }
+  } else if (length(condition) != 1 & !is.null(colorScale)) {
+    if ((!is.null(colorScale) & !is.character(colorScale)) |
+        any(!colorScale %in% grDevices::colors()) |
+        !identical(sort(names(colorScale)),
+                   as.character(sort(unique(condition))))) {
+      stop(paste("'colorScale' must be a named character vector where values",
+                 "consist of R colors, whereas names coincide to the different",
+                 "conditions. For additional details see ?plotDimensions"),
+           call. = FALSE)
+    }
+  }
+  if (!(is.character(title) | is.null(title)) |
+      !length(title) %in% c(0, 1)) {
+    stop(paste("'title' must be the title of the plot.",
+               "For additional details see ?plotDimensions"),
+         call. = FALSE)
+  }
+  
+  ## define assay column in sample map
+  if (assay == "microRNA") {
+    featCol <- "mirnaCol"
+  } else if (assay == "genes") {
+    featCol <- "geneCol"
+  }
+  
+  ## extract expression values
+  featExpr <- mirnaObj[[assay]]
+  
+  ## identify sample metadata
+  samplesMetadata <- MultiAssayExperiment::colData(mirnaObj)
+  meta <- samplesMetadata[!is.na(samplesMetadata[, featCol]), ]
+  
+  ## define condition vector
+  if (is.character(condition) & length(condition) == 1) {
+    cond <- meta[, condition]
+  } else if (is.factor(condition)) {
+    cond <- as.character(condition)
+  } else if (is.character(condition) & length(condition) > 1) {
+    cond <- condition
+  } else {
+    cond = rep(NA, nrow(meta))
+  }
+  
+  ## define cpm values if expression values are count-based
+  oldCounts <- MultiAssayExperiment::metadata(mirnaObj)[["oldCounts"]]
+  if (is.null(oldCounts[[assay]])) {
+    featExpr <- edgeR::cpm(featExpr, log = TRUE)
+  }
+  
+  ## perform multidimensional scaling through limma
+  mds <- limma::plotMDS(featExpr, dim.plot = dimensions, plot = FALSE, ...)
+  
+  ## extract variance explained by the selected dimensions
+  var.exp <- mds$var.explained[dimensions]
+  
+  ## create a data.frame object with MDS coordinates and covariates
+  mds <- data.frame(x = mds$x,
+                    y = mds$y,
+                    primary = meta$primary,
+                    condition = cond)
+  
+  ## create MDS plot based on biological condition or not
+  if (!is.null(condition)) {
+    mdsPlot <- ggplot2::ggplot(mds, ggplot2::aes(x = x,
+                                                 y = y,
+                                                 color = condition,
+                                                 label = primary))
+  } else {
+    mdsPlot <- ggplot2::ggplot(mds, ggplot2::aes(x = x,
+                                                 y = y,
+                                                 label = primary))
+  }
+  
+  ## add points to the MDS scatterplot
+  mdsPlot <- mdsPlot +
+    ggplot2::geom_point(alpha = pointAlpha, size = pointSize)
+  
+  ## add the desired color scale
+  if (!is.null(colorScale)) {
+    mdsPlot <- mdsPlot +
+      ggplot2::scale_color_manual(values = colorScale)
+  }
+  
+  ## add plot theme
+  mdsPlot <- mdsPlot +
+    ggplot2::theme_bw() +
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5), 
+                   legend.position = "right",
+                   panel.grid.major = ggplot2::element_blank(),
+                   panel.grid.minor = ggplot2::element_blank(),
+                   panel.background = ggplot2::element_rect(
+                     colour = "black", linewidth = borderWidth))
+  
+  ## set axis labels
+  mdsPlot <- mdsPlot +
+    ggplot2::xlab(paste("Leading logFC dim ", dimensions[1], " (",
+                        round(var.exp[1]*100), "%)", sep = "")) +
+    ggplot2::ylab(paste("Leading logFC dim ", dimensions[2], " (",
+                        round(var.exp[2]*100), "%)", sep = ""))
+  
+  ## add labels
+  if (labels == TRUE) {
+    if (boxedLabel == TRUE) {
+      mdsPlot <- mdsPlot +
+        ggrepel::geom_label_repel(show.legend = FALSE)
+    } else {
+      mdsPlot <- mdsPlot +
+        ggrepel::geom_text_repel(show.legend = FALSE)
+    }
+  }
+  
+  ## add title
+  if (!is.null(title)) {
+    mdsPlot <- mdsPlot +
+      ggplot2::ggtitle(title)
+  }
+  
+  ## return plot
+  return(mdsPlot)
   
 }
 

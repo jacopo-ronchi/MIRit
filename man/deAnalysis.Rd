@@ -220,6 +220,23 @@ obj <- performGeneDE(obj, group = "disease", contrast = "PTC-NTH",
 design = ~ 0 + disease + patient, method = "voom")
 
 }
+\references{
+Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015). “limma
+powers differential expression analyses for RNA-sequencing and microarray
+studies.” Nucleic Acids Research, 43(7), e47. \url{doi:10.1093/nar/gkv007}.
+
+Law, CW, Chen, Y, Shi, W, and Smyth, GK (2014). "Voom: precision weights
+unlock linear model analysis tools for RNA-seq read counts". Genome Biology
+15, R29
+
+Robinson MD, McCarthy DJ, Smyth GK (2010). “edgeR: a Bioconductor package
+for differential expression analysis of digital gene expression data.”
+Bioinformatics, 26(1), 139-140. \url{doi:10.1093/bioinformatics/btp616}.
+
+Love MI, Huber W, Anders S (2014). “Moderated estimation of fold change and
+dispersion for RNA-seq data with DESeq2.” Genome Biology, 15, 550.
+\url{doi:10.1186/s13059-014-0550-8}.
+}
 \author{
 Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
 }
