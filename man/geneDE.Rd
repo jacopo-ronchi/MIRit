@@ -6,9 +6,9 @@
 \title{Extract differentially expressed genes from a
 \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object}
 \usage{
-geneDE(object, onlySignificant = TRUE, returnObject = FALSE)
+geneDE(object, onlySignificant = TRUE, param = FALSE, returnObject = FALSE)
 
-\S4method{geneDE}{MirnaExperiment}(object, onlySignificant = TRUE, returnObject = FALSE)
+\S4method{geneDE}{MirnaExperiment}(object, onlySignificant = TRUE, param = FALSE, returnObject = FALSE)
 }
 \arguments{
 \item{object}{A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing
@@ -19,11 +19,15 @@ will be returned just for statistically significant genes, if \code{FALSE} the
 full table of gene differential expression will be provided. Default is
 \code{TRUE} to only report significant genes}
 
+\item{param}{Logical, whether to return the complete \code{list} object with
+the parameters used, or just the results stored in \code{data}. Default is FALSE}
+
 \item{returnObject}{Logical, if \code{TRUE} this function will return the
 limma/edgeR/DESeq2 object used for differential expression analysis}
 }
 \value{
-A \code{data.frame} with gene differential expression.
+A \code{data.frame} with gene differential expression, or a \code{list} object with
+the parameters used if \code{param = TRUE}.
 }
 \description{
 This function is an accessor for the \code{geneDE} slot of

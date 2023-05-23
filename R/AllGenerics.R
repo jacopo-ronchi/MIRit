@@ -18,11 +18,14 @@
 #' will be returned just for statistically significant miRNAs, if `FALSE` the
 #' full table of miRNA differential expression will be provided. Default is
 #' `TRUE` to only report significant miRNAs
+#' @param param Logical, whether to return the complete `list` object with
+#' the parameters used, or just the results stored in `data`. Default is FALSE
 #' @param returnObject Logical, if `TRUE` this function will return the
 #' limma/edgeR/DESeq2 object used for differential expression analysis
 #'
 #' @returns
-#' A `data.frame` with miRNA differential expression.
+#' A `data.frame` with miRNA differential expression, or a `list` object with
+#' the parameters used if `param = TRUE`.
 #'
 #' @examples
 #' # load example MirnaExperiment object
@@ -38,6 +41,7 @@
 #' @export
 setGeneric("mirnaDE", function(object,
                                onlySignificant = TRUE,
+                               param = FALSE,
                                returnObject = FALSE)
   standardGeneric("mirnaDE"))
 
@@ -57,11 +61,14 @@ setGeneric("mirnaDE", function(object,
 #' will be returned just for statistically significant genes, if `FALSE` the
 #' full table of gene differential expression will be provided. Default is
 #' `TRUE` to only report significant genes
+#' @param param Logical, whether to return the complete `list` object with
+#' the parameters used, or just the results stored in `data`. Default is FALSE
 #' @param returnObject Logical, if `TRUE` this function will return the
 #' limma/edgeR/DESeq2 object used for differential expression analysis
 #'
 #' @returns
-#' A `data.frame` with gene differential expression.
+#' A `data.frame` with gene differential expression, or a `list` object with
+#' the parameters used if `param = TRUE`.
 #'
 #' @examples
 #' # load example MirnaExperiment object
@@ -77,6 +84,7 @@ setGeneric("mirnaDE", function(object,
 #' @export
 setGeneric("geneDE", function(object,
                               onlySignificant = TRUE,
+                              param = FALSE,
                               returnObject = FALSE)
   standardGeneric("geneDE"))
 
@@ -211,9 +219,13 @@ setGeneric("mirnaTargets", function(object) standardGeneric("mirnaTargets"))
 #'
 #' @param object A [`MirnaExperiment`][MirnaExperiment-class] object containing
 #' miRNA and gene data
+#' @param param Logical, whether to return the complete `list` object with
+#' the parameters used, or just the results stored in `data`. Default is FALSE
 #'
 #' @returns
-#' A `data.frame` object containing the results of the integration analysis.
+#' If `param` is FALSE, then this functions returns a `data.frame` object
+#' containing the results of the integration analysis. Otherwise, a `list`
+#' object including the parameters used for the analysis will be returned.
 #'
 #' @examples
 #' # load example MirnaExperiment object
@@ -232,7 +244,8 @@ setGeneric("mirnaTargets", function(object) standardGeneric("mirnaTargets"))
 #'
 #' @export
 setGeneric("mirnaTargetsIntegration",
-           function(object) standardGeneric("mirnaTargetsIntegration"))
+           function(object,
+                    param = FALSE) standardGeneric("mirnaTargetsIntegration"))
 
 
 

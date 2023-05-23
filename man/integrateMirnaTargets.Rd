@@ -9,7 +9,6 @@ integrateMirnaTargets(
   test = "auto",
   pCutoff = 0.05,
   pAdjustment = "fdr",
-  onlySignificant = TRUE,
   corMethod = "spearman",
   corCutoff = 0.5
 )
@@ -30,10 +29,6 @@ significance. The default value is \code{0.05}}
 must be one of: \code{fdr} (default), \code{BH}, \code{none}, \code{holm}, \code{hochberg}, \code{hommel},
 \code{bonferroni}, \code{BY}}
 
-\item{onlySignificant}{Logical, whether to report only statistically
-significant associations (default is \code{TRUE}). This parameter is considered
-only if a one-sided Fisher's exact test is applied}
-
 \item{corMethod}{The correlation method to be used for correlation analysis.
 It must be one of: \code{spearman} (default), \code{pearson}, \code{kendall}. See the
 'details' section for further information}
@@ -44,34 +39,9 @@ consider meaningful a miRNA-target relationship. Default is \code{0.5}}
 \value{
 A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing integration
 results. To access these results, the user can make use of the
-\code{\link[=mirnaTargetsIntegration]{mirnaTargetsIntegration()}} function, which returns a \code{data.frame} object
-with the details of miRNA-targets relationships. This \code{data.frame} differs
-on the basis of the integration strategy used. For the one-sided Fisher's
-exact test integration, it has seven columns:
-\itemize{
-\item \code{microRNA}: the miRNA ID;
-\item \code{direction}: the fold change direction of the DE-miRNA (\code{upregulated} or
-\code{downregulated});
-\item \code{n_DE_targets}: represents the number of differentially expressed targets;
-\item \code{n_NON_DE_targets}: represents the number of non differentially expressed
-targets;
-\item \code{Fisher.P.Val}: indicates the p-value resulting from the one-sided
-Fisher's exact test;
-\item \code{Fisher.Adjusted.P.Val}: contains the Fisher's exact test p-values
-corrected for multiple testing;
-\item \code{DE_targets}: contains the list of differentially expressed targtes whose
-expression is negatively associated with miRNA expression.
-Instead, when a correlation analysis is performed, \code{mirnaTargetsIntegration}
-has seven columns:
-\item \code{microRNA}: the miRNA ID;
-\item \code{Target}: the correlated target gene;
-\item \code{microRNA.Direction}: the fold change direction of the DE-miRNA;
-\item \code{Pearson/Spearman/Kendall.Coeff}: the value of the correlation coefficient
-used;
-\item \code{Corr.P.Value}: the p-value resulting from the correlation analysis;
-\item \code{Corr.Adjusted.P.Val}: contains the correlation p-values corrected for
-multiple testing.
-}
+\code{\link[=mirnaTargetsIntegration]{mirnaTargetsIntegration()}} function. For additional details on how to
+interpret the results of miRNA-gene integrative analysis, please see
+\code{\link[=MirnaExperiment-class]{MirnaExperiment}}.
 }
 \description{
 This function allows to test which microRNAs are significantly

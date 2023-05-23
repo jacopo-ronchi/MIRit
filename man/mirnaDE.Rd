@@ -6,9 +6,9 @@
 \title{Extract differentially expressed miRNAs from a
 \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object}
 \usage{
-mirnaDE(object, onlySignificant = TRUE, returnObject = FALSE)
+mirnaDE(object, onlySignificant = TRUE, param = FALSE, returnObject = FALSE)
 
-\S4method{mirnaDE}{MirnaExperiment}(object, onlySignificant = TRUE, returnObject = FALSE)
+\S4method{mirnaDE}{MirnaExperiment}(object, onlySignificant = TRUE, param = FALSE, returnObject = FALSE)
 }
 \arguments{
 \item{object}{A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing
@@ -19,11 +19,15 @@ will be returned just for statistically significant miRNAs, if \code{FALSE} the
 full table of miRNA differential expression will be provided. Default is
 \code{TRUE} to only report significant miRNAs}
 
+\item{param}{Logical, whether to return the complete \code{list} object with
+the parameters used, or just the results stored in \code{data}. Default is FALSE}
+
 \item{returnObject}{Logical, if \code{TRUE} this function will return the
 limma/edgeR/DESeq2 object used for differential expression analysis}
 }
 \value{
-A \code{data.frame} with miRNA differential expression.
+A \code{data.frame} with miRNA differential expression, or a \code{list} object with
+the parameters used if \code{param = TRUE}.
 }
 \description{
 This function is an accessor for the \code{mirnaDE} slot of

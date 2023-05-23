@@ -43,7 +43,7 @@ NULL
 #' from different subjects (`FALSE`)
 #' @slot targets A `data.frame` object containing miRNA-target pairs. This
 #' slot is commonly populated by the [getTargets()] function
-#' @slot mirnaTargetsIntegration A `data.frame` object containing the results
+#' @slot mirnaTargetsIntegration A `list` object containing the results
 #' of the integration analysis between miRNA and gene expression values. This
 #' slot is commonly populated by the [integrateMirnaTargets()] function
 #' 
@@ -97,6 +97,13 @@ NULL
 #' thresholds;
 #' * `method`, which specifies the procedure used to determine differentially
 #' expressed miRNAs/gens (eg. "limma-voom", "edgeR", "DESeq2", "limma");
+#' * `group`, which is the column name of the variable (in colData) used for
+#' differential expression analysis;
+#' * `contrast`, which represents the groups that are compared during
+#' differential expression analysis (e.g. 'disease-healthy');
+#' * `design`, which outlines the R `formula` used for fitting the model. It
+#' includes the variable of interest (`group`) together with eventual
+#' covariates (e.g. '~ 0 + disease + sex');
 #' * `pCutoff`, which indicates the p-value cutoff used for DE analysis;
 #' * `pAdjustment`, the approach used for multiple testing correction;
 #' * `logFC`, which states the log2 Fold Change cutoff used for DE analysis;
@@ -123,9 +130,19 @@ NULL
 #'
 #' @section mirnaTargetsIntegration:
 #'
-#' Lastly, `mirnaTargetsIntegration` slot contains a `data.frame` that differs
-#' on the basis of the integration strategy used. For the one-sided Fisher's
-#' exact test integration, this `data.frame` has seven columns:
+#' Lastly, `mirnaTargetsIntegration` slot contains a `list` object that stores
+#' the results and the options used for performing the integrative miRNA-gene
+#' analysis. In particular, `mirnaTargetsIntegration` contains:
+#' * `data`, which is a `data.frame` object with the results of the integrative
+#' analysis;
+#' * `method`, which specifies the procedure used to perform the integrative
+#' analysis;
+#' * `pCutoff`, which indicates the p-value cutoff used for the analysis;
+#' * `pAdjustment`, the approach used for multiple testing correction.
+#' 
+#' Moreover, `data` differs on the basis of the integration strategy used. For
+#' the one-sided Fisher's exact test integration, this `data.frame` has seven
+#' columns:
 #' * `microRNA`: the miRNA ID;
 #' * `direction`: the fold change direction of the DE-miRNA (`upregulated` or
 #' `downregulated`);
@@ -138,8 +155,8 @@ NULL
 #' corrected for multiple testing;
 #' * `DE_targets`: contains the list of differentially expressed targets whose
 #' expression is negatively associated with miRNA expression.
-#' Instead, when a correlation analysis is performed, `mirnaTargetsIntegration`
-#' has seven columns:
+#' 
+#' Instead, when a correlation analysis is performed, `data` has six columns:
 #' * `microRNA`: the miRNA ID;
 #' * `Target`: the correlated target gene;
 #' * `microRNA.Direction`: the fold change direction of the DE-miRNA;
@@ -148,6 +165,9 @@ NULL
 #' * `Corr.P.Value`: the p-value resulting from the correlation analysis;
 #' * `Corr.Adjusted.P.Val`: contains the correlation p-values corrected for
 #' multiple testing.
+#' 
+#' To access the results of the integrative analysis, the `data` slot can be
+#' accessed through the [mirnaTargetsIntegration()] function.
 #'
 #' @note
 #' To create a [`MirnaExperiment`][MirnaExperiment-class] object, you can use
@@ -181,7 +201,7 @@ setClass("MirnaExperiment",
            geneDE = "list",
            pairedSamples = "logical",
            targets = "data.frame",
-           mirnaTargetsIntegration = "data.frame"))
+           mirnaTargetsIntegration = "list"))
 
 
 ## -----------------
@@ -192,20 +212,28 @@ setClass("MirnaExperiment",
 setMethod("initialize",
           signature(.Object = "MirnaExperiment"),
           function(.Object, ...) {
-            requiredObjects <- c("data", "significant", "method", "pCutoff",
-                                 "pAdjustment", "logFC", "deObject")
+            
             deList <- list(data = data.frame(),
                            significant = character(),
                            method = character(),
+                           group = character(),
+                           contrast = character(),
+                           design = NULL,
                            pCutoff = numeric(),
                            pAdjustment = character(),
                            logFC = numeric(),
                            deObject = NULL)
             
+            intList <- list(data = data.frame(),
+                            method = character(),
+                            pCutoff = numeric(),
+                            pAdjustment = character())
+            
             .Object <- callNextMethod(.Object,
                                       ...,
                                       mirnaDE = deList,
-                                      geneDE = deList)
+                                      geneDE = deList,
+                                      mirnaTargetsIntegration = intList)
             .Object
           })
 
@@ -225,15 +253,17 @@ setValidity("MirnaExperiment", function(object) {
                  "differential expression results. Please see",
                  "?MirnaExperiment-class"))
   } else if (!identical(sort(names(object@mirnaDE)),
-                        sort(c("data", "significant", "method", "pCutoff",
+                        sort(c("data", "significant", "method", "group",
+                               "contrast", "design", "pCutoff",
                                "pAdjustment", "logFC", "deObject"))) |
              !identical(sort(names(object@geneDE)),
-                        sort(c("data", "significant", "method", "pCutoff",
+                        sort(c("data", "significant", "method", "group",
+                               "contrast", "design", "pCutoff",
                                "pAdjustment", "logFC", "deObject")))) {
     return(paste("'mirnaDE' and 'geneDE' slots must be list objects",
-                 "containing: 'data', 'significant', 'method', 'pCutoff'",
-                 "'pAdjustment', 'logFC', and 'deObject'.",
-                 "Please see ?MirnaExperiment-class"))
+                 "containing: 'data', 'significant', 'method', 'group',",
+                 "'contrast', 'design', 'pCutoff', 'pAdjustment', 'logFC',",
+                 "and 'deObject'. Please see ?MirnaExperiment-class"))
   } else if (!is.data.frame(mirnaDE(object))) {
     return(paste("'data' within mirnaDE slot must be a data.frame object with",
                  "miRNA differential expression results. Please see",
@@ -264,8 +294,12 @@ setValidity("MirnaExperiment", function(object) {
                  "miRNA and gene expression data derive from the same samples",
                  "('paired samples') while it should be FALSE if data derive",
                  "from different cohorts of samples"))
+  } else if (!is.list(object@mirnaTargetsIntegration)) {
+    return(paste("'mirnaTargetsIntegration' slot must be a list object with",
+                 "integrative analysis results. Please see",
+                 "?MirnaExperiment-class"))
   } else if (!is.data.frame(mirnaTargetsIntegration(object))) {
-    return(paste("'mirnaTargetsIntegration' must be a data.frame object",
+    return(paste("'data' within mirnaTargetsIntegration must be a data.frame",
                  "containing miRNA and gene expression data integration.",
                  "The user should use the function 'integrateMirnaTargets()'",
                  "to perform the integration analysis"))
@@ -504,12 +538,19 @@ MirnaExperiment <- function(
 #' @export
 setMethod("mirnaDE",
           "MirnaExperiment",
-          function(object, onlySignificant, returnObject) {
-            if (onlySignificant == TRUE & returnObject == FALSE) {
+          function(object, onlySignificant, param, returnObject) {
+            if (onlySignificant == TRUE &
+                returnObject == FALSE &
+                param == FALSE) {
               object@mirnaDE$data[object@mirnaDE$data$ID %in%
                                     object@mirnaDE$significant, ]
-            } else if (onlySignificant == FALSE & returnObject == FALSE){
+            } else if (onlySignificant == FALSE &
+                       returnObject == FALSE &
+                       param == FALSE){
               object@mirnaDE$data
+            } else if (param == TRUE &
+                       returnObject == FALSE){
+              object@mirnaDE
             } else {
               object@mirnaDE$deObject
             }
@@ -519,12 +560,19 @@ setMethod("mirnaDE",
 #' @export
 setMethod("geneDE",
           "MirnaExperiment",
-          function(object, onlySignificant, returnObject) {
-            if (onlySignificant == TRUE & returnObject == FALSE) {
+          function(object, onlySignificant, param, returnObject) {
+            if (onlySignificant == TRUE &
+                returnObject == FALSE &
+                param == FALSE) {
               object@geneDE$data[object@geneDE$data$ID %in%
                                    object@geneDE$significant, ]
-            } else if (onlySignificant == FALSE & returnObject == FALSE){
+            } else if (onlySignificant == FALSE &
+                       returnObject == FALSE &
+                       param == FALSE){
               object@geneDE$data
+            } else if (param == TRUE &
+                       returnObject == FALSE){
+              object@geneDE
             } else {
               object@geneDE$deObject
             }
@@ -556,9 +604,14 @@ setMethod("mirnaTargets", "MirnaExperiment", function(object) {
 
 #' @rdname mirnaTargetsIntegration
 #' @export
-setMethod("mirnaTargetsIntegration", "MirnaExperiment", function(object) {
-  object@mirnaTargetsIntegration
-})
+setMethod("mirnaTargetsIntegration", "MirnaExperiment",
+          function(object, param) {
+            if (param == TRUE) {
+              object@mirnaTargetsIntegration
+            } else {
+              object@mirnaTargetsIntegration$data
+            }
+          })
 
 
 ## -------

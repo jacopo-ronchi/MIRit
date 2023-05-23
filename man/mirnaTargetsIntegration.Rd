@@ -5,16 +5,21 @@
 \alias{mirnaTargetsIntegration,MirnaExperiment-method}
 \title{Explore the results of the integration analysis between miRNAs and genes}
 \usage{
-mirnaTargetsIntegration(object)
+mirnaTargetsIntegration(object, param = FALSE)
 
-\S4method{mirnaTargetsIntegration}{MirnaExperiment}(object)
+\S4method{mirnaTargetsIntegration}{MirnaExperiment}(object, param = FALSE)
 }
 \arguments{
 \item{object}{A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing
 miRNA and gene data}
+
+\item{param}{Logical, whether to return the complete \code{list} object with
+the parameters used, or just the results stored in \code{data}. Default is FALSE}
 }
 \value{
-A \code{data.frame} object containing the results of the integration analysis.
+If \code{param} is FALSE, then this functions returns a \code{data.frame} object
+containing the results of the integration analysis. Otherwise, a \code{list}
+object including the parameters used for the analysis will be returned.
 }
 \description{
 After performing the integration analysis between miRNA and gene expression

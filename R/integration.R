@@ -50,9 +50,6 @@
 #' @param pAdjustment The p-value correction method for multiple testing. It
 #' must be one of: `fdr` (default), `BH`, `none`, `holm`, `hochberg`, `hommel`,
 #' `bonferroni`, `BY`
-#' @param onlySignificant Logical, whether to report only statistically
-#' significant associations (default is `TRUE`). This parameter is considered
-#' only if a one-sided Fisher's exact test is applied
 #' @param corMethod The correlation method to be used for correlation analysis.
 #' It must be one of: `spearman` (default), `pearson`, `kendall`. See the
 #' 'details' section for further information
@@ -62,32 +59,9 @@
 #' @returns
 #' A [`MirnaExperiment`][MirnaExperiment-class] object containing integration
 #' results. To access these results, the user can make use of the
-#' [mirnaTargetsIntegration()] function, which returns a `data.frame` object
-#' with the details of miRNA-targets relationships. This `data.frame` differs
-#' on the basis of the integration strategy used. For the one-sided Fisher's
-#' exact test integration, it has seven columns:
-#' * `microRNA`: the miRNA ID;
-#' * `direction`: the fold change direction of the DE-miRNA (`upregulated` or
-#' `downregulated`);
-#' * `n_DE_targets`: represents the number of differentially expressed targets;
-#' * `n_NON_DE_targets`: represents the number of non differentially expressed
-#' targets;
-#' * `Fisher.P.Val`: indicates the p-value resulting from the one-sided
-#' Fisher's exact test;
-#' * `Fisher.Adjusted.P.Val`: contains the Fisher's exact test p-values
-#' corrected for multiple testing;
-#' * `DE_targets`: contains the list of differentially expressed targtes whose
-#' expression is negatively associated with miRNA expression.
-#' Instead, when a correlation analysis is performed, `mirnaTargetsIntegration`
-#' has seven columns:
-#' * `microRNA`: the miRNA ID;
-#' * `Target`: the correlated target gene;
-#' * `microRNA.Direction`: the fold change direction of the DE-miRNA;
-#' * `Pearson/Spearman/Kendall.Coeff`: the value of the correlation coefficient
-#' used;
-#' * `Corr.P.Value`: the p-value resulting from the correlation analysis;
-#' * `Corr.Adjusted.P.Val`: contains the correlation p-values corrected for
-#' multiple testing.
+#' [mirnaTargetsIntegration()] function. For additional details on how to
+#' interpret the results of miRNA-gene integrative analysis, please see
+#' [`MirnaExperiment`][MirnaExperiment-class].
 #'
 #' @examples
 #' # load example MirnaExperiment object
@@ -111,7 +85,6 @@ integrateMirnaTargets <- function(mirnaObj,
                                   test = "auto",
                                   pCutoff = 0.05,
                                   pAdjustment = "fdr",
-                                  onlySignificant = TRUE,
                                   corMethod = "spearman",
                                   corCutoff = 0.5) {
 
@@ -169,10 +142,6 @@ integrateMirnaTargets <- function(mirnaObj,
                "'holm', 'hommel'"),
          call. = FALSE)
   }
-  if (!is.logical(onlySignificant) |
-      length(onlySignificant) != 1) {
-    stop("'onlySignificant' must be logical (TRUE/FALSE)!", call. = FALSE)
-  }
   if (!is.character(corMethod) |
       length(corMethod) != 1 |
       !corMethod %in% c("pearson", "kendall", "spearman")) {
@@ -213,7 +182,7 @@ integrateMirnaTargets <- function(mirnaObj,
                                       pCutoff,
                                       pAdjustment)
   } else if (intMethod == "fisher") {
-    mirnaObj <- oneSidedFisher(mirnaObj, pCutoff, pAdjustment, onlySignificant)
+    mirnaObj <- oneSidedFisher(mirnaObj, pCutoff, pAdjustment)
   }
 
   ## return the object with integration slot
@@ -226,7 +195,7 @@ integrateMirnaTargets <- function(mirnaObj,
 
 
 ## one-sided Fisher's exact test for association analysis
-oneSidedFisher <- function(mirnaObj, pCutoff, pAdjustment, onlySignificant) {
+oneSidedFisher <- function(mirnaObj, pCutoff, pAdjustment) {
 
   ## obtain differentially expressed miRNAs and genes
   dem <- mirnaDE(mirnaObj)
@@ -310,24 +279,24 @@ oneSidedFisher <- function(mirnaObj, pCutoff, pAdjustment, onlySignificant) {
   association <- association[order(association$Fisher.Adjusted.P.Val), ]
 
   ## print association results
-  if (onlySignificant == TRUE) {
-    association <- association[association$Fisher.Adjusted.P.Val < pCutoff, ]
-    if (nrow(association) >= 1) {
-      message(paste("A statistically significant association between",
-                    nrow(association), "DE-miRNAs and",
-                    length(unique(unlist(stringr::str_split(
-                      paste(association$DE_targets, collapse = "/"),
-                      pattern = "/")))), "genes was found!"))
-    } else {
-      message(paste("No statistically significant associations between",
-                    "DE-miRNAs and DEGs were found."))
-    }
+  association <- association[association$Fisher.Adjusted.P.Val < pCutoff, ]
+  if (nrow(association) >= 1) {
+    message(paste("A statistically significant association between",
+                  nrow(association), "DE-miRNAs and",
+                  length(unique(unlist(stringr::str_split(
+                    paste(association$DE_targets, collapse = "/"),
+                    pattern = "/")))), "genes was found!"))
   } else {
-    message("To access the results, use 'mirnaTargetsIntegration()'")
+    message(paste("No statistically significant associations between",
+                  "DE-miRNAs and DEGs were found."))
   }
 
   ## return the object containing association results
-  mirnaTargetsIntegration(mirnaObj) <- association
+  resList <- list(data = association,
+                  method = "One-sided Fisher's exact test",
+                  pCutoff = pCutoff,
+                  pAdjustment = pAdjustment)
+  mirnaTargetsIntegration(mirnaObj) <- resList
   return(mirnaObj)
 
 }
@@ -465,7 +434,11 @@ correlateMirnaTargets <- function(mirnaObj,
   }
 
   ## return the object with the results of the correlation analysis
-  mirnaTargetsIntegration(mirnaObj) <- corRes
+  resList <- list(data = corRes,
+                  method = paste(usedCoef, "'s correlation analysis", sep = ""),
+                  pCutoff = pCutoff,
+                  pAdjustment = pAdjustment)
+  mirnaTargetsIntegration(mirnaObj) <- resList
   return(mirnaObj)
 
 }

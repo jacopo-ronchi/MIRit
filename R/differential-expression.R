@@ -511,9 +511,9 @@ performDE <- function(assay,
   
   ## add differential expression results to mirnaObj
   if (assay == "miRNAs") {
-    mirnaDE(mirnaObj) <- deList[seq(7)]
+    mirnaDE(mirnaObj) <- deList[seq(10)]
   } else if (assay == "genes") {
-    geneDE(mirnaObj) <- deList[seq(7)]
+    geneDE(mirnaObj) <- deList[seq(10)]
   }
   
   ## inform the user about differential expression results
@@ -546,6 +546,9 @@ edgeR.DE <- function(counts,
                      estimateDisp.args,
                      glmQLFit.args,
                      glmQLFTest.args) {
+  
+  ## set the user-defined contrast character
+  defCon <- contrast
   
   ## identify numerator level and reference level
   contrast <- strsplit(contrast, "-")[[1]]
@@ -628,6 +631,9 @@ edgeR.DE <- function(counts,
   deList <- list(data = deRes,
                  significant = sig,
                  method = "edgeR",
+                 group = group,
+                 contrast = defCon,
+                 design = design,
                  pCutoff = pCutoff,
                  pAdjustment = pAdjustment,
                  logFC = logFC,
@@ -653,6 +659,9 @@ DESeq2.DE <- function(counts,
                       pCutoff,
                       pAdjustment,
                       DESeq.args) {
+  
+  ## set the user-defined contrast character
+  defCon <- contrast
   
   ## create DESeq2 object
   dds <- DESeq2::DESeqDataSetFromMatrix(countData = counts,
@@ -694,6 +703,9 @@ DESeq2.DE <- function(counts,
   deList <- list(data = deRes,
                  significant = sig,
                  method = "DESeq2",
+                 group = group,
+                 contrast = defCon,
+                 design = design,
                  pCutoff = pCutoff,
                  pAdjustment = pAdjustment,
                  logFC = logFC,
@@ -724,6 +736,9 @@ voom.DE <- function(counts,
                     voom.args,
                     lmFit.args,
                     eBayes.args) {
+  
+  ## set the user-defined contrast character
+  defCon <- contrast
   
   ## identify numerator level and reference level
   contrast <- strsplit(contrast, "-")[[1]]
@@ -817,6 +832,9 @@ voom.DE <- function(counts,
   deList <- list(data = deRes,
                  significant = sig,
                  method = "limma-voom",
+                 group = group,
+                 contrast = defCon,
+                 design = design,
                  pCutoff = pCutoff,
                  pAdjustment = pAdjustment,
                  logFC = logFC,
@@ -847,6 +865,9 @@ limma.DE <- function(expr,
                      arrayWeights.args,
                      lmFit.args,
                      eBayes.args) {
+  
+  ## set the user-defined contrast character
+  defCon <- contrast
   
   ## identify numerator level and reference level
   contrast <- strsplit(contrast, "-")[[1]]
@@ -927,6 +948,9 @@ limma.DE <- function(expr,
   deList <- list(data = deRes,
                  significant = sig,
                  method = "limma",
+                 group = group,
+                 contrast = defCon,
+                 design = design,
                  pCutoff = pCutoff,
                  pAdjustment = pAdjustment,
                  logFC = logFC,
@@ -1145,6 +1169,9 @@ addDifferentialExpression <- function(mirnaObj,
   mirnaDE(mirnaObj) <- list(data = mirnaDE,
                             significant = significantMirnas,
                             method = "Manually added",
+                            group = NULL,
+                            contrast = NULL,
+                            design = NULL,
                             pCutoff = mirna.pCutoff,
                             pAdjustment = mirna.pAdjustment,
                             logFC = mirna.logFC,
@@ -1152,6 +1179,9 @@ addDifferentialExpression <- function(mirnaObj,
   geneDE(mirnaObj) <- list(data = geneDE,
                            significant = significantGenes,
                            method = "Manually added",
+                           group = NULL,
+                           contrast = NULL,
+                           design = NULL,
                            pCutoff = gene.pCutoff,
                            pAdjustment = gene.pAdjustment,
                            logFC = gene.logFC,
