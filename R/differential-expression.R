@@ -838,7 +838,7 @@ voom.DE <- function(counts,
                  pCutoff = pCutoff,
                  pAdjustment = pAdjustment,
                  logFC = logFC,
-                 deObject = features,
+                 deObject = v,
                  normExpr = normExpr)
   
   ## return differential expression results

@@ -762,26 +762,18 @@ supportedOrganisms <- function(database) {
 
 
 
-#' Perform an enrichment analysis of microRNA targets
+#' Perform an enrichment analysis of integrated microRNA targets
 #'
-#' This function allows to enrich microRNA targets through an
-#' over-representation analysis (ORA). This can be done to investigate the
-#' biological effects of the target genes that were found to be statistically
-#' associated/correlated with DE-miRNAs. The enrichment analysis can be
-#' performed using different databases, namely Gene Ontology
+#' This function allows to perform an over-representation analysis (ORA) in
+#' order to explore the biological effects of microRNA targets that are
+#' statistically associated/correlated with DE-miRNAs. The enrichment analysis
+#' can be performed using different databases, namely Gene Ontology
 #' (GO) - Biological Process, Kyoto Encyclopedia of Genes and Genomes (KEGG),
 #' Reactome, DisGeNet and WikiPathways.
 #'
 #' @details
-#' The enrichment analysis may be carried out either for the integrated
-#' targets, which are those statistically associated/correlated with DE-miRNA
-#' expression, or for all target genes of DE-miRNAs. To enrich only the
-#' successfully integrated targets `integratedTargets` must be set to `TRUE`,
-#' whereas to enrich all the DE-miRNA target genes `integratedTargets` must
-#' be `FALSE`.
-#'
-#' Moreover, if the enrichment analysis is performed using `GO` database,
-#' the [clusterProfiler::simplify()] method contained in the `clusterProfiler`
+#' If the enrichment analysis is performed using `GO` database, the
+#' [clusterProfiler::simplify()] method contained in the `clusterProfiler`
 #' package may be used. This is particularly useful since the structure of GO
 #' database is highly redundant. Therefore, to remove some of the redundancy
 #' from the resulting enriched GO terms, the parameter `simplifyGO` can be set
@@ -789,10 +781,6 @@ supportedOrganisms <- function(database) {
 #'
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
 #' containing miRNA and gene data
-#' @param integratedTargets Logical, whether to perform the enrichment analysis
-#' for target genes statistically associated with DE-miRNA expression or for
-#' all DE-miRNA targets. Default is `TRUE` to only enrich
-#' associated/correlated targets. See the 'details' section
 #' @param database The name of the database used for the enrichment analysis.
 #' It must be one of: `GO`, `KEGG`, `Reactome`, `DisGeNet` and `WikiPathways`.
 #' Default is `GO`
@@ -891,7 +879,6 @@ supportedOrganisms <- function(database) {
 #'
 #' @export
 enrichTargets <- function(mirnaObj,
-                          integratedTargets = TRUE,
                           database = "GO",
                           organism = "Homo sapiens",
                           simplifyGO = TRUE,
@@ -915,8 +902,7 @@ enrichTargets <- function(mirnaObj,
                "'mirnaObj'. Please, use 'performGeneDE()' before using",
                "this function. See ?performGeneDE"), call. = FALSE)
   }
-  if (integratedTargets == TRUE &
-      max(dim(mirnaTargetsIntegration(mirnaObj))) == 0) {
+  if (max(dim(mirnaTargetsIntegration(mirnaObj))) == 0) {
     stop(paste("Integration analysis is not detected in 'mirnaObj'!",
                "Before using this function, expression levels of miRNAs and",
                "genes must be integrated with the 'integrateMirnaTargets()'",
@@ -952,10 +938,6 @@ enrichTargets <- function(mirnaObj,
     stop(paste("For WikiPathways database, 'organism' must be one of:",
                paste(convertOrganism("WikiPathways", "all"), collapse = ", ")),
          call. = FALSE)
-  }
-  if (!is.logical(integratedTargets) |
-      length(integratedTargets) != 1) {
-    stop("'integratedTargets' must be logical (TRUE/FALSE)!", call. = FALSE)
   }
   if (!is.logical(simplifyGO) |
       length(simplifyGO) != 1) {
@@ -995,18 +977,14 @@ enrichTargets <- function(mirnaObj,
 
   ## retrieve targets to enrich
   downMirnaTargets <- selectTargets(mirnaObj,
-                                    integratedTargets,
+                                    TRUE,
                                     "downregulated")
   upMirnaTargets <- selectTargets(mirnaObj,
-                                  integratedTargets,
+                                  TRUE,
                                   "upregulated")
 
   ## set the universe
-  if (integratedTargets == TRUE) {
-    universe <- rownames(mirnaObj)[["genes"]]
-  } else {
-    universe <- NULL
-  }
+  universe <- rownames(mirnaObj)[["genes"]]
 
   ## perform the enrichment for targets of up- and downregulated miRNAs
   if (!(length(upMirnaTargets) == 1 & any(upMirnaTargets == ""))) {
