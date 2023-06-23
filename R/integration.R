@@ -564,10 +564,10 @@ mcnemar.midp <- function(mat, midpAdjustment) {
   n <- mat[1, 2] + mat[2, 1]
   if (n != 0){
     if (midpAdjustment == TRUE) {
-      midp <- midp <- stats::pbinom(x-1, n, 0.5, lower.tail=FALSE) - 
+      midp <- stats::pbinom(x-1, n, 0.5, lower.tail = FALSE) - 
         0.5 * stats::dbinom(x, n, 0.5)
     } else {
-      midp <- stats::pbinom(x-1, n, 0.5, lower.tail=FALSE)
+      midp <- stats::pbinom(x-1, n, 0.5, lower.tail = FALSE)
     }
   } else {
     midp <- 1
