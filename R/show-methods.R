@@ -36,8 +36,8 @@ setMethod("show", "MirnaExperiment", function(object) {
       "\t- significant genes: ", class(significantGenes(object)), " with ",
       length(significantGenes(object)), " gene IDs\n",
       "\t- microRNA targets: ", class(mirnaTargets(object)), " with ",
-      nrow(mirnaTargets(object)), " rows and ", ncol(mirnaTargets(object)),
-      " columns\n",
+      nrow(mirnaTargets(object, demTarg = FALSE)), " rows and ",
+      ncol(mirnaTargets(object, demTarg = FALSE)), " columns\n",
       "\t- miRNA - gene integrative analysis: ",
       class(mirnaTargetsIntegration(object)), " with ",
       nrow(mirnaTargetsIntegration(object)), " rows and ",
@@ -50,53 +50,31 @@ setMethod("show", "MirnaExperiment", function(object) {
 
 
 ## ==========================================================================
-## Show method for MirnaEnrichment class
+## Show method for FunctionalEnrichment class
 ## ==========================================================================
 
 
-#' @describeIn MirnaEnrichment-class Show method for objects of
-#' class MirnaEnrichment
+#' @describeIn FunctionalEnrichment-class Show method for objects of
+#' class FunctionalEnrichment
 #' @export
-setMethod("show", "MirnaEnrichment", function(object) {
-  cat("Object of class MirnaEnrichment containing:\n\n",
+setMethod("show", "FunctionalEnrichment", function(object) {
+  cat("Object of class FunctionalEnrichment containing:\n\n",
       "\t- over-representation analysis results: ",
       class(enrichmentResults(object)), " with ",
       nrow(enrichmentResults(object)), " rows and ",
       ncol(enrichmentResults(object)), " columns\n",
-      "\t- miRNAs used for the enrichment: ", class(object@gene), " of length ",
-      length(object@gene), "\n",
-      "\t- p-value cutoff used: ", object@pvalueCutoff, "\n",
-      "\t- p-value adjustment method: ", object@pAdjustMethod, "\n",
-      "\t- miEAA category: ", enrichmentDatabase(object), "\n",
+      "\t- functional enrichment analysis: ", object@method, "\n",
       "\t- organism: ", object@organism, "\n",
+      "\t- gene sets database: ", enrichmentDatabase(object), "\n",
+      "\t- p-value cutoff used: ", object@pCutoff, "\n",
+      "\t- p-value adjustment method: ", object@pAdjustment, "\n",
+      "\t- features used for the enrichment: ", class(object@features),
+      " of length ", length(object@features), "\n",
+      "\t- statistic used (only for GSEA): ", class(object@statistic),
+      " of length ", length(object@statistic), "\n",
+      "\t- background universe for the enrichment: ", class(object@universe),
+      " of length ", length(object@universe), "\n",
       "\nResults can be accessed with 'enrichmentResults()' while ",
-      "'mirnaDotplot()' can be used for visualization.\n\n", sep = "")
-})
-
-
-## ==========================================================================
-## Show method for MirnaGsea class
-## ==========================================================================
-
-
-#' @describeIn MirnaGsea-class Show method for objects of class MirnaGsea
-#' @export
-setMethod("show", "MirnaGsea", function(object) {
-  cat("Object of class MirnaGsea containing:\n\n",
-      "\t- GSEA analysis results: ",
-      class(enrichmentResults(object)), " with ",
-      nrow(enrichmentResults(object)), " rows and ",
-      ncol(enrichmentResults(object)), " columns\n",
-      "\t- miRNAs used for the enrichment: ", class(object@gene), " of length ",
-      length(object@gene), "\n",
-      "\t- miRNA log foldchanges: ", class(lfcEnrichment(object)),
-      " of length ", length(lfcEnrichment(object)), "\n",
-      "\t- p-value cutoff used: ", object@pvalueCutoff, "\n",
-      "\t- p-value adjustment method: ", object@pAdjustMethod, "\n",
-      "\t- miEAA category: ", enrichmentDatabase(object), "\n",
-      "\t- organism: ", object@organism, "\n",
-      "\nResults can be accessed with 'enrichmentResults()' while ",
-      "'mirnaDotplot()' and 'mirnaRidgeplot()' can be used for ",
-      "visualization.\n\n", sep = "")
+      "'enrichmentDotplot()' can be used for visualization.\n\n", sep = "")
 })
 

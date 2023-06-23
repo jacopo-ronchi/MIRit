@@ -308,400 +308,427 @@ visualizeNetwork <- function(pathGraph,
 
 
 
-#' @rdname mirnaDotplot
-#' @export
-setMethod("mirnaDotplot", "MirnaEnrichment",
-          function(object,
-                   showTerms,
-                   splitDir,
-                   ordBy,
-                   sizeBy,
-                   colBy,
-                   title) {
-            mirnaDotplot.MirnaEnrichment(object,
-                                         showTerms = showTerms,
-                                         splitDir = splitDir,
-                                         ordBy = ordBy,
-                                         sizeBy = sizeBy,
-                                         colBy = colBy,
-                                         title = title)
-          })
-
-
-
-
-
-#' @rdname mirnaDotplot
-#' @export
-setMethod("mirnaDotplot", "MirnaGsea",
-          function(object,
-                   showTerms,
-                   splitDir,
-                   ordBy,
-                   sizeBy,
-                   colBy,
-                   title) {
-            mirnaDotplot.MirnaGsea(object,
-                                   showTerms = showTerms,
-                                   splitDir = splitDir,
-                                   ordBy = ordBy,
-                                   sizeBy = sizeBy,
-                                   colBy = colBy,
-                                   title = title)
-          })
-
-
-
-
-
-## create a dotplot for MirnaEnrichment objects
-#' @importFrom rlang .data
-mirnaDotplot.MirnaEnrichment <- function(mirnaEnr,
-                                         showTerms,
-                                         splitDir,
-                                         ordBy,
-                                         sizeBy,
-                                         colBy,
-                                         title) {
-
-  ## check inputs
-  if (!is(mirnaEnr, "MirnaEnrichment")) {
-    stop("'mirnaEnr' should be of class MirnaEnrichment! See ?enrichMirnas.",
-         call. = FALSE)
-  }
-  if (nrow(enrichmentResults(mirnaEnr)) < 1) {
-    stop("'mirnaEnr' object does not contain any significant results!",
-         call. = FALSE)
-  }
-  if (!is.character(showTerms) &
-      !(is.numeric(showTerms) & length(showTerms) == 1)) {
-    stop(paste("'showTerms' must be the number of top enriched terms",
-               "to plot or, alternatively, a character vector containing",
-               "the terms to be shown."),
-         call. = FALSE)
-  }
-  if (is.character(showTerms) &
-      !all(showTerms %in% enrichmentResults(mirnaEnr)$Subcategory)) {
-    stop("the terms provided are not present in 'mirnaEnr' Subcategory column!",
-         call. = FALSE)
-  }
-  if (!is.logical(splitDir) |
-      length(splitDir) != 1) {
-    stop("'splitDir' must be logical (TRUE/FALSE)! See ?mirnaDotplot",
-         call. = FALSE)
-  }
-  if (!is.character(ordBy) |
-      length(ordBy) != 1 |
-      !ordBy %in% c("fold", "P.adjusted", "P.value", "Observed")) {
-    stop(paste("'ordBy' must be one of: 'fold' (default),",
-               "'P.adjusted', 'P.value', 'Observed'"),
-         call. = FALSE)
-  }
-  if (!is.character(sizeBy) |
-      length(sizeBy) != 1 |
-      !sizeBy %in% c("fold", "P.adjusted", "P.value", "Observed")) {
-    stop(paste("'sizeBy' must be one of: 'fold', 'P.adjusted',",
-               "'P.value', 'Observed' (default)"),
-         call. = FALSE)
-  }
-  if (!is.character(colBy) |
-      length(colBy) != 1 |
-      !colBy %in% c("fold", "P.adjusted", "P.value", "Observed")) {
-    stop(paste("'colBy' must be one of: 'fold', 'P.adjusted'",
-               "(default), 'P.value', 'Observed'"),
-         call. = FALSE)
-  }
-  if (!(is.character(title) | is.null(title)) |
-      !length(title) %in% c(0, 1)) {
-    stop(paste("'title' must be the title of the plot (e.g. 'Enrichment').",
-               "For additional details see ?mirnaDotplot"),
-         call. = FALSE)
-  }
-
-  ## set the right parameter value for 'fold'
-  if (ordBy == "fold") ordBy <- "foldEnrichment"
-  if (sizeBy == "fold") sizeBy <- "foldEnrichment"
-  if (colBy == "fold") colBy <- "foldEnrichment"
-
-  ## extract results from enrichment object
-  res <- enrichmentResults(mirnaEnr)
-
-  ## warning if there are more than one category
-  if (length(unique(res$Category)) > 1) {
-    warning(paste("The object contains results from more than one category.",
-                  "If you want to plot enriched terms just from one miEAA",
-                  "category you can use: mirnaEnr['category']"), call. = FALSE)
-  }
-
-  ## compute ratio between observed and expected hits
-  res$foldEnrichment <- res$Observed / res$Expected
-
-  ## set an x-axis label for 'foldEnrichment'
-  if (ordBy == "foldEnrichment") {
-    ordLabel <- "Fold Enrichment"
-  } else {
-    ordLabel <- ordBy
-  }
-
-  ## reorder results based on specified criterion
-  if (ordBy != "P.adjusted") {
-    res <- res[order(res[, ordBy], decreasing = TRUE), ]
-  } else {
-    res <- res[order(res[, ordBy], decreasing = FALSE), ]
-  }
-
-  ## select terms to be shown in the dotplot
-  if (is.numeric(showTerms)) {
-    res <- res[seq(ifelse(showTerms <= nrow(res), showTerms, nrow(res))), ]
-  } else if (is.character(showTerms)) {
-    res <- res[which(res$Subcategory %in% showTerms), ]
-  }
-
-  ## create a dotplot
-  dotRes <- ggplot2::ggplot(res,
-                            ggplot2::aes(x = !!ggplot2::sym(ordBy),
-                                         y = stats::reorder(.data$Subcategory,
-                                                            !!ggplot2::sym(ordBy)),
-                                         size = !!ggplot2::sym(sizeBy),
-                                         color = !!ggplot2::sym(colBy))) +
-    ggplot2::geom_point() +
-    ggplot2::scale_color_gradient(low = "red", high = "blue",
-                                  guide = ggplot2::guide_colorbar(reverse = TRUE)) +
-    ggplot2::ylab(NULL) +
-    ggplot2::scale_y_discrete() +
-    ggplot2::scale_size(range = c(3, 8)) +
-    ggplot2::guides(size = ggplot2::guide_legend(order = 1),
-                    color = ggplot2::guide_colorbar(order = 2)) +
-    ggplot2::xlab(ordLabel) +
-    theme_enr()
-
-  ## divide by enrichment direction
-  if (splitDir == TRUE) {
-    dotRes <- dotRes +
-      ggplot2::facet_grid(~ Enrichment) +
-      ggplot2::theme(strip.text = ggplot2::element_text(size = 12))
-  }
-  
-  ## add the title of the plot
-  if (!is.null(title)) {
-    dotRes <- dotRes +
-      ggplot2::ggtitle(title)
-  }
-
-  ## return ggplot2 graph
-  return(dotRes)
-
-}
-
-
-
-
-
-## create a dotplot for MirnaGsea objects
-#' @importFrom rlang .data
-mirnaDotplot.MirnaGsea <- function(mirnaGsea,
-                                   showTerms,
-                                   splitDir,
-                                   ordBy,
-                                   colBy,
-                                   sizeBy,
-                                   title) {
-
-  ## check inputs
-  if (!is(mirnaGsea, "MirnaGsea")) {
-    stop("'mirnaGsea' should be of class MirnaGsea! See ?enrichMirnas.",
-         call. = FALSE)
-  }
-  if (nrow(enrichmentResults(mirnaGsea)) < 1) {
-    stop("'mirnaGsea' object does not contain any significant results!",
-         call. = FALSE)
-  }
-  if (!is.character(showTerms) &
-      !(is.numeric(showTerms) & length(showTerms) == 1)) {
-    stop(paste("'showTerms' must be the number of top enriched terms",
-               "to plot or, alternatively, a character vector containing",
-               "the terms to be shown."),
-         call. = FALSE)
-  }
-  if (is.character(showTerms) &
-      !all(showTerms %in% enrichmentResults(mirnaGsea)$Subcategory)) {
-    stop("the terms provided are not present in 'mirnaGsea' Subcategory column!",
-         call. = FALSE)
-  }
-  if (!is.logical(splitDir) |
-      length(splitDir) != 1) {
-    stop("'splitDir' must be logical (TRUE/FALSE)! See ?mirnaDotplot",
-         call. = FALSE)
-  }
-  if (!is.character(ordBy) |
-      length(ordBy) != 1 |
-      !ordBy %in% c("fold", "P.adjusted", "P.value", "Observed")) {
-    stop(paste("'ordBy' must be one of: 'fold' (default),",
-               "'P.adjusted', 'P.value', 'Observed'"),
-         call. = FALSE)
-  }
-  if (!is.character(sizeBy) |
-      length(sizeBy) != 1 |
-      !sizeBy %in% c("fold", "P.adjusted", "P.value", "Observed")) {
-    stop(paste("'sizeBy' must be one of: 'fold', 'P.adjusted', 'P.value',",
-               "'Observed' (default)"),
-         call. = FALSE)
-  }
-  if (!is.character(colBy) |
-      length(colBy) != 1 |
-      !colBy %in% c("fold", "P.adjusted", "P.value", "Observed")) {
-    stop(paste("'colBy' must be one of: 'fold', 'P.adjusted' (default),",
-               "'P.value', 'Observed'"),
-         call. = FALSE)
-  }
-  if (!(is.character(title) | is.null(title)) |
-      !length(title) %in% c(0, 1)) {
-    stop(paste("'title' must be the title of the plot (e.g. 'Enrichment').",
-               "For additional details see ?mirnaDotplot"),
-         call. = FALSE)
-  }
-
-  ## set the right parameter value for 'fold'
-  if (ordBy == "fold") ordBy <- "meanFC"
-  if (sizeBy == "fold") sizeBy <- "meanFC"
-  if (colBy == "fold") colBy <- "meanFC"
-
-  ## extract results from enrichment object
-  res <- enrichmentResults(mirnaGsea)
-
-  ## warning if there are more than one category
-  if (length(unique(res$Category)) > 1) {
-    warning(paste("The object contains results from more than one category.",
-                  "If you want to plot enriched terms just from one miEAA",
-                  "category you can use: mirnaGsea['category']"),
-            call. = FALSE)
-  }
-
-  ## extract mirna fold changes
-  mirnaID <- mirnaIdEnrichment(mirnaGsea)
-  lfc <- lfcEnrichment(mirnaGsea)
-
-  ## compute mean absolute fold change in gene sets
-  res$meanFC <- vapply(rownames(res), function(x) {
-    mirSet <- res[x, "miRNAs/precursors"]
-    mirSet <- stringr::str_split(mirSet, "; ", simplify = TRUE)
-    mean(lfc[mirnaID %in% mirSet])
-  }, FUN.VALUE = numeric(1))
-  res$meanFC <- abs(res$meanFC)
-
-  ## set an x-axis label for 'meanFC'
-  if (ordBy == "meanFC") {
-    ordLabel <- "Mean Absolute logFC"
-  } else {
-    ordLabel <- ordBy
-  }
-
-  ## reorder results based on specified criterion
-  if (ordBy != "P.adjusted") {
-    res <- res[order(res[, ordBy], decreasing = TRUE), ]
-  } else {
-    res <- res[order(res[, ordBy], decreasing = FALSE), ]
-  }
-
-  ## select terms to be shown in the dotplot
-  if (is.numeric(showTerms)) {
-    res <- res[seq(ifelse(showTerms <= nrow(res), showTerms, nrow(res))), ]
-  } else if (is.character(showTerms)) {
-    res <- res[which(res$Subcategory %in% showTerms), ]
-  }
-
-  ## create a dotplot
-  dotRes <- ggplot2::ggplot(res,
-                            ggplot2::aes(x = !!ggplot2::sym(ordBy),
-                                         y = stats::reorder(.data$Subcategory,
-                                                            !!ggplot2::sym(ordBy)),
-                                         size = !!ggplot2::sym(sizeBy),
-                                         color = !!ggplot2::sym(colBy))) +
-    ggplot2::geom_point() +
-    ggplot2::scale_color_gradient(low = "red", high = "blue",
-                                  guide = ggplot2::guide_colorbar(reverse = TRUE)) +
-    ggplot2::ylab(NULL) +
-    ggplot2::scale_y_discrete() +
-    ggplot2::scale_size(range = c(3, 8)) +
-    ggplot2::guides(size = ggplot2::guide_legend(order = 1),
-                    color = ggplot2::guide_colorbar(order = 2)) +
-    ggplot2::xlab(ordLabel) +
-    theme_enr()
-
-  ## divide by enrichment direction
-  if (splitDir == TRUE) {
-    dotRes <- dotRes +
-      ggplot2::facet_grid(~ Enrichment) +
-      ggplot2::theme(strip.text = ggplot2::element_text(size = 12))
-  }
-  
-  ## add the title of the plot
-  if (!is.null(title)) {
-    dotRes <- dotRes +
-      ggplot2::ggtitle(title)
-  }
-
-  ## return ggplot2 graph
-  return(dotRes)
-
-}
-
-
-
-
-
-#' Create a ridgeplot to display the results of miRNA GSEA analysis
+#' Create a dotplot for functional enrichment analysis
 #'
-#' This function creates a ridgeplot that is useful for showing the results
-#' of a miRNA GSEA analysis. The output of this function is a plot where
-#' enrichmed terms found with [gseaMirnas()] function are visualized on the
-#' basis of miRNA fold changes. In particular, the plot displays enriched
-#' terms on the y-axis and miRNA fold changes on the x-axis. The resulting
-#' area represents the density of fold changes belonging to miRNAs annotated
-#' to that category.
+#' This function produces a dotplot to show the results of functional
+#' enrichment analyses carried out through over-representation analysis (ORA),
+#' gene set enrichment analysis (GSEA), and competitive gene set test accounting
+#' for inter-gene correlation (CAMERA). In particular, this function can take
+#' as input enrichment results generated by [enrichGenes()] and
+#' [enrichMirnas()] functions.
 #'
-#' @param mirnaGsea A [`MirnaGsea`][MirnaGsea-class] object containing the
-#' results of gene set enrichment analysis obtained with the [gseaMirnas()]
-#' function
-#' @param showTerms It is the number of top enriched terms to show or,
+#' @param enrichment An object of class
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] containing
+#' enrichment results
+#' @param showTerms It is the number of top significant terms to show or,
 #' alternatively, a character vector indicating the enriched terms to plot.
 #' Default is `10`
+#' @param splitDir Logical, if `TRUE` the resulting plot will be divided in
+#' two columns on the basis of enrichment direction (Up and Down).
+#' Default is `TRUE`. This only applies if enrichment method is GSEA or CAMERA
+#' @param ordBy The parameter used to set the x-axis scale. It must be one of
+#' `ratio` (default), `padj`, `pval` and `overlap`
+#' @param sizeBy The parameter used to set the size scale. It must be one of
+#' `ratio`, `padj`, `pval` and `overlap` (default)
 #' @param colBy The parameter used to set the color scale. It must be one of
-#' `P.adjusted` (default), `P.value` and `Observed`
+#' `ratio`, `padj` (default), `pval` and `overlap`
 #' @param title The title of the plot. Default is `NULL` not to include a plot
 #' title
 #'
 #' @returns
-#' An object of class `ggplot` containing the ridgeplot of miRNA GSEA results.
+#' A `ggplot` graph with a dotplot of enrichment results.
 #'
 #' @examples
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
 #' 
-#' # perform miRNA GSEA analysis
-#' gse_res <- gseaMirnas(obj, organism = "Homo sapiens",
-#' category = "GO_Annotations_mature")
+#' # perform GSEA with KEGG database
+#' gse <- enrichGenes(obj, method = "GSEA",
+#' database = "KEGG", organism = "Homo sapiens")
+#'
+#' # extract results
+#' res <- enrichmentResults(gse)
+#'
+#' # plot results
+#' enrichmentDotplot(gse)
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
+enrichmentDotplot <- function(enrichment,
+                              showTerms = 10,
+                              splitDir = TRUE,
+                              ordBy = "ratio",
+                              sizeBy = "overlap",
+                              colBy = "padj",
+                              title = NULL) {
+  
+  ## check inputs
+  if (!is(enrichment, "FunctionalEnrichment")) {
+    stop("'enrichment' should be of class FunctionalEnrichment!",
+         call. = FALSE)
+  }
+  if (nrow(enrichmentResults(enrichment)) < 1) {
+    stop("'enrichment' object does not contain any significant results!",
+         call. = FALSE)
+  }
+  if (!is.character(showTerms) &
+      !(is.numeric(showTerms) & length(showTerms) == 1)) {
+    stop(paste("'showTerms' must be the number of top enriched terms",
+               "to plot or, alternatively, a character vector containing",
+               "the terms to be shown."),
+         call. = FALSE)
+  }
+  if (is.character(showTerms) &
+      !all(showTerms %in% enrichmentResults(enrichment)$pathway)) {
+    stop("The terms provided are not present in 'enrichment' pathway column!",
+         call. = FALSE)
+  }
+  if (!is.logical(splitDir) |
+      length(splitDir) != 1) {
+    stop("'splitDir' must be logical (TRUE/FALSE)! See ?enrichmentDotplot",
+         call. = FALSE)
+  }
+  if (!is.character(ordBy) |
+      length(ordBy) != 1 |
+      !ordBy %in% c("ratio", "padj", "pval", "overlap")) {
+    stop(paste("'ordBy' must be one of: 'ratio' (default),",
+               "'padj', 'pval', 'overlap'"),
+         call. = FALSE)
+  }
+  if (!is.character(sizeBy) |
+      length(sizeBy) != 1 |
+      !sizeBy %in% c("ratio", "padj", "pval", "overlap")) {
+    stop(paste("'sizeBy' must be one of: 'ratio', 'padj',",
+               "'pval', 'overlap' (default)"),
+         call. = FALSE)
+  }
+  if (!is.character(colBy) |
+      length(colBy) != 1 |
+      !colBy %in% c("ratio", "padj", "pval", "overlap")) {
+    stop(paste("'colBy' must be one of: 'ratio', 'padj'",
+               "(default), 'pval', 'overlap'"),
+         call. = FALSE)
+  }
+  if (!(is.character(title) | is.null(title)) |
+      !length(title) %in% c(0, 1)) {
+    stop(paste("'title' must be the title of the plot (e.g. 'Enrichment').",
+               "For additional details see ?enrichmentDotplot"),
+         call. = FALSE)
+  }
+  
+  ## extract results from enrichment object
+  res <- enrichmentResults(enrichment)
+  
+  ## compute gene ratio and direction for different analyses
+  if (enrichmentMethod(enrichment) == "Gene-Set Enrichment Analysis (GSEA)") {
+    ov <- as.numeric(lapply(res$leadingEdge, length))
+    res$overlap <- ov
+    res$ratio <- ov/res$size
+    res$direction <- "Up"
+    res$direction[which(res$NES < 0)] <- "Down"
+  } else {
+    res$ratio <- res$overlap/res$size
+  }
+  
+  ## order results based on padj
+  res <- res[order(res$padj), ]
+  
+  ## select terms to be shown in the dotplot
+  if (is.numeric(showTerms)) {
+    res <- res[seq(ifelse(showTerms <= nrow(res), showTerms, nrow(res))), ]
+  } else if (is.character(showTerms)) {
+    res <- res[which(res$pathway %in% showTerms), ]
+  }
+  
+  ## set an x-axis label for 'ratio'
+  if (ordBy == "ratio") {
+    ordLabel <- "Gene-Set Overlap"
+  } else {
+    ordLabel <- ordBy
+  }
+  
+  ## reformat results based on specified criterion
+  if (ordBy != "padj" & ordBy != "pval") {
+    res <- res[order(res[, ordBy], decreasing = TRUE), ]
+  } else {
+    res[, ordBy] <- -log10(res[, ordBy])
+    res <- res[order(res[, ordBy], decreasing = TRUE), ]
+    ordLabel <- paste("-log10(", ordBy, ")", sep = "")
+  }
+  
+  ## create a dotplot
+  dotRes <- ggplot2::ggplot(res,
+                            ggplot2::aes(x = !!ggplot2::sym(ordBy),
+                                         y = stats::reorder(.data$pathway,
+                                                            !!ggplot2::sym(ordBy)),
+                                         size = !!ggplot2::sym(sizeBy),
+                                         color = !!ggplot2::sym(colBy))) +
+    ggplot2::geom_point() +
+    ggplot2::scale_color_gradient(low = "red", high = "blue",
+                                  guide = ggplot2::guide_colorbar(reverse = TRUE)) +
+    ggplot2::ylab(NULL) +
+    ggplot2::scale_y_discrete() +
+    ggplot2::scale_size(range = c(3, 8)) +
+    ggplot2::guides(size = ggplot2::guide_legend(order = 1),
+                    color = ggplot2::guide_colorbar(order = 2)) +
+    ggplot2::xlab(ordLabel) +
+    theme_enr()
+  
+  ## divide by enrichment direction
+  if (splitDir == TRUE &
+      enrichmentMethod(enrichment) != "Over-Representation Analysis (ORA)") {
+    dotRes <- dotRes +
+      ggplot2::facet_grid(~ direction) +
+      ggplot2::theme(strip.text = ggplot2::element_text(size = 12))
+  }
+  
+  ## add the title of the plot
+  if (!is.null(title)) {
+    dotRes <- dotRes +
+      ggplot2::ggtitle(title)
+  }
+  
+  ## return ggplot2 graph
+  return(dotRes)
+  
+}
+
+
+
+
+
+#' Create a barplot for functional enrichment analysis
+#'
+#' This function produces a barplot to show the results of functional
+#' enrichment analyses carried out through over-representation analysis (ORA),
+#' gene set enrichment analysis (GSEA), and competitive gene set test accounting
+#' for inter-gene correlation (CAMERA). In particular, this function can take
+#' as input enrichment results generated by [enrichGenes()] and
+#' [enrichMirnas()] functions.
+#'
+#' @param enrichment An object of class
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] containing
+#' enrichment results
+#' @param showTerms It is the number of top significant terms to show or,
+#' alternatively, a character vector indicating the enriched terms to plot.
+#' Default is `10`
+#' @param splitDir Logical, if `TRUE` the resulting plot will be divided in
+#' two columns on the basis of enrichment direction (Up and Down).
+#' Default is `TRUE`. This only applies if enrichment method is GSEA or CAMERA
+#' @param ordBy The parameter used to set the x-axis scale. It must be one of
+#' `ratio` (default), `padj`, `pval` and `overlap`
+#' @param colBy The parameter used to set the color scale. It must be one of
+#' `ratio`, `padj` (default), `pval` and `overlap`
+#' @param title The title of the plot. Default is `NULL` not to include a plot
+#' title
+#'
+#' @returns
+#' A `ggplot` graph with a barplot of enrichment results.
+#'
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform GSEA with KEGG database
+#' gse <- enrichGenes(obj, method = "GSEA",
+#' database = "KEGG", organism = "Homo sapiens")
+#'
+#' # extract results
+#' res <- enrichmentResults(gse)
+#'
+#' # plot results
+#' enrichmentBarplot(gse)
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
+enrichmentBarplot <- function(enrichment,
+                              showTerms = 10,
+                              splitDir = TRUE,
+                              ordBy = "ratio",
+                              colBy = "padj",
+                              title = NULL) {
+  
+  ## check inputs
+  if (!is(enrichment, "FunctionalEnrichment")) {
+    stop("'enrichment' should be of class FunctionalEnrichment!",
+         call. = FALSE)
+  }
+  if (nrow(enrichmentResults(enrichment)) < 1) {
+    stop("'enrichment' object does not contain any significant results!",
+         call. = FALSE)
+  }
+  if (!is.character(showTerms) &
+      !(is.numeric(showTerms) & length(showTerms) == 1)) {
+    stop(paste("'showTerms' must be the number of top enriched terms",
+               "to plot or, alternatively, a character vector containing",
+               "the terms to be shown."),
+         call. = FALSE)
+  }
+  if (is.character(showTerms) &
+      !all(showTerms %in% enrichmentResults(enrichment)$pathway)) {
+    stop("The terms provided are not present in 'enrichment' pathway column!",
+         call. = FALSE)
+  }
+  if (!is.logical(splitDir) |
+      length(splitDir) != 1) {
+    stop("'splitDir' must be logical (TRUE/FALSE)! See ?enrichmentBarplot",
+         call. = FALSE)
+  }
+  if (!is.character(ordBy) |
+      length(ordBy) != 1 |
+      !ordBy %in% c("ratio", "padj", "pval", "overlap")) {
+    stop(paste("'ordBy' must be one of: 'ratio' (default),",
+               "'padj', 'pval', 'overlap'"),
+         call. = FALSE)
+  }
+  if (!is.character(colBy) |
+      length(colBy) != 1 |
+      !colBy %in% c("ratio", "padj", "pval", "overlap")) {
+    stop(paste("'colBy' must be one of: 'ratio', 'padj'",
+               "(default), 'pval', 'overlap'"),
+         call. = FALSE)
+  }
+  if (!(is.character(title) | is.null(title)) |
+      !length(title) %in% c(0, 1)) {
+    stop(paste("'title' must be the title of the plot (e.g. 'Enrichment').",
+               "For additional details see ?enrichmentBarplot"),
+         call. = FALSE)
+  }
+  
+  ## extract results from enrichment object
+  res <- enrichmentResults(enrichment)
+  
+  ## compute gene ratio and direction for different analyses
+  if (enrichmentMethod(enrichment) == "Gene-Set Enrichment Analysis (GSEA)") {
+    ov <- as.numeric(lapply(res$leadingEdge, length))
+    res$overlap <- ov
+    res$ratio <- ov/res$size
+    res$direction <- "Up"
+    res$direction[which(res$NES < 0)] <- "Down"
+  } else {
+    res$ratio <- res$overlap/res$size
+  }
+  
+  ## order results based on padj
+  res <- res[order(res$padj), ]
+  
+  ## select terms to be shown in the barplot
+  if (is.numeric(showTerms)) {
+    res <- res[seq(ifelse(showTerms <= nrow(res), showTerms, nrow(res))), ]
+  } else if (is.character(showTerms)) {
+    res <- res[which(res$pathway %in% showTerms), ]
+  }
+  
+  ## set an x-axis label for 'ratio'
+  if (ordBy == "ratio") {
+    ordLabel <- "Gene-Set Overlap"
+  } else {
+    ordLabel <- ordBy
+  }
+  
+  ## reformat results based on specified criterion
+  if (ordBy != "padj" & ordBy != "pval") {
+    res <- res[order(res[, ordBy], decreasing = TRUE), ]
+  } else {
+    res[, ordBy] <- -log10(res[, ordBy])
+    res <- res[order(res[, ordBy], decreasing = TRUE), ]
+    ordLabel <- paste("-log10(", ordBy, ")", sep = "")
+  }
+  
+  ## create a dotplot
+  barRes <- ggplot2::ggplot(res,
+                            ggplot2::aes(x = !!ggplot2::sym(ordBy),
+                                         y = stats::reorder(.data$pathway,
+                                                            !!ggplot2::sym(ordBy)),
+                                         fill = !!ggplot2::sym(colBy))) +
+    ggplot2::geom_col() +
+    ggplot2::scale_fill_gradient(low = "red", high = "blue",
+                                 guide = ggplot2::guide_colorbar(reverse = TRUE)) +
+    ggplot2::ylab(NULL) +
+    ggplot2::scale_y_discrete() +
+    ggplot2::xlab(ordLabel) +
+    theme_enr()
+  
+  ## divide by enrichment direction
+  if (splitDir == TRUE &
+      enrichmentMethod(enrichment) != "Over-Representation Analysis (ORA)") {
+    barRes <- barRes +
+      ggplot2::facet_grid(~ direction) +
+      ggplot2::theme(strip.text = ggplot2::element_text(size = 12))
+  }
+  
+  ## add the title of the plot
+  if (!is.null(title)) {
+    barRes <- barRes +
+      ggplot2::ggtitle(title)
+  }
+  
+  ## return ggplot2 graph
+  return(barRes)
+  
+}
+
+
+
+
+
+#' Create a ridgeplot to display the results of GSEA analysis
+#'
+#' This function creates a ridgeplot that is useful for showing the results
+#' of GSEA analyses. The output of this function is a plot where enriched
+#' terms/pathways found with [enrichGenes()] function are visualized on the
+#' basis of the ranking metric used for the analysis. The resulting
+#' areas represent the density of signed p-values, log2 fold changes, or
+#' log.p-values belonging to genes annotated to that category.
+#'
+#' @param enrichment An object of class
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] containing
+#' enrichment results
+#' @param showTerms It is the number of top significant terms to show or,
+#' alternatively, a character vector indicating the enriched terms to plot.
+#' Default is `10`
+#' @param colBy The parameter used to set the color scale. It must be one of
+#' `ratio`, `padj` (default), `pval` and `overlap`
+#' @param title The title of the plot. Default is `NULL` not to include a plot
+#' title
+#'
+#' @returns
+#' An object of class `ggplot` containing the ridgeplot of GSEA results.
+#'
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform GSEA with KEGG database
+#' gse <- enrichGenes(obj, method = "GSEA",
+#' database = "KEGG", organism = "Homo sapiens")
+#'
+#' # extract results
+#' res <- enrichmentResults(gse)
 #'
 #' # plot results as a ridgeplot
-#' mirnaRidgeplot(gse_res)
+#' gseaRidgeplot(gse)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @importFrom rlang .data
 #' @export
-mirnaRidgeplot <- function(mirnaGsea,
-                           showTerms = 10,
-                           colBy = "P.adjusted",
-                           title = NULL) {
-
-  ## check inputs
-  if (!is(mirnaGsea, "MirnaGsea")) {
-    stop("'mirnaGsea' should be of class MirnaGsea! See ?gseaMirnas.",
+gseaRidgeplot <- function(enrichment,
+                          showTerms = 10,
+                          colBy = "padj",
+                          title = NULL) {
+  
+  if (!is(enrichment, "FunctionalEnrichment")) {
+    stop("'enrichment' should be of class FunctionalEnrichment!",
          call. = FALSE)
   }
-  if (nrow(enrichmentResults(mirnaGsea)) < 1) {
-    stop("'mirnaGsea' object does not contain any significant results!",
+  if (nrow(enrichmentResults(enrichment)) < 1) {
+    stop("'enrichment' object does not contain any significant results!",
          call. = FALSE)
   }
   if (!is.character(showTerms) &
@@ -712,84 +739,325 @@ mirnaRidgeplot <- function(mirnaGsea,
          call. = FALSE)
   }
   if (is.character(showTerms) &
-      !all(showTerms %in% enrichmentResults(mirnaGsea)$Subcategory)) {
-    stop("the terms provided are not present in 'mirnaGsea' Subcategory column!",
+      !all(showTerms %in% enrichmentResults(enrichment)$pathway)) {
+    stop("The terms provided are not present in 'enrichment' pathway column!",
          call. = FALSE)
   }
   if (!is.character(colBy) |
       length(colBy) != 1 |
-      !colBy %in% c("P.adjusted", "P.value", "Observed")) {
-    stop(paste("'colBy' must be one of: P.adjusted' (default),",
-               "'P.value', 'Observed'"),
+      !colBy %in% c("ratio", "padj", "pval", "overlap")) {
+    stop(paste("'colBy' must be one of: 'ratio', 'padj'",
+               "(default), 'pval', 'overlap'"),
          call. = FALSE)
   }
   if (!(is.character(title) | is.null(title)) |
       !length(title) %in% c(0, 1)) {
     stop(paste("'title' must be the title of the plot (e.g. 'Enrichment').",
-               "For additional details see ?mirnaRidgeplot"),
+               "For additional details see ?enrichmentDotplot"),
          call. = FALSE)
   }
-
-  ## extract results from enrichment object
-  res <- enrichmentResults(mirnaGsea)
-
-  ## warning if there are more than one category
-  if (length(unique(res$Category)) > 1) {
-    warning(paste("The object contains results from more than one category.",
-                  "If you want to plot enriched terms just from one miEAA",
-                  "category you can use: mirnaEnr['category']"), call. = FALSE)
+  
+  ## check that GSEA has been performed
+  if (enrichmentMethod(enrichment) != "Gene-Set Enrichment Analysis (GSEA)") {
+    stop(paste("To use this function, 'enrichment' must originate from a",
+               "gene-set enrichment analysis (GSEA).",
+               "For additional details see ?enrichmentBarplot"),
+         call. = FALSE)
   }
-
-  ## select terms to be shown in the dotplot
+  
+  ## extract results from enrichment object
+  res <- enrichmentResults(enrichment)
+  
+  ## extract ranked list from FunctionalEnrichment object
+  rankedList <- enrichmentMetric(enrichment)
+  names(rankedList) <- enrichedFeatures(enrichment)
+  
+  ## compute gene ratio
+  ov <- as.numeric(lapply(res$leadingEdge, length))
+  res$overlap <- ov
+  res$ratio <- ov/res$size
+  
+  ## order results based on padj
+  res <- res[order(res$padj), ]
+  
+  ## select terms to be shown in the ridgeplot
   if (is.numeric(showTerms)) {
     res <- res[seq(ifelse(showTerms <= nrow(res), showTerms, nrow(res))), ]
   } else if (is.character(showTerms)) {
-    res <- res[which(res$Subcategory %in% showTerms), ]
+    res <- res[which(res$pathway %in% showTerms), ]
   }
-
-  ## extract mirna fold changes
-  mirnaID <- mirnaIdEnrichment(mirnaGsea)
-  lfc <- lfcEnrichment(mirnaGsea)
-
-  ## retrieve logFCs for miRNAs in each category
-  lfcSet <- lapply(res[, "miRNAs/precursors"], function(x) {
-    mirSet <- stringr::str_split(x, "; ", simplify = TRUE)
-    lfc[mirnaID %in% mirSet]
+  
+  ## retrieve ranking metric for genes in each category
+  metricSet <- lapply(res[, "leadingEdge"], function(x) {
+    rankedList[intersect(x, names(rankedList))]
   })
-
-  ## create a dataframe with logFCs reported for each category
-  setLen <- vapply(lfcSet, length, FUN.VALUE = numeric(1))
-  meanLfc <- vapply(lfcSet, mean, FUN.VALUE = numeric(1))
-  ridgeDf <- data.frame(term = rep(res$Subcategory, setLen),
-                        P.adjusted = rep(res$P.adjusted, setLen),
-                        P.value = rep(res$P.value, setLen),
-                        Observed = rep(res$Observed, setLen),
-                        meanLFC = rep(meanLfc, setLen),
-                        val = unlist(lfcSet))
-
+  names(metricSet) <- res$pathway
+  
+  ## create a data.frame with metric reported for each category
+  setLen <- vapply(metricSet, length, FUN.VALUE = numeric(1))
+  meanMetric <- vapply(metricSet, mean, FUN.VALUE = numeric(1))
+  ridgeDf <- data.frame(pathway = rep(res$pathway, setLen),
+                        padj = rep(res$padj, setLen),
+                        pval = rep(res$pval, setLen),
+                        overlap = rep(res$overlap, setLen),
+                        metric = rep(meanMetric, setLen),
+                        val = unlist(metricSet))
+  
   ## create a ridgeplot
-  ridgeRes <- ggplot2::ggplot(ridgeDf, ggplot2::aes(x = .data$val,
-                                                    y = stats::reorder(.data$term,
-                                                                       .data$meanLFC),
-                                                    fill = !!ggplot2::sym(colBy))) +
+  ridPlot <- ggplot2::ggplot(ridgeDf,
+                             ggplot2::aes(x = .data$val,
+                                          y = stats::reorder(.data$pathway,
+                                                             .data$metric),
+                                          fill = !!ggplot2::sym(colBy))) +
     ggridges::geom_density_ridges() +
     ggplot2::scale_fill_continuous(low = "red",
                                    high = "blue",
-                                   name = "P.adjusted",
+                                   name = colBy,
                                    guide = ggplot2::guide_colorbar(reverse = TRUE)) +
     ggplot2::ylab(NULL) +
-    ggplot2::xlab("miRNAs logFC") +
+    ggplot2::xlab("Ranking Metric") +
     theme_enr()
   
   ## add the title of the plot
   if (!is.null(title)) {
-    ridgeRes <- ridgeRes +
+    ridPlot <- ridPlot +
       ggplot2::ggtitle(title)
   }
-
+  
   ## return ggplot2 graph
-  return(ridgeRes)
+  return(ridPlot)
+  
+}
 
+
+
+
+
+#' Create a GSEA plot that displays the running enrichment score (ES) for a
+#' given pathway
+#'
+#' This function creates a classic enrichment plot to show the results of
+#' gene set enrichment analyses (GSEA). In particular, this function takes as
+#' input GSEA results originating from the [enrichGenes()] function, and
+#' returns a [ggplot2] object with GSEA plot. In this kind of plots, the
+#' running enrichment score (ES) for a given pathway is shown on the y-axis,
+#' whereas gene positions in the ranked list are reported on the x-axis.
+#'
+#' @param enrichment An object of class
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] containing
+#' enrichment results
+#' @param pathway It must be the name of a significantly enriched term/pathway
+#' for which we want to produce a GSEA plot (e.g. 'Thyroid hormone synthesis') 
+#' @param showTitle Logical, whether to add the name of the pathway/term as
+#' plot title. Default is TRUE
+#' @param rankingMetric Logical, whether to show the variations of the ranking
+#' metric below the plot. Default is FALSE
+#' @param lineColor It must be an R color name that specifies the color of
+#' the running score line. Default is `green`. All available colors
+#' can be listed with [grDevices::colors()]
+#' @param lineSize The line width of the running score line. Default is `1`
+#' @param vlineColor It must be an R color name that specifies the color of
+#' the vertical line indicating the enrichment score (ES). Default is `red`.
+#' All available colors can be listed with [grDevices::colors()]
+#' @param vlineSize The line width of the vertical line indicating the
+#' enrichment score (ES). Default is `0.6`
+#'
+#' @returns
+#' An object of class `ggplot` containing the GSEA plot.
+#'
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform GSEA with KEGG database
+#' gse <- enrichGenes(obj, method = "GSEA",
+#' database = "KEGG", organism = "Homo sapiens")
+#'
+#' # extract results
+#' res <- enrichmentResults(gse)
+#'
+#' # plot results
+#' gseaPlot(gse, pathway = "Thyroid hormone synthesis")
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
+gseaPlot <- function(enrichment,
+                     pathway,
+                     showTitle = TRUE,
+                     rankingMetric = FALSE,
+                     lineColor = "green",
+                     lineSize = 1,
+                     vlineColor = "red",
+                     vlineSize = 0.6) {
+  
+  ## check inputs
+  if (!is(enrichment, "FunctionalEnrichment")) {
+    stop("'enrichment' should be of class FunctionalEnrichment!",
+         call. = FALSE)
+  }
+  if (nrow(enrichmentResults(enrichment)) < 1) {
+    stop("'enrichment' object does not contain any significant results!",
+         call. = FALSE)
+  }
+  if (is.character(pathway) &
+      !pathway %in% enrichmentResults(enrichment)$pathway) {
+    stop("'pathway' is not present in 'enrichment' pathway column!",
+         call. = FALSE)
+  }
+  if (!is.logical(showTitle) |
+      length(showTitle) != 1) {
+    stop("'showTitle' must be logical (TRUE/FALSE)! See ?gseaPlot",
+         call. = FALSE)
+  }
+  if (!is.logical(rankingMetric) |
+      length(rankingMetric) != 1) {
+    stop("'rankingMetric' must be logical (TRUE/FALSE)! See ?gseaPlot",
+         call. = FALSE)
+  }
+  if (!is.character(lineColor) |
+      length(lineColor) != 1 |
+      !lineColor %in% grDevices::colors()) {
+    stop(paste("'lineColor' must be an R color name. All available colors",
+               "can be listed with 'colors()'."),
+         call. = FALSE)
+  }
+  if (!is.numeric(lineSize) |
+      length(lineSize) != 1 |
+      lineSize < 0) {
+    stop("'lineSize' must be a non-neagtive number! (default is 1)",
+         call. = FALSE)
+  }
+  if (!is.character(vlineColor) |
+      length(vlineColor) != 1 |
+      !vlineColor %in% grDevices::colors()) {
+    stop(paste("'vlineColor' must be an R color name. All available colors",
+               "can be listed with 'colors()'."),
+         call. = FALSE)
+  }
+  if (!is.numeric(vlineSize) |
+      length(vlineSize) != 1 |
+      vlineSize < 0) {
+    stop("'vlineSize' must be a non-neagtive number! (default is 0.6)",
+         call. = FALSE)
+  }
+  
+  ## check that GSEA has been performed
+  if (enrichmentMethod(enrichment) != "Gene-Set Enrichment Analysis (GSEA)") {
+    stop(paste("To use this function, 'enrichment' must originate from a",
+               "gene-set enrichment analysis (GSEA).",
+               "For additional details see ?enrichmentBarplot"),
+         call. = FALSE)
+  }
+  
+  ## extract ranked list and gene sets from FunctionalEnrichment object
+  geneSet <- enrichment@geneSet
+  rankedList <- enrichmentMetric(enrichment)
+  names(rankedList) <- enrichedFeatures(enrichment)
+  
+  ## extract the gene set of interest
+  gs <- geneSet[[pathway]]
+  
+  ## keep only the genes present in ranked list
+  gs <- intersect(gs, names(rankedList))
+  
+  ## define the lengths of gene set and ranked list
+  lengthRank <- length(rankedList)
+  lengthSet <- length(gs)
+  
+  ## create vectors for positive and negative hits
+  pos <- numeric(lengthRank)
+  misses <- numeric(lengthRank)
+  
+  ## identify the positions of the genes in ranked list belonging to the pathway
+  hits <- names(rankedList) %in% gs
+  
+  ## calculate scores
+  pos[hits] <- abs(rankedList[hits])
+  misses[!hits] <-  1/(lengthRank-lengthSet)
+  
+  ## determine cumulative sums
+  pSum <- sum(pos)
+  pos <- cumsum(pos/pSum)
+  misses <- cumsum(misses)
+  
+  ## compute GSEA running score
+  runScore <- pos - misses
+  
+  ## set the maximum absolute deviance from zero (ES)
+  if(abs(max(runScore)) < abs(min(runScore))) {
+    es <- min(runScore)
+  } else {
+    es <- max(runScore)
+  }
+  
+  ## create data.frame for ggplot2
+  gseData <- data.frame(position = seq(length(runScore)),
+                        runScore = runScore,
+                        hits = hits,
+                        genes = names(rankedList),
+                        metric = rankedList)
+  
+  ## add ymin and ymax for ranges
+  gseData$ymin <- 0
+  gseData$ymax <- 0
+  gseData$ymin[hits] <- - diff(range(runScore))/20
+  gseData$ymax[hits] <- diff(range(runScore))/20
+  
+  ## create GSEA plot with ggplot2
+  gsePlot <- ggplot2::ggplot(gseData, ggplot2::aes(x = position)) +
+    ggplot2::geom_line(ggplot2::aes(y = runScore),
+                       linewidth = lineSize,
+                       color = lineColor) +
+    ggplot2::geom_vline(xintercept = which(runScore == es),
+                        color = vlineColor,
+                        linewidth = vlineSize,
+                        linetype = "dashed") +
+    ggplot2::geom_linerange(ggplot2::aes(ymin = ymin,
+                                         ymax = ymax)) +
+    ggplot2::geom_hline(yintercept = 0) +
+    ggplot2::xlab("Position in Ranked List of Genes") +
+    ggplot2::ylab("Running Score") +
+    theme_enr()
+  
+  ## add pathway title if desired
+  if (showTitle == TRUE) {
+    gsePlot <- gsePlot +
+      ggplot2::ggtitle(pathway)
+  }
+  
+  ## show ranking metric if wanted by the user
+  if (rankingMetric == TRUE) {
+    
+    ## remove x axis element from GSEA plot
+    gsePlot <- gsePlot +
+      ggplot2::xlab(NULL) +
+      ggplot2::theme(axis.text.x = ggplot2::element_blank(),
+                     axis.ticks.x = ggplot2::element_blank())
+    
+    ## create rank plot
+    rankPlot <- ggplot2::ggplot(gseData, ggplot2::aes(x = position)) +
+      ggplot2::geom_segment(ggplot2::aes(xend = position,
+                                         y = metric,
+                                         yend=0),
+                            color="black") +
+      ggplot2::ylab("Ranking Metric") +
+      ggplot2::xlab("Position in Ranked List of Genes") +
+      theme_enr()
+    
+    ## merge GSEA plot and rank plot
+    gsePlot <- ggpubr::ggarrange(gsePlot,
+                                 rankPlot,
+                                 ncol = 1,
+                                 heights = c(1, 0.7),
+                                 align = "v")
+    
+  }
+  
+  ## return ggplot2 object
+  return(gsePlot)
+  
 }
 
 
@@ -817,7 +1085,7 @@ theme_enr <- function() {
 
 
 
-#' Create a trackplot tho show association between miRNAs and disease-SNPs
+#' Create a trackplot to show the association between miRNAs and disease-SNPs
 #'
 #' This function plots a trackplot that shows the genomic position of
 #' disease-associated SNPs that affect miRNA genes. This is useful to visualize
@@ -1237,8 +1505,8 @@ plotCorrelation <- function(mirnaObj,
   }
   
   ## determine the correlation coefficient used
-  corMethod <- colnames(mirnaTargetsIntegration(mirnaObj))[4]
-  corMethod <- tolower(strsplit(corMethod, ".", fixed = TRUE)[[1]][1])
+  corMethod <- mirnaTargetsIntegration(mirnaObj, param = TRUE)$method
+  corMethod <- tolower(sub("([A-Za-z]+).*", "\\1", corMethod))
   
   ## inform the user about using Pearson's correlation with rank data
   if (useRanks == TRUE & corMethod == "pearson") {

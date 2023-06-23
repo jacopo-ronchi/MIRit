@@ -2,152 +2,110 @@
 % Please edit documentation in R/enrichment.R
 \name{enrichTargets}
 \alias{enrichTargets}
-\title{Perform an enrichment analysis of microRNA targets}
+\title{Perform an enrichment analysis of integrated microRNA targets}
 \usage{
 enrichTargets(
   mirnaObj,
-  integratedTargets = TRUE,
   database = "GO",
+  category = NULL,
   organism = "Homo sapiens",
-  simplifyGO = TRUE,
   pCutoff = 0.05,
-  qCutoff = 0.2,
   pAdjustment = "fdr",
-  ...
+  minSize = 10,
+  maxSize = 500
 )
 }
 \arguments{
 \item{mirnaObj}{A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object
 containing miRNA and gene data}
 
-\item{integratedTargets}{Logical, whether to perform the enrichment analysis
-for target genes statistically associated with DE-miRNA expression or for
-all DE-miRNA targets. Default is \code{TRUE} to only enrich
-associated/correlated targets. See the 'details' section}
-
 \item{database}{The name of the database used for the enrichment analysis.
-It must be one of: \code{GO}, \code{KEGG}, \code{Reactome}, \code{DisGeNet} and \code{WikiPathways}.
-Default is \code{GO}}
+It must be one of: \code{GO}, \code{KEGG}, \code{MsigDB}, \code{WikiPathways}, \code{Reactome},
+\code{Enrichr}, \code{DO}, \code{NCG}, \code{DisGeNET}, \code{COVID19}. Default is \code{GO}}
+
+\item{category}{The desired subcategory of gene sets present in \code{database}.
+Please, see the \emph{details} section to check the available categories for
+each database. Default is NULL to use default categories}
 
 \item{organism}{The name of the organism under consideration. The different
 databases have different supported organisms. To see the list of supported
 organisms for a given database, use the \code{\link[=supportedOrganisms]{supportedOrganisms()}} function.
 Default is \verb{Homo sapiens}}
 
-\item{simplifyGO}{Logical, whether to apply the
-\code{\link[clusterProfiler:simplify-methods]{clusterProfiler::simplify()}} function in \code{clusterProfiler} package to
-reduce the redundancy of GO terms in the results (default is \code{TRUE}).
-This argument is only considered when \code{database} is set to \code{GO}. For further
-information see the \emph{details} section}
-
 \item{pCutoff}{The adjusted p-value cutoff to use for statistical
 significance. The default value is \code{0.05}}
-
-\item{qCutoff}{The q-value cutoff to use for statistical significance
-The default value is \code{0.2}}
 
 \item{pAdjustment}{The p-value correction method for multiple testing. It
 must be one of: \code{fdr} (default), \code{BH}, \code{none}, \code{holm}, \code{hochberg}, \code{hommel},
 \code{bonferroni}, \code{BY}}
 
-\item{...}{Other parameters that can be given to the enrichment functions}
+\item{minSize}{The minimum size for a gene set. All gene sets containing
+less than this number of genes will not be considered. Default is 10}
+
+\item{maxSize}{The maximum size for a gene set. All gene sets containing
+more than this number of genes will not be considered. Default is 500}
 }
 \value{
-A \code{list} object with two elements, namely 'UP-miRNA targets' and
-'DOWN-miRNA targets', containing enrichment results of genes targeted by
-upregulated miRNAs and by downregulated miRNAs, respectively. Each element
-of this \code{list} consists of an object of class
-\code{\link[DOSE:enrichResult-class]{enrichResult-class}} containing the outcome
-of the enrichment analysis of target genes. To access the enrichment results
-as a standard \code{data.frame}, you can use the \code{as.data.frame()} function.
-The user can also refer to the documentation of \code{clusterProfiler} for
-analyzing and plotting results:
-\url{http://yulab-smu.top/biomedical-knowledge-mining-book/index.html}.
+This function produces a \code{list} object with two elements, namely
+'upregulated' and 'downregulated', each containing a
+\code{\link[=FunctionalEnrichment-class]{FunctionalEnrichment}}
+object storing enrichment results of upregulated and downregulated target
+genes, respectively.
+
+To access results of \code{\link[=FunctionalEnrichment-class]{FunctionalEnrichment}}
+objects, the user can use the \code{\link[=enrichmentResults]{enrichmentResults()}} function. Additionally,
+MIRit provides several functions to graphically represent enrichment
+analyses, including \code{\link[=enrichmentBarplot]{enrichmentBarplot()}}, and \code{\link[=enrichmentDotplot]{enrichmentDotplot()}}.
 }
 \description{
-This function allows to enrich microRNA targets through an
-over-representation analysis (ORA). This can be done to investigate the
-biological effects of the target genes that were found to be statistically
-associated/correlated with DE-miRNAs. The enrichment analysis can be
-performed using different databases, namely Gene Ontology
-(GO) - Biological Process, Kyoto Encyclopedia of Genes and Genomes (KEGG),
-Reactome, DisGeNet and WikiPathways.
+This function allows to perform an over-representation analysis (ORA) of
+integrated miRNA targets in order to explore the biological effects of
+targets that are statistically associated/correlated with DE-miRNAs. The
+enrichment analysis can be performed using different databases, namely
+Gene Ontology (GO), Kyoto Encyclopedia of Genes and Genomes (KEGG), MsigDB,
+WikiPathways, Reactome, Enrichr, Disease Ontology (DO), Network of Cancer
+Genes (NCG), DisGeNET, and COVID19.
 }
 \details{
-The enrichment analysis may be carried out either for the integrated
-targets, which are those statistically associated/correlated with DE-miRNA
-expression, or for all target genes of DE-miRNAs. To enrich only the
-successfully integrated targets \code{integratedTargets} must be set to \code{TRUE},
-whereas to enrich all the DE-miRNA target genes \code{integratedTargets} must
-be \code{FALSE}.
+For each database, different organisms are supported. To check the supported
+organisms for a given database, MIRit provides the \code{\link[=supportedOrganism]{supportedOrganism()}}
+function.
 
-Moreover, if the enrichment analysis is performed using \code{GO} database,
-the \code{\link[clusterProfiler:simplify-methods]{clusterProfiler::simplify()}} method contained in the \code{clusterProfiler}
-package may be used. This is particularly useful since the structure of GO
-database is highly redundant. Therefore, to remove some of the redundancy
-from the resulting enriched GO terms, the parameter \code{simplifyGO} can be set
-to \code{TRUE}.
+Moreover, since different database support multiple subcategories, the
+\code{category} parameter can be set to specify the desired resource. For
+specific information regarding the available categories for the different
+databases, check the \emph{details} section of the \code{\link[=enrichGenes]{enrichGenes()}} documentation.
 }
 \note{
-The over-representation analysis is implemented in this function through
-the packages \code{clusterProfiler}, \code{ReactomePA} and \code{DOSE}.
+To download gene sets from the above mentioned databases, MIRit uses the
+\code{geneset} R package. Moreover, to perform ORA, MIRit implements the
+\code{fgsea} package in Bioconductor.
 }
 \examples{
 # load example MirnaExperiment object
 obj <- loadExamples()
 
-# perform enrichment analysis of integrated targets with Reactome
-targets_enrichment <- enrichTargets(obj, database = "Reactome")
+# perform enrichment analysis of integrated targets with KEGG
+targets_enrichment <- enrichTargets(obj, method = "ORA", database = "KEGG")
 
-# extract the enrichment of targets of upregulated miRNAs
-enr_up <- targets_enrichment[["UP-miRNA targets"]]
+# extract enrichment results of downregulated targets
+enr_down <- targets_enrichment[["downregulated"]]
 
 # extract enrichment results as a data.frame
-enr_df <- as.data.frame(enr_up)
-enr_df
+enr_df <- enrichmentResults(enr_down)
 
 # create a dotplot of enriched terms
-enrichplot::dotplot(enr_up)
+enrichmentDotplot(enr_down)
 
 }
 \references{
-T Wu, E Hu, S Xu, M Chen, P Guo, Z Dai, T Feng, L Zhou, W Tang, L Zhan, X
-Fu, S Liu, X Bo, and G Yu. clusterProfiler 4.0: A universal enrichment tool
-for interpreting omics data. The Innovation. 2021, 2(3):100141
+Liu, Y., Li, G. Empowering biologists to decode omics data: the Genekitr R
+package and web server. BMC Bioinformatics 24, 214 (2023).
+\url{https://doi.org/10.1186/s12859-023-05342-9}.
 
-Guangchuang Yu, Qing-Yu He. ReactomePA: an R/Bioconductor package for
-reactome pathway analysis and visualization. Molecular BioSystems 2016,
-12(2):477-479
-
-Guangchuang Yu, Li-Gen Wang, Guang-Rong Yan, Qing-Yu He. DOSE: an
-R/Bioconductor package for Disease Ontology Semantic and Enrichment
-analysis. Bioinformatics 2015 31(4):608-609
-
-Ashburner, M., Ball, C., Blake, J. et al. Gene Ontology: tool for the
-unification of biology. Nat Genet 25, 25–29 (2000).
-\url{https://doi.org/10.1038/75556}
-
-Minoru Kanehisa, Susumu Goto, KEGG: Kyoto Encyclopedia of Genes and Genomes,
-Nucleic Acids Research, Volume 28, Issue 1, 1 January 2000, Pages 27–30,
-\url{https://doi.org/10.1093/nar/28.1.27}
-
-G. Joshi-Tope, M. Gillespie, I. Vastrik, P. D'Eustachio, E. Schmidt, B.
-de Bono, B. Jassal, G.R. Gopinath, G.R. Wu, L. Matthews, S. Lewis, E.
-Birney, L. Stein, Reactome: a knowledgebase of biological pathways, Nucleic
-Acids Research, Volume 33, Issue suppl_1, 1 January 2005, Pages D428–D432,
-\url{https://doi.org/10.1093/nar/gki072}
-
-Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,
-E., Sanz, F., & Furlong, L. I. (2020). The DisGeNET knowledge platform for
-disease genomics: 2019 update. Nucleic Acids Research, 48(D1), D845-D855.
-
-Marvin Martens, Ammar Ammar, Anders Riutta, Andra Waagmeester, Denise N
-Slenter, Kristina Hanspers, Ryan A. Miller, Daniela Digles, Elisson N Lopes,
-Friederike Ehrhart, Lauren J Dupuis, Laurent A Winckers, Susan L Coort, Egon
-L Willighagen, Chris T Evelo, Alexander R Pico, Martina Kutmon,
-WikiPathways: connecting communities, Nucleic Acids Research, Volume 49,
-Issue D1, 8 January 2021, Pages D613–D621,
-\url{https://doi.org/10.1093/nar/gkaa1024}
+Korotkevich G, Sukhov V, Sergushichev A (2019). “Fast gene set enrichment
+analysis.” bioRxiv. doi:10.1101/060012,
+\url{http://biorxiv.org/content/early/2016/06/20/060012}.
 }
 \author{
 Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}

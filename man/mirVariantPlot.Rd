@@ -2,7 +2,7 @@
 % Please edit documentation in R/visualization.R
 \name{mirVariantPlot}
 \alias{mirVariantPlot}
-\title{Create a trackplot tho show association between miRNAs and disease-SNPs}
+\title{Create a trackplot to show the association between miRNAs and disease-SNPs}
 \usage{
 mirVariantPlot(
   variantId,

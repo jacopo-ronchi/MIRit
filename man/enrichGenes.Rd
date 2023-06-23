@@ -2,137 +2,259 @@
 % Please edit documentation in R/enrichment.R
 \name{enrichGenes}
 \alias{enrichGenes}
-\title{Perform an over-representation analysis of differentially expressed genes}
+\title{Perform functional enrichment analysis of genes}
 \usage{
 enrichGenes(
   mirnaObj,
+  method = "GSEA",
   database = "GO",
+  category = NULL,
   organism = "Homo sapiens",
-  simplifyGO = TRUE,
   pCutoff = 0.05,
-  qCutoff = 0.2,
   pAdjustment = "fdr",
-  ...
+  minSize = 10,
+  maxSize = 500,
+  rankMetric = "signed.pval",
+  eps = 1e-50
 )
 }
 \arguments{
 \item{mirnaObj}{A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object
 containing miRNA and gene data}
 
+\item{method}{The functional enrichment analysis to perform. It must be one
+of \code{ORA}, \code{GSEA} (default), and \code{CAMERA}. For additional information, see
+the \emph{details} section}
+
 \item{database}{The name of the database used for the enrichment analysis.
-It must be one of: \code{GO}, \code{KEGG}, \code{Reactome}, \code{DisGeNet} and \code{WikiPathways}.
-Default is \code{GO}}
+It must be one of: \code{GO}, \code{KEGG}, \code{MsigDB}, \code{WikiPathways}, \code{Reactome},
+\code{Enrichr}, \code{DO}, \code{NCG}, \code{DisGeNET}, \code{COVID19}. Default is \code{GO}}
+
+\item{category}{The desired subcategory of gene sets present in \code{database}.
+Please, see the \emph{details} section to check the available categories for
+each database. Default is NULL to use default categories}
 
 \item{organism}{The name of the organism under consideration. The different
 databases have different supported organisms. To see the list of supported
 organisms for a given database, use the \code{\link[=supportedOrganisms]{supportedOrganisms()}} function.
 Default is \verb{Homo sapiens}}
 
-\item{simplifyGO}{Logical, whether to apply the
-\code{\link[clusterProfiler:simplify-methods]{clusterProfiler::simplify()}} function in \code{clusterProfiler} package to
-reduce the redundancy of GO terms in the results (default is \code{TRUE}).
-This argument is only considered when \code{database} is set to \code{GO}. For further
-information see the \emph{details} section}
-
 \item{pCutoff}{The adjusted p-value cutoff to use for statistical
 significance. The default value is \code{0.05}}
-
-\item{qCutoff}{The q-value cutoff to use for statistical significance
-The default value is \code{0.2}}
 
 \item{pAdjustment}{The p-value correction method for multiple testing. It
 must be one of: \code{fdr} (default), \code{BH}, \code{none}, \code{holm}, \code{hochberg}, \code{hommel},
 \code{bonferroni}, \code{BY}}
 
-\item{...}{Other parameters that can be given to the enrichment functions}
+\item{minSize}{The minimum size for a gene set. All gene sets containing
+less than this number of genes will not be considered. Default is 10}
+
+\item{maxSize}{The maximum size for a gene set. All gene sets containing
+more than this number of genes will not be considered. Default is 500}
+
+\item{rankMetric}{The ranking statistic used to order genes before performing
+GSEA. It must be one of \code{signed.pval} (default), \code{logFC}, and \code{log.pval}.
+For additional information, refer to the \emph{details} section}
+
+\item{eps}{The lower boundary for p-value calculation (default is 1e-50).
+To compute exact p-values, this parameter can be set to 0, even though
+the analysis will be slower}
 }
 \value{
-A \code{list} object with two elements, namely 'upregulated' and 'downregulated',
-containing enrichment results of upregulated and downregulated genes,
-respectively. Each element of this \code{list} consists of an object of class
-\code{\link[DOSE:enrichResult-class]{enrichResult-class}} containing the outcome
-of the enrichment analysis of DE-genes. To access the enrichment results
-as a standard \code{data.frame}, you can use the \code{as.data.frame()} function.
-The user can also refer to the documentation of \code{clusterProfiler} for
-analyzing and plotting results:
-\url{http://yulab-smu.top/biomedical-knowledge-mining-book/index.html}.
+For method \code{GSEA} and \code{CAMERA}, this function produces an object of class
+\code{\link[=FunctionalEnrichment-class]{FunctionalEnrichment}} containing enrichment
+results. Instead, when \code{ORA} is used, this function returns a \code{list} object
+with two elements, namely 'upregulated' and 'downregulated',
+each containing a \code{\link[=FunctionalEnrichment-class]{FunctionalEnrichment}}
+object storing enrichment results of upregulated and downregulated genes,
+respectively.
+
+To access results of \code{\link[=FunctionalEnrichment-class]{FunctionalEnrichment}}
+objects, the user can use the \code{\link[=enrichmentResults]{enrichmentResults()}} function. Additionally,
+MIRit provides several functions to graphically represent enrichment
+analyses, including \code{\link[=enrichmentBarplot]{enrichmentBarplot()}}, \code{\link[=enrichmentDotplot]{enrichmentDotplot()}},
+\code{\link[=gseaPlot]{gseaPlot()}}, and \code{\link[=gseaRidgeplot]{gseaRidgeplot()}}.
 }
 \description{
-This function allows to enrich upregulated and downregulated genes through
-an over-representation analysis (ORA). This can be done to investigate the
-biological effects of gene expression dysregulations. The enrichment
-analysis can be carried out using different databases, namely Gene Ontology
-(GO) - Biological Process, Kyoto Encyclopedia of Genes and Genomes (KEGG),
-Reactome, DisGeNet and WikiPathways.
+This function allows to investigate the biological functions and pathways
+that result dysregulated across biological conditions. In particular,
+different enrichment approaches can be used, including over-representation
+analysis (ORA), gene-set enrichment analysis (GSEA), and Correlation Adjusted
+MEan RAnk gene set test (CAMERA). Moreover, for all these analyses, the
+enrichment can be carried out using different databases, namely Gene Ontology
+(GO), Kyoto Encyclopedia of Genes and Genomes (KEGG), MsigDB, WikiPathways,
+Reactome, Enrichr, Disease Ontology (DO), Network of Cancer Genes (NCG),
+DisGeNET, and COVID19. For exhaustive information on how to use this
+function, please refer to the \emph{details} section.
 }
 \details{
-If the enrichment analysis is performed using \code{GO} database,
-the \code{\link[clusterProfiler:simplify-methods]{clusterProfiler::simplify()}} method contained in the \code{clusterProfiler}
-package may be used. This is particularly useful since the structure of GO
-database is highly redundant. Therefore, to remove some of the redundancy
-from the resulting enriched GO terms, the parameter \code{simplifyGO} can be set
-to \code{TRUE}.
+\subsection{Enrichment method}{
+
+The method used for functional enrichment analysis will drastically
+influence the biological results, and thus, it must be carefully chosen.
+\code{ORA} (Boyle et al., 2004) takes differentially expressed genes (separately
+considering upregulated and downregulated features) and uses the
+hypergeometric test to infer the biological processes that are regulated by
+these genes more than would be expected by chance. The downside of this
+approach is that we only consider genes that passed a pre-defined threshold,
+thus losing all the slight changes in gene expression that may have important
+biological consequences.
+
+To address this limit, \code{GSEA} was introduced (Subramanian, 2005). This
+analysis starts by ranking genes according to a specific criterion, and then
+uses a running statistic that is able to identify even slight but coordinated
+expression changes of genes belonging to a specific pathway. Therefore,
+\code{GSEA} is the default method used in MIRit to perform the functional
+enrichment analysis of genes.
+
+Moreover, in addition to ORA and GSEA, this function allows to perform the
+enrichment analysis through \code{CAMERA} (Wu and Smyth, 2012), which is another
+competitive test used for functional enrichment of genes. The main advantage
+of this method is that it adjusts the gene set test statistic according to
+inter-gene correlations. This is particularly interesting since it was
+demonstrated that inter-gene correlations may affect the reliability of
+functional enrichment analyses.
+}
+
+\subsection{Databases and categories}{
+
+Regarding gene sets, multiple databases can be used to investigate the
+consequences of gene expression alterations. However, different databases
+also includes several subcategories with different annotations. To
+specifically query desired categories, the \code{category} parameter is used. As
+a reference, here are listed the available categories for the different
+databases supported:
+\itemize{
+\item Gene Ontology (GO):
+\itemize{
+\item \code{bp}, for GO - Biological Processes;
+\item \code{mf}, for GO - Molecular Function;
+\item \code{cc}, for GO - Cellular Component;
+}
+\item Kyoto Encyclopedia of Genes and Genomes (KEGG):
+\itemize{
+\item \code{pathway}, for KEGG biological pathways;
+\item \code{module}, for KEGG reaction modules;
+\item \code{enzyme}, for KEGG enzyme nomenclature;
+\item \code{disease}, for KEGG diseases (only Homo sapiens supported);
+\item \code{drug}, for KEGG drug targets (only Homo sapiens supported);
+\item \code{network}, for KEGG disease/drug perturbation netowrks (only Homo
+sapiens supported);
+}
+\item MsigDB:
+\itemize{
+\item \code{H}, for MsigDB hallmark genes of specific biological states/processes;
+\item \code{C1}, for gene sets of human chromosome cytogenetic bands;
+\item \code{C2-CGP}, for expression signatures of genetic and chemical
+perturbations;
+\item \code{C2-CP-BIOCARTA}, for canonical pathways gene sets derived from the
+BioCarta pathway database;
+\item \code{C2-CP-KEGG}, for canonical pathways gene sets derived from the
+KEGG pathway database;
+\item \code{C2-CP-PID}, for canonical pathways gene sets derived from the
+PID pathway database;
+\item \code{C2-CP-REACTOME}, for canonical pathways gene sets derived from the
+Reactome pathway database;
+\item \code{C2-CP-WIKIPATHWAYS}, for canonical pathways gene sets derived from the
+WikiPathways database;
+\item \code{C3-MIR-MIRDB}, for gene sets containing high-confidence gene-level
+predictions of human miRNA targets as catalogued by miRDB v6.0 algorithm;
+\item \code{C3-MIR-MIR_Legacy}, for older gene sets that contain genes sharing
+putative target sites of human mature miRNA in their 3'-UTRs;
+\item \code{C3-TFT-GTRD}, for genes that share GTRD predicted transcription factor
+binding sites in the region -1000,+100 bp around the TSS for the
+indicated transcription factor;
+\item \code{C3-TFT-TFT_Legacy}, for older gene sets that share upstream
+cis-regulatory motifs which can function as potential transcription factor
+binding sites;
+\item \code{C4-CGN}, for gene sets defined by expression neighborhoods centered
+on 380 cancer-associated genes;
+\item \code{C4-CM}, for cancer modules as defined by Segal et al. 2004;
+\item \code{C5-GO-BP}, for GO - biological process ontology;
+\item \code{C5-GO-CC}, for GO - cellular component ontology;
+\item \code{C5-GO-MF}, for GO - molecular function ontology;
+\item \code{C5-HPO}, for Human Phenotype ontology (HPO);
+\item \code{C6}, for gene sets that represent signatures of cellular pathways which
+are often dis-regulated in cancer;
+\item \code{C7-IMMUNESIGDB}, for manually curated gene sets representing chemical
+and genetic perturbations of the immune system;
+\item \code{C7-VAX}, for gene sets deriving from the Human Immunology Project
+Consortium (HIPC) describing human transcriptomic immune responses to
+vaccinations;
+\item \code{C8}, for gene sets that contain curated cluster markers for cell types;
+}
+\item WikiPathways;
+\item Reactome;
+\item Enrichr:
+\itemize{
+\item All avaliable gene sets can be listed through
+\code{geneset::enrichr_metadata}
+}
+\item Disease Ontology (DO);
+\item Network of Cancer Genes (NCG):
+\itemize{
+\item \code{v6}, for the sixth version;
+\item \code{v7}, for the seventh version;
+}
+\item DisGeNET;
+\item COVID-19.
+}
+}
+
+\subsection{Supported organisms}{
+
+For each database, different organisms are supported. To check the supported
+organisms for a given database, MIRit provides the \code{\link[=supportedOrganism]{supportedOrganism()}}
+function.
+}
+
+\subsection{GSEA ranking statistic}{
+
+The ranking statistic used to order genes before conducting GSEA is able
+to influence the biological interpretation of functional enrichment
+results. Several metrics have been used in scientific literature. MIRit
+implements the possibility of using \code{signed.pval}, \code{logFC}, and \code{log.pval}.
+In particular, the simplest option is to rank genes according to their
+\code{logFC} value. However, this procedure is biased by higher variance for
+lowly abundant genes.
+
+Therefore, we recommend to use the \code{signed.pval} metric, which consists in
+the p-value of a gene multiplied for the sign of its logFC, i.e.
+\code{sign(logFC) * p-value}. Alternatively, \verb{log,pval} metric, which consist in
+the product of logFC and p-value, i.e. \code{logFC * p-value} can also be used.
+}
 }
 \note{
-The over-representation analysis is implemented in this function through
-the packages \code{clusterProfiler}, \code{ReactomePA} and \code{DOSE}.
+To download gene sets from the above mentioned databases, MIRit uses the
+\code{geneset} R package. Moreover, to perform ORA and GSEA, MIRit implements the
+\code{fgsea} algorithm, whereas for CAMERA, the \code{limma} package is used.
 }
 \examples{
 # load example MirnaExperiment object
 obj <- loadExamples()
 
-# perform enrichment analysis of DE genes with Reactome
-de_enr <- enrichGenes(obj, database = "Reactome")
+# perform GSEA with KEGG
+de_enr <- enrichGenes(obj, database = "KEGG")
 
-# extract the enrichment of upregulated genes
-enr_up <- de_enr[["upregulated"]]
-
-# extract enrichment results as a data.frame
-enr_df <- as.data.frame(enr_up)
-enr_df
+# extract results
+de_df <- enrichmentResults(de_enr)
 
 # create a dotplot of enriched terms
-enrichplot::dotplot(enr_up)
+enrichmentDotplot(de_enr)
 
 }
 \references{
-T Wu, E Hu, S Xu, M Chen, P Guo, Z Dai, T Feng, L Zhou, W Tang, L Zhan, X
-Fu, S Liu, X Bo, and G Yu. clusterProfiler 4.0: A universal enrichment tool
-for interpreting omics data. The Innovation. 2021, 2(3):100141
+Liu, Y., Li, G. Empowering biologists to decode omics data: the Genekitr R
+package and web server. BMC Bioinformatics 24, 214 (2023).
+\url{https://doi.org/10.1186/s12859-023-05342-9}.
 
-Guangchuang Yu, Qing-Yu He. ReactomePA: an R/Bioconductor package for
-reactome pathway analysis and visualization. Molecular BioSystems 2016,
-12(2):477-479
+Korotkevich G, Sukhov V, Sergushichev A (2019). “Fast gene set enrichment
+analysis.” bioRxiv. doi:10.1101/060012,
+\url{http://biorxiv.org/content/early/2016/06/20/060012}.
 
-Guangchuang Yu, Li-Gen Wang, Guang-Rong Yan, Qing-Yu He. DOSE: an
-R/Bioconductor package for Disease Ontology Semantic and Enrichment
-analysis. Bioinformatics 2015 31(4):608-609
-
-Ashburner, M., Ball, C., Blake, J. et al. Gene Ontology: tool for the
-unification of biology. Nat Genet 25, 25–29 (2000).
-\url{https://doi.org/10.1038/75556}
-
-Minoru Kanehisa, Susumu Goto, KEGG: Kyoto Encyclopedia of Genes and Genomes,
-Nucleic Acids Research, Volume 28, Issue 1, 1 January 2000, Pages 27–30,
-\url{https://doi.org/10.1093/nar/28.1.27}
-
-G. Joshi-Tope, M. Gillespie, I. Vastrik, P. D'Eustachio, E. Schmidt, B.
-de Bono, B. Jassal, G.R. Gopinath, G.R. Wu, L. Matthews, S. Lewis, E.
-Birney, L. Stein, Reactome: a knowledgebase of biological pathways, Nucleic
-Acids Research, Volume 33, Issue suppl_1, 1 January 2005, Pages D428–D432,
-\url{https://doi.org/10.1093/nar/gki072}
-
-Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,
-E., Sanz, F., & Furlong, L. I. (2020). The DisGeNET knowledge platform for
-disease genomics: 2019 update. Nucleic Acids Research, 48(D1), D845-D855.
-
-Marvin Martens, Ammar Ammar, Anders Riutta, Andra Waagmeester, Denise N
-Slenter, Kristina Hanspers, Ryan A. Miller, Daniela Digles, Elisson N Lopes,
-Friederike Ehrhart, Lauren J Dupuis, Laurent A Winckers, Susan L Coort, Egon
-L Willighagen, Chris T Evelo, Alexander R Pico, Martina Kutmon,
-WikiPathways: connecting communities, Nucleic Acids Research, Volume 49,
-Issue D1, 8 January 2021, Pages D613–D621,
-\url{https://doi.org/10.1093/nar/gkaa1024}
+Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015). “limma
+powers differential expression analyses for RNA-sequencing and microarray
+studies.” Nucleic Acids Research, 43(7), e47. \url{doi:10.1093/nar/gkv007}.
 }
 \author{
 Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}

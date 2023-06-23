@@ -52,51 +52,24 @@ identifyColNames <- function(tabOutput, tabID = "") {
 
 
 
-## obtain integrated (or not) targets to enrich
-selectTargets <- function(mirnaObj, integratedTargets, direction) {
-
-  if (integratedTargets == TRUE) {
-
-    ## check that integration has been performed
-    if (nrow(mirnaTargetsIntegration(mirnaObj)) == 0) {
-      stop(paste("No targets integrated with DE-miRNAs have been found!",
-                 "Run 'integrateMirnaTargets()' to obtain targets",
-                 "whose expression is linked to that of DE-miRNAs.",
-                 "Instead, if you want to enrich all the targets of DE-miRNAs",
-                 "just set 'integratedTargets = FALSE'."), call. = FALSE)
-    }
-
-    ## extract integrated targets
-    intRes <- mirnaTargetsIntegration(mirnaObj)
-    if (colnames(intRes)[2] == "Target") {
-      targets <- unique(intRes$Target[intRes$microRNA.Direction == direction])
-    } else if (colnames(intRes)[2] == "direction") {
-      targets <- intRes$DE_targets[intRes$direction == direction]
-      targets <- paste(targets, collapse = "/")
-      targets <- stringr::str_split(targets, "/")
-      targets <- unlist(targets)
-    }
-
-  } else {
-
-    ## extract differential expression results
-    dem <- mirnaDE(mirnaObj)
-    if (direction == "upregulated") {
-      demId <- dem$ID[dem$logFC > 0]
-    } else if (direction == "downregulated") {
-      demId <- dem$ID[dem$logFC < 0]
-    }
-
-    ## extract all targets of DE-miRNAs
-    targets <- mirnaTargets(mirnaObj)
-    targets <- targets$target_symbol[targets$mature_mirna_id %in% demId]
-    targets <- unique(targets)
-
+## obtain integrated targets to enrich
+selectTargets <- function(mirnaObj, miRNA.Direction) {
+  
+  ## extract integrated targets
+  intRes <- mirnaTargetsIntegration(mirnaObj)
+  if (colnames(intRes)[2] == "Target") {
+    targets <- unique(intRes$Target[intRes$microRNA.Direction ==
+                                      miRNA.Direction])
+  } else if (colnames(intRes)[2] == "direction") {
+    targets <- intRes$DE_targets[intRes$direction == miRNA.Direction]
+    targets <- paste(targets, collapse = "/")
+    targets <- stringr::str_split(targets, "/")
+    targets <- unlist(targets)
   }
-
+  
   ## return targets
   return(targets)
-
+  
 }
 
 

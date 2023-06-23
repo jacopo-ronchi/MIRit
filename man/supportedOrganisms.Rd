@@ -7,17 +7,22 @@
 supportedOrganisms(database)
 }
 \arguments{
-\item{database}{The name of the database used for the enrichment analysis.
-It must be one of: \code{GO}, \code{KEGG}, \code{Reactome}, \code{DisGeNet} and \code{WikiPathways}}
+\item{database}{The database name. It must be one of: \code{GO}, \code{KEGG}, \code{MsigDB},
+\code{WikiPathways}, \code{Reactome}, \code{Enrichr}, \code{DO}, \code{NCG}, \code{DisGeNET}, \code{COVID19}}
 }
 \value{
-A \code{character} listing all the supported organisms for the database
+A \code{character} vector listing all the supported organisms for the database
 specified by the user.
 }
 \description{
 This function provides the list of supported organisms for different
 databases, namely Gene Ontology (GO), Kyoto Encyclopedia of Genes and
-Genomes (KEGG), Reactome, DisGeNet and WikiPathways.
+Genomes (KEGG), MsigDB, WikiPathways, Reactome, Enrichr, Disease Ontology
+(DO), Network of Cancer Genes (NCG), DisGeNET, and COVID19.
+}
+\note{
+To perform the functional enrichment of genes, MIRit uses the \code{geneset} R
+package to download gene sets from the above mentioned databases.
 }
 \examples{
 # get the supported organisms for GO database
@@ -28,31 +33,9 @@ supportedOrganisms("Reactome")
 
 }
 \references{
-Ashburner, M., Ball, C., Blake, J. et al. Gene Ontology: tool for the
-unification of biology. Nat Genet 25, 25–29 (2000).
-\url{https://doi.org/10.1038/75556}
-
-Minoru Kanehisa, Susumu Goto, KEGG: Kyoto Encyclopedia of Genes and Genomes,
-Nucleic Acids Research, Volume 28, Issue 1, 1 January 2000, Pages 27–30,
-\url{https://doi.org/10.1093/nar/28.1.27}
-
-G. Joshi-Tope, M. Gillespie, I. Vastrik, P. D'Eustachio, E. Schmidt, B.
-de Bono, B. Jassal, G.R. Gopinath, G.R. Wu, L. Matthews, S. Lewis, E.
-Birney, L. Stein, Reactome: a knowledgebase of biological pathways, Nucleic
-Acids Research, Volume 33, Issue suppl_1, 1 January 2005, Pages D428–D432,
-\url{https://doi.org/10.1093/nar/gki072}
-
-Piñero, J., Ramírez-Anguita, J. M., Saüch-Pitarch, J., Ronzano, F., Centeno,
-E., Sanz, F., & Furlong, L. I. (2020). The DisGeNET knowledge platform for
-disease genomics: 2019 update. Nucleic Acids Research, 48(D1), D845-D855.
-
-Marvin Martens, Ammar Ammar, Anders Riutta, Andra Waagmeester, Denise N
-Slenter, Kristina Hanspers, Ryan A. Miller, Daniela Digles, Elisson N Lopes,
-Friederike Ehrhart, Lauren J Dupuis, Laurent A Winckers, Susan L Coort, Egon
-L Willighagen, Chris T Evelo, Alexander R Pico, Martina Kutmon,
-WikiPathways: connecting communities, Nucleic Acids Research, Volume 49,
-Issue D1, 8 January 2021, Pages D613–D621,
-\url{https://doi.org/10.1093/nar/gkaa1024}
+Liu, Y., Li, G. Empowering biologists to decode omics data: the Genekitr R
+package and web server. BMC Bioinformatics 24, 214 (2023).
+\url{https://doi.org/10.1186/s12859-023-05342-9}.
 }
 \author{
 Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}

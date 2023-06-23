@@ -141,27 +141,25 @@ NULL
 #' * `pAdjustment`, the approach used for multiple testing correction.
 #' 
 #' Moreover, `data` differs on the basis of the integration strategy used. For
-#' the one-sided Fisher's exact test integration, this `data.frame` has seven
-#' columns:
+#' the one-sided association test integration, and for integration based on
+#' rotation gene set tests, this `data.frame` has seven columns:
 #' * `microRNA`: the miRNA ID;
-#' * `direction`: the fold change direction of the DE-miRNA (`upregulated` or
-#' `downregulated`);
-#' * `n_DE_targets`: represents the number of differentially expressed targets;
-#' * `n_NON_DE_targets`: represents the number of non differentially expressed
-#' targets;
-#' * `Fisher.P.Val`: indicates the p-value resulting from the one-sided
-#' Fisher's exact test;
-#' * `Fisher.Adjusted.P.Val`: contains the Fisher's exact test p-values
-#' corrected for multiple testing;
-#' * `DE_targets`: contains the list of differentially expressed targets whose
+#' * `mirna.direction`: the fold change direction of the DE-miRNA (`Up` or
+#' `Down`);
+#' * `gene.direction`: the fold change direction of target genes (`Up` or
+#' `Down`);
+#' * `DE`: represents the number of differentially expressed targets;
+#' * `targets`: represents the total number of targets for this miRNA;
+#' * `P.Val`: indicates the resulting p-value;
+#' * `adj.P.Val`: contains test p-values corrected for multiple testing;
+#' * `DE.targets`: contains the list of differentially expressed targets whose
 #' expression is negatively associated with miRNA expression.
 #' 
 #' Instead, when a correlation analysis is performed, `data` has six columns:
 #' * `microRNA`: the miRNA ID;
 #' * `Target`: the correlated target gene;
 #' * `microRNA.Direction`: the fold change direction of the DE-miRNA;
-#' * `Pearson/Spearman/Kendall.Coeff`: the value of the correlation coefficient
-#' used;
+#' * `Corr.Coeff`: the value of the correlation coefficient used;
 #' * `Corr.P.Value`: the p-value resulting from the correlation analysis;
 #' * `Corr.Adjusted.P.Val`: contains the correlation p-values corrected for
 #' multiple testing.
@@ -284,7 +282,7 @@ setValidity("MirnaExperiment", function(object) {
     return(paste("'significant' object within 'geneDE' slot must be a",
                  "character with IDs of statiscally significantly",
                  "differentially expressed genes."))
-  } else if (!is.data.frame(mirnaTargets(object))) {
+  } else if (!is.data.frame(mirnaTargets(object, demTarg = FALSE))) {
     return(paste("'targets' slot must be a data.frame object with miRNAs and",
                  "their relative targets. The end user typically avoids",
                  "manually setting miRNA targets and uses 'getTargets'",
@@ -598,8 +596,13 @@ setMethod("pairedSamples", "MirnaExperiment", function(object) {
 
 #' @rdname mirnaTargets
 #' @export
-setMethod("mirnaTargets", "MirnaExperiment", function(object) {
-  object@targets
+setMethod("mirnaTargets", "MirnaExperiment", function(object, demTarg) {
+  if (demTarg == TRUE) {
+    dem <- significantMirnas(object)
+    object@targets[object@targets$MicroRNA %in% dem, ]
+  } else {
+    object@targets
+  }
 })
 
 #' @rdname mirnaTargetsIntegration
@@ -653,7 +656,7 @@ setReplaceMethod("mirnaTargetsIntegration",
 
 
 ## ==========================================================================
-## MirnaEnrichment Class
+## FunctionalEnrichment Class
 ## ==========================================================================
 
 
@@ -662,59 +665,105 @@ setReplaceMethod("mirnaTargetsIntegration",
 ## ----------------
 
 
-#' The `MirnaEnrichment` class
+#' The `FunctionalEnrichment` class
 #'
-#' This class extends and adapts the
-#' [`enrichResult-class`][DOSE::enrichResult-class] in order to make it
-#' suitable for handling miRNA enrichment results.
+#' This class introduces the possibility to store the results of functional
+#' enrichment analyses such as over-representation analysis (ORA), gene set
+#' enrichment analysis (GSEA), and competitive gene set test accounting for
+#' inter-gene correlation (CAMERA). The different slots contained in this class
+#' are used to store enrichment results generated through different functions,
+#' including [enrichGenes()] and [enrichMirnas()].
 #'
-#' @slot result A `data.frame` object holding the output of enrichment analysis
-#' @slot pvalueCutoff A `numeric` value defining the threshold used for
+#' @slot data A `data.frame` object holding the output of enrichment analysis
+#' @slot method The method used to perform functional enrichment analysis
+#' (e.g. `Gene Set Enrichment Analysis (GSEA)`)
+#' @slot organism The name of the organism under consideration (e.g.
+#' `Homo sapiens`)
+#' @slot database The name of the database used for the enrichment analysis
+#' (e.g. `KEGG`)
+#' @slot pCutoff A `numeric` value defining the threshold used for
 #' statistical significance in the enrichment analysis (e.g. `0.05`)
-#' @slot pAdjustMethod A `character` indicating the method used to correct
+#' @slot pAdjustment A `character` indicating the method used to correct
 #' p-values for multiple testing (e.g. `fdr`)
-#' @slot qvalueCutoff A `numeric` value defining the q-value threshold used
+#' @slot qCutoff A `numeric` value defining the q-value threshold used
 #' in the enrichment analysis (e.g. `0.2`)
-#' @slot organism The name of the organism under consideration (e.g.
-#' `Homo sapiens`)
-#' @slot ontology The name of the miEAA 2.0 category used to perform the
-#' enrichment analysis (e.g. `miRWalk_GO_mature`)
-#' @slot gene A `character` vector containing the list of miRNAs used for the
-#' enrichment
-#' @slot keytype The type of miRNA IDs used. For example `miRBase v22`
-#' @slot universe The background universe of miRNAs used for the
-#' over-representation analysis (ORA). Typically, this is equal to the complete
-#' list of miRNAs assayed
-#' @slot gene2Symbol Mapping of genes to symbols, if needed
-#' @slot geneSets Gene sets
-#' @slot readable Logical flag of gene ID in symbol or not
-#' @slot termsim Similarity between terms
-#' @slot method Method for calculating the similarity between nodes
-#' @slot dr Dimension reduction result
-#' 
-#' @param object An object of class [`MirnaEnrichment`][MirnaEnrichment-class]
-#' @param x An object of class [`MirnaEnrichment`][MirnaEnrichment-class]
-#' containing enrichment results of multiple miEAA 2.0 categories
-#' @param i A valid miEAA 2.0 category name
-#' @param j Missing
-#' @param drop Missing
-#' @param ... Additional arguments not used
-#'
-#' @references
-#' Guangchuang Yu, Li-Gen Wang, Guang-Rong Yan, Qing-Yu He. DOSE: an
-#' R/Bioconductor package for Disease Ontology Semantic and Enrichment
-#' analysis. Bioinformatics 2015 31(4):608-609
+#' @slot features A `character` vector containing the list of features used for
+#' the enrichment
+#' @slot statistic A `numeric` vector containing the statistic used to run
+#' GSEA. This parameter is empty for ORA and CAMERA
+#' @slot universe The background universe of features. Typically, this is equal
+#' to the complete list of features assayed. This slot is NULL for GSEA
+#' @slot geneSet The gene set used for the functional enrichment analysis. It
+#' is a `list` object where each element contains the list of genes belonging
+#' to a specific pathway.
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
-#' @name MirnaEnrichment-class
+#' @name FunctionalEnrichment-class
 #' @docType class
 #' @export
 #' @import methods
-#' @importClassesFrom DOSE enrichResult
-setClass("MirnaEnrichment",
-         contains="enrichResult")
+setClass("FunctionalEnrichment",
+         representation(data = "data.frame",
+                        method = "character",
+                        organism = "character",
+                        database = "character",
+                        pCutoff = "numeric",
+                        pAdjustment = "character",
+                        features = "character",
+                        statistic = "numeric",
+                        universe = "character",
+                        geneSet = "list"))
+
+
+## --------
+## Validity
+## --------
+
+setValidity("FunctionalEnrichment", function(object) {
+  
+  if (!is.data.frame(object@data)) {
+    return(paste("'data' slot must be a data.frame that stores the resutls of",
+                 "functional enrichment analyses. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.character(object@method)) {
+    return(paste("'method' slot must be a character object that specifies the",
+                 "functonal enrichment method used. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.character(object@organism)) {
+    return(paste("'organism' slot must be a character object that specifies",
+                 "the organism used. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.character(object@database)) {
+    return(paste("'database' slot must be a character object that specifies",
+                 "the database used. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.numeric(object@pCutoff)) {
+    return(paste("'pCutoff' slot must be a numeric object that specifies",
+                 "the p-value cutoff used. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.character(object@pAdjustment) |
+             !object@pAdjustment %in% stats::p.adjust.methods) {
+    return(paste("'pAdjustment' slot must be a character object that specifies",
+                 "the p-value correction method used. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.character(object@features)) {
+    return(paste("'features' slot must be a character object containing the",
+                 "features used for functional enrichment analysis. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.numeric(object@statistic)) {
+    return(paste("'statistic' slot must be a numeric object that specifies",
+                 "the metric used for GSEA. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.character(object@universe)) {
+    return(paste("'universe' slot must be a character object that contains",
+                 "the complete list of background genes used. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else {
+    return(TRUE)
+  }
+})
 
 
 ## ---------
@@ -723,128 +772,28 @@ setClass("MirnaEnrichment",
 
 #' @rdname enrichmentResults
 #' @export
-setMethod("enrichmentResults", "MirnaEnrichment", function(object) {
-  object@result
+setMethod("enrichmentResults", "FunctionalEnrichment", function(object) {
+  object@data
 })
 
-setMethod("enrichmentDatabase", "MirnaEnrichment", function(object) {
-  object@ontology
+setMethod("enrichmentDatabase", "FunctionalEnrichment", function(object) {
+  object@database
 })
 
-setMethod("mirnaIdEnrichment", "MirnaEnrichment", function(object) {
-  object@gene
+setMethod("enrichmentMethod", "FunctionalEnrichment", function(object) {
+  object@method
 })
 
-
-## -------
-## Setters
-## -------
-
-setReplaceMethod("enrichmentResults", "MirnaEnrichment", function(object, value) {
-  object@result <- value
-  validObject(object)
-  object
+setMethod("geneSet", "FunctionalEnrichment", function(object) {
+  object@geneSet
 })
 
-setReplaceMethod("enrichmentDatabase", "MirnaEnrichment", function(object, value) {
-  object@ontology <- value
-  validObject(object)
-  object
+setMethod("enrichmentMetric", "FunctionalEnrichment", function(object) {
+  object@statistic
 })
 
-
-
-## ==========================================================================
-## MirnaGsea Class
-## ==========================================================================
-
-
-## ----------------
-## Class definition
-## ----------------
-
-
-#' The `MirnaGsea` class
-#'
-#' This class extends and adapts the
-#' [`gseaResult-class`][DOSE::gseaResult-class] in order to make it
-#' suitable for handling miRNA gene set enrichment analysis (GSEA) results.
-#'
-#' @slot result A `data.frame` object holding the output of enrichment analysis
-#' @slot pvalueCutoff A `numeric` value defining the threshold used for
-#' statistical significance in the enrichment analysis (e.g. `0.05`)
-#' @slot pAdjustMethod A `character` indicating the method used to correct
-#' p-values for multiple testing (e.g. `fdr`)
-#' @slot organism The name of the organism under consideration (e.g.
-#' `Homo sapiens`)
-#' @slot ontology The name of the miEAA 2.0 category used to perform the
-#' enrichment analysis (e.g. `miRWalk_GO_mature`)
-#' @slot gene A `character` vector containing the list of miRNAs used for the
-#' enrichment
-#' @slot lfc A `numeric` vector containing the list of log2 fold changes
-#' relative to miRNAs listed in the `gene` slot
-#' @slot keytype The type of miRNA IDs used. For example `miRBase v22`
-#' @slot gene2Symbol Mapping of genes to symbols, if needed
-#' @slot geneSets Gene sets
-#' @slot setType Set type
-#' @slot geneList Order rank gene list
-#' @slot permScores Permutation scores
-#' @slot params Parameters
-#' @slot readable Logical flag of gene ID in symbol or not
-#' @slot dr Dimension reduction result
-#' 
-#' @param object An object of class [`MirnaGsea`][MirnaGsea-class]
-#' @param x An object of class [`MirnaGsea`][MirnaGsea-class] containing
-#' enrichment results of multiple miEAA 2.0 categories
-#' @param i A valid miEAA 2.0 category name
-#' @param j Missing
-#' @param drop Missing
-#' @param ... Additional arguments not used
-#'
-#' @references
-#' Guangchuang Yu, Li-Gen Wang, Guang-Rong Yan, Qing-Yu He. DOSE: an
-#' R/Bioconductor package for Disease Ontology Semantic and Enrichment
-#' analysis. Bioinformatics 2015 31(4):608-609
-#'
-#' @author
-#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
-#'
-#' @name MirnaGsea-class
-#' @docType class
-#' @export
-#' @import methods
-#' @importClassesFrom DOSE gseaResult
-setClass("MirnaGsea",
-         contains="gseaResult",
-         slots = representation(
-           pvalueCutoff = "numeric",
-           pAdjustMethod = "character",
-           ontology = "character",
-           gene = "character",
-           lfc = "numeric"
-         ))
-
-
-## ---------
-## Accessors
-## ---------
-
-#' @rdname enrichmentResults
-#' @export
-setMethod("enrichmentResults", "MirnaGsea", function(object) {
-  object@result
-})
-
-setMethod("enrichmentDatabase", "MirnaGsea", function(object) {
-  object@ontology
-})
-
-setMethod("lfcEnrichment", "MirnaGsea", function(object) {
-  object@lfc
-})
-
-setMethod("mirnaIdEnrichment", "MirnaGsea", function(object) {
-  object@gene
+setMethod("enrichedFeatures", "FunctionalEnrichment", function(object) {
+  object@features
 })
 
 
@@ -852,15 +801,17 @@ setMethod("mirnaIdEnrichment", "MirnaGsea", function(object) {
 ## Setters
 ## -------
 
-setReplaceMethod("enrichmentResults", "MirnaGsea", function(object, value) {
-  object@result <- value
-  validObject(object)
-  object
-})
+setReplaceMethod("enrichmentResults", "FunctionalEnrichment",
+                 function(object, value) {
+                   object@data <- value
+                   validObject(object)
+                   object
+                 })
 
-setReplaceMethod("enrichmentDatabase", "MirnaGsea", function(object, value) {
-  object@ontology <- value
-  validObject(object)
-  object
-})
+setReplaceMethod("enrichmentDatabase", "FunctionalEnrichment",
+                 function(object, value) {
+                   object@database <- value
+                   validObject(object)
+                   object
+                 })
 
