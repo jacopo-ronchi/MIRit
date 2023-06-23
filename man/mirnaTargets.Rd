@@ -3,27 +3,33 @@
 \name{mirnaTargets}
 \alias{mirnaTargets}
 \alias{mirnaTargets,MirnaExperiment-method}
-\title{Explore the targets of differentially expressed microRNAs}
+\title{Explore miRNA-target pairs}
 \usage{
-mirnaTargets(object)
+mirnaTargets(object, demTarg = TRUE)
 
-\S4method{mirnaTargets}{MirnaExperiment}(object)
+\S4method{mirnaTargets}{MirnaExperiment}(object, demTarg = TRUE)
 }
 \arguments{
 \item{object}{A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing
 miRNA and gene data}
+
+\item{demTarg}{Logical, whether to report the targets of differentially
+expressed miRNAs, or to report the targets of all miRNAs in study.
+Default is TRUE to just report the target genes of differentially
+expressed miRNAs}
 }
 \value{
-A \code{data.frame} object containing the interactions (predicted and/or
-validated) between miRNAs and target genes, as retrieved with the
-\code{\link[=getTargets]{getTargets()}} function.
+A \code{data.frame} object containing the interactions between miRNAs and target
+genes, as retrieved with the \code{\link[=getTargets]{getTargets()}} function.
 }
 \description{
-This function accesses the \code{mirnaTargets} slot of a
+This function accesses the \code{targets} slot of a
 \code{\link[=MirnaExperiment-class]{MirnaExperiment}}
 object. After retrieving miRNA targets with the \code{\link[=getTargets]{getTargets()}} function,
 the interactions between miRNAs and target genes are stored in the
-\code{mirnaTargets} slot and can be explored with this function.
+\code{targets} slot and can be explored with this function. If \code{demTarg}
+parameter is set to TRUE, only targets of differentially expressed miRNAs
+will be considered; otherwise, all miRNA-target relationships will be shown.
 }
 \examples{
 # load example MirnaExperiment object

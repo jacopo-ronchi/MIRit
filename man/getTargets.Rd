@@ -4,70 +4,66 @@
 \alias{getTargets}
 \title{Get microRNA targets}
 \usage{
-getTargets(
-  mirnaObj,
-  organism = "Homo sapiens",
-  onlyValidated = FALSE,
-  minPredicted = 3,
-  minValidated = 1,
-  topCutoff = 20
-)
+getTargets(mirnaObj, score = "Medium")
 }
 \arguments{
 \item{mirnaObj}{A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object
 containing miRNA and gene data}
 
-\item{organism}{The name of the organism under consideration. It must be one
-of: \verb{Homo sapiens}, \verb{Mus musculus}, \verb{Rattus norvegicus}}
-
-\item{onlyValidated}{Logical, if \code{TRUE}, the function will retrieve only
-experimentally validated targets; if \code{FALSE}, a combination of validated
-and predicted targets will be used (default is \code{FALSE})}
-
-\item{minPredicted}{Considers as true targets only those predicted by at
-least n prediction algorithms. It should be within 1-8 (default is \code{3})}
-
-\item{minValidated}{Considers as true targets only those present in more
-than n databases with validated interactions. It should be within 1-3
-(default is \code{1})}
-
-\item{topCutoff}{This value corresponds to the percentage of top results
-retrieved by the different prediction databases present in \code{multiMiR}.
-Default is \code{20}}
+\item{score}{The minimum mirDIP confidence score. It must be one of
+\verb{Very High}, \code{High}, \code{Medium} (default), \code{Low}, which correspond to ranks
+among top 1\%, top 5\% (excluding top 1\%), top 1/3 (excluding top 5\%) and
+remaining predictions, respectively.}
 }
 \value{
-A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing targets of
-differentially expressed miRNAs. Targets are stored in the \code{targets} slot
-and can be accessed with the \code{\link[=mirnaTargets]{mirnaTargets()}} function.
+A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing miRNA targets
+stored in the \code{targets} slot. Results can be accessed with the
+\code{\link[=mirnaTargets]{mirnaTargets()}} function.
 }
 \description{
-This function allows to obtain the targets of differentially expressed
-miRNAs using the \code{multiMiR} package, which outputs microRNA targets from
-several databases, including 8 prediction databases and 3 databases with
-experimentally validated targets. The microRNA-mRNA interactions reported
-by this function can derive by both predicted and validated interactions.
-The user can decide whether to retrieve only validated targets or a
-combination of predicted and validated targets. Moreover, for predicted
-interactions, the user can decide either to consider as targets all
-predicted targets or to include only those targets predicted by a minimum
-of n prediction databases.
+This function allows to obtain human miRNA-target interactions using the
+microRNA Data Integration Portal (mirDIP) database, which aggregates miRNA
+target predictions from 24 different resources by using an integrated score
+inferred from different prediction metrics. In this way, as demonstrated by
+Tokar et al. 2018, mirDIP reports more accurate predictions compared to
+those of individual tools.
+}
+\details{
+The downside of miRNA target prediction algorithms is the scarce extend of
+overlap existing between the different tools. To address this issue,
+several ensemble methods have been developed, trying to aggregate the
+predictions obtained by different algorithms. Initially, several researchers
+determined as significant miRNA-target pairs those predicted by more than
+one tool (intersection method). However, this method is not able to capture
+an important number of meaningful interactions. Alternatively, other
+strategies used to merge predictions from several algorithms (union method).
+Despite identifying more true relationships, the union method leads to a
+higher proportion of false discoveries. Therefore, other ensemble methods
+including mirDIP started using other statistics to rank miRNA-target
+predictions obtained by multiple algorithms. For additional information on
+mirDIP database and its ranking metric check Tokar et al. 2018 and
+Hauschild et al. 2023.
+}
+\note{
+To access mirDIP database at \url{https://ophid.utoronto.ca/mirDIP/}, this
+function directly use mirDIP API through R.
 }
 \examples{
 # load example MirnaExperiment object
 obj <- loadExamples()
 
-# retrieve validated targets and targets predicted by at lest 3 databases
-# obj <- getTargets(mirnaObj = obj, onlyValidated = FALSE,
-# minPredicted = 3, minValidated = 1, topCutoff = 20)
+# retrieve targets 
+# obj <- getTargets(mirnaObj = obj)
 
 }
 \references{
-Yuanbin Ru, Katerina J. Kechris, Boris Tabakoff, Paula Hoffman, Richard A.
-Radcliffe, Russell Bowler, Spencer Mahaffey, Simona Rossi, George A. Calin,
-Lynne Bemis, Dan Theodorescu; The multiMiR R package and database:
-integration of microRNA–target interactions along with their disease and
-drug associations. Nucleic Acids Res 2014; 42 (17): e133. doi:
-\url{10.1093/nar/gku631}
+Tomas Tokar and others, mirDIP 4.1—integrative database of human microRNA
+target predictions, Nucleic Acids Research, Volume 46, Issue D1, 4 January
+2018, Pages D360–D370, \url{https://doi.org/10.1093/nar/gkx1144}.
+
+Anne-Christin Hauschild and others, MirDIP 5.2: tissue context annotation
+and novel microRNA curation, Nucleic Acids Research, Volume 51, Issue D1,
+6 January 2023, Pages D217–D225, \url{https://doi.org/10.1093/nar/gkac1070}.
 }
 \author{
 Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}

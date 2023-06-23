@@ -58,9 +58,9 @@ from different subjects (\code{FALSE})}
 \item{\code{targets}}{A \code{data.frame} object containing miRNA-target pairs. This
 slot is commonly populated by the \code{\link[=getTargets]{getTargets()}} function}
 
-\item{\code{mirnaTargetsIntegration}}{A \code{list} object containing the results
+\item{\code{integration}}{A \code{list} object containing the results
 of the integration analysis between miRNA and gene expression values. This
-slot is commonly populated by the \code{\link[=integrateMirnaTargets]{integrateMirnaTargets()}} function}
+slot is commonly populated by the \code{\link[=mirnaIntegration]{mirnaIntegration()}} function}
 }}
 
 \note{
@@ -164,12 +164,12 @@ miRNA.
 }
 }
 
-\section{mirnaTargetsIntegration}{
+\section{integration}{
 
 
-Lastly, \code{mirnaTargetsIntegration} slot contains a \code{list} object that stores
+Lastly, \code{integration} slot contains a \code{list} object that stores
 the results and the options used for performing the integrative miRNA-gene
-analysis. In particular, \code{mirnaTargetsIntegration} contains:
+analysis. In particular, \code{integration} contains:
 \itemize{
 \item \code{data}, which is a \code{data.frame} object with the results of the integrative
 analysis;
@@ -180,20 +180,19 @@ analysis;
 }
 
 Moreover, \code{data} differs on the basis of the integration strategy used. For
-the one-sided Fisher's exact test integration, this \code{data.frame} has seven
-columns:
+the one-sided association test integration, and for integration based on
+rotation gene set tests, this \code{data.frame} has seven columns:
 \itemize{
 \item \code{microRNA}: the miRNA ID;
-\item \code{direction}: the fold change direction of the DE-miRNA (\code{upregulated} or
-\code{downregulated});
-\item \code{n_DE_targets}: represents the number of differentially expressed targets;
-\item \code{n_NON_DE_targets}: represents the number of non differentially expressed
-targets;
-\item \code{Fisher.P.Val}: indicates the p-value resulting from the one-sided
-Fisher's exact test;
-\item \code{Fisher.Adjusted.P.Val}: contains the Fisher's exact test p-values
-corrected for multiple testing;
-\item \code{DE_targets}: contains the list of differentially expressed targets whose
+\item \code{mirna.direction}: the fold change direction of the DE-miRNA (\code{Up} or
+\code{Down});
+\item \code{gene.direction}: the fold change direction of target genes (\code{Up} or
+\code{Down});
+\item \code{DE}: represents the number of differentially expressed targets;
+\item \code{targets}: represents the total number of targets for this miRNA;
+\item \code{P.Val}: indicates the resulting p-value;
+\item \code{adj.P.Val}: contains test p-values corrected for multiple testing;
+\item \code{DE.targets}: contains the list of differentially expressed targets whose
 expression is negatively associated with miRNA expression.
 }
 
@@ -202,15 +201,14 @@ Instead, when a correlation analysis is performed, \code{data} has six columns:
 \item \code{microRNA}: the miRNA ID;
 \item \code{Target}: the correlated target gene;
 \item \code{microRNA.Direction}: the fold change direction of the DE-miRNA;
-\item \code{Pearson/Spearman/Kendall.Coeff}: the value of the correlation coefficient
-used;
+\item \code{Corr.Coeff}: the value of the correlation coefficient used;
 \item \code{Corr.P.Value}: the p-value resulting from the correlation analysis;
 \item \code{Corr.Adjusted.P.Val}: contains the correlation p-values corrected for
 multiple testing.
 }
 
 To access the results of the integrative analysis, the \code{data} slot can be
-accessed through the \code{\link[=mirnaTargetsIntegration]{mirnaTargetsIntegration()}} function.
+accessed through the \code{\link[=integration]{integration()}} function.
 }
 
 \references{

@@ -69,14 +69,14 @@ An object of class \code{ggplot} containing the correlation scatter plot.
 \description{
 This function creates a scatter plot that shows the correlation between
 miRNA and gene expression levels. This is useful after correlation
-analysis performed through the \code{\link[=integrateMirnaTargets]{integrateMirnaTargets()}} function, to
+analysis performed through the \code{\link[=mirnaIntegration]{mirnaIntegration()}} function, to
 graphically visualize the quantitative effect of miRNA dysregulations on
 target gene expression. Furthermore, this function performs linear/monotonic
 regression to better represent the relationships between miRNA-target pairs.
 }
 \details{
 When non-parametric correlation has been performed with the
-\code{\link[=integrateMirnaTargets]{integrateMirnaTargets()}} function, a regression line can be fitted through
+\code{\link[=mirnaIntegration]{mirnaIntegration()}} function, a regression line can be fitted through
 monotonic regression on expression levels, or through linear regression
 performed on rank-transformed data. Since, ranks do not correspond to real
 expression values, the default option is to perform monotonic regression
@@ -88,7 +88,7 @@ R package, which implements the algorithm proposed by Murray et al. in 2016.
 obj <- loadExamples()
 
 # perform miRNA-target integration
-obj <- integrateMirnaTargets(obj)
+obj <- mirnaIntegration(obj)
 
 # plot correlation between miR-34a and PAX8 with monotonic regression curve
 plotCorrelation(obj, "hsa-miR-34a-5p", "PAX8", condition = "disease")

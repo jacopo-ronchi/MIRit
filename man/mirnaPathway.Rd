@@ -46,7 +46,7 @@ This function uses the \code{graphite} package to retrieve biological pathways a
 obj <- loadExamples()
 
 # perform the integration analysis between miRNAs and their targets
-obj <- integrateMirnaTargets(obj)
+obj <- mirnaIntegration(obj)
 
 # explore Thyroid hormone synthesis pathway in KEGG
 net <- mirnaPathway(obj,
