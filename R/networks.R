@@ -114,7 +114,7 @@ listPathways <- function(organism, database) {
 #' obj <- loadExamples()
 #' 
 #' # perform the integration analysis between miRNAs and their targets
-#' obj <- integrateMirnaTargets(obj)
+#' obj <- mirnaIntegration(obj)
 #'
 #' # explore Thyroid hormone synthesis pathway in KEGG
 #' net <- mirnaPathway(obj,
@@ -177,11 +177,11 @@ mirnaPathway <- function(mirnaObj,
                "'mirnaObj'. Please, use 'performGeneDE()' before using",
                "this function. See ?performGeneDE"), call. = FALSE)
   }
-  if (max(dim(mirnaTargetsIntegration(mirnaObj))) == 0) {
+  if (max(dim(integration(mirnaObj))) == 0) {
     stop(paste("Integration analysis is not detected in 'mirnaObj'!",
                "Before using this function, expression levels of miRNAs and",
-               "genes must be integrated with the 'integrateMirnaTargets()'",
-               "function. See '?integrateMirnaTargets' for the details."),
+               "genes must be integrated with the 'mirnaIntegration()'",
+               "function. See '?mirnaIntegration' for the details."),
          call. = FALSE)
   }
   if (!is.character(pathway) |
@@ -220,7 +220,7 @@ mirnaPathway <- function(mirnaObj,
   edges <- nodes <- NULL
   
   ## define integration method used
-  integration <- mirnaTargetsIntegration(mirnaObj)
+  integration <- integration(mirnaObj)
   if (colnames(integration)[5] == "Fisher.P.Val") {
     intMeth <- "fisher"
   } else {

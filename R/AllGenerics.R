@@ -219,8 +219,8 @@ setGeneric("mirnaTargets",
 #' Explore the results of the integration analysis between miRNAs and genes
 #'
 #' After performing the integration analysis between miRNA and gene expression
-#' values with the [integrateMirnaTargets()] function, the results are stored
-#' in the `mirnaTargetsIntegration` slot of a
+#' values with the [mirnaIntegration()] function, the results are stored
+#' in the `integration` slot of a
 #' [`MirnaExperiment`][MirnaExperiment-class] object and can be explored with
 #' this function.
 #'
@@ -239,20 +239,20 @@ setGeneric("mirnaTargets",
 #' obj <- loadExamples()
 #' 
 #' # perform Kendall's correlation analysis with tau > 0.8 and p < 0.05
-#' obj <- integrateMirnaTargets(obj, test = "correlation",
+#' obj <- mirnaIntegration(obj, test = "correlation",
 #' corMethod = "kendall", corCutoff = 0.8)
 #'
 #' # visualize the results of correlation analysis
-#' res <- mirnaTargetsIntegration(obj)
+#' res <- integration(obj)
 #' res
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-setGeneric("mirnaTargetsIntegration",
+setGeneric("integration",
            function(object,
-                    param = FALSE) standardGeneric("mirnaTargetsIntegration"))
+                    param = FALSE) standardGeneric("integration"))
 
 
 
@@ -272,8 +272,8 @@ setGeneric("mirnaTargets<-", function(object, value)
   standardGeneric("mirnaTargets<-")
 )
 
-setGeneric("mirnaTargetsIntegration<-", function(object, value)
-  standardGeneric("mirnaTargetsIntegration<-")
+setGeneric("integration<-", function(object, value)
+  standardGeneric("integration<-")
 )
 
 

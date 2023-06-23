@@ -138,7 +138,7 @@ getTargets <- function(mirnaObj,
   
   ## print the results of target retrieval
   message(paste(nrow(tg), "miRNA-target pairs have been identified for the",
-                length(allMirnas), "miRNAs in study! Notably,",
+                length(allMirnas), "miRNAs in study!\nNotably,",
                 length(unique(mirnaTargets(mirnaObj)$Gene.Symbol)),
                 "genes are targeted by differentially expressed miRNAs."))
   

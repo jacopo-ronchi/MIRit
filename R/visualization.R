@@ -1294,13 +1294,13 @@ mirVariantPlot <- function(variantId,
 #' 
 #' This function creates a scatter plot that shows the correlation between
 #' miRNA and gene expression levels. This is useful after correlation
-#' analysis performed through the [integrateMirnaTargets()] function, to
+#' analysis performed through the [mirnaIntegration()] function, to
 #' graphically visualize the quantitative effect of miRNA dysregulations on
 #' target gene expression. Furthermore, this function performs linear/monotonic
 #' regression to better represent the relationships between miRNA-target pairs.
 #' 
 #' When non-parametric correlation has been performed with the
-#' [integrateMirnaTargets()] function, a regression line can be fitted through
+#' [mirnaIntegration()] function, a regression line can be fitted through
 #' monotonic regression on expression levels, or through linear regression
 #' performed on rank-transformed data. Since, ranks do not correspond to real
 #' expression values, the default option is to perform monotonic regression
@@ -1352,7 +1352,7 @@ mirVariantPlot <- function(variantId,
 #' obj <- loadExamples()
 #' 
 #' # perform miRNA-target integration
-#' obj <- integrateMirnaTargets(obj)
+#' obj <- mirnaIntegration(obj)
 #'
 #' # plot correlation between miR-34a and PAX8 with monotonic regression curve
 #' plotCorrelation(obj, "hsa-miR-34a-5p", "PAX8", condition = "disease")
@@ -1380,16 +1380,16 @@ plotCorrelation <- function(mirnaObj,
          call. = FALSE)
   }
   if (integratedTargets == TRUE &
-      max(dim(mirnaTargetsIntegration(mirnaObj))) == 0) {
+      max(dim(integration(mirnaObj))) == 0) {
     stop(paste("Integration analysis is not detected in 'mirnaObj'!",
                "Before using this function, expression levels of miRNAs and",
-               "genes must be integrated with the 'integrateMirnaTargets()'",
-               "function. See '?integrateMirnaTargets' for the details."),
+               "genes must be integrated with the 'mirnaIntegration()'",
+               "function. See '?mirnaIntegration' for the details."),
          call. = FALSE)
   }
   if (pairedSamples(mirnaObj) == FALSE) {
     stop(paste("Correlation analysis can only be performed for paired",
-               "samples! See ?mirnaTargetsIntegration"), call. = FALSE)
+               "samples! See ?mirnaIntegration"), call. = FALSE)
   }
   if (!is.character(mirna) |
       length(mirna) != 1 |
@@ -1489,12 +1489,12 @@ plotCorrelation <- function(mirnaObj,
   }
   
   ## get integration results
-  intRes <- mirnaTargetsIntegration(mirnaObj)
+  intRes <- integration(mirnaObj)
   
   ## verify that correlation analysis has been performed
   if (colnames(intRes)[2] != "Target") {
     stop(paste("Correlation analysis must be performed before using this",
-               "function! See ?mirnaTargetsIntegration"), call. = FALSE)
+               "function! See ?integration"), call. = FALSE)
   }
   
   ## check if the specified miRNA-target pair is present
@@ -1505,7 +1505,7 @@ plotCorrelation <- function(mirnaObj,
   }
   
   ## determine the correlation coefficient used
-  corMethod <- mirnaTargetsIntegration(mirnaObj, param = TRUE)$method
+  corMethod <- integration(mirnaObj, param = TRUE)$method
   corMethod <- tolower(sub("([A-Za-z]+).*", "\\1", corMethod))
   
   ## inform the user about using Pearson's correlation with rank data

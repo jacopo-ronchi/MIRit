@@ -1022,11 +1022,11 @@ enrichTargets <- function(mirnaObj,
                "'mirnaObj'. Please, use 'performGeneDE()' before using",
                "this function. See ?performGeneDE"), call. = FALSE)
   }
-  if (max(dim(mirnaTargetsIntegration(mirnaObj))) == 0) {
+  if (max(dim(integration(mirnaObj))) == 0) {
     stop(paste("Integration analysis is not detected in 'mirnaObj'!",
                "Before using this function, expression levels of miRNAs and",
-               "genes must be integrated with the 'integrateMirnaTargets()'",
-               "function. See '?integrateMirnaTargets' for the details."),
+               "genes must be integrated with the 'mirnaIntegration()'",
+               "function. See '?mirnaIntegration' for the details."),
          call. = FALSE)
   }
   if (!is.character(database) |

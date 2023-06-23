@@ -56,14 +56,14 @@ identifyColNames <- function(tabOutput, tabID = "") {
 selectTargets <- function(mirnaObj, miRNA.Direction) {
   
   ## extract integrated targets
-  intRes <- mirnaTargetsIntegration(mirnaObj)
+  intRes <- integration(mirnaObj)
   if (colnames(intRes)[2] == "Target") {
     targets <- unique(intRes$Target[intRes$microRNA.Direction ==
                                       miRNA.Direction])
   } else if (colnames(intRes)[2] == "direction") {
-    targets <- intRes$DE_targets[intRes$direction == miRNA.Direction]
+    targets <- intRes$DE_targets[intRes$mirna.direction == miRNA.Direction]
     targets <- paste(targets, collapse = "/")
-    targets <- stringr::str_split(targets, "/")
+    targets <- strsplit(targets, "/")
     targets <- unlist(targets)
   }
   

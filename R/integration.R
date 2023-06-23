@@ -54,8 +54,8 @@
 #' Finally, for unpaired data, the effect of DE-miRNAs on the expression of
 #' target genes can be estimated through rotation gene-set tests. In particular,
 #' a fast approximation to rotation gene-set testing called `fry`, implemented
-#' in the `limma` package, can be used to compute the statistical significance
-#' of target expression changes across biological conditions.
+#' in the `limma` package, can be used to statistically quantify the influence
+#' of miRNAs on the expression changes of theri target genes.
 #'
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
 #' containing miRNA and gene data
@@ -63,7 +63,7 @@
 #' and genes. It must be one of `auto` (default), to automatically determine
 #' the appropriate statistical test; `correlation`, to perform a correlation
 #' analysis; `association`, to perform a one-sided association test; `fry` to
-#' perform the inegrative analysis through rotation gene-set testing
+#' perform the integrative analysis through rotation gene-set testing
 #' @param pCutoff The adjusted p-value cutoff to use for statistical
 #' significance. The default value is `0.05`
 #' @param pAdjustment The p-value correction method for multiple testing. It
@@ -71,7 +71,7 @@
 #' `bonferroni`, `BY`
 #' @param corMethod The correlation method to be used for correlation analysis.
 #' It must be one of: `spearman` (default), `pearson`, `kendall`. See the
-#' 'details' section for further information
+#' *details* section for further information
 #' @param corCutoff The minimum (negative) value of correlation coefficient to
 #' consider meaningful a miRNA-target relationship. Default is `0.5`
 #' @param midpAdjustment Logical, whether to use Lancaster's mid-p adjustment
@@ -84,7 +84,7 @@
 #' @returns
 #' A [`MirnaExperiment`][MirnaExperiment-class] object containing integration
 #' results. To access these results, the user can make use of the
-#' [mirnaTargetsIntegration()] function. For additional details on how to
+#' [integration()] function. For additional details on how to
 #' interpret the results of miRNA-gene integrative analysis, please see
 #' [`MirnaExperiment`][MirnaExperiment-class].
 #'
@@ -93,14 +93,14 @@
 #' obj <- loadExamples()
 #' 
 #' # perform integration analysis with default settings
-#' obj <- integrateMirnaTargets(obj)
+#' obj <- mirnaIntegration(obj)
 #'
 #' # use Fisher's exact test  with FDR < 0.05 as significance threshold
-#' obj <- integrateMirnaTargets(obj, test = "association",
+#' obj <- mirnaIntegration(obj, test = "association",
 #' pAdjustment = "fdr")
 #'
 #' # perform Kendall's correlation analysis with tau > 0.8 and p < 0.05
-#' obj <- integrateMirnaTargets(obj, test = "correlation",
+#' obj <- mirnaIntegration(obj, test = "correlation",
 #' corMethod = "kendall", corCutoff = 0.8)
 #' 
 #' @references
@@ -120,15 +120,15 @@
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-integrateMirnaTargets <- function(mirnaObj,
-                                  test = "auto",
-                                  pCutoff = 0.05,
-                                  pAdjustment = "fdr",
-                                  corMethod = "spearman",
-                                  corCutoff = 0.5,
-                                  midpAdjustment = TRUE,
-                                  paired = FALSE) {
-
+mirnaIntegration <- function(mirnaObj,
+                             test = "auto",
+                             pCutoff = 0.05,
+                             pAdjustment = "fdr",
+                             corMethod = "spearman",
+                             corCutoff = 0.5,
+                             midpAdjustment = TRUE,
+                             paired = FALSE) {
+  
   ## check inputs
   if (!is(mirnaObj, "MirnaExperiment")) {
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
@@ -152,12 +152,13 @@ integrateMirnaTargets <- function(mirnaObj,
   }
   if (!is.character(test) |
       length(test) != 1 |
-      !test %in% c("auto", "correlation", "association")) {
+      !test %in% c("auto", "correlation", "association", "fry")) {
     stop(paste("'test' must be one of:\n",
                "\t- 'auto', (default) to automatically",
                "choose the appropriate test;\n",
                "\t- 'correlation', to perform a correlation analysis;\n",
-               "\t- 'association', to apply a one-sided association test."),
+               "\t- 'association', to apply a one-sided association test;\n",
+               "\t- 'fry', to apply rotation gene-set testing."),
          call. = FALSE)
   }
   if (test == "correlation" & pairedSamples(mirnaObj) == FALSE) {
@@ -197,7 +198,7 @@ integrateMirnaTargets <- function(mirnaObj,
     stop("'corCutoff' must be a number between 0 and 1! (default is 0.5)",
          call. = FALSE)
   }
-
+  
   ## use the appropriate test
   if (test == "auto" & pairedSamples(mirnaObj) == TRUE) {
     intMethod <- "correlation"
@@ -214,7 +215,7 @@ integrateMirnaTargets <- function(mirnaObj,
                          "one-sided association test"),
                   "will be used."))
   }
-
+  
   ## call the right function
   if (intMethod == "correlation") {
     mirnaObj <- correlateMirnaTargets(mirnaObj,
@@ -228,11 +229,15 @@ integrateMirnaTargets <- function(mirnaObj,
                                       pAdjustment,
                                       midpAdjustment,
                                       paired)
+  } else if (intMethod == "fry") {
+    mirnaObj <- fryMirnaTargets(mirnaObj,
+                                pCutoff,
+                                pAdjustment)
   }
-
+  
   ## return the object with integration slot
   return(mirnaObj)
-
+  
 }
 
 
@@ -245,28 +250,28 @@ correlateMirnaTargets <- function(mirnaObj,
                                   corCutoff,
                                   pCutoff,
                                   pAdjustment) {
-
+  
   ## extract miRNA and gene expression values
   mirnaExpr <- mirnaObj[["microRNA"]]
   geneExpr <- mirnaObj[["genes"]]
-
+  
   ## check if samples are paired, otherwise exclude unpaired samples
   sMap <- MultiAssayExperiment::sampleMap(mirnaObj)
   mirnaSamples <- sMap$primary[sMap$assay == "microRNA"]
   geneSamples <- sMap$primary[sMap$assay == "genes"]
   
   if (!identical(mirnaSamples, geneSamples)) {
-
+    
     ## determine common and uncommon samples
     common <- intersect(mirnaSamples, geneSamples)
     unpaired  <- setdiff(mirnaSamples, geneSamples)
-
+    
     ## stop if common samples are less than 3
     if (length(common) < 3) {
       stop("To perform the correlation at least 3 paired samples are needed.",
            call. = FALSE)
     }
-
+    
     ## remove samples without measurments of both miRNAs and genes
     if (length(unpaired) > 0) {
       
@@ -280,7 +285,7 @@ correlateMirnaTargets <- function(mirnaObj,
                     "correlation analysis. Removed samples are:",
                     paste(unpaired, collapse = ", ")))
     }
-
+    
     ## order the columns of expression matrices in the same way
     mirnaMap = sMap[sMap$assay == "microRNA", ]
     geneMap = sMap[sMap$assay == "genes", ]
@@ -288,72 +293,72 @@ correlateMirnaTargets <- function(mirnaObj,
                                                colnames(mirnaExpr)))]
     geneExpr <- geneExpr[, geneMap$colname[order(match(geneMap$primary,
                                                        mirnaOrder))]]
-
+    
   }
-
+  
   ## retrieve differentially expressed genes and miRNAs
   dem <- mirnaDE(mirnaObj)
   deg <- geneDE(mirnaObj)
-
+  
   ## retrieve targets of DE-miRNAs from the object
   targetsTable <- mirnaTargets(mirnaObj)
-
+  
   ## select differentially expressed miRNA targets
   targetsTable <- targetsTable[targetsTable$Gene.Symbol %in% deg$ID, ]
-
+  
   ## restrict to target genes present in the assay
   targetsTable <- targetsTable[targetsTable$Gene.Symbol
                                %in% rownames(geneExpr), ]
-
+  
   ## extract the expression values of miRNA targets
   targetExpr <- geneExpr[rownames(geneExpr) %in% targetsTable$Gene.Symbol, ]
-
+  
   ## compute the correlation between each pair of DE-miRNA - target
   usedCoef <- gsub("(^)([[:alpha:]])", "\\1\\U\\2", corMethod, perl = TRUE)
   message(paste("Performing ", usedCoef, "'s correlation analysis...",
                 sep = ""))
   correlation <- mapply(function(mirna, gene) {
-
+    
     ## extract the expression values of the microRNA and the target
     mirnaInt <- as.numeric(mirnaExpr[mirna, ])
     geneInt <- as.numeric(targetExpr[gene, ])
-
+    
     ## perform the correlation analysis
     corPair <- stats::cor.test(mirnaInt,
                                geneInt,
                                method = corMethod,
                                alternative = "less",
                                exact = FALSE)
-
+    
     ## report the results of the correlation analysis
     fold <- ifelse(dem$logFC[dem$ID == mirna] > 0,
                    "upregulated",
                    "downregulated")
-
+    
     pair <- c(mirna,
               gene,
               fold,
               corPair$estimate,
               corPair$p.value)
     pair
-
+    
   }, targetsTable$MicroRNA, targetsTable$Gene.Symbol)
-
+  
   ## convert correlation output to a data.frame object
   corRes <- as.data.frame(t(correlation))
   colnames(corRes) <-c("microRNA", "Target", "microRNA.Direction",
                        "Corr.Coefficient", "Corr.P.Value")
   corRes$Corr.Coefficient <- as.numeric(corRes$Corr.Coefficient)
   corRes$Corr.P.Value <- as.numeric(corRes$Corr.P.Value)
-
+  
   ## correct correlation p values for multiple testing
   pAdj <- stats::p.adjust(corRes$Corr.P.Value, method = pAdjustment)
   corRes$Corr.Adjusted.P.Val <- pAdj
-
+  
   ## select statistically significant associations
   corRes <- corRes[corRes$Corr.Adjusted.P.Val <= pCutoff &
                      abs(corRes$Corr.Coefficient) >= corCutoff, ]
-
+  
   ## report the results of the correlation analysis
   if (nrow(corRes) >= 1) {
     message(paste("A statistically significant correlation between",
@@ -362,15 +367,15 @@ correlateMirnaTargets <- function(mirnaObj,
     message(paste("No statistically significant correlation between",
                   "DE-miRNAs and targets was found."))
   }
-
+  
   ## return the object with the results of the correlation analysis
   resList <- list(data = corRes,
                   method = paste(usedCoef, "'s correlation analysis", sep = ""),
                   pCutoff = pCutoff,
                   pAdjustment = pAdjustment)
-  mirnaTargetsIntegration(mirnaObj) <- resList
+  integration(mirnaObj) <- resList
   return(mirnaObj)
-
+  
 }
 
 
@@ -501,7 +506,7 @@ associateMirnaTargets <- function(mirnaObj,
                   method = meth,
                   pCutoff = pCutoff,
                   pAdjustment = pAdjustment)
-  mirnaTargetsIntegration(mirnaObj) <- resList
+  integration(mirnaObj) <- resList
   return(mirnaObj)
   
 }
@@ -575,7 +580,9 @@ mcnemar.midp <- function(mat, midpAdjustment) {
 
 
 ## rotation gene-set test for integrative analysis
-fryMirnaTargets <- function(mirnaObj, pCutoff, pAdjustment) {
+fryMirnaTargets <- function(mirnaObj,
+                            pCutoff,
+                            pAdjustment) {
   
   ## extract gene differential expression results
   de <- geneDE(mirnaObj, param = TRUE)
@@ -702,7 +709,7 @@ fryMirnaTargets <- function(mirnaObj, pCutoff, pAdjustment) {
                   method = "Rotation Gene-Set Test (FRY)",
                   pCutoff = pCutoff,
                   pAdjustment = pAdjustment)
-  mirnaTargetsIntegration(mirnaObj) <- resList
+  integration(mirnaObj) <- resList
   return(mirnaObj)
   
 }

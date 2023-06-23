@@ -43,9 +43,9 @@ NULL
 #' from different subjects (`FALSE`)
 #' @slot targets A `data.frame` object containing miRNA-target pairs. This
 #' slot is commonly populated by the [getTargets()] function
-#' @slot mirnaTargetsIntegration A `list` object containing the results
+#' @slot integration A `list` object containing the results
 #' of the integration analysis between miRNA and gene expression values. This
-#' slot is commonly populated by the [integrateMirnaTargets()] function
+#' slot is commonly populated by the [mirnaIntegration()] function
 #' 
 #' @section ExperimentList:
 #' 
@@ -128,11 +128,11 @@ NULL
 #' * `target_symbol`, which indicates the target gene for the corresponding
 #' miRNA.
 #'
-#' @section mirnaTargetsIntegration:
+#' @section integration:
 #'
-#' Lastly, `mirnaTargetsIntegration` slot contains a `list` object that stores
+#' Lastly, `integration` slot contains a `list` object that stores
 #' the results and the options used for performing the integrative miRNA-gene
-#' analysis. In particular, `mirnaTargetsIntegration` contains:
+#' analysis. In particular, `integration` contains:
 #' * `data`, which is a `data.frame` object with the results of the integrative
 #' analysis;
 #' * `method`, which specifies the procedure used to perform the integrative
@@ -165,7 +165,7 @@ NULL
 #' multiple testing.
 #' 
 #' To access the results of the integrative analysis, the `data` slot can be
-#' accessed through the [mirnaTargetsIntegration()] function.
+#' accessed through the [integration()] function.
 #'
 #' @note
 #' To create a [`MirnaExperiment`][MirnaExperiment-class] object, you can use
@@ -199,7 +199,7 @@ setClass("MirnaExperiment",
            geneDE = "list",
            pairedSamples = "logical",
            targets = "data.frame",
-           mirnaTargetsIntegration = "list"))
+           integration = "list"))
 
 
 ## -----------------
@@ -231,7 +231,7 @@ setMethod("initialize",
                                       ...,
                                       mirnaDE = deList,
                                       geneDE = deList,
-                                      mirnaTargetsIntegration = intList)
+                                      integration = intList)
             .Object
           })
 
@@ -292,14 +292,14 @@ setValidity("MirnaExperiment", function(object) {
                  "miRNA and gene expression data derive from the same samples",
                  "('paired samples') while it should be FALSE if data derive",
                  "from different cohorts of samples"))
-  } else if (!is.list(object@mirnaTargetsIntegration)) {
-    return(paste("'mirnaTargetsIntegration' slot must be a list object with",
+  } else if (!is.list(object@integration)) {
+    return(paste("'integration' slot must be a list object with",
                  "integrative analysis results. Please see",
                  "?MirnaExperiment-class"))
-  } else if (!is.data.frame(mirnaTargetsIntegration(object))) {
-    return(paste("'data' within mirnaTargetsIntegration must be a data.frame",
+  } else if (!is.data.frame(integration(object))) {
+    return(paste("'data' within integration slot must be a data.frame",
                  "containing miRNA and gene expression data integration.",
-                 "The user should use the function 'integrateMirnaTargets()'",
+                 "The user should use the function 'mirnaIntegration()'",
                  "to perform the integration analysis"))
   } else {
     return(TRUE)
@@ -605,14 +605,14 @@ setMethod("mirnaTargets", "MirnaExperiment", function(object, demTarg) {
   }
 })
 
-#' @rdname mirnaTargetsIntegration
+#' @rdname integration
 #' @export
-setMethod("mirnaTargetsIntegration", "MirnaExperiment",
+setMethod("integration", "MirnaExperiment",
           function(object, param) {
             if (param == TRUE) {
-              object@mirnaTargetsIntegration
+              object@integration
             } else {
-              object@mirnaTargetsIntegration$data
+              object@integration$data
             }
           })
 
@@ -645,10 +645,10 @@ setReplaceMethod("mirnaTargets", "MirnaExperiment", function(object, value) {
   object
 })
 
-setReplaceMethod("mirnaTargetsIntegration",
+setReplaceMethod("integration",
                  "MirnaExperiment",
                  function(object, value) {
-                   object@mirnaTargetsIntegration <- value
+                   object@integration <- value
                    validObject(object)
                    object
                  })

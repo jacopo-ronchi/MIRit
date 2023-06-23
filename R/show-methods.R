@@ -39,9 +39,9 @@ setMethod("show", "MirnaExperiment", function(object) {
       nrow(mirnaTargets(object, demTarg = FALSE)), " rows and ",
       ncol(mirnaTargets(object, demTarg = FALSE)), " columns\n",
       "\t- miRNA - gene integrative analysis: ",
-      class(mirnaTargetsIntegration(object)), " with ",
-      nrow(mirnaTargetsIntegration(object)), " rows and ",
-      ncol(mirnaTargetsIntegration(object)), " columns\n",
+      class(integration(object)), " with ",
+      nrow(integration(object)), " rows and ",
+      ncol(integration(object)), " columns\n",
       "\nMicroRNA and gene expression data derive from: ",
       ifelse(pairedSamples(object) == TRUE, "paired", "unpaired"),
       " samples\n\n", sep = "")
