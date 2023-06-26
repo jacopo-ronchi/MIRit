@@ -13,8 +13,7 @@
 #' approximation to rotation gene-set testing ('fry' method). For correlation
 #' analyses, the default behavior is to use Spearman's correlation analysis,
 #' whereas for association tests the default option makes use of a one-sided
-#' Fisher's exact test with Lancaster's mid-p correction. See the *details*
-#' section for further information.
+#' Boschloo's exact test. See the *details* section for further information.
 #'
 #' @details
 #' As already pointed out, if miRNA and gene expression data derive from the
@@ -43,13 +42,18 @@
 #' cases to evaluate if targets of down-regulated miRNAs are statistically
 #' enriched in up-regulated genes, and, conversely, if targets of up-regulated
 #' miRNAs are statistically enriched in down-regulated genes. In this case,
-#' Fisher's exact test is the default option to assess the statistical
-#' significance of this inverse association. However, if cases and controls
-#' derive from repeated measurements taken in different times or from different
-#' tissues, a one-sided McNemar's exact test is used instead. For both Fisher's
-#' and McNemar's tests, the default behavior is to use Lancaster's mid-p
-#' adjustment since it has been shown that it increases statistical power
-#' while retaining Type I error rates.
+#' Fisher's exact test can be used to assess the statistical significance of
+#' this inverse association. Moreover, Lancaster's mid-p adjustment can be
+#' applied since it has been shown that it increases statistical power
+#' while retaining Type I error rates. However, Fisher's exact test is a
+#' conditional test that requires the sum of both rows and columns of a
+#' contingency table to be fixed. Notably, this is not true for genomic data
+#' because it is likely that different datasets may lead to a different number
+#' of DEGs. Therefore, the default behavior in MIRit is to use a variant of
+#' Barnard's exact test, named Boschloo's exact test, that is suitable when
+#' group sizes of contingency tables are variable. Moreover, it is possible to
+#' demonstrate that Boschloo's test is uniformly more powerful compared to
+#' Fisher's exact test.
 #' 
 #' Finally, for unpaired data, the effect of DE-miRNAs on the expression of
 #' target genes can be estimated through rotation gene-set tests. In particular,
@@ -74,12 +78,14 @@
 #' *details* section for further information
 #' @param corCutoff The minimum (negative) value of correlation coefficient to
 #' consider meaningful a miRNA-target relationship. Default is `0.5`
-#' @param midpAdjustment Logical, whether to use Lancaster's mid-p adjustment
-#' method for association tests or not. Default is TRUE to compute mid-p-values
-#' @param paired Logical, this parameter must be set to TRUE if samples from
-#' the biological conditions considered for differential expression analysis
-#' derive from repeated measurements. In this case, a one-sided McNemar's exact
-#' test is used for estimating the association. Default is FALSE
+#' @param associationMethod The statistical test used for evaluating the
+#' association between miRNAs and their targets for unpaired data. It must be
+#' one of `boschloo` (default), to perform a one-sided Boschloo's exact test;
+#' `fisher-midp`, to compute a one-sided Fisher's exact test with Lancaster's
+#' mid-p correction; `fisher`, to perform a one-sided Fisher's exact test
+#' @param nuisanceParam The number of nuisance parameter values considered for
+#' p-value calculation in `boschloo` method. The higher this value, the better
+#' the p-value estimation accuracy. Default is 100
 #'
 #' @returns
 #' A [`MirnaExperiment`][MirnaExperiment-class] object containing integration
@@ -95,7 +101,7 @@
 #' # perform integration analysis with default settings
 #' obj <- mirnaIntegration(obj)
 #'
-#' # use Fisher's exact test  with FDR < 0.05 as significance threshold
+#' # use Boschloo's exact test with FDR < 0.05 as significance threshold
 #' obj <- mirnaIntegration(obj, test = "association",
 #' pAdjustment = "fdr")
 #'
@@ -115,6 +121,11 @@
 #' Routledge, R. D. (1994). Practicing Safe Statistics with the Mid-p. The
 #' Canadian Journal of Statistics / La Revue Canadienne de Statistique, 22(1),
 #' 103–110, \url{https://doi.org/10.2307/3315826}.
+#' 
+#' Boschloo R.D. (1970). "Raised Conditional Level of Significance for the
+#' 2x2-table when Testing the Equality of Two Probabilities".
+#' Statistica Neerlandica. 24: 1–35.
+#' \url{doi:10.1111/j.1467-9574.1970.tb00104.x}.
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -126,8 +137,8 @@ mirnaIntegration <- function(mirnaObj,
                              pAdjustment = "fdr",
                              corMethod = "spearman",
                              corCutoff = 0.5,
-                             midpAdjustment = TRUE,
-                             paired = FALSE) {
+                             associationMethod = "boschloo",
+                             nuisanceParam = 100) {
   
   ## check inputs
   if (!is(mirnaObj, "MirnaExperiment")) {
@@ -198,6 +209,19 @@ mirnaIntegration <- function(mirnaObj,
     stop("'corCutoff' must be a number between 0 and 1! (default is 0.5)",
          call. = FALSE)
   }
+  if (!is.character(associationMethod) |
+      length(associationMethod) != 1 |
+      !associationMethod %in% c("boschloo", "fisher-midp", "fisher")) {
+    stop(paste("'associationMethod' must be one of: 'boschloo' (default),",
+               "'fisher-midp', and 'fisher'."),
+         call. = FALSE)
+  }
+  if (!is.numeric(nuisanceParam) |
+      length(nuisanceParam) != 1 |
+      nuisanceParam < 0) {
+    stop("'nuisanceParam' must be a non negative number! (default is 100)",
+         call. = FALSE)
+  }
   
   ## use the appropriate test
   if (test == "auto" & pairedSamples(mirnaObj) == TRUE) {
@@ -227,8 +251,8 @@ mirnaIntegration <- function(mirnaObj,
     mirnaObj <- associateMirnaTargets(mirnaObj,
                                       pCutoff,
                                       pAdjustment,
-                                      midpAdjustment,
-                                      paired)
+                                      associationMethod,
+                                      nuisanceParam)
   } else if (intMethod == "fry") {
     mirnaObj <- fryMirnaTargets(mirnaObj,
                                 pCutoff,
@@ -386,8 +410,8 @@ correlateMirnaTargets <- function(mirnaObj,
 associateMirnaTargets <- function(mirnaObj,
                                   pCutoff,
                                   pAdjustment,
-                                  midpAdjustment,
-                                  paired) {
+                                  associationMethod,
+                                  nuisanceParam) {
   
   ## obtain differentially expressed miRNAs and genes
   dem <- mirnaDE(mirnaObj)
@@ -405,16 +429,13 @@ associateMirnaTargets <- function(mirnaObj,
   totGenes <- unique(totGenes)
   
   ## define the association test used
-  if (paired == FALSE & midpAdjustment == FALSE) {
-    meth <- "One-sided Fisher's exact test"
-  } else if (paired == FALSE & midpAdjustment == TRUE) {
+  if (associationMethod == "boschloo") {
+    meth <- "One-sided Boschloo's exact test"
+  } else if (associationMethod == "fisher-midp") {
     meth <- paste("One-sided Fisher's exact test",
                   "with Lancaster's mid-p correction")
-  } else if (paired == TRUE & midpAdjustment == FALSE) {
-    meth <- "One-sided McNemar's exact test"
-  } else if (paired == TRUE & midpAdjustment == TRUE) {
-    meth <- paste("One-sided McNemar's exact test",
-                  "with Lancaster's mid-p correction")
+  } else if (associationMethod == "fisher") {
+    meth <- "One-sided Fisher's exact test"
   }
   
   ## compute the inverse association between each miRNA and its targets
@@ -449,17 +470,15 @@ associateMirnaTargets <- function(mirnaObj,
     nonDegsTarg <- length(intersect(nonDegs, targ))
     degsTarg <- length(intersect(degs, targ))
     
-    contingencyTable <- data.frame(
-      "NonTargetGenes" = c(nonDegsNonTarg, degsNonTarg),
-      "TargetGenes" = c(nonDegsTarg, degsTarg),
-      row.names = c("nonDEGs", "DEGs"),
-      stringsAsFactors = FALSE
-    )
+    contingencyTable <- matrix(c(nonDegsTarg,
+                                 nonDegsNonTarg,
+                                 degsTarg,
+                                 degsNonTarg), 2)
     
     ## perform the appropriate statistical test
     pval <- association.helper(contingencyTable,
-                               midpAdjustment,
-                               paired)
+                               associationMethod,
+                               nuisanceParam)
     
     ## report results to a list object
     intRes <- c(x,
@@ -516,15 +535,17 @@ associateMirnaTargets <- function(mirnaObj,
 
 
 ## helper function for choosing the association test
-association.helper <- function(contingencyTable, midpAdjustment, paired) {
+association.helper <- function(contingencyTable,
+                               associationMethod,
+                               nuisanceParam) {
   
   ## perform the appropriate statistical test
-  if (paired == FALSE) {
-    ## perform one-sided Fisher's test with/without Lancaster's correction
-    pval <- fisher.midp(contingencyTable, midpAdjustment)
-  } else {
-    ## perform one-sided McNemar's test with/without Lancaster's correction
-    pval <- mcnemar.midp(contingencyTable, midpAdjustment)
+  if (associationMethod == "boschloo") {
+    pval <- boshloo.test(contingencyTable, nuisanceParam)
+  } else if (associationMethod == "fisher-midp") {
+    pval <- fisher.midp(contingencyTable, midpAdjustment = TRUE)
+  } else if (associationMethod == "fisher") {
+    pval <- fisher.midp(contingencyTable, midpAdjustment = FALSE)
   }
   
   ## return the computed p-value
@@ -544,11 +565,9 @@ fisher.midp <- function(mat, midpAdjustment) {
   k <- sum(mat[1L, ])
   mat <- mat[1L, 1L]
   if (midpAdjustment == TRUE) {
-    midp <- stats::phyper(mat - 1, m, n, k,
-                          lower.tail = FALSE) - 0.5 * stats::dhyper(mat, m,
-                                                                    n, k)
+    midp <- stats::phyper(mat, m, n, k) - 0.5 * stats::dhyper(mat, m, n, k)
   } else {
-    midp <- stats::phyper(mat - 1, m, n, k, lower.tail = FALSE)
+    midp <- stats::phyper(mat, m, n, k)
   }
   return(midp)
 }
@@ -557,22 +576,122 @@ fisher.midp <- function(mat, midpAdjustment) {
 
 
 
-## compute p-value for one-sided McNemar's exact test with or without
-## Lancaster's mid-p correction (alternative is greater)
-mcnemar.midp <- function(mat, midpAdjustment) {
-  x <- mat[1, 2]
-  n <- mat[1, 2] + mat[2, 1]
-  if (n != 0){
-    if (midpAdjustment == TRUE) {
-      midp <- stats::pbinom(x-1, n, 0.5, lower.tail = FALSE) - 
-        0.5 * stats::dbinom(x, n, 0.5)
-    } else {
-      midp <- stats::pbinom(x-1, n, 0.5, lower.tail = FALSE)
-    }
-  } else {
-    midp <- 1
+## optimization helper function for p-value refinement
+optimization.heper <- function(p, Ns){
+  sum(matrix(dbinom(seq(0, Ns[1]), Ns[1], p), ncol = 1) *
+        (moreExtremeMat %*% dbinom(seq(0, Ns[2]), Ns[2], p)))
+}
+
+
+
+
+
+## calculate p-values fro Boshloo's exact test
+boshloo.test <- function(data, npNumbers) {
+  
+  ## this implementation of the Boschloo's test is
+  ## inspired by the Exact R package (Peter Calhoun)
+  
+  ## create a vector of values for the nusiance parameter
+  int <- seq(0.00001, 0.99999, length = npNumbers)
+  
+  ## transpose contingency table to have fixed row sums
+  data <- t(data)
+  
+  ## extract values from contingency table
+  x <- data[1,1]
+  y <- data[1,2]
+  Ns <- .colSums(data, 2, 2)
+  N <- sum(Ns)
+  
+  ## compute p-value resulting from Fisher's exact test
+  fp <- fisher.midp(data, midpAdjustment = FALSE)
+  
+  ## define a matrix for calculating the number of more extreme tables
+  moreExtremeMat <- matrix(NA, Ns[1]+1, Ns[2]+1,
+                           dimnames = list(seq(0, Ns[1]), seq(0, Ns[2])))
+  for (j in seq(data[1,2]+1, Ns[2]+1)) {
+    moreExtremeMat[seq(0, data[1,1]+1), j] <- 1
   }
-  return(midp)
+  
+  ## compute the number of more extreme tables for each row of the matrix
+  for (i in seq(0, Ns[1])) {
+    
+    ## find first column with NA
+    startJ <- which(is.na(moreExtremeMat[i+1, ]))[1] - 1
+    if (!is.na(startJ)) {
+      
+      ## compute the number of more extreme tables for each column
+      for (j in startJ:Ns[2]) {
+        
+        ## define a new contingency table for each table
+        newDat <- matrix(c(i, Ns[1]-i, j, Ns[2]-j), 2, 2)
+        
+        ## calculate Fisher's exact test p-value for each table
+        newTX <- fisher.midp(newDat, midpAdjustment = FALSE)
+        newTX <- signif(newTX, 12) ## correct for rounding errors
+        
+        ## compare Fisher's p-value of each table to the observed p-value
+        if (newTX <= fp) {
+          
+          ## set the remaining columns in the row as more extreme
+          moreExtremeMat[i+1, seq(j+1, Ns[2]+1)] <- 1
+          break
+          
+        } else {
+          
+          ## set the remaining rows in the column as less extreme
+          moreExtremeMat[seq(i+1, Ns[1]+1), j+1] <- 0
+          
+        }
+      }
+    }
+  }
+  
+  ## create probability vector
+  index <- 1
+  prob <- rep(NA, length(int))
+  
+  ## select the binomials needed
+  Tbls <- which(moreExtremeMat == 1, arr.ind = TRUE) - 1
+  maxX1 <- max(Tbls[ , 1])
+  minX2 <- min(Tbls[ , 2])
+  
+  ## calculate the probability for each value of the nuisance parameter
+  for (probVal in int) {
+    binomProb1 <- dbinom(seq(0, maxX1), Ns[1], probVal)
+    binomProb2 <- dbinom(seq(minX2, Ns[2]), Ns[2], probVal)
+    matVal <- moreExtremeMat[seq(maxX1+1), seq(minX2+1, Ns[2]+1), drop = FALSE]
+    prob[index] <- suppressWarnings(sum(binomProb1 * (matVal %*% binomProb2)))
+    index <- index + 1
+  }
+  prob <- signif(prob, 12) ## remove rounding errors ????
+  
+  ## identify the maximum p-value
+  np <- int[which(prob == max(prob, na.rm=TRUE))]
+  pvalue <- max(prob, na.rm=TRUE)
+  
+  ## refine p-values through the optimize function
+  refPvalue <- rep(0, length(np))
+  refNp <- refPvalue
+  for (i in seq_along(np)) {
+    ref <- suppressWarnings(
+      optimise(f = optimization.heper,
+               interval = c(max(int[1], np[i]-1/npNumbers),
+                            min(int[npNumbers], np[i]+1/npNumbers)),
+               maximum = TRUE))
+    refPvalue[i] <- ref$objective
+    refNp[i] <- ref$maximum
+  }
+  refPvalue <- min(c(1, signif(refPvalue, 12)))
+  if (!all(is.na(refPvalue)) && max(refPvalue, na.rm = TRUE) > pvalue) {
+    np <- refNp[refPvalue == max(refPvalue)]
+    pvalue <- max(refPvalue)
+  }
+  
+  ## return p-value
+  return(pvalue)
+  
 }
 
 

@@ -11,8 +11,8 @@ mirnaIntegration(
   pAdjustment = "fdr",
   corMethod = "spearman",
   corCutoff = 0.5,
-  midpAdjustment = TRUE,
-  paired = FALSE
+  associationMethod = "boschloo",
+  nuisanceParam = 100
 )
 }
 \arguments{
@@ -39,13 +39,15 @@ It must be one of: \code{spearman} (default), \code{pearson}, \code{kendall}. Se
 \item{corCutoff}{The minimum (negative) value of correlation coefficient to
 consider meaningful a miRNA-target relationship. Default is \code{0.5}}
 
-\item{midpAdjustment}{Logical, whether to use Lancaster's mid-p adjustment
-method for association tests or not. Default is TRUE to compute mid-p-values}
+\item{associationMethod}{The statistical test used for evaluating the
+association between miRNAs and their targets for unpaired data. It must be
+one of \code{boschloo} (default), to perform a one-sided Boschloo's exact test;
+\code{fisher-midp}, to compute a one-sided Fisher's exact test with Lancaster's
+mid-p correction; \code{fisher}, to perform a one-sided Fisher's exact test}
 
-\item{paired}{Logical, this parameter must be set to TRUE if samples from
-the biological conditions considered for differential expression analysis
-derive from repeated measurements. In this case, a one-sided McNemar's exact
-test is used for estimating the association. Default is FALSE}
+\item{nuisanceParam}{The number of nuisance parameter values considered for
+p-value calculation in \code{boschloo} method. The higher this value, the better
+the p-value estimation accuracy. Default is 100}
 }
 \value{
 A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing integration
@@ -68,8 +70,7 @@ effects on target gene expression can also be quantified through a fast
 approximation to rotation gene-set testing ('fry' method). For correlation
 analyses, the default behavior is to use Spearman's correlation analysis,
 whereas for association tests the default option makes use of a one-sided
-Fisher's exact test with Lancaster's mid-p correction. See the \emph{details}
-section for further information.
+Boschloo's exact test. See the \emph{details} section for further information.
 }
 \details{
 As already pointed out, if miRNA and gene expression data derive from the
@@ -100,13 +101,18 @@ performed. However, one-sided association tests can be applied in these
 cases to evaluate if targets of down-regulated miRNAs are statistically
 enriched in up-regulated genes, and, conversely, if targets of up-regulated
 miRNAs are statistically enriched in down-regulated genes. In this case,
-Fisher's exact test is the default option to assess the statistical
-significance of this inverse association. However, if cases and controls
-derive from repeated measurements taken in different times or from different
-tissues, a one-sided McNemar's exact test is used instead. For both Fisher's
-and McNemar's tests, the default behavior is to use Lancaster's mid-p
-adjustment since it has been shown that it increases statistical power
-while retaining Type I error rates.
+Fisher's exact test can be used to assess the statistical significance of
+this inverse association. Moreover, Lancaster's mid-p adjustment can be
+applied since it has been shown that it increases statistical power
+while retaining Type I error rates. However, Fisher's exact test is a
+conditional test that requires the sum of both rows and columns of a
+contingency table to be fixed. Notably, this is not true for genomic data
+because it is likely that different datasets may lead to a different number
+of DEGs. Therefore, the default behavior in MIRit is to use a variant of
+Barnard's exact test, named Boschloo's exact test, that is suitable when
+group sizes of contingency tables are variable. Moreover, it is possible to
+demonstrate that Boschloo's test is uniformly more powerful compared to
+Fisher's exact test.
 
 Finally, for unpaired data, the effect of DE-miRNAs on the expression of
 target genes can be estimated through rotation gene-set tests. In particular,
@@ -121,7 +127,7 @@ obj <- loadExamples()
 # perform integration analysis with default settings
 obj <- mirnaIntegration(obj)
 
-# use Fisher's exact test  with FDR < 0.05 as significance threshold
+# use Boschloo's exact test with FDR < 0.05 as significance threshold
 obj <- mirnaIntegration(obj, test = "association",
 pAdjustment = "fdr")
 
@@ -142,6 +148,11 @@ Pages 2176–2182, \url{https://doi.org/10.1093/bioinformatics/btq401}.
 Routledge, R. D. (1994). Practicing Safe Statistics with the Mid-p. The
 Canadian Journal of Statistics / La Revue Canadienne de Statistique, 22(1),
 103–110, \url{https://doi.org/10.2307/3315826}.
+
+Boschloo R.D. (1970). "Raised Conditional Level of Significance for the
+2x2-table when Testing the Equality of Two Probabilities".
+Statistica Neerlandica. 24: 1–35.
+\url{doi:10.1111/j.1467-9574.1970.tb00104.x}.
 }
 \author{
 Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
