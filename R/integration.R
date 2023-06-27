@@ -577,7 +577,7 @@ fisher.midp <- function(mat, midpAdjustment) {
 
 
 ## optimization helper function for p-value refinement
-optimization.heper <- function(p, Ns){
+optimization.heper <- function(p, Ns, moreExtremeMat){
   sum(matrix(dbinom(seq(0, Ns[1]), Ns[1], p), ncol = 1) *
         (moreExtremeMat %*% dbinom(seq(0, Ns[2]), Ns[2], p)))
 }
@@ -668,17 +668,19 @@ boshloo.test <- function(data, npNumbers) {
   prob <- signif(prob, 12) ## remove rounding errors ????
   
   ## identify the maximum p-value
-  np <- int[which(prob == max(prob, na.rm=TRUE))]
-  pvalue <- max(prob, na.rm=TRUE)
+  np <- int[which(prob == max(prob, na.rm = TRUE))]
+  pvalue <- max(prob, na.rm = TRUE)
   
   ## refine p-values through the optimize function
   refPvalue <- rep(0, length(np))
   refNp <- refPvalue
   for (i in seq_along(np)) {
     ref <- suppressWarnings(
-      optimise(f = optimization.heper,
+      optimize(f = optimization.heper,
                interval = c(max(int[1], np[i]-1/npNumbers),
                             min(int[npNumbers], np[i]+1/npNumbers)),
+               Ns = Ns,
+               moreExtremeMat = moreExtremeMat,
                maximum = TRUE))
     refPvalue[i] <- ref$objective
     refNp[i] <- ref$maximum
