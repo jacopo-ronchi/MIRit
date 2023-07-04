@@ -1,3 +1,7 @@
+<!-- badges: start -->
+  [![BioC status](http://www.bioconductor.org/shields/build/release/bioc/MIRit.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/MIRit)
+<!-- badges: end -->
+
 # MIRit
 
 ## miRNA Integration Tool (MIRit)

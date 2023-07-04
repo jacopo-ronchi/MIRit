@@ -42,6 +42,7 @@ Imports:
     MultiAssayExperiment,
     multiMiR,
     rbioapi,
+    Rcpp,
     ReactomePA,
     rlang,
     stringr,
@@ -49,6 +50,7 @@ Imports:
 Collate: 
     'AllGenerics.R'
     'AllClasses.R'
+    'MIRit-package.R'
     'association.R'
     'data.R'
     'differential-expression.R'
@@ -72,3 +74,5 @@ Depends:
 LazyData: false
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+LinkingTo: 
+    Rcpp
