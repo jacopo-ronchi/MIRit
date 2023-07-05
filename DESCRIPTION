@@ -51,6 +51,7 @@ Collate:
     'AllGenerics.R'
     'AllClasses.R'
     'MIRit-package.R'
+    'RcppExports.R'
     'association.R'
     'data.R'
     'differential-expression.R'
