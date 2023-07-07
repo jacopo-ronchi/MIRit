@@ -17,6 +17,7 @@ RoxygenNote: 7.2.3
 Imports: 
     AnnotationDbi,
     BiocFileCache,
+    BiocParallel,
     biomaRt,
     BSgenome.Hsapiens.UCSC.hg38,
     clusterProfiler,
@@ -60,6 +61,7 @@ Collate:
     'networks.R'
     'show-methods.R'
     'targets.R'
+    'topological-integration.R'
     'utils.R'
     'visualization.R'
 Suggests: 

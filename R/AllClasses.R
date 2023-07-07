@@ -685,8 +685,6 @@ setReplaceMethod("integration",
 #' statistical significance in the enrichment analysis (e.g. `0.05`)
 #' @slot pAdjustment A `character` indicating the method used to correct
 #' p-values for multiple testing (e.g. `fdr`)
-#' @slot qCutoff A `numeric` value defining the q-value threshold used
-#' in the enrichment analysis (e.g. `0.2`)
 #' @slot features A `character` vector containing the list of features used for
 #' the enrichment
 #' @slot statistic A `numeric` vector containing the statistic used to run
@@ -811,6 +809,147 @@ setReplaceMethod("enrichmentResults", "FunctionalEnrichment",
 setReplaceMethod("enrichmentDatabase", "FunctionalEnrichment",
                  function(object, value) {
                    object@database <- value
+                   validObject(object)
+                   object
+                 })
+
+
+
+## ==========================================================================
+## TopologicalIntegration Class
+## ==========================================================================
+
+
+## ----------------
+## Class definition
+## ----------------
+
+
+#' The `TopologicalIntegration` class
+#'
+#' This class stores the results of miRNA-mRNA topological analyses. In
+#' particular, the slots of this class are suitable to contain
+#' 
+#' ????
+#' introduces the possibility to store the results of functional
+#' enrichment analyses such as over-representation analysis (ORA), gene set
+#' enrichment analysis (GSEA), and competitive gene set test accounting for
+#' inter-gene correlation (CAMERA). The different slots contained in this class
+#' are used to store enrichment results generated through different functions,
+#' including [enrichGenes()] and [enrichMirnas()].
+#'
+#' @slot data A `data.frame` object holding the output of enrichment analysis
+#' @slot method The method used to perform functional enrichment analysis
+#' (e.g. `Gene Set Enrichment Analysis (GSEA)`)
+#' @slot organism The name of the organism under consideration (e.g.
+#' `Homo sapiens`)
+#' @slot database The name of the database used for the enrichment analysis
+#' (e.g. `KEGG`)
+#' @slot pCutoff A `numeric` value defining the threshold used for
+#' statistical significance in the enrichment analysis (e.g. `0.05`)
+#' @slot pAdjustment A `character` indicating the method used to correct
+#' p-values for multiple testing (e.g. `fdr`)
+#' @slot pathways A `list` of `graph` objects containing the biological
+#' pathways retrieved from `database`, augmented with miRNA-mRNA interactions
+#' @slot minPc description
+#' @slot nPerm description
+#'
+#' 
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @name TopologicalIntegration-class
+#' @docType class
+#' @export
+#' @import methods
+setClass("TopologicalIntegration",
+         representation(data = "data.frame",
+                        method = "character",
+                        organism = "character",
+                        database = "character",
+                        pCutoff = "numeric",
+                        pAdjustment = "character",
+                        pathways = "list",
+                        minPc = "numeric",
+                        nPerm = "numeric"))
+
+
+## --------
+## Validity
+## --------
+
+setValidity("TopologicalIntegration", function(object) {
+  
+  if (!is.data.frame(object@data)) {
+    return(paste("'data' slot must be a data.frame that stores the resutls of",
+                 "functional enrichment analyses. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.character(object@method)) {
+    return(paste("'method' slot must be a character object that specifies the",
+                 "functonal enrichment method used. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.character(object@organism)) {
+    return(paste("'organism' slot must be a character object that specifies",
+                 "the organism used. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.character(object@database)) {
+    return(paste("'database' slot must be a character object that specifies",
+                 "the database used. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.numeric(object@pCutoff)) {
+    return(paste("'pCutoff' slot must be a numeric object that specifies",
+                 "the p-value cutoff used. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.character(object@pAdjustment) |
+             !object@pAdjustment %in% stats::p.adjust.methods) {
+    return(paste("'pAdjustment' slot must be a character object that specifies",
+                 "the p-value correction method used. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.character(object@features)) {
+    return(paste("'features' slot must be a character object containing the",
+                 "features used for functional enrichment analysis. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.numeric(object@statistic)) {
+    return(paste("'statistic' slot must be a numeric object that specifies",
+                 "the metric used for GSEA. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else if (!is.character(object@universe)) {
+    return(paste("'universe' slot must be a character object that contains",
+                 "the complete list of background genes used. Please see",
+                 "?FunctionalEnrichment-class"))
+  } else {
+    return(TRUE)
+  }
+})
+
+
+## ---------
+## Accessors
+## ---------
+
+#' @rdname topologicalResults
+#' @export
+setMethod("topologicalResults", "TopologicalIntegration", function(object) {
+  object@data
+}) ## WRITE GENERICS FOR THESE ACCESSORS AND SETTERS !!!
+
+setMethod("topologicalDatabase", "TopologicalIntegration", function(object) {
+  object@database
+})
+
+setMethod("augmentedPathways", "TopologicalIntegration", function(object) {
+  object@pathways
+})
+
+
+## -------
+## Setters
+## -------
+
+setReplaceMethod("topologicalResults", "TopologicalIntegration",
+                 function(object, value) {
+                   object@data <- value
                    validObject(object)
                    object
                  })

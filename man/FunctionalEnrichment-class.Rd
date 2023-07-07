@@ -42,9 +42,6 @@ statistical significance in the enrichment analysis (e.g. \code{0.05})}
 \item{\code{pAdjustment}}{A \code{character} indicating the method used to correct
 p-values for multiple testing (e.g. \code{fdr})}
 
-\item{\code{qCutoff}}{A \code{numeric} value defining the q-value threshold used
-in the enrichment analysis (e.g. \code{0.2})}
-
 \item{\code{features}}{A \code{character} vector containing the list of features used for
 the enrichment}
 
