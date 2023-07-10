@@ -2,8 +2,6 @@
 ## Generics for MirnaExperiment class
 ## ==========================================================================
 
-
-
 #' Extract differentially expressed miRNAs from a
 #' [`MirnaExperiment`][MirnaExperiment-class] object
 #'
@@ -282,39 +280,6 @@ setGeneric("integration<-", function(object, value)
 ## Generics for FunctionalEnrichment class
 ## ==========================================================================
 
-
-
-#' Extract results from enrichment objects
-#'
-#' This function allows to access the `data` slot of a
-#' [`FunctionalEnrichment`][FunctionalEnrichment-class] object. This is useful 
-#' to take a closer look at all the enriched terms of an enrichment analysis. Nfor objects of classes
-#'
-#' @param object An object of class
-#' [`FunctionalEnrichment`][FunctionalEnrichment-class] containing
-#' enrichment results.
-#'
-#' @returns
-#' A `data.frame` object with the full results of the enrichment analysis.
-#'
-#' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
-#' 
-#' # perform GSEA with KEGG database
-#' gse <- enrichMirnas(obj, organism = "Homo sapiens",
-#' database = "KEGG", method = "GSEA")
-#'
-#' # extract results
-#' res <- enrichmentResults(gse)
-#'
-#' # plot results
-#' enrichmentDotplot(gse)
-#'
-#' @author
-#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
-#'
-#' @export
 setGeneric("enrichmentResults", function(object)
   standardGeneric("enrichmentResults"))
 
@@ -339,5 +304,24 @@ setGeneric("enrichmentResults<-", function(object, value)
 
 setGeneric("enrichmentDatabase<-", function(object, value)
   standardGeneric("enrichmentDatabase<-")
+)
+
+
+
+## ==========================================================================
+## Generics for IntegrativePathwayAnalysis class
+## ==========================================================================
+
+setGeneric("integratedPathways", function(object)
+  standardGeneric("integratedPathways"))
+
+setGeneric("integrationDatabase", function(object)
+  standardGeneric("integrationDatabase"))
+
+setGeneric("augmentedPathways", function(object)
+  standardGeneric("augmentedPathways"))
+
+setGeneric("integratedPathways<-", function(object, value)
+  standardGeneric("integratedPathways<-")
 )
 

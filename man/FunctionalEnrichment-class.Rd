@@ -3,9 +3,27 @@
 \docType{class}
 \name{FunctionalEnrichment-class}
 \alias{FunctionalEnrichment-class}
+\alias{enrichmentResults,FunctionalEnrichment-method}
+\alias{enrichmentDatabase,FunctionalEnrichment-method}
+\alias{enrichmentMethod,FunctionalEnrichment-method}
+\alias{geneSet,FunctionalEnrichment-method}
+\alias{enrichmentMetric,FunctionalEnrichment-method}
+\alias{enrichedFeatures,FunctionalEnrichment-method}
 \alias{show,FunctionalEnrichment-method}
 \title{The \code{FunctionalEnrichment} class}
 \usage{
+\S4method{enrichmentResults}{FunctionalEnrichment}(object)
+
+\S4method{enrichmentDatabase}{FunctionalEnrichment}(object)
+
+\S4method{enrichmentMethod}{FunctionalEnrichment}(object)
+
+\S4method{geneSet}{FunctionalEnrichment}(object)
+
+\S4method{enrichmentMetric}{FunctionalEnrichment}(object)
+
+\S4method{enrichedFeatures}{FunctionalEnrichment}(object)
+
 \S4method{show}{FunctionalEnrichment}(object)
 }
 \description{
@@ -18,6 +36,23 @@ including \code{\link[=enrichGenes]{enrichGenes()}} and \code{\link[=enrichMirna
 }
 \section{Functions}{
 \itemize{
+\item \code{enrichmentResults(FunctionalEnrichment)}: Access the \code{data} slot to take a
+closer look at all the enriched terms of an enrichment analysis
+
+\item \code{enrichmentDatabase(FunctionalEnrichment)}: See the database used for the
+functional enrichment
+
+\item \code{enrichmentMethod(FunctionalEnrichment)}: Visualize the approach used for the
+functional enrichment analysis
+
+\item \code{geneSet(FunctionalEnrichment)}: Access the \code{geneSet} slot to see
+the collection of gene sets used for GSEA
+
+\item \code{enrichmentMetric(FunctionalEnrichment)}: View the ranking metric used for GSEA
+
+\item \code{enrichedFeatures(FunctionalEnrichment)}: View the names of the pre-ranked
+features used for GSEA
+
 \item \code{show(FunctionalEnrichment)}: Show method for objects of
 class FunctionalEnrichment
 

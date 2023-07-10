@@ -4,7 +4,8 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 double computePathwayScore(NumericVector lfc,
                            List edges,
-                           List weights) {
+                           List weights,
+                           int nN) {
   
   // extract the names of nodes in the graph
   CharacterVector nodes = edges.names();
@@ -70,7 +71,7 @@ double computePathwayScore(NumericVector lfc,
   }
   
   // normalize pathway score for the number of nodes
-  pS /= n;
+  pS /= nN;
   
   // return pathway score
   return pS;

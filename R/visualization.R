@@ -1384,7 +1384,7 @@ plotCorrelation <- function(mirnaObj,
     stop(paste("Integration analysis is not detected in 'mirnaObj'!",
                "Before using this function, expression levels of miRNAs and",
                "genes must be integrated with the 'mirnaIntegration()'",
-               "function. See '?mirnaIntegration' for the details."),
+               "function. See '?mirnaIntegration' for details."),
          call. = FALSE)
   }
   if (pairedSamples(mirnaObj) == FALSE) {

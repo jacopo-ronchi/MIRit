@@ -722,7 +722,7 @@ setClass("FunctionalEnrichment",
 setValidity("FunctionalEnrichment", function(object) {
   
   if (!is.data.frame(object@data)) {
-    return(paste("'data' slot must be a data.frame that stores the resutls of",
+    return(paste("'data' slot must be a data.frame that stores the results of",
                  "functional enrichment analyses. Please see",
                  "?FunctionalEnrichment-class"))
   } else if (!is.character(object@method)) {
@@ -768,28 +768,43 @@ setValidity("FunctionalEnrichment", function(object) {
 ## Accessors
 ## ---------
 
-#' @rdname enrichmentResults
+#' @describeIn FunctionalEnrichment-class Access the `data` slot to take a
+#' closer look at all the enriched terms of an enrichment analysis
 #' @export
 setMethod("enrichmentResults", "FunctionalEnrichment", function(object) {
   object@data
 })
 
+#' @describeIn FunctionalEnrichment-class See the database used for the
+#' functional enrichment
+#' @export
 setMethod("enrichmentDatabase", "FunctionalEnrichment", function(object) {
   object@database
 })
 
+#' @describeIn FunctionalEnrichment-class Visualize the approach used for the
+#' functional enrichment analysis
+#' @export
 setMethod("enrichmentMethod", "FunctionalEnrichment", function(object) {
   object@method
 })
 
+#' @describeIn FunctionalEnrichment-class Access the `geneSet` slot to see
+#' the collection of gene sets used for GSEA
+#' @export
 setMethod("geneSet", "FunctionalEnrichment", function(object) {
   object@geneSet
 })
 
+#' @describeIn FunctionalEnrichment-class View the ranking metric used for GSEA
+#' @export
 setMethod("enrichmentMetric", "FunctionalEnrichment", function(object) {
   object@statistic
 })
 
+#' @describeIn FunctionalEnrichment-class View the names of the pre-ranked
+#' features used for GSEA
+#' @export
 setMethod("enrichedFeatures", "FunctionalEnrichment", function(object) {
   object@features
 })
@@ -816,7 +831,7 @@ setReplaceMethod("enrichmentDatabase", "FunctionalEnrichment",
 
 
 ## ==========================================================================
-## TopologicalIntegration Class
+## IntegrativePathwayAnalysis Class
 ## ==========================================================================
 
 
@@ -825,45 +840,102 @@ setReplaceMethod("enrichmentDatabase", "FunctionalEnrichment",
 ## ----------------
 
 
-#' The `TopologicalIntegration` class
+#' The `IntegrativePathwayAnalysis` class
 #'
-#' This class stores the results of miRNA-mRNA topological analyses. In
-#' particular, the slots of this class are suitable to contain
+#' This class stores the output of integrative multi-omic pathway analyses.
+#' In particular, the slots of this class are suitable to represent the results
+#' of topologically-aware integrative pathway analyses (TAIPA) returned from
+#' the [topologicalAnalysis()] function.
 #' 
-#' ????
-#' introduces the possibility to store the results of functional
-#' enrichment analyses such as over-representation analysis (ORA), gene set
-#' enrichment analysis (GSEA), and competitive gene set test accounting for
-#' inter-gene correlation (CAMERA). The different slots contained in this class
-#' are used to store enrichment results generated through different functions,
-#' including [enrichGenes()] and [enrichMirnas()].
+#' @details
+#' 
+#' ## Analysis results
+#' 
+#' The `data` slot of this class consists in a `data.frame` object with seven
+#' columns, namely:
+#' 
+#' * `pathway`, which indicates the name of the biological network;
+#' * `considered.nodes`, which specifies the number of nodes with expression
+#' measurement available;
+#' * `total.nodes`, which states the total number of nodes for this pathway;
+#' * `score`, which expresses the score of each individual pathway
+#' * `normalized.score`, the score of each pathway normalized by the total
+#' number of nodes;
+#' * `P.Val`, the p-value of each pathway;
+#' * `Adj.P.Val`, the p-value adjusted for multiple testing.
+#' 
+#' ## Organisms and databases
+#' 
+#' The `organism` and `database` slots specify the organism in study and the
+#' database used for retrieving biological interactions, respectively. In
+#' particular, the [topologicalAnalysis()] function supports `KEGG`,
+#' `WikiPathways`, and `Reactome` databases. Regarding organisms, the
+#' [supportedOrganisms()] function can be used to retrieve the available
+#' species for each database.
+#' 
+#' ## Statistical significance of the permutation test
+#' 
+#' `pCutoff` and `pAdjustment` slots refer to the cutoff used for the analysis.
+#' `pCutoff` is the threshold used for defining statistically significant
+#' pathways, whereas `pAdjustment` refers to the multiple testing correction
+#' method used. It must be one of `stats::p.adjust.methods`.
+#' 
+#' Furthermore, since the statistical significance of each pathway is defined
+#' on the basis of a permutation test, the number of permutations is also
+#' specified in the `nPerm` slot.
+#' 
+#' ## Augmented pathways
+#' 
+#' The `pathways` slot contains a `list` with weighted `graph` objects, each
+#' representing a biological pathway. These networks have been enlarged by
+#' adding the observed miRNA-mRNA interactions. Each network has been
+#' processed so that the weight of each edge is +1 for activation interactions,
+#' and -1 for repression interactions, such as those occurring between miRNAs
+#' and mRNAs.
+#' 
+#' ## Log2 fold changes of miRNAs and genes
+#' 
+#' The expression variation of all miRNAs and genes measured in the study is
+#' stored in the `expression` slot. In particular, this slot consists of a
+#' named `numeric` vector of log2 fold changes.
+#' 
+#' ## Minimum percentage of measured features
+#' 
+#' The `minPc` slot indicates the minimum percentage of miRNAs/mRNAs above
+#' which pathways have been considered for the integrative analysis. This is
+#' needed because often, when differential expression analysis is performed,
+#' lowly expressed features are removed. Therefore, some pathways might result
+#' significantly affected even if only 1% of nodes is perturbed.
 #'
-#' @slot data A `data.frame` object holding the output of enrichment analysis
-#' @slot method The method used to perform functional enrichment analysis
-#' (e.g. `Gene Set Enrichment Analysis (GSEA)`)
+#' @slot data A `data.frame` object that contains the results of the
+#' integrative pathway analysis. See the *details* section for further details
+#' @slot method The method used for the analysis
 #' @slot organism The name of the organism under consideration (e.g.
 #' `Homo sapiens`)
-#' @slot database The name of the database used for the enrichment analysis
-#' (e.g. `KEGG`)
+#' @slot database The name of the database used for retrieving biological
+#' pathways (e.g. `KEGG`)
 #' @slot pCutoff A `numeric` value defining the threshold used for
-#' statistical significance in the enrichment analysis (e.g. `0.05`)
+#' statistical significance (e.g. `0.05`)
 #' @slot pAdjustment A `character` indicating the method used to correct
 #' p-values for multiple testing (e.g. `fdr`)
 #' @slot pathways A `list` of `graph` objects containing the biological
-#' pathways retrieved from `database`, augmented with miRNA-mRNA interactions
-#' @slot minPc description
-#' @slot nPerm description
-#'
-#' 
+#' networks retrieved from `database`, and augmented with
+#' miRNA-mRNA interactions
+#' @slot expression A named `numeric` vector containing log2 fold changes of
+#' all miRNAs and genes
+#' @slot minPc The minimum percentage of measured features that a pathway must
+#' have for being considered in the analysis
+#' @slot nPerm The number of permutation used for assessing the statistical
+#' significance of each pathway
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
-#' @name TopologicalIntegration-class
+#' @name IntegrativePathwayAnalysis-class
 #' @docType class
 #' @export
 #' @import methods
-setClass("TopologicalIntegration",
+setClass("IntegrativePathwayAnalysis",
          representation(data = "data.frame",
                         method = "character",
                         organism = "character",
@@ -871,6 +943,7 @@ setClass("TopologicalIntegration",
                         pCutoff = "numeric",
                         pAdjustment = "character",
                         pathways = "list",
+                        expression = "numeric",
                         minPc = "numeric",
                         nPerm = "numeric"))
 
@@ -879,45 +952,49 @@ setClass("TopologicalIntegration",
 ## Validity
 ## --------
 
-setValidity("TopologicalIntegration", function(object) {
+setValidity("IntegrativePathwayAnalysis", function(object) {
   
   if (!is.data.frame(object@data)) {
-    return(paste("'data' slot must be a data.frame that stores the resutls of",
-                 "functional enrichment analyses. Please see",
-                 "?FunctionalEnrichment-class"))
+    return(paste("'data' slot must be a data.frame that stores the results of",
+                 "an integrative pathway analysis. Please see",
+                 "?IntegrativePathwayAnalysis-class"))
   } else if (!is.character(object@method)) {
-    return(paste("'method' slot must be a character object that specifies the",
-                 "functonal enrichment method used. Please see",
-                 "?FunctionalEnrichment-class"))
+    return(paste("'method' slot must be a character object that describes the",
+                 "approach used for the integrative pathway analysis. Please",
+                 "see ?IntegrativePathwayAnalysis-class"))
   } else if (!is.character(object@organism)) {
     return(paste("'organism' slot must be a character object that specifies",
                  "the organism used. Please see",
-                 "?FunctionalEnrichment-class"))
+                 "?IntegrativePathwayAnalysis-class"))
   } else if (!is.character(object@database)) {
     return(paste("'database' slot must be a character object that specifies",
                  "the database used. Please see",
-                 "?FunctionalEnrichment-class"))
+                 "?IntegrativePathwayAnalysis-class"))
   } else if (!is.numeric(object@pCutoff)) {
     return(paste("'pCutoff' slot must be a numeric object that specifies",
                  "the p-value cutoff used. Please see",
-                 "?FunctionalEnrichment-class"))
+                 "?IntegrativePathwayAnalysis-class"))
   } else if (!is.character(object@pAdjustment) |
              !object@pAdjustment %in% stats::p.adjust.methods) {
     return(paste("'pAdjustment' slot must be a character object that specifies",
                  "the p-value correction method used. Please see",
-                 "?FunctionalEnrichment-class"))
-  } else if (!is.character(object@features)) {
-    return(paste("'features' slot must be a character object containing the",
-                 "features used for functional enrichment analysis. Please see",
-                 "?FunctionalEnrichment-class"))
-  } else if (!is.numeric(object@statistic)) {
-    return(paste("'statistic' slot must be a numeric object that specifies",
-                 "the metric used for GSEA. Please see",
-                 "?FunctionalEnrichment-class"))
-  } else if (!is.character(object@universe)) {
-    return(paste("'universe' slot must be a character object that contains",
-                 "the complete list of background genes used. Please see",
-                 "?FunctionalEnrichment-class"))
+                 "?IntegrativePathwayAnalysis-class"))
+  } else if (!is.list(object@pathways)) {
+    return(paste("'pathways' slot must be a list object containing graph",
+                 "objects with augmented biological networks. Please",
+                 "see ?IntegrativePathwayAnalysis-class"))
+  } else if (!is.character(object@expression)) {
+    return(paste("'expression' slot must be a named numeric object containing",
+                 "the log2 fold changes of all miRNAs/mRNAs in study. Please",
+                 "see ?IntegrativePathwayAnalysis-class"))
+  } else if (!is.numeric(object@minPC)) {
+    return(paste("'minPC' slot must be a numeric object that specifies",
+                 "the minimum percentage of measured nodes required. Please",
+                 "see ?IntegrativePathwayAnalysis-class"))
+  } else if (!is.numeric(object@nPerm)) {
+    return(paste("'nPerm' slot must be a numeric object that defines",
+                 "the number of permutations used. Please see",
+                 "?IntegrativePathwayAnalysis-class"))
   } else {
     return(TRUE)
   }
@@ -928,17 +1005,30 @@ setValidity("TopologicalIntegration", function(object) {
 ## Accessors
 ## ---------
 
-#' @rdname topologicalResults
+#' @describeIn IntegrativePathwayAnalysis-class Access the results of
+#' integrative miRNA-mRNA pathway analysis
 #' @export
-setMethod("topologicalResults", "TopologicalIntegration", function(object) {
+setMethod("integratedPathways",
+          "IntegrativePathwayAnalysis",
+          function(object) {
   object@data
-}) ## WRITE GENERICS FOR THESE ACCESSORS AND SETTERS !!!
+})
 
-setMethod("topologicalDatabase", "TopologicalIntegration", function(object) {
+#' @describeIn IntegrativePathwayAnalysis-class View the database used for
+#' the integrative pathway analysis
+#' @export
+setMethod("integrationDatabase",
+          "IntegrativePathwayAnalysis",
+          function(object) {
   object@database
 })
 
-setMethod("augmentedPathways", "TopologicalIntegration", function(object) {
+#' @describeIn IntegrativePathwayAnalysis-class Extract the list of biological
+#' networks augmented with miRNA-mRNA interactions
+#' @export
+setMethod("augmentedPathways",
+          "IntegrativePathwayAnalysis",
+          function(object) {
   object@pathways
 })
 
@@ -947,7 +1037,8 @@ setMethod("augmentedPathways", "TopologicalIntegration", function(object) {
 ## Setters
 ## -------
 
-setReplaceMethod("topologicalResults", "TopologicalIntegration",
+setReplaceMethod("integratedPathways",
+                 "IntegrativePathwayAnalysis",
                  function(object, value) {
                    object@data <- value
                    validObject(object)

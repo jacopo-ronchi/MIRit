@@ -8,9 +8,9 @@
 #'
 #' @param organism The name of the organism under consideration. The different
 #' databases have different supported organisms. To see the list of supported
-#' organisms for a given database, use the [supportedOrganisms()] function.
+#' organisms for a given database, use the [supportedOrganisms()] function
 #' @param database The name of the database to use. It must be one of: `KEGG`,
-#' `Reactome`, and `WikiPathways`.
+#' `Reactome`, and `WikiPathways`
 #'
 #' @returns
 #' A `character` vector containing the pathway names present in the
@@ -27,8 +27,8 @@
 #' @references
 #' Sales, G., Calura, E., Cavalieri, D. et al. graphite - a Bioconductor
 #' package to convert pathway topology to gene network.
-#' BMC Bioinformatics 13, 20 (2012).
-#' \url{https://doi.org/10.1186/1471-2105-13-20}
+#' BMC Bioinformatics 13, 20 (2012),
+#' \url{https://doi.org/10.1186/1471-2105-13-20}.
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -198,7 +198,8 @@ mirnaPathway <- function(mirnaObj,
     stop("Databases supported are: 'KEGG', 'Reactome' and 'WikiPathways'",
          call. = FALSE)
   }
-  if (database == "KEGG" & !organism %in% convertOrganism("graph_kegg", "all")) {
+  if (database == "KEGG" &
+      !organism %in% convertOrganism("graph_kegg", "all")) {
     stop(paste("For KEGG database 'organism' must be one of:",
                paste(convertOrganism("graph_kegg", "all"), collapse = ", ")),
          call. = FALSE)

@@ -11,21 +11,22 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // computePathwayScore
-double computePathwayScore(NumericVector lfc, List edges, List weights);
-RcppExport SEXP _MIRit_computePathwayScore(SEXP lfcSEXP, SEXP edgesSEXP, SEXP weightsSEXP) {
+double computePathwayScore(NumericVector lfc, List edges, List weights, int nN);
+RcppExport SEXP _MIRit_computePathwayScore(SEXP lfcSEXP, SEXP edgesSEXP, SEXP weightsSEXP, SEXP nNSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type lfc(lfcSEXP);
     Rcpp::traits::input_parameter< List >::type edges(edgesSEXP);
     Rcpp::traits::input_parameter< List >::type weights(weightsSEXP);
-    rcpp_result_gen = Rcpp::wrap(computePathwayScore(lfc, edges, weights));
+    Rcpp::traits::input_parameter< int >::type nN(nNSEXP);
+    rcpp_result_gen = Rcpp::wrap(computePathwayScore(lfc, edges, weights, nN));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_MIRit_computePathwayScore", (DL_FUNC) &_MIRit_computePathwayScore, 3},
+    {"_MIRit_computePathwayScore", (DL_FUNC) &_MIRit_computePathwayScore, 4},
     {NULL, NULL, 0}
 };
 
