@@ -21,47 +21,67 @@ of topologically-aware integrative pathway analyses (TAIPA) returned from
 the \code{\link[=topologicalAnalysis]{topologicalAnalysis()}} function.
 }
 \details{
-\subsection{Topologically-Aware Integrative Pathway Analysis (TAIPA)}{
+\subsection{Analysis results}{
 
-This analysis aims to identify the biological pathways that result affected
-by miRNA and mRNA dysregulations. In this analysis, biological pathways are
-retrieved from a pathway database such as KEGG, and the interplay between
-miRNAs and genes is then added to the networks. Each network is defined as
-a graph \eqn{G(N,E)}, where \eqn{N} represents nodes, and \eqn{E} represents
-the relationships between nodes. For each pathway, a score is a computed as:
-
-\deqn{s = \frac{1}{N}\cdot \sum_{i = 0}^{N}\sum_{j = 0}^{U}\beta_{i\to j}
-\left( \Delta E_i\cdot \Delta E_j\right)\,,}
-
-where \eqn{N} is the total number of nodes in the pathway, \eqn{U} is the
-total number of interactors for each node, \eqn{\Delta E} is the log2 fold
-change of each node, and \eqn{\beta} is an interaction factor that
-represents the directionality of a specific interaction (+1 for activation,
--1 for inhibition).
-
-The higher is the score, and the more affected is a pathway. Then, to
-compute the statistical significance of each pathway score, a permutation
-procedure is applied. Indeed, for each pathway log2 fold changes are
-permuted several times, and for each permutation pathway score is calculated.
-In the end, the p-value is defined as the fraction of permutations that
-reported a higher pathway score than the observed one.
-}
-
-\subsection{\code{data} slot}{
-
-The \code{data} slot of this class consists in a \code{data.frame} object with seven
+The \code{data} slot of this class consists in a \code{data.frame} object with six
 columns, namely:
 \itemize{
 \item \code{pathway}, which indicates the name of the biological network;
 \item \code{considered.nodes}, which specifies the number of nodes with expression
 measurement available;
 \item \code{total.nodes}, which states the total number of nodes for this pathway;
-\item \code{score}, which expresses the score of each individual pathway
-\item \code{normalized.score}, the score of each pathway normalized by the total
-number of nodes;
+\item \code{score}, which expresses the score of each individual pathway;
 \item \code{P.Val}, the p-value of each pathway;
-\item \code{Adj.P.Val}, the p-value adjusted for multiple testing.
+\item \code{adj.P.Val}, the p-value adjusted for multiple testing.
 }
+}
+
+\subsection{Organisms and databases}{
+
+The \code{organism} and \code{database} slots specify the organism in study and the
+database used for retrieving biological interactions, respectively. In
+particular, the \code{\link[=topologicalAnalysis]{topologicalAnalysis()}} function supports \code{KEGG},
+\code{WikiPathways}, and \code{Reactome} databases. Regarding organisms, the
+\code{\link[=supportedOrganisms]{supportedOrganisms()}} function can be used to retrieve the available
+species for each database.
+}
+
+\subsection{Statistical significance of the permutation test}{
+
+\code{pCutoff} and \code{pAdjustment} slots refer to the cutoff used for the analysis.
+\code{pCutoff} is the threshold used for defining statistically significant
+pathways, whereas \code{pAdjustment} refers to the multiple testing correction
+method used. It must be one of \code{stats::p.adjust.methods}.
+
+Furthermore, since the statistical significance of each pathway is defined
+on the basis of a permutation test, the number of permutations is also
+specified in the \code{nPerm} slot.
+}
+
+\subsection{Augmented pathways}{
+
+The \code{pathways} slot contains a \code{list} with weighted \code{graph} objects, each
+representing a biological pathway. These networks have been enlarged by
+adding the observed miRNA-mRNA interactions. Each network has been
+processed so that the weight of each edge is +1 for activation interactions,
+and -1 for repression interactions, such as those occurring between miRNAs
+and mRNAs.
+}
+
+\subsection{Log2 fold changes of miRNAs and genes}{
+
+The expression variation of all miRNAs and genes measured in the study is
+stored in the \code{expression} slot. In particular, this slot consists of a
+named \code{numeric} vector of log2 fold changes.
+}
+
+\subsection{Minimum percentage of measured features}{
+
+The \code{minPc} slot indicates the minimum percentage of miRNAs/mRNAs above
+which pathways have been considered for the integrative analysis. This is
+needed because often, when differential expression analysis is performed,
+lowly expressed features are removed. Therefore, some pathways might result
+significantly affected even if only 1\% of nodes is perturbed.
 }
 }
 \section{Functions}{
@@ -99,6 +119,9 @@ p-values for multiple testing (e.g. \code{fdr})}
 \item{\code{pathways}}{A \code{list} of \code{graph} objects containing the biological
 networks retrieved from \code{database}, and augmented with
 miRNA-mRNA interactions}
+
+\item{\code{expression}}{A named \code{numeric} vector containing log2 fold changes of
+all miRNAs and genes}
 
 \item{\code{minPc}}{The minimum percentage of measured features that a pathway must
 have for being considered in the analysis}

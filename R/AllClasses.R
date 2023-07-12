@@ -851,18 +851,16 @@ setReplaceMethod("enrichmentDatabase", "FunctionalEnrichment",
 #' 
 #' ## Analysis results
 #' 
-#' The `data` slot of this class consists in a `data.frame` object with seven
+#' The `data` slot of this class consists in a `data.frame` object with six
 #' columns, namely:
 #' 
 #' * `pathway`, which indicates the name of the biological network;
 #' * `considered.nodes`, which specifies the number of nodes with expression
 #' measurement available;
 #' * `total.nodes`, which states the total number of nodes for this pathway;
-#' * `score`, which expresses the score of each individual pathway
-#' * `normalized.score`, the score of each pathway normalized by the total
-#' number of nodes;
+#' * `score`, which expresses the score of each individual pathway;
 #' * `P.Val`, the p-value of each pathway;
-#' * `Adj.P.Val`, the p-value adjusted for multiple testing.
+#' * `adj.P.Val`, the p-value adjusted for multiple testing.
 #' 
 #' ## Organisms and databases
 #' 
@@ -983,12 +981,12 @@ setValidity("IntegrativePathwayAnalysis", function(object) {
     return(paste("'pathways' slot must be a list object containing graph",
                  "objects with augmented biological networks. Please",
                  "see ?IntegrativePathwayAnalysis-class"))
-  } else if (!is.character(object@expression)) {
+  } else if (!is.numeric(object@expression)) {
     return(paste("'expression' slot must be a named numeric object containing",
                  "the log2 fold changes of all miRNAs/mRNAs in study. Please",
                  "see ?IntegrativePathwayAnalysis-class"))
-  } else if (!is.numeric(object@minPC)) {
-    return(paste("'minPC' slot must be a numeric object that specifies",
+  } else if (!is.numeric(object@minPc)) {
+    return(paste("'minPc' slot must be a numeric object that specifies",
                  "the minimum percentage of measured nodes required. Please",
                  "see ?IntegrativePathwayAnalysis-class"))
   } else if (!is.numeric(object@nPerm)) {

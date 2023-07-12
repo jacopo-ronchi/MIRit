@@ -2509,3 +2509,198 @@ plotDimensions <- function(mirnaObj,
   
 }
 
+
+
+
+
+#' Display integrated miRNA-mRNA augmented pathways in a dotplot
+#'
+#' This function produces a dotplot that depicts the results of a
+#' topologically-aware integrative pathway analysis (TAIPA) carried out through
+#' the [topologicalAnalysis()] function.
+#' 
+#' When producing the dotplot with default values, the significant pathways
+#' are ordered on the x-axis on the basis of their pathway score computed by
+#' [topologicalAnalysis()]. The higher is this score, and the more affected a
+#' pathway result between biological condditions. Moroever, the size of each
+#' dot is equal to the ratio between the number of nodes for which a
+#' measurement is available, and the total number of nodes. Finally, the color
+#' scale of dots is relative to the adjusted p-values of each pathway. However,
+#' the user can change the behavior of this function, by changing `ordBy`,
+#' `sizeBy`, and `colBy` parameters.
+#'
+#' @param object An object of class
+#' [`IntegrativePathwayAnalysis`][IntegrativePathwayAnalysis-class]
+#' @param showTerms It is the number of top significant pathways to show or,
+#' alternatively, a character vector indicating the pathways to plot.
+#' Default is `10`
+#' @param ordBy The parameter used to set the x-axis scale. It must be one of
+#' `ratio`, `padj`, `pval` and `score` (default). See the *details* section
+#' for further information
+#' @param sizeBy The parameter used to set the size scale. It must be one of
+#' `ratio` (default), `padj`, `pval` and `score`. See the *details* section
+#' for further information
+#' @param colBy The parameter used to set the color scale. It must be one of
+#' `ratio`, `padj` (default), `pval` and `score`. See the *details* section
+#' for further information
+#' @param title The title of the plot. Default is `NULL` not to include a plot
+#' title
+#'
+#' @returns
+#' A `ggplot` graph with a dotplot of integrated pathways.
+#'
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform integration analysis with default settings
+#' obj <- mirnaIntegration(obj)
+#'
+#' # perform the integrative pathway analysis with default settings
+#' #ipa <- topologicalAnalysis(obj)
+#' 
+#' # access the results of pathway analysis
+#' #integratedPathways(ipa)
+#' 
+#' # create a dotplot of integrated pathways
+#' #integrationDotplot(ipa)
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
+integrationDotplot <- function(object,
+                               showTerms = 10,
+                               ordBy = "score",
+                               sizeBy = "ratio",
+                               colBy = "padj",
+                               title = NULL) {
+  
+  ## check inputs
+  if (!is(object, "IntegrativePathwayAnalysis")) {
+    stop("'object' should be of class IntegrativePathwayAnalysis!",
+         call. = FALSE)
+  }
+  if (nrow(integratedPathways(object)) < 1) {
+    stop("'object' object does not contain any significant results!",
+         call. = FALSE)
+  }
+  if (!is.character(showTerms) &
+      !(is.numeric(showTerms) & length(showTerms) == 1)) {
+    stop(paste("'showTerms' must be the number of top significant pathways",
+               "to plot or, alternatively, a character vector containing",
+               "the pathways to be shown."),
+         call. = FALSE)
+  }
+  if (is.character(showTerms) &
+      !all(showTerms %in% integratedPathways(object)$pathway)) {
+    stop("The pathways provided are not present in 'object' pathway column!",
+         call. = FALSE)
+  }
+  if (!is.character(ordBy) |
+      length(ordBy) != 1 |
+      !ordBy %in% c("ratio", "padj", "pval", "score")) {
+    stop(paste("'ordBy' must be one of: 'ratio', 'padj',",
+               "'pval', 'score' (default)"),
+         call. = FALSE)
+  }
+  if (!is.character(sizeBy) |
+      length(sizeBy) != 1 |
+      !sizeBy %in% c("ratio", "padj", "pval", "score")) {
+    stop(paste("'sizeBy' must be one of: 'ratio' (default), 'padj',",
+               "'pval', 'score'"),
+         call. = FALSE)
+  }
+  if (!is.character(colBy) |
+      length(colBy) != 1 |
+      !colBy %in% c("ratio", "padj", "pval", "score")) {
+    stop(paste("'colBy' must be one of: 'ratio', 'padj'",
+               "(default), 'pval', 'score'"),
+         call. = FALSE)
+  }
+  if (!(is.character(title) | is.null(title)) |
+      !length(title) %in% c(0, 1)) {
+    stop(paste("'title' must be the title of the plot.",
+               "For additional details see ?integrationDotplot"),
+         call. = FALSE)
+  }
+  
+  ## extract results from object object
+  res <- integratedPathways(object)
+  
+  ## CHANGE FROM HERE
+  
+  ## compute gene ratio and direction for different analyses
+  if (objectMethod(object) == "Gene-Set object Analysis (GSEA)") {
+    ov <- as.numeric(lapply(res$leadingEdge, length))
+    res$overlap <- ov
+    res$ratio <- ov/res$size
+    res$direction <- "Up"
+    res$direction[which(res$NES < 0)] <- "Down"
+  } else {
+    res$ratio <- res$overlap/res$size
+  }
+  
+  ## order results based on padj
+  res <- res[order(res$padj), ]
+  
+  ## select terms to be shown in the dotplot
+  if (is.numeric(showTerms)) {
+    res <- res[seq(ifelse(showTerms <= nrow(res), showTerms, nrow(res))), ]
+  } else if (is.character(showTerms)) {
+    res <- res[which(res$pathway %in% showTerms), ]
+  }
+  
+  ## set an x-axis label for 'ratio'
+  if (ordBy == "ratio") {
+    ordLabel <- "Gene-Set Overlap"
+  } else {
+    ordLabel <- ordBy
+  }
+  
+  ## reformat results based on specified criterion
+  if (ordBy != "padj" & ordBy != "pval") {
+    res <- res[order(res[, ordBy], decreasing = TRUE), ]
+  } else {
+    res[, ordBy] <- -log10(res[, ordBy])
+    res <- res[order(res[, ordBy], decreasing = TRUE), ]
+    ordLabel <- paste("-log10(", ordBy, ")", sep = "")
+  }
+  
+  ## create a dotplot
+  dotRes <- ggplot2::ggplot(res,
+                            ggplot2::aes(x = !!ggplot2::sym(ordBy),
+                                         y = stats::reorder(.data$pathway,
+                                                            !!ggplot2::sym(ordBy)),
+                                         size = !!ggplot2::sym(sizeBy),
+                                         color = !!ggplot2::sym(colBy))) +
+    ggplot2::geom_point() +
+    ggplot2::scale_color_gradient(low = "red", high = "blue",
+                                  guide = ggplot2::guide_colorbar(reverse = TRUE)) +
+    ggplot2::ylab(NULL) +
+    ggplot2::scale_y_discrete() +
+    ggplot2::scale_size(range = c(3, 8)) +
+    ggplot2::guides(size = ggplot2::guide_legend(order = 1),
+                    color = ggplot2::guide_colorbar(order = 2)) +
+    ggplot2::xlab(ordLabel) +
+    theme_enr()
+  
+  ## divide by object direction
+  if (splitDir == TRUE &
+      objectMethod(object) != "Over-Representation Analysis (ORA)") {
+    dotRes <- dotRes +
+      ggplot2::facet_grid(~ direction) +
+      ggplot2::theme(strip.text = ggplot2::element_text(size = 12))
+  }
+  
+  ## add the title of the plot
+  if (!is.null(title)) {
+    dotRes <- dotRes +
+      ggplot2::ggtitle(title)
+  }
+  
+  ## return ggplot2 graph
+  return(dotRes)
+  
+}
+

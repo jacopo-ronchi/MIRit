@@ -10,10 +10,10 @@ listPathways(organism, database)
 \arguments{
 \item{organism}{The name of the organism under consideration. The different
 databases have different supported organisms. To see the list of supported
-organisms for a given database, use the \code{\link[=supportedOrganisms]{supportedOrganisms()}} function.}
+organisms for a given database, use the \code{\link[=supportedOrganisms]{supportedOrganisms()}} function}
 
 \item{database}{The name of the database to use. It must be one of: \code{KEGG},
-\code{Reactome}, and \code{WikiPathways}.}
+\code{Reactome}, and \code{WikiPathways}}
 }
 \value{
 A \code{character} vector containing the pathway names present in the
@@ -37,8 +37,8 @@ listPathways("Mus musculus", "WikiPathways")
 \references{
 Sales, G., Calura, E., Cavalieri, D. et al. graphite - a Bioconductor
 package to convert pathway topology to gene network.
-BMC Bioinformatics 13, 20 (2012).
-\url{https://doi.org/10.1186/1471-2105-13-20}
+BMC Bioinformatics 13, 20 (2012),
+\url{https://doi.org/10.1186/1471-2105-13-20}.
 }
 \author{
 Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}

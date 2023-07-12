@@ -96,7 +96,7 @@
 #' @returns
 #' An object of class
 #' [`IntegrativePathwayAnalysis`][IntegrativePathwayAnalysis-class] that stores
-#' the results of the analysis.
+#' the results of the analysis. See the relative help page for further details.
 #'
 #' @examples
 #' # load example MirnaExperiment object
@@ -112,7 +112,7 @@
 #' #integratedPathways(ipa)
 #' 
 #' # create a dotplot of integrated pathways
-#' #enrichmentDotplot(ipa)
+#' #integrationDotplot(ipa)
 #' 
 #' # explore a specific biological network
 #' #visualizeNetwork(ipa, "Thyroid hormone synthesis")
@@ -125,7 +125,8 @@
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
-#'
+#' 
+#' @import BiocParallel
 #' @export
 topologicalAnalysis <- function(mirnaObj,
                                 database = "KEGG",
@@ -134,7 +135,7 @@ topologicalAnalysis <- function(mirnaObj,
                                 pAdjustment = "fdr",
                                 nPerm = 10000,
                                 minPc = 10,
-                                BPPARAM = BiocParallel::bpparam()) {
+                                BPPARAM = bpparam()) {
   
   ## input checks
   if (!is(mirnaObj, "MirnaExperiment")) {
@@ -191,7 +192,7 @@ topologicalAnalysis <- function(mirnaObj,
   if (!is.numeric(nPerm) |
       length(nPerm) != 1 |
       nPerm < 0 |
-      nPerm %% 1 == 0) {
+      !nPerm %% 1 == 0) {
     stop("'nPerm' must be a positive integer! (default is 10000)",
          call. = FALSE)
   }
@@ -228,19 +229,24 @@ topologicalAnalysis <- function(mirnaObj,
   
   ## convert pathway identifiers to gene symbols
   message("Converting identifiers to gene symbols...")
-  pathDb <- quiet(BiocParallel::bplapply(pathDb,
-                                         graphite::convertIdentifiers,
-                                         to = "SYMBOL",
-                                         BPPARAM = BPPARAM))
-  ## PREVENT THIS FROM PRINTING !!!!
+  pathDb <- bplapply(as.list(pathDb), function(x) {
+    suppressMessages(graphite::convertIdentifiers(x, to = "SYMBOL"))
+  }, BPPARAM = BPPARAM)
   
-  ## create a list of pathway networks with miRNA-gene interactions
+  ## create a list of augmented pathways without inversion
   message("Adding miRNA-gene interactions to biological pathways...")
-  netList <- BiocParallel::bplapply(pathDb,
-                                    augmentPathway,
-                                    targets = targ,
-                                    inverted = TRUE,
-                                    BPPARAM = BPPARAM)
+  realPaths <- bplapply(pathDb,
+                        augmentPathway,
+                        targets = targ,
+                        inverted = FALSE,
+                        BPPARAM = BPPARAM)
+  
+  ## create a list of inverted networks for pathway score calculation
+  netList <- bplapply(pathDb,
+                      augmentPathway,
+                      targets = targ,
+                      inverted = TRUE,
+                      BPPARAM = BPPARAM)
   
   ## determine the number of nodes for each augmented pathway
   pNodes <- vapply(netList, function(g) {
@@ -252,20 +258,24 @@ topologicalAnalysis <- function(mirnaObj,
   }, FUN.VALUE = integer(1))
   
   ## normalize networks before computing pathway score
-  graphList <- BiocParallel::bplapply(netList,
-                                      normalizeGraph,
-                                      featDE = featDE,
-                                      minPc = minPc,
-                                      BPPARAM = BPPARAM)
+  graphList <- bplapply(netList,
+                        normalizeGraph,
+                        featDE = featDE,
+                        minPc = minPc,
+                        BPPARAM = BPPARAM)
   
   ## remove NULL pathways
   nullPath <- which(lengths(graphList) == 0)
   if (length(nullPath) > 0) {
     warning(paste(length(nullPath), "pathways have been ignored because they",
-                  "contain too few nodes with gene expression measurement."))
+                  "contain too few nodes with gene expression measurement."),
+            call. = FALSE)
     graphList <- graphList[-nullPath]
     pNodes <- pNodes[-nullPath]
   }
+  
+  ## obtain the number of considered nodes for each pathway
+  cNodes <- unlist(lapply(graphList, graph::numNodes))
   
   ## randomly create vector of logFCs with permuted names
   randomVec <- lapply(seq(nPerm), function(i) {
@@ -274,64 +284,76 @@ topologicalAnalysis <- function(mirnaObj,
     rVec
   })
   
-  ## compute pathway score and p-value for each pathway
-  message(paste("Calculating pathway scores and p-values with",
-                nPerm, "permutations..."))
-  pS <- lapply_pb(names(graphList), function(pathName) {
-    
-    ## set graph object and number of nodes
-    path <- graphList[[pathName]]
-    nN <- pNodes[[pathName]]
-    
-    ## define pathway score for each graph
-    sc <- computePathwayScore(lfc,
-                              graph::edges(path),
-                              graph::edgeWeights(path),
-                              nN)
-    
-    ## compute pathway score for each random set
-    randomScores <- BiocParallel::bplapply(randomVec,
-                                           computePathwayScore,
-                                           edges = graph::edges(path),
-                                           weights = graph::edgeWeights(path),
-                                           BPPARAM = BPPARAM)
-    randomScores <- unlist(randomScores)
-    
-    ## define p-value as the fraction of more extreme values in random sets
-    pval <- sum(randomScores >= sc) / nPerm
-    
-    ## calculate normalized score ??? FORSE NON HA SENSO QUI
-    norm.sc <- sc / nN
-    
-    ## return pathway score and p-value for each graph
-    c(pathName, sc, norm.sc, pval)
-    
+  ## calculate the observed score for each pathway
+  message("Calculating pathway scores...")
+  pS <- bplapply(names(graphList),
+                 score.helper,
+                 lfc = lfc,
+                 gList = graphList,
+                 pN = pNodes,
+                 BPPARAM = BPPARAM)
+  names(pS) <- names(graphList)
+  pS <- unlist(pS)
+  
+  ## combine pathway networks and permuted vectors
+  paths <- rep(names(graphList), times = nPerm)
+  permVec <- rep(randomVec, each = length(graphList))
+  
+  ## use parallel mapply to compute score for each pathway and for each set
+  message(paste("Calculating p-values with", nPerm, "permutations..."))
+  permScores <- bpmapply(score.helper,
+                         paths,
+                         permVec,
+                         MoreArgs = list(gList = graphList,
+                                         pN = pNodes),
+                         BPPARAM = BPPARAM,
+                         BPOPTIONS = bpoptions(tasks = 500,
+                                               progressbar = TRUE))
+  
+  ## split the permuted scores according to the pathways
+  permScores <- split(permScores, paths)
+  
+  ## order permuted scores based on observed scores
+  permScores <- permScores[names(pS)]
+  
+  ## define p-values as the fraction of more extreme random values
+  pval <- lapply(names(permScores), function(pa) {
+    sum(permScores[[pa]] >= pS[[pa]]) / nPerm
   })
+  names(pval) <- names(permScores)
+  pval <- unlist(pval)
   
   ## create result data.frame
-  resDf <- do.call(rbind.data.frame, pS)
-  colnames(resDf) <- c("pathway", "score", "normalized.score", "P.Val")
+  resDf <- data.frame(pathwy = names(pS),
+                      considered.nodes = cNodes,
+                      total.nodes = pNodes,
+                      score = pS,
+                      P.Val = pval)
   
   ## correct p-values for multiple testing
   resDf$adj.P.Val <- stats::p.adjust(resDf$P.Val, method = pAdjustment)
   
-  ## ADD THE NUMBER OF NODES AND THE NUMBER OF MEASURED NODES!!!!
-  
   ## order results by adjusted p-values
   resDf <- resDf[order(resDf$adj.P.Val), ]
   
-  ## PRINT THE RESULTS OF THE ANALYSIS
+  ## maintain only significant results
+  resDf <- resDf[resDf$adj.P.Val <= pCutoff, ]
   
-  ## create a TopologicalIntegration object
-  res <- new("TopologicalIntegration",
+  ## print the results of the analysis
+  message(paste("The topologically-aware integrative pathway analysis",
+                "reported", nrow(resDf), "significantly altered pathways!"))
+  
+  ## create a IntegrativePathwayAnalysis object
+  res <- new("IntegrativePathwayAnalysis",
              data = resDf,
-             method = paste("Topologically-aware miRNA-mRNA",
-                            "integrative analysis (TAMMIA)"),
+             method = paste("Topologically-Aware Integrative",
+                            "Pathway Analysis (TAIPA)"),
              organism = organism,
              database = database,
              pCutoff = pCutoff,
              pAdjustment = pAdjustment,
-             pathways = netList, ## CORRECT THIS TO INCLUDE NON INVERTED NETS
+             pathways = realPaths,
+             expression = lfc,
              minPc = minPc,
              nPerm = nPerm)
   
@@ -441,6 +463,28 @@ normalizeGraph <- function(net, featDE, minPc) {
   
   ## return normalized graph
   return(net)
+  
+}
+
+
+
+
+
+## helper function for calculating pathway score for each graph in a list
+score.helper <- function(pathName, lfc, gList, pN) {
+  
+  ## set graph object and number of nodes
+  path <- gList[[pathName]]
+  nN <- pN[[pathName]]
+  
+  ## define pathway score for each graph
+  sc <- computePathwayScore(lfc,
+                            edges = graph::edges(path),
+                            weights = graph::edgeWeights(path),
+                            nN = nN)
+  
+  ## return the resulting score
+  return(sc)
   
 }
 
