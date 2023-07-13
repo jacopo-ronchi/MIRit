@@ -7,9 +7,7 @@
 integrationDotplot(
   object,
   showTerms = 10,
-  ordBy = "score",
-  sizeBy = "ratio",
-  colBy = "padj",
+  showTermsParam = "score",
   title = NULL
 )
 }
@@ -17,21 +15,13 @@ integrationDotplot(
 \item{object}{An object of class
 \code{\link[=IntegrativePathwayAnalysis-class]{IntegrativePathwayAnalysis}}}
 
-\item{showTerms}{It is the number of top significant pathways to show or,
-alternatively, a character vector indicating the pathways to plot.
-Default is \code{10}}
+\item{showTerms}{It is the number of pathways to be shown, based on the
+order determined by the parameter \code{showTermsParam}; or, alternatively, a
+character vector indicating the pathways to plot. Default is \code{10}}
 
-\item{ordBy}{The parameter used to set the x-axis scale. It must be one of
-\code{ratio}, \code{padj}, \code{pval} and \code{score} (default). See the \emph{details} section
-for further information}
-
-\item{sizeBy}{The parameter used to set the size scale. It must be one of
-\code{ratio} (default), \code{padj}, \code{pval} and \code{score}. See the \emph{details} section
-for further information}
-
-\item{colBy}{The parameter used to set the color scale. It must be one of
-\code{ratio}, \code{padj} (default), \code{pval} and \code{score}. See the \emph{details} section
-for further information}
+\item{showTermsParam}{The order in which the top pathways are selected as
+specified by the \code{showTerms} parameter. It must be one of \code{ratio}, \code{padj},
+\code{pval} and \code{score} (default)}
 
 \item{title}{The title of the plot. Default is \code{NULL} not to include a plot
 title}
@@ -45,15 +35,13 @@ topologically-aware integrative pathway analysis (TAIPA) carried out through
 the \code{\link[=topologicalAnalysis]{topologicalAnalysis()}} function.
 }
 \details{
-When producing the dotplot with default values, significant pathways
+When producing the dotplot with this function, significant pathways
 are ordered on the x-axis on the basis of their pathway score computed by
 \code{\link[=topologicalAnalysis]{topologicalAnalysis()}}. The higher is this score, and the more affected a
 pathway result between biological conditions. Moreover, the size of each
 dot is equal to the ratio between the number of nodes for which a
 measurement is available, and the total number of nodes. Finally, the color
-scale of dots is relative to the adjusted p-values of each pathway. However,
-the user can change the behavior of this function, by changing \code{ordBy},
-\code{sizeBy}, and \code{colBy} parameters.
+scale of dots is relative to the adjusted p-values of each pathway.
 }
 \examples{
 # load example MirnaExperiment object

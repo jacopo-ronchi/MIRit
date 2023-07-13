@@ -4,19 +4,25 @@
 \alias{gseaRidgeplot}
 \title{Create a ridgeplot to display the results of GSEA analysis}
 \usage{
-gseaRidgeplot(enrichment, showTerms = 10, colBy = "padj", title = NULL)
+gseaRidgeplot(
+  enrichment,
+  showTerms = 10,
+  showTermsParam = "padj",
+  title = NULL
+)
 }
 \arguments{
 \item{enrichment}{An object of class
 \code{\link[=FunctionalEnrichment-class]{FunctionalEnrichment}} containing
 enrichment results}
 
-\item{showTerms}{It is the number of top significant terms to show or,
-alternatively, a character vector indicating the enriched terms to plot.
-Default is \code{10}}
+\item{showTerms}{It is the number of terms to be shown, based on the
+order determined by the parameter \code{showTermsParam}; or, alternatively, a
+character vector indicating the terms to plot. Default is \code{10}}
 
-\item{colBy}{The parameter used to set the color scale. It must be one of
-\code{ratio}, \code{padj} (default), \code{pval} and \code{overlap}}
+\item{showTermsParam}{The order in which the top terms are selected as
+specified by the \code{showTerms} parameter. It must be one of \code{ratio}, \code{padj}
+(default), \code{pval} and \code{overlap}}
 
 \item{title}{The title of the plot. Default is \code{NULL} not to include a plot
 title}

@@ -2,6 +2,6 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 computePathwayScore <- function(lfc, edges, weights, nN) {
-    .Call('_MIRit_computePathwayScore', PACKAGE = 'MIRit', lfc, edges, weights, nN)
+    .Call(`_MIRit_computePathwayScore`, lfc, edges, weights, nN)
 }
 
