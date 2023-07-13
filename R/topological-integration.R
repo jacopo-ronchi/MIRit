@@ -324,7 +324,7 @@ topologicalAnalysis <- function(mirnaObj,
   pval <- unlist(pval)
   
   ## create result data.frame
-  resDf <- data.frame(pathwy = names(pS),
+  resDf <- data.frame(pathway = names(pS),
                       considered.nodes = cNodes,
                       total.nodes = pNodes,
                       score = pS,

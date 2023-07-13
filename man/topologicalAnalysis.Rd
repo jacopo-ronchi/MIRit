@@ -12,7 +12,7 @@ topologicalAnalysis(
   pAdjustment = "fdr",
   nPerm = 10000,
   minPc = 10,
-  BPPARAM = BiocParallel::bpparam()
+  BPPARAM = bpparam()
 )
 }
 \arguments{
@@ -137,7 +137,7 @@ obj <- mirnaIntegration(obj)
 #integratedPathways(ipa)
 
 # create a dotplot of integrated pathways
-#enrichmentDotplot(ipa)
+#integrationDotplot(ipa)
 
 # explore a specific biological network
 #visualizeNetwork(ipa, "Thyroid hormone synthesis")

@@ -2519,10 +2519,10 @@ plotDimensions <- function(mirnaObj,
 #' topologically-aware integrative pathway analysis (TAIPA) carried out through
 #' the [topologicalAnalysis()] function.
 #' 
-#' When producing the dotplot with default values, the significant pathways
+#' When producing the dotplot with default values, significant pathways
 #' are ordered on the x-axis on the basis of their pathway score computed by
 #' [topologicalAnalysis()]. The higher is this score, and the more affected a
-#' pathway result between biological condditions. Moroever, the size of each
+#' pathway result between biological conditions. Moreover, the size of each
 #' dot is equal to the ratio between the number of nodes for which a
 #' measurement is available, and the total number of nodes. Finally, the color
 #' scale of dots is relative to the adjusted p-values of each pathway. However,
@@ -2628,32 +2628,27 @@ integrationDotplot <- function(object,
   ## extract results from object object
   res <- integratedPathways(object)
   
-  ## CHANGE FROM HERE
+  ## compute nodes ratio
+  res$ratio <- res$considered.nodes / res$total.nodes
   
-  ## compute gene ratio and direction for different analyses
-  if (objectMethod(object) == "Gene-Set object Analysis (GSEA)") {
-    ov <- as.numeric(lapply(res$leadingEdge, length))
-    res$overlap <- ov
-    res$ratio <- ov/res$size
-    res$direction <- "Up"
-    res$direction[which(res$NES < 0)] <- "Down"
-  } else {
-    res$ratio <- res$overlap/res$size
-  }
+  ## rename column p-value column names
+  colnames(res)[colnames(res) %in% c("P.Val", "adj.P.Val")] <- c("pval", "padj")
   
   ## order results based on padj
   res <- res[order(res$padj), ]
   
-  ## select terms to be shown in the dotplot
+  ## select pathways to be shown in the dotplot
   if (is.numeric(showTerms)) {
     res <- res[seq(ifelse(showTerms <= nrow(res), showTerms, nrow(res))), ]
   } else if (is.character(showTerms)) {
     res <- res[which(res$pathway %in% showTerms), ]
   }
   
-  ## set an x-axis label for 'ratio'
+  ## set x-axis label
   if (ordBy == "ratio") {
-    ordLabel <- "Gene-Set Overlap"
+    ordLabel <- "Nodes Ratio (NR)"
+  } else if (ordBy == "score") {
+    ordLabel <- "Pathway Score (s)"
   } else {
     ordLabel <- ordBy
   }
@@ -2684,14 +2679,6 @@ integrationDotplot <- function(object,
                     color = ggplot2::guide_colorbar(order = 2)) +
     ggplot2::xlab(ordLabel) +
     theme_enr()
-  
-  ## divide by object direction
-  if (splitDir == TRUE &
-      objectMethod(object) != "Over-Representation Analysis (ORA)") {
-    dotRes <- dotRes +
-      ggplot2::facet_grid(~ direction) +
-      ggplot2::theme(strip.text = ggplot2::element_text(size = 12))
-  }
   
   ## add the title of the plot
   if (!is.null(title)) {
