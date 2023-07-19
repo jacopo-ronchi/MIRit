@@ -180,6 +180,83 @@ lapply_pb <- function(X, FUN, ...) {
 
 
 
+#' List all the available biological pathways in KEGG, Reactome and
+#' WikiPathways
+#'
+#' This function can be used to retrieve a list of valid biological pathways
+#' present in KEGG, Reactome and WikiPathways.
+#'
+#' @param organism The name of the organism under consideration. The different
+#' databases have different supported organisms. To see the list of supported
+#' organisms for a given database, use the [supportedOrganisms()] function
+#' @param database The name of the database to use. It must be one of: `KEGG`,
+#' `Reactome`, and `WikiPathways`
+#'
+#' @returns
+#' A `character` vector containing the pathway names present in the
+#' specified database.
+#'
+#' @examples
+#' # list the mouse pathways present in WikiPathways
+#' listPathways("Mus musculus", "WikiPathways")
+#'
+#' @note
+#' This function uses the `graphite` package to retrieve biological pathways
+#' from KEGG, Reactome and WikiPathways.
+#'
+#' @references
+#' Sales, G., Calura, E., Cavalieri, D. et al. graphite - a Bioconductor
+#' package to convert pathway topology to gene network.
+#' BMC Bioinformatics 13, 20 (2012),
+#' \url{https://doi.org/10.1186/1471-2105-13-20}.
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
+listPathways <- function(organism, database) {
+  
+  ## check inputs
+  if (!is.character(database) |
+      length(database) != 1 |
+      !database %in% c("KEGG", "Reactome", "WikiPathways")) {
+    stop("Databases supported are: 'KEGG', 'Reactome' and 'WikiPathways'",
+         call. = FALSE)
+  }
+  if (database == "KEGG" & !organism %in% convertOrganism("graph_kegg", "all")) {
+    stop(paste("For KEGG database 'organism' must be one of:",
+               paste(convertOrganism("graph_kegg", "all"), collapse = ", ")),
+         call. = FALSE)
+  } else if (database == "Reactome" &
+             !organism %in% convertOrganism("graph_reactome", "all")) {
+    stop(paste("For Reactome database 'organism' must be one of:",
+               paste(convertOrganism("graph_reactome", "all"),
+                     collapse = ", ")),
+         call. = FALSE)
+  } else if (database == "WikiPathways" &
+             !organism %in% convertOrganism("graph_wikipathways", "all")) {
+    stop(paste("For WikiPathways database 'organism' must be one of:",
+               paste(convertOrganism("graph_wikipathways", "all"),
+                     collapse = ", ")),
+         call. = FALSE)
+  }
+  
+  ## set organism name and database
+  database <- tolower(database)
+  organism <- convertOrganism(paste("graph", database, sep = "_"), organism)
+  
+  ## download pathways from specified database
+  pathDb <- graphite::pathways(species = organism, database = database)
+  
+  ## return the names of the pathways present in the specified database
+  return(names(pathDb))
+  
+}
+
+
+
+
+
 #' Create example [`MirnaExperiment`][MirnaExperiment-class] objects
 #' 
 #' This helper function allows to create a

@@ -20,16 +20,11 @@ Imports:
     BiocParallel,
     biomaRt,
     BSgenome.Hsapiens.UCSC.hg38,
-    clusterProfiler,
     DESeq2,
-    DOSE,
-    dplyr,
     edgeR,
     GenomicRanges,
-    ggnewscale,
     ggplot2,
     ggpubr,
-    ggraph,
     ggrepel,
     ggridges,
     graph,
@@ -44,10 +39,9 @@ Imports:
     multiMiR,
     rbioapi,
     Rcpp,
-    ReactomePA,
+    Rgraphviz (>= 2.44.0),
     rlang,
-    stringr,
-    tidygraph
+    stringr
 Collate: 
     'AllGenerics.R'
     'AllClasses.R'
@@ -58,7 +52,6 @@ Collate:
     'differential-expression.R'
     'enrichment.R'
     'integration.R'
-    'networks.R'
     'show-methods.R'
     'targets.R'
     'topological-integration.R'

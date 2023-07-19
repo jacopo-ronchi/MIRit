@@ -5,94 +5,134 @@
 \title{Visualize the relationships between miRNAs and genes in a biological pathway}
 \usage{
 visualizeNetwork(
-  pathGraph,
-  onlyIntegrated = FALSE,
-  layout = "stress",
-  node = "box",
-  size = 3,
+  object,
+  pathway,
+  onlyMeasured = FALSE,
+  algorithm = "dot",
+  fontsize = 14,
+  lfcScale = c("royalblue", "white", "red"),
+  naCol = "lightgrey",
+  nodeBorderCol = "black",
+  nodeTextCol = "black",
+  edgeCol = "darkgrey",
+  edgeWidth = 1,
+  legendColorbar = TRUE,
+  legendInteraction = TRUE,
   title = NULL,
-  edgesCol = "gray",
-  bindingEdgesCol = "gray",
-  stress.text.distance = 0.2,
-  circle.text.distance = 0.1
+  titleCex = 2,
+  titleFace = 1
 )
 }
 \arguments{
-\item{pathGraph}{A \code{\link[tidygraph:tbl_graph]{tidygraph::tbl_graph}} object created with the
-\code{\link[=mirnaPathway]{mirnaPathway()}} function.}
+\item{object}{An object of class
+\code{\link[=IntegrativePathwayAnalysis-class]{IntegrativePathwayAnalysis}} containing
+the results of a miRNA-mRNA pathway analysis}
 
-\item{onlyIntegrated}{Logical. It must be set to \code{TRUE} for building the
-network only for integrated targets, i.e. those targets whose expression is
-statistically associated/correlated with miRNA expression. Instead, to build
-the complete biological pathway, \code{onlyIntegrated} must be set to
-\code{FALSE} (default)}
+\item{pathway}{The name of the biological pathway to show. The available
+pathways for a given database can be seen through the \code{\link[=listPathways]{listPathways()}}
+function}
 
-\item{layout}{It must be either \code{stress} (default), to build the network
-through an optimized Kamada-Kawai algorithm, or \code{circle}, to represent the
-pathway through a circular layout}
+\item{onlyMeasured}{Logical. It must be set to \code{TRUE} for building the
+network with only miRNAs/genes for which expression measurement is
+available. Instead, to reproduce the complete biological pathway,
+\code{onlyMeasured} must be set to \code{FALSE} (default). See the \emph{details} section
+for further information}
 
-\item{node}{It must be either \code{box} (default), to represent nodes as
-boxed labels, or \code{points}, to display nodes as points with the gene/miRNA
-identifier}
+\item{algorithm}{The layout algorithm used to arrange nodes in the network.
+It must be one of \code{dot} (default), \code{circo}, \code{fdp}, \code{neato}, \code{osage} or
+\code{twopi}. For more information regarding these algorithms, please check the
+\emph{details} section}
 
-\item{size}{The size of node elements in the graph. Default is \code{3}}
+\item{fontsize}{The font size of each node in the graph. Default is 14}
 
-\item{title}{The title of the plot (e.g. "Thyroid hormone signaling
-pathway"). Default is \code{NULL} not to include a plot title}
+\item{lfcScale}{It must be a character vector of length 3 containing valid
+R color names for creating a gradient of log2 fold changes. The first value
+refers to downregulation, the middle one to stable expression, and the last
+one to upregulation. Default value is \code{c('royalblue', 'white', 'red')}. All
+available colors can be listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
 
-\item{edgesCol}{It must be an R color name that specifies the color of
-interaction arrows in the network. Default is \code{gray}. All available colors
-can be listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
-
-\item{bindingEdgesCol}{It must be an R color name that specifies the color
-of chemical binding arrows in the network. Default is \code{gray}. All available
+\item{naCol}{It must be an R color name that specifies the fill color of
+nodes without expression measurements. Default is \code{lightgrey}. All available
 colors can be listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
 
-\item{stress.text.distance}{The distance between activation/inhibition
-arrow caps and nodes for the \code{stress} design. Default is \code{0.2}}
+\item{nodeBorderCol}{It must be an R color name that specifies the color of
+node borders. Default is \code{black}. All available colors can be listed
+with \code{\link[grDevices:colors]{grDevices::colors()}}}
 
-\item{circle.text.distance}{The distance between activation/inhibition
-arrow caps and nodes for the \code{circle} design. Default is \code{0.1}}
+\item{nodeTextCol}{It must be an R color name that specifies the color of
+miRNA/gene names. Default is \code{black}. All available colors can be listed
+with \code{\link[grDevices:colors]{grDevices::colors()}}}
+
+\item{edgeCol}{It must be an R color name that specifies the color of
+edges between nodes. Default is \code{darkgrey}. All available colors can be
+listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
+
+\item{edgeWidth}{The width of edges. Default is 1}
+
+\item{legendColorbar}{Logical, whether to add a legend with a color bar for
+log2 fold changes. Default is TRUE}
+
+\item{legendInteraction}{Logical, whether to add a legend that links edge
+types to biological interactions. Default is TRUE}
+
+\item{title}{The title of the plot. Default is \code{NULL} not to include a plot
+title}
+
+\item{titleCex}{The cex of the plot main title. Default is 2}
+
+\item{titleFace}{An integer which specifies which font to use for title. 1
+corresponds to plain text, 2 to bold face, 3 to italic, 4 to bold italic,
+and 5 to symbol font. Default is 1}
 }
 \value{
-A \code{ggraph} object representing the network graph. For instructions on how
-to handle and edit this object, please refer to the \code{ggraph} package.
+A base R plot with the augmented pathway.
 }
 \description{
-This function is used to plot the network object created with the
-\code{\link[=mirnaPathway]{mirnaPathway()}} function. The resulting network represents the interactions
-occurring within a biological pathway alongside with regulating microRNAs
-that affect pathway members. Moreover, this function visually displays the
-network with gene and miRNA expression levels, so that the user can easily
-understand the biological implications of miRNA dysregulations.
+This function can be used to plot augmented pathways created by the
+\code{\link[=topologicalAnalysis]{topologicalAnalysis()}} function. In particular, given a valid object of
+class \code{\link[=IntegrativePathwayAnalysis-class]{IntegrativePathwayAnalysis}},
+this function allows to produce a network graph for a specified biological
+pathway, alongside with expression fold changes. In this way, augmented
+pathways made of both miRNAs and genes can be visually explored to better
+investigate the consequences of miRNA/gene dysregulations.
 }
 \details{
-The \code{layout} parameter determines the layout of the integrated network. If
-this parameter is set to \code{stress}, this function adopts an optimized version
-of the stress-minimization algorithm (known as Kamada-Kawai algorithm).
-Otherwise, if \code{circle} layout is used, biological pathways will be
-displayed as a circular network. Both of these layout algorithms are
-implemented in the \code{ggraph} package.
+The network created by this function is highly flexible, allowing to tweak
+different parameters that can influence the resulting graph, including
+node selection, layout options, colors, and legends.
+\subsection{Included nodes}{
 
-The \code{stress} layout is suitable for small pathways, but it can get messed
-for larger biological networks. In these cases, the \code{circle} layout
-performs better.
+When performing differential expression analysis, lowly expressed features
+are usually excluded to reduce multiple testing penalties and increase
+power. Therefore, log2 fold changes are not available for several
+miRNAs/genes. In this regard, the user has the opportunity to display all
+the genes involved in a given pathway (\code{onlyMeasured = FALSE}), or just to
+plot a network for miRNA/genes with log2 fold changes
+(\code{onlyMeasured = TRUE}).
 }
-\examples{
-# load example MirnaExperiment object
-obj <- loadExamples()
 
-# explore Thyroid hormone synthesis pathway present in KEGG
-net <- mirnaPathway(obj,
-pathway = "Thyroid hormone synthesis", organism = "Homo sapiens",
-database = "KEGG")
+\subsection{Layout algorithms}{
 
-# visualize miRNA-gene network
-visualizeNetwork(net)
+Furthermore, this function allows to use different methods to lay out nodes
+in the network by setting the \code{algorithm} parameter. In this regard, several
+algorithms in \code{Rgraphviz} package can be used, namely:
+\itemize{
+\item \code{dot} (default), which is an algorithm attributed to Sugiyama et al. and
+described by Gansner et al., that creates a ranked layout that is
+particularly suited to display hierarchies and complex pathways;
+\item \code{circo}, which uses a recursive radial algorithm resulting in a circular
+layout;
+}
 
-# visualize network with a circular layout and with points
-visualizeNetwork(net, layout = "circle", node = "point")
+it is possible to plot all the nodes that participate in the
+biological pathway, or just
 
+The dot algorithm produces a ranked layout of a graph honoring edge directions. It is particularly appropriate for displaying hierarchies or directed acyclic graphs. The basic layout scheme
+is attributed to Sugiyama et al. The specific algorithm used by dot follows the steps described by
+}
+}
+\note{
+This function uses the \code{Rgraphviz} package to render the network object.
 }
 \author{
 Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}

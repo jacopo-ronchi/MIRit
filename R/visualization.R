@@ -1,307 +1,431 @@
 #' Visualize the relationships between miRNAs and genes in a biological pathway
-#'
-#' This function is used to plot the network object created with the
-#' [mirnaPathway()] function. The resulting network represents the interactions
-#' occurring within a biological pathway alongside with regulating microRNAs
-#' that affect pathway members. Moreover, this function visually displays the
-#' network with gene and miRNA expression levels, so that the user can easily
-#' understand the biological implications of miRNA dysregulations.
+#' 
+#' This function can be used to plot augmented pathways created by the
+#' [topologicalAnalysis()] function. In particular, given a valid object of
+#' class [`IntegrativePathwayAnalysis`][IntegrativePathwayAnalysis-class],
+#' this function allows to produce a network graph for a specified biological
+#' pathway, alongside with expression fold changes. In this way, augmented
+#' pathways made of both miRNAs and genes can be visually explored to better
+#' investigate the consequences of miRNA/gene dysregulations.
 #'
 #' @details
-#' The `layout` parameter determines the layout of the integrated network. If
-#' this parameter is set to `stress`, this function adopts an optimized version
-#' of the stress-minimization algorithm (known as Kamada-Kawai algorithm).
-#' Otherwise, if `circle` layout is used, biological pathways will be
-#' displayed as a circular network. Both of these layout algorithms are
-#' implemented in the `ggraph` package.
+#' The network created by this function is highly flexible, allowing to tweak
+#' different parameters that can influence the resulting graph, including
+#' node selection, layout options, colors, and legends. 
+#' 
+#' ## Included nodes
+#' 
+#' When performing differential expression analysis, lowly expressed features
+#' are usually excluded to reduce multiple testing penalties and increase
+#' power. Therefore, log2 fold changes are not available for several
+#' miRNAs/genes. In this regard, the user has the opportunity to display all
+#' the genes involved in a given pathway (`onlyMeasured = FALSE`), or just to
+#' plot a network for miRNA/genes with log2 fold changes
+#' (`onlyMeasured = TRUE`).
+#' 
+#' ## Layout algorithms
+#' 
+#' Furthermore, this function allows to use different methods to lay out nodes
+#' in the network by setting the `algorithm` parameter. In this regard, several
+#' algorithms in `Rgraphviz` package can be used, namely:
+#' 
+#' * `dot` (default), which is an algorithm attributed to Sugiyama et al. and
+#' described by Gansner et al., that creates a ranked layout that is
+#' particularly suited to display hierarchies and complex pathways;
+#' * `circo`, which uses a recursive radial algorithm resulting in a circular
+#' layout;
+#' 
+#' 
+#' 
+#' 
+#' it is possible to plot all the nodes that participate in the
+#' biological pathway, or just
+#' 
+#' The dot algorithm produces a ranked layout of a graph honoring edge directions. It is particularly appropriate for displaying hierarchies or directed acyclic graphs. The basic layout scheme 
+#'is attributed to Sugiyama et al. The specific algorithm used by dot follows the steps described by  
 #'
-#' The `stress` layout is suitable for small pathways, but it can get messed
-#' for larger biological networks. In these cases, the `circle` layout
-#' performs better.
-#'
-#' @param pathGraph A [`tidygraph::tbl_graph`] object created with the
-#' [mirnaPathway()] function.
-#' @param onlyIntegrated Logical. It must be set to `TRUE` for building the
-#' network only for integrated targets, i.e. those targets whose expression is
-#' statistically associated/correlated with miRNA expression. Instead, to build
-#' the complete biological pathway, `onlyIntegrated` must be set to
-#' `FALSE` (default)
-#' @param layout It must be either `stress` (default), to build the network
-#' through an optimized Kamada-Kawai algorithm, or `circle`, to represent the
-#' pathway through a circular layout
-#' @param node It must be either `box` (default), to represent nodes as
-#' boxed labels, or `points`, to display nodes as points with the gene/miRNA
-#' identifier
-#' @param size The size of node elements in the graph. Default is `3`
-#' @param title The title of the plot (e.g. "Thyroid hormone signaling
-#' pathway"). Default is `NULL` not to include a plot title
-#' @param edgesCol It must be an R color name that specifies the color of
-#' interaction arrows in the network. Default is `gray`. All available colors
-#' can be listed with [grDevices::colors()]
-#' @param bindingEdgesCol It must be an R color name that specifies the color
-#' of chemical binding arrows in the network. Default is `gray`. All available
+#' @param object An object of class
+#' [`IntegrativePathwayAnalysis`][IntegrativePathwayAnalysis-class] containing
+#' the results of a miRNA-mRNA pathway analysis
+#' @param pathway The name of the biological pathway to show. The available
+#' pathways for a given database can be seen through the [listPathways()]
+#' function
+#' @param onlyMeasured Logical. It must be set to `TRUE` for building the
+#' network with only miRNAs/genes for which expression measurement is
+#' available. Instead, to reproduce the complete biological pathway,
+#' `onlyMeasured` must be set to `FALSE` (default). See the *details* section
+#' for further information
+#' @param algorithm The layout algorithm used to arrange nodes in the network.
+#' It must be one of `dot` (default), `circo`, `fdp`, `neato`, `osage` or
+#' `twopi`. For more information regarding these algorithms, please check the
+#' *details* section
+#' @param fontsize The font size of each node in the graph. Default is 14
+#' @param lfcScale It must be a character vector of length 3 containing valid
+#' R color names for creating a gradient of log2 fold changes. The first value
+#' refers to downregulation, the middle one to stable expression, and the last
+#' one to upregulation. Default value is `c('royalblue', 'white', 'red')`. All
+#' available colors can be listed with [grDevices::colors()]
+#' @param naCol It must be an R color name that specifies the fill color of
+#' nodes without expression measurements. Default is `lightgrey`. All available
 #' colors can be listed with [grDevices::colors()]
-#' @param stress.text.distance The distance between activation/inhibition
-#' arrow caps and nodes for the `stress` design. Default is `0.2`
-#' @param circle.text.distance The distance between activation/inhibition
-#' arrow caps and nodes for the `circle` design. Default is `0.1`
+#' @param nodeBorderCol It must be an R color name that specifies the color of
+#' node borders. Default is `black`. All available colors can be listed
+#' with [grDevices::colors()]
+#' @param nodeTextCol It must be an R color name that specifies the color of
+#' miRNA/gene names. Default is `black`. All available colors can be listed
+#' with [grDevices::colors()]
+#' @param edgeCol It must be an R color name that specifies the color of
+#' edges between nodes. Default is `darkgrey`. All available colors can be
+#' listed with [grDevices::colors()]
+#' @param edgeWidth The width of edges. Default is 1
+#' @param legendColorbar Logical, whether to add a legend with a color bar for
+#' log2 fold changes. Default is TRUE
+#' @param legendInteraction Logical, whether to add a legend that links edge
+#' types to biological interactions. Default is TRUE
+#' @param title The title of the plot. Default is `NULL` not to include a plot
+#' title
+#' @param titleCex The cex of the plot main title. Default is 2
+#' @param titleFace An integer which specifies which font to use for title. 1
+#' corresponds to plain text, 2 to bold face, 3 to italic, 4 to bold italic,
+#' and 5 to symbol font. Default is 1
 #'
 #' @returns
-#' A `ggraph` object representing the network graph. For instructions on how
-#' to handle and edit this object, please refer to the `ggraph` package.
+#' A base R plot with the augmented pathway.
 #'
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
 #' 
-#' # explore Thyroid hormone synthesis pathway present in KEGG
-#' net <- mirnaPathway(obj,
-#' pathway = "Thyroid hormone synthesis", organism = "Homo sapiens",
-#' database = "KEGG")
-#'
-#' # visualize miRNA-gene network
-#' visualizeNetwork(net)
-#'
-#' # visualize network with a circular layout and with points
-#' visualizeNetwork(net, layout = "circle", node = "point")
+#' 
+#' @note
+#' This function uses the `Rgraphviz` package to render the network object.
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
-#' @importFrom rlang .data
 #' @export
-visualizeNetwork <- function(pathGraph,
-                             onlyIntegrated = FALSE,
-                             layout = "stress",
-                             node = "box",
-                             size = 3,
+visualizeNetwork <- function(object,
+                             pathway,
+                             onlyMeasured = FALSE,
+                             algorithm = "dot",
+                             fontsize = 14,
+                             lfcScale = c("royalblue", "white", "red"),
+                             naCol = "lightgrey",
+                             nodeBorderCol = "black",
+                             nodeTextCol = "black",
+                             edgeCol = "darkgrey",
+                             edgeWidth = 1,
+                             legendColorbar = TRUE,
+                             legendInteraction = TRUE,
                              title = NULL,
-                             edgesCol = "gray",
-                             bindingEdgesCol = "gray",
-                             stress.text.distance = 0.2,
-                             circle.text.distance = 0.1) {
-
-  ## check inputs
-  if (!is(pathGraph, "tbl_graph")) {
-    stop("'pathGraph' should be of class tbl_graph! See ?mirnaPathway",
+                             titleCex = 2,
+                             titleFace = 1) {
+  
+  ## input checks
+  if (!is(object, "IntegrativePathwayAnalysis")) {
+    stop(paste("'object' should be of class IntegrativePathwayAnalysis!",
+               "See ?IntegrativePathwayAnalysis-class"),
          call. = FALSE)
   }
-  if (!is.logical(onlyIntegrated) |
-      length(onlyIntegrated) != 1) {
-    stop("'onlyIntegrated' must be logical (TRUE/FALSE)! See ?visualizeNetwork",
+  if (!is.character(pathway) |
+      length(pathway) != 1 |
+      !pathway %in% names(augmentedPathways(object))) {
+    stop(paste("'pathway' must be the name of a valid pathway included in",
+               "'names(augmentedPathways(object))'. For additional details,",
+               "see ?visualizeNetwork"),
          call. = FALSE)
   }
-  if (!is.character(layout) |
-      length(layout) != 1 |
-      !layout %in% c("stress", "circle")) {
-    stop(paste("'layout' must be either 'stress' or 'circle'.",
+  if (!is.logical(onlyMeasured) |
+      length(onlyMeasured) != 1) {
+    stop("'onlyMeasured' must be logical (TRUE/FALSE)! See ?visualizeNetwork",
+         call. = FALSE)
+  }
+  if (!is.character(algorithm) |
+      length(algorithm) != 1 |
+      !algorithm %in% c("dot", "circo", "fdp", "neato", "osage", "twopi")) {
+    stop(paste("'algorithm' must be either 'dot' (default), 'circo', 'fdp'",
+               "'neato', 'osage' or 'twopi'.",
                "For additional details see ?visualizeNetwork"),
          call. = FALSE)
   }
-  if (!is.character(node) |
-      length(node) != 1 |
-      !node %in% c("box", "point")) {
-    stop(paste("'node' must be either 'box' or 'point'.",
-               "For additional details see ?visualizeNetwork"),
+  if (!is.numeric(fontsize) |
+      length(fontsize) != 1 |
+      fontsize < 1) {
+    stop("'fontsize' must be a number higher than 1! (default is 14)",
          call. = FALSE)
   }
-  if (!is.numeric(size) |
-      length(size) != 1 |
-      size < 0) {
-    stop(paste("'size' must be a positive number!",
-               "For additional details see ?visualizeNetwork"),
+  if (length(lfcScale) != 3 |
+      any(!lfcScale %in% grDevices::colors())) {
+    stop(paste("'lfcScale' must be a vector with R color names for",
+               "downregulated features, non significant features, and",
+               "upregulated features. The default value is",
+               "c('royalblue', 'white', 'red'). All available colors",
+               "can be listed with 'colors()'."), call. = FALSE)
+  }
+  if (!is.character(naCol) |
+      length(naCol) != 1 |
+      !naCol %in% grDevices::colors()) {
+    stop(paste("'naCol' must be an R color name. All available colors",
+               "can be listed with 'colors()'."),
+         call. = FALSE)
+  }
+  if (!is.character(nodeBorderCol) |
+      length(nodeBorderCol) != 1 |
+      !nodeBorderCol %in% grDevices::colors()) {
+    stop(paste("'nodeBorderCol' must be an R color name. All available colors",
+               "can be listed with 'colors()'."),
+         call. = FALSE)
+  }
+  if (!is.character(nodeTextCol) |
+      length(nodeTextCol) != 1 |
+      !nodeTextCol %in% grDevices::colors()) {
+    stop(paste("'nodeTextCol' must be an R color name. All available colors",
+               "can be listed with 'colors()'."),
+         call. = FALSE)
+  }
+  if (!is.character(edgeCol) |
+      length(edgeCol) != 1 |
+      !edgeCol %in% grDevices::colors()) {
+    stop(paste("'edgeCol' must be an R color name. All available colors",
+               "can be listed with 'colors()'."),
+         call. = FALSE)
+  }
+  if (!is.numeric(edgeWidth) |
+      length(edgeWidth) != 1 |
+      edgeWidth < 0) {
+    stop("'edgeWidth' must be a non-negative number! (default is 1)",
+         call. = FALSE)
+  }
+  if (!is.logical(legendColorbar) |
+      length(legendColorbar) != 1) {
+    stop(paste("'legendColorbar' must be logical (TRUE/FALSE)!",
+               "See ?visualizeNetwork"),
+         call. = FALSE)
+  }
+  if (!is.logical(legendInteraction) |
+      length(legendInteraction) != 1) {
+    stop(paste("'legendInteraction' must be logical (TRUE/FALSE)!",
+               "See ?visualizeNetwork"),
          call. = FALSE)
   }
   if (!(is.character(title) | is.null(title)) |
       !length(title) %in% c(0, 1)) {
-    stop(paste("'title' must be the title of the plot (e.g. 'Apoptosis').",
+    stop(paste("'title' must be the title of the network.",
                "For additional details see ?visualizeNetwork"),
          call. = FALSE)
   }
-  if (!is.character(edgesCol) |
-      length(edgesCol) != 1 |
-      !edgesCol %in% grDevices::colors()) {
-    stop(paste("'edgesCol' must be an R color name. All available colors",
-               "can be listed with 'colors()'."),
+  if (!is.numeric(titleCex) |
+      length(titleCex) != 1 |
+      titleCex <= 0) {
+    stop("'titleCex' must be a positive number higher than 0! (default is 2)",
          call. = FALSE)
   }
-  if (!is.character(bindingEdgesCol) |
-      length(bindingEdgesCol) != 1 |
-      !bindingEdgesCol %in% grDevices::colors()) {
-    stop(paste("'bindingEdgesCol' must be an R color name. All available",
-               "colors can be listed with 'colors()'."),
-         call. = FALSE)
-  }
-  if (!is.numeric(stress.text.distance) |
-      length(stress.text.distance) != 1 |
-      stress.text.distance < 0) {
-    stop(paste("'stress.text.distance' must be a positive number!",
-               "For additional details see ?visualizeNetwork"),
-         call. = FALSE)
-  }
-  if (!is.numeric(circle.text.distance) |
-      length(circle.text.distance) != 1 |
-      circle.text.distance < 0) {
-    stop(paste("'circle.text.distance' must be a positive number!",
-               "For additional details see ?visualizeNetwork"),
+  if (!is.numeric(titleFace) |
+      length(titleFace) != 1 |
+      titleFace < 1 |
+      titleFace > 5 |
+      titleFace%%1 != 0) {
+    stop("'titleFace' must be an integer between 1 and 5! (default is 1)",
          call. = FALSE)
   }
   
-  ## listing the variables not present in the global environment
-  edges <- NULL
-
-  ## set accepted pathway processes
-  activation <- "ACTIVATION|Activation|activation|expression"
-  inhibition <- "INHIBITION|Inhibition|inhibition"
-  binding <- "Binding|binding"
-
-  ## retain only integrated targets if wanted by the user
-  if (onlyIntegrated == TRUE) {
-    
-    tmpGraph <- tidygraph::to_subgraph(pathGraph,
-                                       .data$integrated == "integrated",
-                                       subset_by = "nodes")$subgraph
-    
-    ## check if integrated axes are present, otherwise report the whole pathway
-    if (length(tmpGraph) == 0) {
-      warning(paste("There are no integrated axes within this pathway.",
-                    "The complete pathway will be reported..."), call. = FALSE)
-    } else {
-      pathGraph <- tmpGraph
-    }
-  }
-
-  ## extract network edges
-  graphEdges <- as.data.frame(tidygraph::activate(pathGraph, edges))
+  ## extract augmented pathways
+  pList <- augmentedPathways(object)
   
-  ## create a ggraph network to visualize biological pathways with DE-miRNAs
-  mirNet <- ggraph::ggraph(pathGraph, layout = layout)
+  ## select the pathways of interest
+  p <- pList[[pathway]]
   
-  ## use different edges for different biological interactions
-  mirNet <- mirNet +
-    ggraph::geom_edge_link(
-      ggplot2::aes(filter = grepl(binding, .data$edgeType),
-                   linetype = "binding"),
-      color = bindingEdgesCol) +
-    
-    ggraph::geom_edge_link(
-      ggplot2::aes(filter = grepl(inhibition, .data$edgeType) &
-                     !grepl(activation, .data$edgeType),
-                   linetype = "inhibition",
-                   end_cap = {
-                     ## set the arrow distance from nodes for boxed labels/points
-                     if (node == "box") {
-                       ggraph::label_rect(.data$node2.name,
-                                          padding = ggplot2::margin(2, 2, 2, 2,
-                                                                    unit = "mm"))
-                     } else if (node == "point") {
-                       ggraph::circle(3, unit = "mm")
-                     }
-                   }),
-      color = edgesCol,
-      arrow = grid::arrow(length = ggplot2::unit(2, "mm"),
-                          angle = 90,
-                          type = "open")) +
-    
-    ggraph::geom_edge_link(
-      ggplot2::aes(filter = grepl(activation, .data$edgeType),
-                   linetype = "activation",
-                   end_cap = {
-                     ## set the arrow distance from nodes for boxed labels/points
-                     if (node == "box") {
-                       ggraph::label_rect(.data$node2.name,
-                                          padding = ggplot2::margin(2, 2, 2, 2,
-                                                                    unit = "mm"))
-                     } else if (node == "point") {
-                       ggraph::circle(3, unit = "mm")
-                     }
-                   }),
-      color = edgesCol,
-      arrow = grid::arrow(length = ggplot2::unit(2, "mm"),
-                          type = "closed")) +
-    
-    ggraph::geom_edge_link(
-      ggplot2::aes(filter = !grepl(paste(activation,
-                                         inhibition,
-                                         binding,
-                                         sep = "|"), .data$edgeType),
-                   linetype = "standard"),
-      color = edgesCol)
-
-  ## customize colors and labels with different scales for genes and miRNAs
-  if (node == "box") {
-    mirNet <- mirNet +
-      ggraph::geom_node_label(ggplot2::aes(label = .data$name,
-                                           fill = .data$geneLogFC),
-                              size = size) +
-      ggplot2::scale_fill_gradient2(low = "blue", mid = "white", high = "red",
-                                    guide = ggplot2::guide_colorbar(order = 1)) +
-      ggnewscale::new_scale_fill() +
-      ggraph::geom_node_label(data = function(x) {tidygraph::filter(x, is.na(.data$geneLogFC))},
-                              ggplot2::aes(label = .data$name,
-                                           fill = .data$mirnaLogFC),
-                              size = size) +
-      ggplot2::scale_fill_gradient2(low = "green", mid = "grey", high = "yellow",
-                                    guide = ggplot2::guide_colorbar(order = 2))
-  } else if (node == "point") {
-    mirNet <- mirNet +
-      ggraph::geom_node_point(ggplot2::aes(fill = .data$geneLogFC),
-                              pch = 21, size = size) +
-      ggplot2::scale_fill_gradient2(low = "blue", mid = "white", high = "red",
-                                    guide = ggplot2::guide_colorbar(order = 1)) +
-      ggnewscale::new_scale_fill() +
-      ggraph::geom_node_point(data = function(x) {tidygraph::filter(x, is.na(.data$geneLogFC))},
-                              ggplot2::aes(fill = .data$mirnaLogFC),
-                              pch = 21, size = size) +
-      ggplot2::scale_fill_gradient2(low = "green", mid = "grey", high = "yellow",
-                                    guide = ggplot2::guide_colorbar(order = 2))
+  ## return NULL for invalid pathways
+  if (is.null(p)) {
+    stop("The selected pathway is NULL!", call. = FALSE)
   }
-
-  ## add text elements for point nodes
-  if (node == "point") {
-    if (layout == "stress") {
-      mirNet <- mirNet +
-        ggraph::geom_node_text(ggplot2::aes(label = .data$name),
-                               size = size, nudge_y = - stress.text.distance)
-    } else if (layout == "circle") {
-      mirNet <- mirNet +
-        ggraph::geom_node_text(ggplot2::aes(label = .data$name), size = size,
-                               nudge_x = mirNet$data$x * circle.text.distance,
-                               nudge_y = mirNet$data$y * circle.text.distance)
-    }
+  
+  ## extract expression changes
+  lfc <- object@expression
+  
+  ## extract only connected nodes with expression measurement
+  if (onlyMeasured == TRUE) {
+    p <- graph::subGraph(intersect(names(lfc), graph::nodes(p)), p)
+    connectedNodes <- unlist(strsplit(graph::edgeNames(p),
+                                      split = "~",
+                                      fixed = TRUE))
+    p <- graph::removeNode(setdiff(graph::nodes(p), connectedNodes), p)
   }
-
-  ## add linetype scale
-  mirNet <- mirNet +
-    ggraph::scale_edge_linetype_manual(name = "interaction",
-                                       values = c("activation" = "solid",
-                                                  "binding" = "dashed",
-                                                  "inhibition" = "solid",
-                                                  "standard" = "solid"),
-                                       guide = "none")
-
-  ## increase plot limits on the basis of maximum and minimum coordinates
-  mirNet <- mirNet +
-    ggplot2::coord_cartesian(xlim = c(-0.5 + min(mirNet$data$x),
-                                      0.5 + max(mirNet$data$x)),
-                             ylim = c(-0.5 + min(mirNet$data$y),
-                                      0.5 + max(mirNet$data$y)))
-
-  ## add graph and title themes
-  mirNet <- mirNet +
-    ggraph::theme_graph(base_family = "sans") +
-    ggplot2::theme(plot.title = ggplot2::element_text(face = "plain",
-                                                      hjust = 0.5))
-
-  ## add the title of the plot
+  
+  ## extract weights and edges
+  e <- vapply(Rgraphviz::edgeData(p), function(x) {
+    x$weight
+  }, FUN.VALUE = numeric(1))
+  
+  ## extract nodes
+  nodes <- graph::nodes(p)
+  
+  ## retain fold changes of nodes
+  exprNodes <- lfc[nodes]
+  exprNodes <- exprNodes[!is.na(exprNodes)]
+  
+  ## change edge names according to Rgraphviz
+  names(e) <- gsub("|", "~", names(e), fixed = TRUE)
+  
+  ## use different shapes for genes and miRNAs
+  nS <- rep("ellipse", length(nodes))
+  nS[grep("miR", nodes)] <- "box"
+  names(nS) <- nodes
+  
+  ## use larger node shapes for miRNAs
+  fixedsize <- rep(TRUE, length(nodes))
+  fixedsize[grep("miR", nodes)] <- FALSE
+  names(fixedsize) <- nodes
+  
+  ## use different color scales for genes and miRNA fold changes
+  filCol <- rep(naCol, length(nodes))
+  names(filCol) <- nodes
+  exprColors <- setColorScale(exprNodes,
+                              cols = lfcScale,
+                              numColors = 300)
+  filCol[names(exprNodes)] <- exprColors
+  
+  ## change arrowheads on the basis of interaction type
+  arrHead <- rep("open", length(e))
+  arrHead[e == 0] <- "none"
+  arrHead[e == -1] <- "tee"
+  names(arrHead) <- names(e)
+  
+  ## set linetype dashed for binding
+  lty <- rep("solid", length(e))
+  lty[e == 0] <- "dashed"
+  names(lty) <- names(e)
+  
+  ## arrange nodes in the network with respect to node shape
+  g <- Rgraphviz::layoutGraph(p, layoutType = algorithm,
+                              nodeAttr = list(shape = nS,
+                                              fixedsize = fixedsize,
+                                              fontsize = fontsize))
+  
+  ## define node parameters
+  nAttr <- list(fill = filCol,
+                fontsize = fontsize,
+                col = nodeBorderCol,
+                textCol = nodeTextCol)
+  
+  ## define edge parameters
+  eAttr <- list(col = edgeCol,
+                arrowhead = arrHead,
+                lty = lty,
+                lwd = edgeWidth)
+  
+  ## setting parameters for nodes and adges
+  graph::nodeRenderInfo(g) <- nAttr
+  graph::edgeRenderInfo(g) <- eAttr
+  
+  ## store current layout settings
+  currentPar <- par(no.readonly = TRUE)
+  
+  ## define plotting layout
+  if (legendColorbar == TRUE &
+      legendInteraction == TRUE) {
+    layout(matrix(c(1, 1, 1, 0, 2, 3), ncol = 2),
+           widths = c(3, 1),
+           heights = c(0.5, 2, 2))
+  } else if (legendColorbar == TRUE &
+             legendInteraction == FALSE) {
+    layout(matrix(c(1, 1, 1, 0, 2, 0), ncol = 2),
+           widths = c(3, 1),
+           heights = c(1.2, 2, 1.2))
+  } else if (legendColorbar == FALSE &
+             legendInteraction == TRUE) {
+    layout(matrix(c(1, 1, 1, 0, 2, 0), ncol = 2),
+           widths = c(3, 1),
+           heights = c(1.4, 2, 1))
+  } else {
+    layout(1)
+  }
+  
+  ## add extra space for title
   if (!is.null(title)) {
-    mirNet <- mirNet +
-      ggplot2::ggtitle(title)
+    par(oma = c(0, 0, 2, 0))
   }
+  
+  ## make sure to restore graphical parameters on exit
+  on.exit({
+    par(currentPar)
+  })
+  
+  ## produce the network graph
+  Rgraphviz::renderGraph(g)
+  
+  ## produce logFC color bar legend
+  if (legendColorbar == TRUE) {
+    par(mar = c(2, 4.2, 4, 4.2))
+    legMat <- matrix(seq(min(exprNodes), max(exprNodes), length.out = 300))
+    image(x = 1,
+          y = legMat,
+          z = matrix(1:300, nrow=1),
+          col = setColorScale(seq(min(exprNodes),
+                                  max(exprNodes),
+                                  len = 300),
+                              cols = c("royalblue", "white", "red"),
+                              numColors = 300),
+          axes = FALSE,
+          xlab = "",
+          ylab = "",
+          main = "LogFC",
+          font.main = 1)
+    axis(2, las = 1)
+  }
+  
+  ## create a legend for interaction types
+  if (legendInteraction == TRUE) {
+    par(mar = c(4, 2.5, 2, 2.5))
+    plot.new()
+    arrows(0, 0.8, 1, 0.8, code = 0, lty = "dashed", col = edgeCol)
+    arrows(0, 0.5, 1, 0.5, angle = 30, col = edgeCol, length = 0.07)
+    arrows(0, 0.2, 1, 0.2, angle = 90, col = edgeCol, length = 0.07)
+    text(x = 0, y = 0.9, labels = "Binding", adj = 0)
+    text(x = 0, y = 0.6, labels = "Activation", adj = 0)
+    text(x = 0, y = 0.3, labels = "Inhibition", adj = 0)
+    title(main = "Interaction", font.main = 1)
+  }
+  
+  ## add a title to the network plot
+  if (!is.null(title)) {
+    title(title, line = 0, outer = TRUE,
+          cex.main = titleCex, font.main = titleFace)
+  }
+}
 
-  ## plot network
-  return(mirNet)
 
+
+
+
+## helper function for creating and assigning color scales
+setColorScale <- function(values, cols, numColors) {
+  
+  ## set colors for positive and negative logFCs
+  if (all(values > 0)) {
+    cols <- cols[c(2, 3)]
+  } else if (all(values < 0)) {
+    cols <- cols[c(1, 2)]
+  }
+  
+  ## create a function that generates the color scale
+  colorScale <- colorRampPalette(cols)
+  
+  ## generate the color scale with the desired number of colors
+  colorVector <- colorScale(numColors)
+  
+  ## define breaks for values
+  posRatio <- sum(values > 0) / length(values)
+  breaks <- c(-Inf, rev(seq(0, min(values), len = numColors / 2)),
+              seq(0, max(values), len = numColors / 2)[-1], Inf)
+  
+  ## assign color values based on another vector
+  colorValues <- colorVector[cut(values, breaks = breaks)]
+  
+  ## set the names of color values equal to those of vector
+  names(colorValues) <- names(values)
+  
+  ## return color values
+  return(colorValues)
+  
 }
 
 
@@ -2321,7 +2445,7 @@ plotDimensions <- function(mirnaObj,
   }
   if (!is.numeric(dimensions) |
       length(dimensions) != 2 |
-      any(dimensions%%1!=0) |
+      any(dimensions%%1 != 0) |
       any(dimensions <= 0)) {
     stop(paste("'dimensions' must be a numeric vector of length 2, that",
                "specifies the dimensions to be represented in the MDS plot!",
