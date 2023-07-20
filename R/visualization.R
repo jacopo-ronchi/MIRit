@@ -11,7 +11,7 @@
 #' @details
 #' The network created by this function is highly flexible, allowing to tweak
 #' different parameters that can influence the resulting graph, including
-#' node selection, layout options, colors, and legends. 
+#' node selection, node highlighting, layout algorithms, colors, and legends. 
 #' 
 #' ## Included nodes
 #' 
@@ -22,6 +22,18 @@
 #' the genes involved in a given pathway (`onlyMeasured = FALSE`), or just to
 #' plot a network for miRNA/genes with log2 fold changes
 #' (`onlyMeasured = TRUE`).
+#' 
+#' ## Highlight nodes and edges
+#' 
+#' One interesting feature offered by this function consists in highlighting
+#' specific nodes and edges within a network. This results particularly useful
+#' when we want to put in evidence affected routes in a biological pathways.
+#' To highlight nodes, you must provide the `highlightNodes` parameter with a
+#' `character` vector that lists all the desired nodes. As a result, the
+#' borders of highlighted nodes will be colored according to `highlightCol`
+#' parameter (default is 'gold'), and will have a width specified by
+#' `highlightWidth` (default is 2). Notably, this function automatically
+#' highlights in the same way the edges connecting the selected nodes.
 #' 
 #' ## Layout algorithms
 #' 
@@ -89,7 +101,7 @@
 #' `twopi`. For more information regarding these algorithms, please check the
 #' *details* section
 #' @param fontsize The font size of each node in the graph. Default is 14
-#' @param lfcScale It must be a character vector of length 3 containing valid
+#' @param lfcScale It must be a `character` vector of length 3 containing valid
 #' R color names for creating a gradient of log2 fold changes. The first value
 #' refers to downregulation, the middle one to stable expression, and the last
 #' one to upregulation. Default value is `c('royalblue', 'white', 'red')`. All
@@ -107,6 +119,14 @@
 #' edges between nodes. Default is `darkgrey`. All available colors can be
 #' listed with [grDevices::colors()]
 #' @param edgeWidth The width of edges. Default is 1
+#' @param highlightNodes A `character` vector containing the names of nodes
+#' that you want to highlight. Default is NULL not to highlight any nodes.
+#' See the *details* section for additional information
+#' @param highlightCol It must be an R color name that specifies the color of
+#' edges and borders for highlighted nodes. Default is `gold`. All available
+#' colors can be listed with [grDevices::colors()]
+#' @param highlightWidth The width of edges between highlighted nodes. Default
+#' is 2
 #' @param legendColorbar Logical, whether to add a legend with a color bar for
 #' log2 fold changes. Default is TRUE
 #' @param legendInteraction Logical, whether to add a legend that links edge
@@ -155,6 +175,9 @@ visualizeNetwork <- function(object,
                              nodeTextCol = "black",
                              edgeCol = "darkgrey",
                              edgeWidth = 1,
+                             highlightNodes = NULL,
+                             highlightCol = "gold",
+                             highlightWidth = 2,
                              legendColorbar = TRUE,
                              legendInteraction = TRUE,
                              title = NULL,
@@ -234,6 +257,25 @@ visualizeNetwork <- function(object,
       length(edgeWidth) != 1 |
       edgeWidth < 0) {
     stop("'edgeWidth' must be a non-negative number! (default is 1)",
+         call. = FALSE)
+  }
+  if (!is.null(highlightNodes) &
+      !is.character(highlightNodes)) {
+    stop(paste("'highlightNodes' must contain the names of nodes to",
+               "highlight. For additional details see ?visualizeNetwork."),
+         call. = FALSE)
+  }
+  if (!is.character(highlightCol) |
+      length(highlightCol) != 1 |
+      !highlightCol %in% grDevices::colors()) {
+    stop(paste("'highlightCol' must be an R color name. All available colors",
+               "can be listed with 'colors()'."),
+         call. = FALSE)
+  }
+  if (!is.numeric(highlightWidth) |
+      length(highlightWidth) != 1 |
+      highlightWidth < 0) {
+    stop("'highlightWidth' must be a non-negative number! (default is 2)",
          call. = FALSE)
   }
   if (!is.logical(legendColorbar) |
@@ -357,6 +399,38 @@ visualizeNetwork <- function(object,
   ## setting parameters for nodes and adges
   graph::nodeRenderInfo(g) <- nAttr
   graph::edgeRenderInfo(g) <- eAttr
+  
+  ## highlight desired nodes
+  if (!is.null(highlightNodes)) {
+    
+    ## check that supplied nodes are present
+    if (!any(highlightNodes) %in% nodes) {
+      warning(paste(paste(highlightNodes[!highlightNodes %in% nodes],
+                          collapse = ", "), "not belonging to this network!",
+                    "Highlighting is ignored..."),
+              call. = FALSE)
+      highlightNodes <- highlightNodes[highlightNodes %in% nodes]
+    }
+    
+    ## set the properties of selected nodes and edges
+    highNodeCol <- rep(highlightCol, length(highlightNodes))
+    highNodeWidth <- rep(highlightWidth, length(highlightNodes))
+    names(highNodeCol) <- highlightNodes
+    names(highNodeWidth) <- highlightNodes
+    highEdges <- as.character(outer(highlightNodes, highlightNodes,
+                                    paste, sep = "~"))
+    highEdges <- highEdges[highEdges %in% graph::edgeNames(g)]
+    highEdgeCol <- rep(highlightCol, length(highEdges))
+    highEdgeWidth <- rep(highlightWidth, length(highEdges))
+    names(highEdgeCol) <- highEdges
+    names(highEdgeWidth) <- highEdges
+    if (length(highNodeCol) > 0) {
+      graph::nodeRenderInfo(g) <- list(col = highNodeCol, lwd = highNodeWidth)
+    }
+    if (length(highEdgeCol) > 0) {
+      graph::edgeRenderInfo(g) <- list(col = highEdgeCol, lwd = highEdgeWidth)
+    }
+  }
   
   ## store current layout settings
   currentPar <- par(no.readonly = TRUE)

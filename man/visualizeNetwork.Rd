@@ -16,6 +16,9 @@ visualizeNetwork(
   nodeTextCol = "black",
   edgeCol = "darkgrey",
   edgeWidth = 1,
+  highlightNodes = NULL,
+  highlightCol = "gold",
+  highlightWidth = 2,
   legendColorbar = TRUE,
   legendInteraction = TRUE,
   title = NULL,
@@ -45,7 +48,7 @@ It must be one of \code{dot} (default), \code{circo}, \code{fdp}, \code{neato}, 
 
 \item{fontsize}{The font size of each node in the graph. Default is 14}
 
-\item{lfcScale}{It must be a character vector of length 3 containing valid
+\item{lfcScale}{It must be a \code{character} vector of length 3 containing valid
 R color names for creating a gradient of log2 fold changes. The first value
 refers to downregulation, the middle one to stable expression, and the last
 one to upregulation. Default value is \code{c('royalblue', 'white', 'red')}. All
@@ -68,6 +71,17 @@ edges between nodes. Default is \code{darkgrey}. All available colors can be
 listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
 
 \item{edgeWidth}{The width of edges. Default is 1}
+
+\item{highlightNodes}{A \code{character} vector containing the names of nodes
+that you want to highlight. Default is NULL not to highlight any nodes.
+See the \emph{details} section for additional information}
+
+\item{highlightCol}{It must be an R color name that specifies the color of
+edges and borders for highlighted nodes. Default is \code{gold}. All available
+colors can be listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
+
+\item{highlightWidth}{The width of edges between highlighted nodes. Default
+is 2}
 
 \item{legendColorbar}{Logical, whether to add a legend with a color bar for
 log2 fold changes. Default is TRUE}
@@ -99,7 +113,7 @@ investigate the consequences of miRNA/gene dysregulations.
 \details{
 The network created by this function is highly flexible, allowing to tweak
 different parameters that can influence the resulting graph, including
-node selection, layout options, colors, and legends.
+node selection, node highlighting, layout algorithms, colors, and legends.
 \subsection{Included nodes}{
 
 When performing differential expression analysis, lowly expressed features
@@ -109,6 +123,19 @@ miRNAs/genes. In this regard, the user has the opportunity to display all
 the genes involved in a given pathway (\code{onlyMeasured = FALSE}), or just to
 plot a network for miRNA/genes with log2 fold changes
 (\code{onlyMeasured = TRUE}).
+}
+
+\subsection{Highlight nodes and edges}{
+
+One interesting feature offered by this function consists in highlighting
+specific nodes and edges within a network. This results particularly useful
+when we want to put in evidence affected routes in a biological pathways.
+To highlight nodes, you must provide the \code{highlightNodes} parameter with a
+\code{character} vector that lists all the desired nodes. As a result, the
+borders of highlighted nodes will be colored according to \code{highlightCol}
+parameter (default is 'gold'), and will have a width specified by
+\code{highlightWidth} (default is 2). Notably, this function automatically
+highlights in the same way the edges connecting the selected nodes.
 }
 
 \subsection{Layout algorithms}{
