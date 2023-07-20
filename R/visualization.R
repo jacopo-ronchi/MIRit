@@ -34,16 +34,45 @@
 #' particularly suited to display hierarchies and complex pathways;
 #' * `circo`, which uses a recursive radial algorithm resulting in a circular
 #' layout;
+#' * `fdp`, which adopts a force-directed approach similar to that of
+#' Fruchterman and Reingold;
+#' * `neato`, which relies on a spring model where an iterative solver finds
+#' low energy configurations;
+#' * `osage`, which is a layout engine that recursively draws cluster subgraphs;
+#' * `twopi`, which places a node in the center of the network, and then
+#' arranges the remaining nodes in a series of concentric circles around the
+#' center.
 #' 
+#' For additional information on these algorithms, refer to
+#' [Rgraphviz::GraphvizLayouts].
 #' 
+#' ## Customization
 #' 
+#' To customize the look of the resulting plot, this function allows to change
+#' different graphical parameters, including:
 #' 
-#' it is possible to plot all the nodes that participate in the
-#' biological pathway, or just
+#' * the color scale for log2 fold changes, that can be set with `lfcScale`;
+#' * the font size of nodes, which can be changed through `fontsize`;
+#' * the fill color of nodes for which log2 fold changes have not been
+#' calculated, customizable with the `naCol` parameter;
+#' * the border color for nodes, which can be edited with `nodeBorderCol`;
+#' * the text color of nodes, which can be changed through `nodeTextCol`;
+#' * the color used for edges, set by `edgeCol`;
+#' * the width of edges, customizable with `edgeWidth`.
 #' 
-#' The dot algorithm produces a ranked layout of a graph honoring edge directions. It is particularly appropriate for displaying hierarchies or directed acyclic graphs. The basic layout scheme 
-#'is attributed to Sugiyama et al. The specific algorithm used by dot follows the steps described by  
-#'
+#' Additionally, this function allows to include handy legends that are useful
+#' for interpreting the biological consequences of network alterations. In
+#' particular:
+#' 
+#' * a color bar legend displaying the log2 fold changes corresponding to each
+#' fill color can be included with `legendColorbar = TRUE` (default); and
+#' * a legend that links the appearance of edges and arrow heads to the type of
+#' biological interaction can be shown through `legendInteraction = TRUE`
+#' (default).
+#' 
+#' Lastly, `title`, `titleCex` and `titleFace` parameters can be tweaked to
+#' include a network title with the desired look.
+#' 
 #' @param object An object of class
 #' [`IntegrativePathwayAnalysis`][IntegrativePathwayAnalysis-class] containing
 #' the results of a miRNA-mRNA pathway analysis
@@ -93,7 +122,20 @@
 #' A base R plot with the augmented pathway.
 #'
 #' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
 #' 
+#' # perform integration analysis with default settings
+#' obj <- mirnaIntegration(obj)
+#'
+#' # perform the integrative pathway analysis with default settings
+#' #ipa <- topologicalAnalysis(obj)
+#' 
+#' # access the results of pathway analysis
+#' #integratedPathways(ipa)
+#' 
+#' # explore a specific biological network
+#' #visualizeNetwork(ipa, "Thyroid hormone synthesis")
 #' 
 #' @note
 #' This function uses the `Rgraphviz` package to render the network object.
