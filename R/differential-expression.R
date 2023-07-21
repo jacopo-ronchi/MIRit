@@ -43,7 +43,7 @@
 #' for unknown sources of variation (`useWsva = TRUE`). Moreover, for
 #' microarray data, the `arrayWeights()` function in `limma` can be used to
 #' assess differential expression with respect to array qualities. Additionally,
-#' when using `limma-voom`, the user may estimate voom trasformation with or
+#' when using `limma-voom`, the user may estimate voom transformation with or
 #' without quality weights (by specifying `useVoomWithQualityWeights = TRUE`).
 #' 
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
@@ -986,6 +986,7 @@ limma.DE <- function(expr,
 #' These tables should contain the differential expression results for all
 #' miRNAs/genes analyzed, not just for statistically significant species.
 #' All `data.frame` objects can be used, as long as they have:
+#' 
 #' * One column containing miRNA/gene names (according to miRBase/hgnc
 #' nomenclature). Accepted column names are: `ID`, `Symbol`, `Gene_Symbol`,
 #' `Mirna`, `mir`, `Gene`, `gene.symbol`, `Gene.symbol`;

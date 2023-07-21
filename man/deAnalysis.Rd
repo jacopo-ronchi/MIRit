@@ -193,7 +193,7 @@ may opt to include weighted surrogate variable analysis (WSVA) to correct
 for unknown sources of variation (\code{useWsva = TRUE}). Moreover, for
 microarray data, the \code{arrayWeights()} function in \code{limma} can be used to
 assess differential expression with respect to array qualities. Additionally,
-when using \code{limma-voom}, the user may estimate voom trasformation with or
+when using \code{limma-voom}, the user may estimate voom transformation with or
 without quality weights (by specifying \code{useVoomWithQualityWeights = TRUE}).
 }
 \section{Functions}{

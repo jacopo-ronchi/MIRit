@@ -17,17 +17,17 @@ identified with the \code{\link[=searchDisease]{searchDisease()}} function}
 A \code{data.frame} containing details about disease-SNPs and the associated
 differentially expressed miRNAs:
 \itemize{
-\item \code{variant} contains SNP identifiers
-\item \code{miRNA} specifies the DE-miRNA gene present
-\item \code{chr} indicates the chromosome of SNPs
-\item \code{position} shows the SNP position
-\item \code{allele} displays possible alleles for this SNPs
-\item \code{distance} specifies the distance between SNPs and miRNAs
-\item \code{is_upstream} indicates wheter SNP is upstream of miRNA gene
-\item \code{is_downstream} indicates wheter SNP is downstream of miRNA gene
-\item \code{mirnaStrand} shows the strand
-\item \code{mirnaStartPosition} displays the start position of DE-miRNA gene
-\item \code{mirnaEndPosition} displays the end position of DE-miRNA gene
+\item \code{variant} contains SNP identifiers;
+\item \code{miRNA} specifies the DE-miRNA gene present;
+\item \code{chr} indicates the chromosome of SNPs;
+\item \code{position} shows the SNP position;
+\item \code{allele} displays possible alleles for this SNPs;
+\item \code{distance} specifies the distance between SNPs and miRNAs;
+\item \code{is_upstream} indicates whether SNP is upstream of miRNA gene;
+\item \code{is_downstream} indicates whether SNP is downstream of miRNA gene;
+\item \code{mirnaStrand} shows the strand;
+\item \code{mirnaStartPosition} displays the start position of DE-miRNA gene;
+\item \code{mirnaEndPosition} displays the end position of DE-miRNA gene.
 }
 }
 \description{
@@ -45,7 +45,7 @@ might alter its expression or the spectrum of miRNA targets.
 To retrieve disease-SNPs, this function uses \code{gwasrapidd} package, which
 directly queries the NHGRI-EBI Catalog of published genome-wide association
 studies. After running this function, the user can use the \code{\link[=mirVariantPlot]{mirVariantPlot()}}
-function to produce a trackplot for visualizing the genomic presence of
+function to produce a trackplot for visualizing the genomic location of
 SNPs within miRNA genes.
 }
 \note{

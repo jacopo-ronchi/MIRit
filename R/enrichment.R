@@ -1,63 +1,3 @@
-#' Get the list of supported organisms for a given database
-#'
-#' This function provides the list of supported organisms for different
-#' databases, namely Gene Ontology (GO), Kyoto Encyclopedia of Genes and
-#' Genomes (KEGG), MsigDB, WikiPathways, Reactome, Enrichr, Disease Ontology
-#' (DO), Network of Cancer Genes (NCG), DisGeNET, and COVID19.
-#'
-#' @param database The database name. It must be one of: `GO`, `KEGG`, `MsigDB`,
-#' `WikiPathways`, `Reactome`, `Enrichr`, `DO`, `NCG`, `DisGeNET`, `COVID19`
-#'
-#' @returns
-#' A `character` vector listing all the supported organisms for the database
-#' specified by the user.
-#'
-#' @examples
-#' # get the supported organisms for GO database
-#' supportedOrganisms("GO")
-#'
-#' # get the supported organisms for Reactome
-#' supportedOrganisms("Reactome")
-#' 
-#' @note
-#' To perform the functional enrichment of genes, MIRit uses the `geneset` R
-#' package to download gene sets from the above mentioned databases.
-#'
-#' @references
-#' Liu, Y., Li, G. Empowering biologists to decode omics data: the Genekitr R
-#' package and web server. BMC Bioinformatics 24, 214 (2023).
-#' \url{https://doi.org/10.1186/s12859-023-05342-9}.
-#'
-#' @author
-#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
-#'
-#' @export
-supportedOrganisms <- function(database) {
-  
-  ## check inputs
-  if (!is.character(database) |
-      length(database) != 1 |
-      !database %in% c("GO", "KEGG", "MsigDB", "WikiPathways", "Reactome",
-                       "Enrichr", "DO", "NCG", "DisGeNET", "COVID19")) {
-    stop(paste("'database' must be one of 'GO', 'KEGG', 'MsigDB',",
-               "'WikiPathways', 'Reactome', 'Enrichr', 'DO', 'NCG',",
-               "'DisGeNET', 'COVID19'. For additional details,",
-               "see ?enrichGenes"),
-         call. = FALSE)
-  }
-  
-  ## extract supported organisms from species data.frame
-  supp <- species[!is.na(species[, database]), "specie"]
-  
-  ## return supported organisms
-  return(supp)
-  
-}
-
-
-
-
-
 ## helper function to download the desired gene set for enrichment analyses
 prepareGeneSet <- function(organism, database, category) {
   
@@ -481,6 +421,12 @@ enrichGenes <- function(mirnaObj,
       !method %in% c("ORA", "GSEA", "CAMERA")) {
     stop(paste("'method' must be one of 'ORA', 'GSEA', 'CAMERA'.",
                "For additional details, see ?enrichGenes"),
+         call. = FALSE)
+  }
+  if (geneDE(mirnaObj, param = TRUE)$method == "Manually added" &
+      method == "CAMERA") {
+    stop(paste("Functional enrichment analysis with CAMERA is not available",
+               "for user-supplied differential expression results..."),
          call. = FALSE)
   }
   if (!is.numeric(pCutoff) |

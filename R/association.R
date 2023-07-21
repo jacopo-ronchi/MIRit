@@ -97,7 +97,7 @@ searchDisease <- function(diseaseName) {
 #' To retrieve disease-SNPs, this function uses `gwasrapidd` package, which
 #' directly queries the NHGRI-EBI Catalog of published genome-wide association
 #' studies. After running this function, the user can use the [mirVariantPlot()]
-#' function to produce a trackplot for visualizing the genomic presence of
+#' function to produce a trackplot for visualizing the genomic location of
 #' SNPs within miRNA genes.
 #'
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
@@ -108,17 +108,18 @@ searchDisease <- function(diseaseName) {
 #' @returns
 #' A `data.frame` containing details about disease-SNPs and the associated
 #' differentially expressed miRNAs:
-#' * `variant` contains SNP identifiers
-#' * `miRNA` specifies the DE-miRNA gene present
-#' * `chr` indicates the chromosome of SNPs
-#' * `position` shows the SNP position
-#' * `allele` displays possible alleles for this SNPs
-#' * `distance` specifies the distance between SNPs and miRNAs
-#' * `is_upstream` indicates wheter SNP is upstream of miRNA gene
-#' * `is_downstream` indicates wheter SNP is downstream of miRNA gene
-#' * `mirnaStrand` shows the strand
-#' * `mirnaStartPosition` displays the start position of DE-miRNA gene
-#' * `mirnaEndPosition` displays the end position of DE-miRNA gene
+#' 
+#' * `variant` contains SNP identifiers;
+#' * `miRNA` specifies the DE-miRNA gene present;
+#' * `chr` indicates the chromosome of SNPs;
+#' * `position` shows the SNP position;
+#' * `allele` displays possible alleles for this SNPs;
+#' * `distance` specifies the distance between SNPs and miRNAs;
+#' * `is_upstream` indicates whether SNP is upstream of miRNA gene;
+#' * `is_downstream` indicates whether SNP is downstream of miRNA gene;
+#' * `mirnaStrand` shows the strand;
+#' * `mirnaStartPosition` displays the start position of DE-miRNA gene;
+#' * `mirnaEndPosition` displays the end position of DE-miRNA gene.
 #'
 #' @examples
 #' # load example MirnaExperiment object
@@ -159,6 +160,11 @@ findMirnaSNPs <- function(mirnaObj,
                "'mirnaObj'. Please, use 'performMirnaDE()' before using",
                "this function. See ?performMirnaDE"), call. = FALSE)
   }
+  if (nrow(mirnaDE(mirnaObj)) == 0) {
+    stop(paste("No miRNAs in this object are defined as differentially",
+               "expressed. Consider using 'performMirnaDE()' with lower",
+               "thresholds. See ?performMirnaDE"), call. = FALSE)
+  }
   if (!is.character(diseaseEFO) | length(diseaseEFO) != 1) {
     stop(paste("'diseaseEFO' must be a string of length 1",
                "containing the EFO ID of the disease. You can obtain the",
@@ -180,13 +186,13 @@ findMirnaSNPs <- function(mirnaObj,
   varDf <- varDf[varDf$is_mapped_gene == "TRUE", ]
   
   ## find genomic details of differentially expressed miRNAs
+  message("Finding genomic information of differentially expressed miRNAs...")
   ensembl <- biomaRt::useEnsembl(biomart = "ensembl",
                                  dataset = "hsapiens_gene_ensembl",
                                  mirror = "useast")
   deMirnas <- mirnaDE(mirnaObj)
   deMirnas <- deMirnas$ID
   deMirnas <- gsub("-5p|-3p", "", deMirnas)
-  
   mirGenes <- biomaRt::select(ensembl,
                               keys = deMirnas,
                               keytype = "mirbase_id",
@@ -221,11 +227,6 @@ findMirnaSNPs <- function(mirnaObj,
   colnames(resDf) <- c("variant", "miRNA", "chr", "position", "allele",
                        "distance", "is_upstream", "is_downstream",
                        "mirnaStrand", "mirnaStartPosition", "mirnaEndPosition")
-  
-  ## stop the code if no SNP is associated with DE-miRNAs
-  if (nrow(resDf) == 0) {
-    stop("No disease-associated SNPs occur at DE-miRNA loci!", call. = FALSE)
-  }
   
   ## display a message with miRNA-SNPs association results
   message(paste("After the analysis,", nrow(resDf), "variants associated with",

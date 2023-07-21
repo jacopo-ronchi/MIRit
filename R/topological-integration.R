@@ -152,25 +152,7 @@ topologicalAnalysis <- function(mirnaObj,
   if (!is.character(database) |
       length(database) != 1 |
       !database %in% c("KEGG", "Reactome", "WikiPathways")) {
-    stop("Databases supported are: 'KEGG', 'Reactome' and 'WikiPathways'",
-         call. = FALSE)
-  }
-  if (database == "KEGG" &
-      !organism %in% convertOrganism("graph_kegg", "all")) {
-    stop(paste("For KEGG database 'organism' must be one of:",
-               paste(convertOrganism("graph_kegg", "all"), collapse = ", ")),
-         call. = FALSE)
-  } else if (database == "Reactome" &
-             !organism %in% convertOrganism("graph_reactome", "all")) {
-    stop(paste("For Reactome database 'organism' must be one of:",
-               paste(convertOrganism("graph_reactome", "all"),
-                     collapse = ", ")),
-         call. = FALSE)
-  } else if (database == "WikiPathways" &
-             !organism %in% convertOrganism("graph_wikipathways", "all")) {
-    stop(paste("For WikiPathways database 'organism' must be one of:",
-               paste(convertOrganism("graph_wikipathways", "all"),
-                     collapse = ", ")),
+    stop("Supported databases are: 'KEGG', 'Reactome' and 'WikiPathways'",
          call. = FALSE)
   }
   if (!is.numeric(pCutoff) |
@@ -204,6 +186,18 @@ topologicalAnalysis <- function(mirnaObj,
          call. = FALSE)
   }
   
+  ## check if database is supported for the given specie
+  supp <- species[!is.na(species[, paste("graph", database, sep = "_")]),
+                  "specie"]
+  if (!organism %in% supp) {
+    stop(paste("For", database, "database, 'organism' must be one of:",
+               paste(supp, collapse = ", ")))
+  }
+  
+  ## convert organism name to graphite name
+  org <- species[species$specie == organism,
+                 paste("graph", database, sep = "_")]
+  
   ## get differential expression results
   deg <- geneDE(mirnaObj, onlySignificant = FALSE)
   dem <- mirnaDE(mirnaObj, onlySignificant = FALSE)
@@ -219,13 +213,9 @@ topologicalAnalysis <- function(mirnaObj,
   targ <- mirnaTargets(mirnaObj)
   targ <- targ[targ$Gene.Symbol %in% intTargets, ]
   
-  ## set organism name and database
-  datalow <- tolower(database)
-  organism <- convertOrganism(paste("graph", datalow, sep = "_"), organism)
-  
   ## download pathways from specified database
   message(paste("Downloading pathways from", database, "database..."))
-  pathDb <- graphite::pathways(species = organism, database = datalow)
+  pathDb <- graphite::pathways(species = org, database = tolower(database))
   
   ## convert pathway identifiers to gene symbols
   message("Converting identifiers to gene symbols...")

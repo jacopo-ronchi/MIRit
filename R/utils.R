@@ -87,93 +87,60 @@ quiet <- function(x) {
 
 
 
-## convert organism ids
-convertOrganism <- function(col, orgId) {
-
-  ## create a dataframe listing supported organisms for different functions
-  supp <- data.frame(multiMiR = c("Homo sapiens", "Mus musculus",
-                                  "Rattus norvegicus", NA, NA, NA, NA, NA, NA,
-                                  NA, NA, NA, NA, NA, NA, NA, NA),
-                     miEAA = c("Homo sapiens", "Mus musculus",
-                               "Rattus norvegicus", "Arabidopsis thaliana",
-                               "Bos taurus", "Caenorhabditis elegans",
-                               "Drosophila melanogaster", "Danio rerio",
-                               "Gallus gallus", "Sus scrofa",
-                               NA, NA, NA, NA, NA, NA, NA),
-                     OrgDb = c("org.Hs.eg.db", "org.Mm.eg.db", "org.Rn.eg.db",
-                               "org.At.tair.db", "org.Bt.eg.db", "org.Ce.eg.db",
-                               "org.Dm.eg.db", "org.Dr.eg.db", "org.Gg.eg.db",
-                               "org.Ss.eg.db", "org.Sc.sgd.db", NA,
-                               "org.Pt.eg.db", NA, NA, "org.Cf.eg.db",
-                               "org.Ag.eg.db"),
-                     KEGG = c("hsa", "mmu", "rno", "ath", "bta", "cel", "dme",
-                              "dre", "gga", "ssc", "sce", "pop", "ptr", "osa",
-                              "ecb", "cfa", "aga"),
-                     Reactome = c("human", "mouse", "rat", NA, NA, "celegans",
-                                  "fly", "zebrafish", NA, NA, "yeast", NA, NA,
-                                  NA, NA, NA, NA),
-                     DisGeNet = c("Homo sapiens", NA, NA, NA, NA, NA, NA, NA,
-                                  NA, NA, NA, NA, NA, NA, NA, NA, NA),
-                     WikiPathways = c("Homo sapiens", "Mus musculus",
-                                      "Rattus norvegicus",
-                                      "Arabidopsis thaliana",
-                                      "Bos taurus", "Caenorhabditis elegans",
-                                      "Drosophila melanogaster",
-                                      "Danio rerio", "Gallus gallus",
-                                      "Sus scrofa", "Saccharomyces cerevisiae",
-                                      "Populus trichocarpa", "Pan troglodytes",
-                                      "Oryza sativa", "Equus caballus",
-                                      "Canis familiaris", "Anopheles gambiae"),
-                     graph_kegg = c("hsapiens", "mmusculus", "rnorvegicus",
-                                    "athaliana", "btaurus", "celegans",
-                                    "dmelanogaster", "drerio", "ggallus",
-                                    "sscrofa", "scerevisiae", NA, NA, NA, NA,
-                                    "cfamiliaris", NA),
-                     graph_reactome = c("hsapiens", "mmusculus", "rnorvegicus",
-                                        NA, "btaurus", "celegans",
-                                        "dmelanogaster", "drerio", "ggallus",
-                                        "sscrofa", "scerevisiae", NA, NA, NA,
-                                        NA, "cfamiliaris", NA),
-                     graph_wikipathways = c("hsapiens", "mmusculus",
-                                            "rnorvegicus", "athaliana",
-                                            "btaurus", "celegans",
-                                            "dmelanogaster", "drerio",
-                                            "ggallus", "sscrofa", "scerevisiae",
-                                            NA, NA, NA, NA, "cfamiliaris", NA))
-  rownames(supp) <- supp$WikiPathways
-
-  ## convert organism ID or return all supported organisms
-  if (orgId != "all") {
-    id <- supp[orgId, col]
-  } else {
-    id <- rownames(supp[which(!is.na(supp[, col])), ])
+#' Get the list of supported organisms for a given database
+#'
+#' This function provides the list of supported organisms for different
+#' databases, namely Gene Ontology (GO), Kyoto Encyclopedia of Genes and
+#' Genomes (KEGG), MsigDB, WikiPathways, Reactome, Enrichr, Disease Ontology
+#' (DO), Network of Cancer Genes (NCG), DisGeNET, and COVID19.
+#'
+#' @param database The database name. It must be one of: `GO`, `KEGG`, `MsigDB`,
+#' `WikiPathways`, `Reactome`, `Enrichr`, `DO`, `NCG`, `DisGeNET`, `COVID19`
+#'
+#' @returns
+#' A `character` vector listing all the supported organisms for the database
+#' specified by the user.
+#'
+#' @examples
+#' # get the supported organisms for GO database
+#' supportedOrganisms("GO")
+#'
+#' # get the supported organisms for Reactome
+#' supportedOrganisms("Reactome")
+#' 
+#' @note
+#' To perform the functional enrichment of genes, MIRit uses the `geneset` R
+#' package to download gene sets from the above mentioned databases.
+#'
+#' @references
+#' Liu, Y., Li, G. Empowering biologists to decode omics data: the Genekitr R
+#' package and web server. BMC Bioinformatics 24, 214 (2023).
+#' \url{https://doi.org/10.1186/s12859-023-05342-9}.
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
+supportedOrganisms <- function(database) {
+  
+  ## check inputs
+  if (!is.character(database) |
+      length(database) != 1 |
+      !database %in% c("GO", "KEGG", "MsigDB", "WikiPathways", "Reactome",
+                       "Enrichr", "DO", "NCG", "DisGeNET", "COVID19")) {
+    stop(paste("'database' must be one of 'GO', 'KEGG', 'MsigDB',",
+               "'WikiPathways', 'Reactome', 'Enrichr', 'DO', 'NCG',",
+               "'DisGeNET', 'COVID19'. For additional details,",
+               "see ?supportedOrganisms"),
+         call. = FALSE)
   }
-
-  ## return id
-  return(id)
-
-}
-
-
-
-
-
-## helper function to show a progress bar with lapply
-## credit to: Mark Heckmann on ryouready.wordpress.com
-lapply_pb <- function(X, FUN, ...) {
-  env <- environment()
-  pb_Total <- length(X)
-  counter <- 0
-  pb <- txtProgressBar(min = 0, max = pb_Total, style = 3)
-  wrapper <- function(...){
-    curVal <- get("counter", envir = env)
-    assign("counter", curVal +1 ,envir = env)
-    setTxtProgressBar(get("pb", envir = env), curVal + 1)
-    FUN(...)
-  }
-  res <- lapply(X, wrapper, ...)
-  close(pb)
-  res
+  
+  ## extract supported organisms from species data.frame
+  supp <- species[!is.na(species[, database]), "specie"]
+  
+  ## return supported organisms
+  return(supp)
+  
 }
 
 
@@ -220,33 +187,25 @@ listPathways <- function(organism, database) {
   if (!is.character(database) |
       length(database) != 1 |
       !database %in% c("KEGG", "Reactome", "WikiPathways")) {
-    stop("Databases supported are: 'KEGG', 'Reactome' and 'WikiPathways'",
-         call. = FALSE)
-  }
-  if (database == "KEGG" & !organism %in% convertOrganism("graph_kegg", "all")) {
-    stop(paste("For KEGG database 'organism' must be one of:",
-               paste(convertOrganism("graph_kegg", "all"), collapse = ", ")),
-         call. = FALSE)
-  } else if (database == "Reactome" &
-             !organism %in% convertOrganism("graph_reactome", "all")) {
-    stop(paste("For Reactome database 'organism' must be one of:",
-               paste(convertOrganism("graph_reactome", "all"),
-                     collapse = ", ")),
-         call. = FALSE)
-  } else if (database == "WikiPathways" &
-             !organism %in% convertOrganism("graph_wikipathways", "all")) {
-    stop(paste("For WikiPathways database 'organism' must be one of:",
-               paste(convertOrganism("graph_wikipathways", "all"),
-                     collapse = ", ")),
+    stop("Supported databases are: 'KEGG', 'Reactome' and 'WikiPathways'",
          call. = FALSE)
   }
   
-  ## set organism name and database
-  database <- tolower(database)
-  organism <- convertOrganism(paste("graph", database, sep = "_"), organism)
+  ## check if database is supported for the given specie
+  supp <- species[!is.na(species[, paste("graph", database, sep = "_")]),
+                  "specie"]
+  if (!organism %in% supp) {
+    stop(paste("For", database, "database, 'organism' must be one of:",
+               paste(supp, collapse = ", ")))
+  }
+  
+  ## set organism name
+  organism <- species[species$specie == organism,
+                      paste("graph", database, sep = "_")]
   
   ## download pathways from specified database
-  pathDb <- graphite::pathways(species = organism, database = database)
+  pathDb <- graphite::pathways(species = organism,
+                               database = tolower(database))
   
   ## return the names of the pathways present in the specified database
   return(names(pathDb))

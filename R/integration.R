@@ -172,6 +172,12 @@ mirnaIntegration <- function(mirnaObj,
                "\t- 'fry', to apply rotation gene-set testing."),
          call. = FALSE)
   }
+  if (geneDE(mirnaObj, param = TRUE)$method == "Manually added" &
+      test == "fry") {
+    stop(paste("Integration through 'fry' method is not available",
+               "for user-supplied differential expression results..."),
+         call. = FALSE)
+  }
   if (test == "correlation" & pairedSamples(mirnaObj) == FALSE) {
     warning(paste("You can't perform a 'correlation' analysis with",
                   "unpaired samples! Setting 'test' to 'association' for",
