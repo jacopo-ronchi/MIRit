@@ -379,6 +379,11 @@ validateCategories <- function(database, category, organism) {
 #' Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015). “limma
 #' powers differential expression analyses for RNA-sequencing and microarray
 #' studies.” Nucleic Acids Research, 43(7), e47. \url{doi:10.1093/nar/gkv007}.
+#' 
+#' Wu D, Smyth GK. Camera: a competitive gene set test accounting for inter-gene
+#' correlation. Nucleic Acids Res. 2012 Sep 1;40(17):e133.
+#' doi: \url{10.1093/nar/gks461}. Epub 2012 May 25. PMID: 22638577; PMCID:
+#' PMC3458527.
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
