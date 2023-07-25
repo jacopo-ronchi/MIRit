@@ -1931,7 +1931,7 @@ plotCorrelation <- function(mirnaObj,
 #' be one of `P.Value`, to use unadjusted p-values, and `adj.P.Val` (default),
 #' to use p-values corrected for multiple testing
 #' @param sigOffset The distance between the different brackets used to
-#' show statistical significance. Default is 0.9, but the user can increment it
+#' show statistical significance. Default is 1.5, but the user can increment it
 #' to enlarge the distance between significance brackets
 #' @param sigLabelSize The size for the labels used to show statistical
 #' significance. Default is 7, which is well suited for representing p-values
@@ -1973,7 +1973,7 @@ plotDE <- function(mirnaObj,
                    showSignificance = TRUE,
                    starSig = TRUE,
                    pCol = "adj.P.Val",
-                   sigOffset = 0.9,
+                   sigOffset = 1.5,
                    sigLabelSize = 7,
                    digits = 3,
                    colorScale = NULL) {
@@ -2049,7 +2049,7 @@ plotDE <- function(mirnaObj,
   if (!is.numeric(sigOffset) |
       length(sigOffset) != 1 |
       sigOffset < 0) {
-    stop("'sigOffset' must be a non-neagtive number! (default is 0.9)",
+    stop("'sigOffset' must be a non-neagtive number! (default is 1.5)",
          call. = FALSE)
   }
   if (!is.numeric(sigLabelSize) |
@@ -2130,7 +2130,7 @@ plotDE <- function(mirnaObj,
   statTest$Gene <- features
   
   ## add y position for p-value labels
-  yCo <- max(exprDf$Expression) + 0.1*max(exprDf$Expression)
+  yCo <- max(exprDf$Expression) + 0.1 * max(exprDf$Expression)
   statTest$y.position <- seq(yCo,
                              yCo +
                                sigOffset*(length(unique(exprDf$Gene)) - 1),
@@ -2198,6 +2198,11 @@ plotDE <- function(mirnaObj,
       ggplot2::scale_color_manual(values = colorScale) +
       ggplot2::scale_fill_manual(values = colorScale)
   }
+  
+  ## expand y-limit
+  dePlot <- dePlot +
+    ggplot2::ylim(c(NA, max(statTest$y.position) +
+                      0.1 * max(statTest$y.position)))
   
   ## return the plot object
   return(dePlot)
