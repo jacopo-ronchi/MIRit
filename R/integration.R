@@ -800,35 +800,39 @@ fryMirnaTargets <- function(mirnaObj,
   ## maintain interactions under the specified cutoff
   res <- rs[rs$FDR <= pCutoff, ]
   
-  ## create resulting data.frame
-  res$microRNA <- rownames(res)
-  res$mirna.direction <- "Down"
-  res$mirna.direction[res$microRNA %in% upDem] <- "Up"
-  deg <- geneDE(mirnaObj)
-  deTarg <- mapply(function(mir, fold) {
-    if (fold == "Up") {
-      degFold <- deg$ID[deg$logFC < 0]
-    } else if (fold == "Down") {
-      degFold <- deg$ID[deg$logFC > 0]
-    }
-    mirDe <- intersect(tgList[[mir]], degFold)
-    c(paste(mirDe, collapse = "/"), length(mirDe))
-  }, res$microRNA, res$mirna.direction)
-  res$DE_targets <- deTarg[1, ]
-  res$DE <- deTarg[2, ]
-  res <- res[, c(7, 8, 2, 10, 1, 3, 4, 9)]
-  colnames(res) <- c("microRNA", "mirna.direction", "gene.direction",
-                     "DE", "targets", "P.Val", "adj.P.Val", "DE.targets")
-  
   ## print integration results
-  if (nrow(res) >= 1) {
+  if (nrow(res) == 0) {
+    res <- data.frame()
+    message(paste("No statistically significant associations between",
+                  "DE-miRNAs and genes were found."))
+  } else {
+    
+    ## create resulting data.frame
+    res$microRNA <- rownames(res)
+    res$mirna.direction <- "Down"
+    res$mirna.direction[res$microRNA %in% upDem] <- "Up"
+    deg <- geneDE(mirnaObj)
+    deTarg <- mapply(function(mir, fold) {
+      if (fold == "Up") {
+        degFold <- deg$ID[deg$logFC < 0]
+      } else if (fold == "Down") {
+        degFold <- deg$ID[deg$logFC > 0]
+      }
+      mirDe <- intersect(tgList[[mir]], degFold)
+      c(paste(mirDe, collapse = "/"), length(mirDe))
+    }, res$microRNA, res$mirna.direction)
+    res$DE_targets <- deTarg[1, ]
+    res$DE <- deTarg[2, ]
+    res <- res[, c(7, 8, 2, 10, 1, 3, 4, 9)]
+    colnames(res) <- c("microRNA", "mirna.direction", "gene.direction",
+                       "DE", "targets", "P.Val", "adj.P.Val", "DE.targets")
+    
+    ## report results
     message(paste("A statistically significant association between",
                   nrow(res), "DE-miRNAs and",
                   length(unique(unlist(strsplit(res$DE.targets, "/")))),
                   "genes was found!"))
-  } else {
-    message(paste("No statistically significant associations between",
-                  "DE-miRNAs and genes were found."))
+    
   }
   
   ## return the object containing association results
