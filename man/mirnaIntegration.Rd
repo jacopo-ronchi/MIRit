@@ -118,7 +118,7 @@ Finally, for unpaired data, the effect of DE-miRNAs on the expression of
 target genes can be estimated through rotation gene-set tests. In particular,
 a fast approximation to rotation gene-set testing called \code{fry}, implemented
 in the \code{limma} package, can be used to statistically quantify the influence
-of miRNAs on the expression changes of theri target genes.
+of miRNAs on the expression changes of their target genes.
 }
 \examples{
 # load example MirnaExperiment object

@@ -59,7 +59,7 @@
 #' target genes can be estimated through rotation gene-set tests. In particular,
 #' a fast approximation to rotation gene-set testing called `fry`, implemented
 #' in the `limma` package, can be used to statistically quantify the influence
-#' of miRNAs on the expression changes of theri target genes.
+#' of miRNAs on the expression changes of their target genes.
 #'
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
 #' containing miRNA and gene data
