@@ -1603,8 +1603,7 @@ plotCorrelation <- function(mirnaObj,
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
          call. = FALSE)
   }
-  if (integratedTargets == TRUE &
-      max(dim(integration(mirnaObj))) == 0) {
+  if (max(dim(integration(mirnaObj))) == 0) {
     stop(paste("Integration analysis is not detected in 'mirnaObj'!",
                "Before using this function, expression levels of miRNAs and",
                "genes must be integrated with the 'mirnaIntegration()'",

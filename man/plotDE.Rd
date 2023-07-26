@@ -13,7 +13,7 @@ plotDE(
   showSignificance = TRUE,
   starSig = TRUE,
   pCol = "adj.P.Val",
-  sigOffset = 0.9,
+  sigOffset = 1.5,
   sigLabelSize = 7,
   digits = 3,
   colorScale = NULL
@@ -47,7 +47,7 @@ be one of \code{P.Value}, to use unadjusted p-values, and \code{adj.P.Val} (defa
 to use p-values corrected for multiple testing}
 
 \item{sigOffset}{The distance between the different brackets used to
-show statistical significance. Default is 0.9, but the user can increment it
+show statistical significance. Default is 1.5, but the user can increment it
 to enlarge the distance between significance brackets}
 
 \item{sigLabelSize}{The size for the labels used to show statistical
