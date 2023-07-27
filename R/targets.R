@@ -60,7 +60,9 @@
 #'
 #' @export
 getTargets <- function(mirnaObj,
-                       score = "Medium") {
+                       organism = "Homo sapiens",
+                       score = "High",
+                       includeValidated = TRUE) {
   
   ## check inputs
   if (!is(mirnaObj, "MirnaExperiment")) {
@@ -72,12 +74,30 @@ getTargets <- function(mirnaObj,
                "'mirnaObj'. Please, use 'performGeneDE()' before using",
                "this function. See ?performGeneDE"), call. = FALSE)
   }
+  if (!is.character(organism) |
+      length(organism) != 1 |
+      !organism %in% c("Homo sapiens", "Mus musculus", "Rattus norvegicus",
+                       "Arabidopsis thaliana", "Bos taurus",
+                       "Caenorhabditis elegans", "Danio rerio",
+                       "Drosophila melanogaster", "Gallus gallus",
+                       "Sus scrofa")) {
+    stop(paste("'organism' must be  one of: 'Homo sapiens' (default),",
+               "'Mus musculus', 'Rattus norvegicus', 'Arabidopsis thaliana',",
+               "'Bos taurus', 'Caenorhabditis elegans', 'Danio rerio',",
+               "'Drosophila melanogaster', 'Gallus gallus',",
+               "and 'Sus scrofa'."),
+         call. = FALSE)
+  }
   if (!is.character(score) |
       length(score) != 1 |
       !score %in% c("Very High", "High", "Medium", "Low")) {
     stop(paste("'score' must be one of 'Very High', 'High', 'Medium', 'Low'.",
                "For additional details, see ?getTargets"),
          call. = FALSE)
+  }
+  if (!is.logical(includeValidated) |
+      length(includeValidated) != 1) {
+    stop("'includeValidated' must be logical (TRUE/FALSE)!", call. = FALSE)
   }
   
   ## define miRNAs
@@ -133,6 +153,56 @@ getTargets <- function(mirnaObj,
   ## maintain only targets that are present in gene expression matrix
   tg <- tg[tg$Gene.Symbol %in% rownames(mirnaObj[["genes"]]), ]
   
+  ## retain only interesting columns
+  tg <- tg[, c("Gene.Symbol", "MicroRNA", "Integrated.Score",
+               "Number.of.Sources", "Score.Class")]
+  tg$Type <- "Predicted"
+  
+  ## add validated interactions from miRTarBase
+  if (includeValidated == TRUE) {
+    
+    ## define miRTarBase v9 link
+    mtUrl <- paste("https://mirtarbase.cuhk.edu.cn/~miRTarBase/",
+                   "miRTarBase_2022/cache/download/9.0/miRTarBase_MTI.xlsx",
+                   sep = "")
+    
+    ## load cache
+    bfc <- .get_cache()
+    
+    ## check if miRTarBase is cached
+    rid <- BiocFileCache::bfcquery(bfc, "miRTarBase", "rname")$rid
+    if (!length(rid)) {
+      
+      ## download miRTarBase and add it to the cache directory
+      message("Downloading validated interactions from miRTarBase v9.0...")
+      rid <- names(BiocFileCache::bfcadd(bfc, "miRTarBase", mtUrl))
+      
+    } else {
+      message("Loading miRTarBase from cache...")
+    }
+    
+    ## check if cached file needs to be updated
+    if (!isFALSE(BiocFileCache::bfcneedsupdate(bfc, rid))) {
+      BiocFileCache::bfcdownload(bfc, rid)
+    }
+    
+    ## load miRTarBase
+    mt <- quiet(readxl::read_xlsx(BiocFileCache::bfcrpath(bfc, rids = rid)))
+    
+    ## keep interactions involving measured miRNAs
+    mt <- mt[mt$miRNA %in% allMirnas, c("miRNA", "Target Gene", "Experiments",
+                                        "Support Type", "References (PMID)")]
+    colnames(mt) <- c("MicroRNA", "Gene.Symbol", "Experiments",
+                      "Support.Type", "References")
+    
+    ## merge mirDIP and miRTarBase results
+    message("Merging predicted and validated results...")
+    tg <- merge(tg, mt, by = c("MicroRNA", "Gene.Symbol"), all = TRUE)
+    tg$Type[tg$Type == "Predicted" & !is.na(tg$References)] <- "Both"
+    tg$Type[is.na(tg$Type)] <- "Validated"
+    
+  }
+  
   ## add miRNA-target pairs to the MirnaExperiment object
   mirnaTargets(mirnaObj) <- tg
   
@@ -153,7 +223,7 @@ getTargets <- function(mirnaObj,
 
 ## helper function to query mirDIP and check for status
 mirDIP.query <- function(URL, ...) {
-  response <- httr::POST(URL, ...)
+  response <- httr::POST(URL, config = httr::progress(), ...)
   httr::stop_for_status(response)
   response
 }
