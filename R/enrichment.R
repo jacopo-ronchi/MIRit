@@ -56,6 +56,9 @@ prepareGeneSet <- function(organism, database, category) {
                               transTo = "symbol",
                               org = convOrg)
     gs$symbol <- symb$symbol[match(gs$gene, symb$input_id)]
+    dupDO <- duplicated(data.frame("name" = tolower(gs$name),
+                                   "symbol" = gs$symbol))
+    gs <- gs[!dupDO, ]
   } else if (database == "NCG") {
     if (category == "v6") {
       gs <- geneset::getHgDisease(source = "ncg_v6")
