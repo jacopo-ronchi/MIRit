@@ -36,8 +36,7 @@ searchDisease <- function(diseaseName) {
   }
   
   ## load cache
-  path <- file.path(tempdir(), "MIRit_cache")
-  bfc <- BiocFileCache::BiocFileCache(path, ask = FALSE)
+  bfc <- .get_cache()
   
   ## check if EFO traits are cached
   message("Checking for cached EFO traits...")

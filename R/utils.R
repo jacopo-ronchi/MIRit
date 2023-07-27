@@ -1,4 +1,4 @@
-## identify column names
+## helper function to identify column names
 identifyColNames <- function(tabOutput, tabID = "") {
 
   # define accepted column names
@@ -52,7 +52,7 @@ identifyColNames <- function(tabOutput, tabID = "") {
 
 
 
-## obtain integrated targets to enrich
+## helper function to obtain integrated targets to enrich
 selectTargets <- function(mirnaObj, miRNA.Direction) {
   
   ## extract integrated targets
@@ -76,11 +76,21 @@ selectTargets <- function(mirnaObj, miRNA.Direction) {
 
 
 
-## hide output by cat
+## helper function for hiding output by cat
 quiet <- function(x) {
   sink(tempfile())
   on.exit(sink())
   invisible(force(x))
+}
+
+
+
+
+
+## helper function for loading cache
+.get_cache <- function() {
+  cache <- tools::R_user_dir("MIRit", which = "cache")
+  BiocFileCache::BiocFileCache(cache)
 }
 
 
