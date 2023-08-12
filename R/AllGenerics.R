@@ -182,16 +182,10 @@ setGeneric("pairedSamples", function(object) standardGeneric("pairedSamples"))
 #' [`MirnaExperiment`][MirnaExperiment-class]
 #' object. After retrieving miRNA targets with the [getTargets()] function,
 #' the interactions between miRNAs and target genes are stored in the
-#' `targets` slot and can be explored with this function. If `demTarg`
-#' parameter is set to TRUE, only targets of differentially expressed miRNAs
-#' will be considered; otherwise, all miRNA-target relationships will be shown.
+#' `targets` slot and can be explored with this function.
 #'
 #' @param object A [`MirnaExperiment`][MirnaExperiment-class] object containing
 #' miRNA and gene data
-#' @param demTarg Logical, whether to report the targets of differentially
-#' expressed miRNAs, or to report the targets of all miRNAs in study.
-#' Default is TRUE to just report the target genes of differentially
-#' expressed miRNAs
 #'
 #' @returns
 #' A `data.frame` object containing the interactions between miRNAs and target
@@ -209,8 +203,7 @@ setGeneric("pairedSamples", function(object) standardGeneric("pairedSamples"))
 #'
 #' @export
 setGeneric("mirnaTargets",
-           function(object,
-                    demTarg = TRUE) standardGeneric("mirnaTargets"))
+           function(object) standardGeneric("mirnaTargets"))
 
 
 

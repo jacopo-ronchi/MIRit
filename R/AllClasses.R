@@ -123,10 +123,8 @@ NULL
 #'
 #' @section targets:
 #'
-#' `targets` is a `data.frame` with just two columns:
-#' * `mature_mirna_id`, which contains miRNA names; and
-#' * `target_symbol`, which indicates the target gene for the corresponding
-#' miRNA.
+#' `targets` is a `data.frame` with miRNA-target interactions, as retrieved by
+#' [getTargets()] function.
 #'
 #' @section integration:
 #'
@@ -282,11 +280,11 @@ setValidity("MirnaExperiment", function(object) {
     return(paste("'significant' object within 'geneDE' slot must be a",
                  "character with IDs of statiscally significantly",
                  "differentially expressed genes."))
-  } else if (!is.data.frame(mirnaTargets(object, demTarg = FALSE))) {
+  } else if (!is.data.frame(mirnaTargets(object))) {
     return(paste("'targets' slot must be a data.frame object with miRNAs and",
                  "their relative targets. The end user typically avoids",
                  "manually setting miRNA targets and uses 'getTargets'",
-                 "function to retrieve them"))
+                 "function to retrieve them."))
   } else if (!is.logical(pairedSamples(object))) {
     return(paste("'pairedSamples' must be logical. It should be TRUE if",
                  "miRNA and gene expression data derive from the same samples",
@@ -596,13 +594,8 @@ setMethod("pairedSamples", "MirnaExperiment", function(object) {
 
 #' @rdname mirnaTargets
 #' @export
-setMethod("mirnaTargets", "MirnaExperiment", function(object, demTarg) {
-  if (demTarg == TRUE) {
-    dem <- significantMirnas(object)
-    object@targets[object@targets$MicroRNA %in% dem, ]
-  } else {
-    object@targets
-  }
+setMethod("mirnaTargets", "MirnaExperiment", function(object) {
+  object@targets
 })
 
 #' @rdname integration

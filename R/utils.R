@@ -90,7 +90,7 @@ quiet <- function(x) {
 ## helper function for loading cache
 .get_cache <- function() {
   cache <- tools::R_user_dir("MIRit", which = "cache")
-  BiocFileCache::BiocFileCache(cache)
+  BiocFileCache::BiocFileCache(cache, ask = FALSE)
 }
 
 

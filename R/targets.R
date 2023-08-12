@@ -69,10 +69,10 @@ getTargets <- function(mirnaObj,
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
          call. = FALSE)
   }
-  if (nrow(geneDE(mirnaObj, onlySignificant = FALSE)) == 0) {
-    stop(paste("Gene differential expression results are not present in",
-               "'mirnaObj'. Please, use 'performGeneDE()' before using",
-               "this function. See ?performGeneDE"), call. = FALSE)
+  if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0) {
+    stop(paste("MiRNA differential expression results are not present in",
+               "'mirnaObj'. Please, use 'performMirnaDE()' before using",
+               "this function. See ?performMirnaDE"), call. = FALSE)
   }
   if (!is.character(organism) |
       length(organism) != 1 |
@@ -101,7 +101,7 @@ getTargets <- function(mirnaObj,
   }
   
   ## define miRNAs
-  allMirnas <- rownames(mirnaObj[["microRNA"]])
+  allMirnas <- mirnaDE(mirnaObj)$ID
   
   ## collapse miRNA names
   microRNAs <- paste(allMirnas, collapse = ", ")
@@ -178,12 +178,12 @@ getTargets <- function(mirnaObj,
       rid <- names(BiocFileCache::bfcadd(bfc, "miRTarBase", mtUrl))
       
     } else {
-      message("Loading miRTarBase from cache...")
+      message("\nLoading miRTarBase from cache...")
     }
     
     ## check if cached file needs to be updated
     if (!isFALSE(BiocFileCache::bfcneedsupdate(bfc, rid))) {
-      BiocFileCache::bfcdownload(bfc, rid)
+      BiocFileCache::bfcdownload(bfc, rid, ask = FALSE)
     }
     
     ## load miRTarBase
@@ -208,9 +208,7 @@ getTargets <- function(mirnaObj,
   
   ## print the results of target retrieval
   message(paste(nrow(tg), "miRNA-target pairs have been identified for the",
-                length(allMirnas), "miRNAs in study!\nNotably,",
-                length(unique(mirnaTargets(mirnaObj)$Gene.Symbol)),
-                "genes are targeted by differentially expressed miRNAs."))
+                length(allMirnas), "differentially expressed miRNAs."))
   
   ## return mirnaObj with targets
   return(mirnaObj)
