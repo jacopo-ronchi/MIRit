@@ -433,8 +433,8 @@ normalizeGraph <- function(net, featDE, minPc) {
     return(NULL)
   }
   
-  ## determine the number of nodes in the graph
-  n <- graph::numNodes(net)
+  ## determine the number of genes in the graph
+  n <- length(graph::nodes(net)[!grepl("miR", graph::nodes(net))])
   
   ## remove nodes and edges without measurement
   net <- graph::subGraph(intersect(featDE$ID,
@@ -446,8 +446,9 @@ normalizeGraph <- function(net, featDE, minPc) {
   dgNode <- degree$inDegree + degree$outDegree
   net <- graph::subGraph(names(dgNode[dgNode != 0]), net)
   
-  ## return NULL if graph has less than X % of nodes
-  if (graph::numNodes(net) < (minPc / 100) * n) {
+  ## return NULL if graph has less than X % of genes with measurement
+  nN <- length(graph::nodes(net)[!grepl("miR", graph::nodes(net))])
+  if (nN < (minPc / 100) * n) {
     return(NULL)
   }
   
