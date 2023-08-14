@@ -493,6 +493,14 @@ MirnaExperiment <- function(
     pairedSamples <- FALSE
   }
   
+  ## check that primary column doesn't have repeated elements for unpaired data
+  if (pairedSamples == FALSE &
+      any(duplicated(samplesMetadata$primary)) == TRUE) {
+    stop(paste("For unpaired data, 'primary' column in 'samplesMetadata'",
+               "can't contain duplicated elements. See ?MirnaExperiment"),
+         call. = FALSE)
+  }
+  
   ## create a sample map for the MultiAssayExperiment object
   mirnaMap <- samplesMetadata[!is.na(samplesMetadata$mirnaCol), ]
   mirnaMap$geneCol <- NULL
@@ -500,6 +508,7 @@ MirnaExperiment <- function(
   geneMap$mirnaCol <- NULL
   colnames(mirnaMap)[which(colnames(mirnaMap) == "mirnaCol")] <- "colname"
   colnames(geneMap)[which(colnames(geneMap) == "geneCol")] <- "colname"
+  geneMap <- geneMap[, colnames(mirnaMap)]
   mapList <- list("microRNA" = mirnaMap, "genes" = geneMap)
   sMap <- MultiAssayExperiment::listToMap(mapList)
   
