@@ -1,34 +1,55 @@
 #' Get microRNA targets
 #'
-#' This function allows to obtain human miRNA-target interactions using the
-#' microRNA Data Integration Portal (mirDIP) database, which aggregates miRNA
-#' target predictions from 24 different resources by using an integrated score
-#' inferred from different prediction metrics. In this way, as demonstrated by
-#' Tokar et al. 2018, mirDIP reports more accurate predictions compared to
-#' those of individual tools.
+#' This function allows to obtain human miRNA-target interactions using two
+#' databases, namely miRTarBase v9, which contains experimentally validated
+#' interactions, and the microRNA Data Integration Portal (mirDIP) database,
+#' which aggregates miRNA target predictions from 24 different resources by
+#' using an integrated score inferred from different prediction metrics. In
+#' this way, as demonstrated by Tokar et al. 2018, mirDIP reports more accurate
+#' predictions compared to those of individual tools. However, for species
+#' other than Homo sapiens only validated interactions are returned, since
+#' mirDIP is only available for human miRNAs.
 #' 
 #' @details
-#' The downside of miRNA target prediction algorithms is the scarce extend of
-#' overlap existing between the different tools. To address this issue,
-#' several ensemble methods have been developed, trying to aggregate the
-#' predictions obtained by different algorithms. Initially, several researchers
-#' determined as significant miRNA-target pairs those predicted by more than
-#' one tool (intersection method). However, this method is not able to capture
-#' an important number of meaningful interactions. Alternatively, other
-#' strategies used to merge predictions from several algorithms (union method).
-#' Despite identifying more true relationships, the union method leads to a
-#' higher proportion of false discoveries. Therefore, other ensemble methods
-#' including mirDIP started using other statistics to rank miRNA-target
-#' predictions obtained by multiple algorithms. For additional information on
-#' mirDIP database and its ranking metric check Tokar et al. 2018 and
-#' Hauschild et al. 2023.
+#' To define miRNA target genes, we can consider both experimentally validated
+#' and computationally predicted interactions. Interactions of the former type
+#' are generally preferred, since they are corroborated by biomolecular
+#' experiments. However, they are often not sufficient, thus making it necessary
+#' to consider the predicted interactions as well. The downside of miRNA target
+#' prediction algorithms is the scarce extend of overlap existing between the
+#' different tools. To address this issue, several ensemble methods have been
+#' developed, trying to aggregate the predictions obtained by different
+#' algorithms. Initially, several researchers determined as significant
+#' miRNA-target pairs those predicted by more than one tool (intersection
+#' method). However, this method is not able to capture an important number of
+#' meaningful interactions. Alternatively, other strategies used to merge
+#' predictions from several algorithms (union method). Despite identifying more
+#' true relationships, the union method leads to a higher proportion of false
+#' discoveries. Therefore, other ensemble methods including mirDIP started using
+#' other statistics to rank miRNA-target predictions obtained by multiple
+#' algorithms. For additional information on mirDIP database and its ranking
+#' metric check Tokar et al. 2018 and Hauschild et al. 2023.
+#' 
+#' This function defines miRNA targets by considering both validated
+#' interactions present in miRTarBase (version 9), and predicted interactions
+#' identified by mirDIP. Please note that for species other than Homo sapiens,
+#' only miRTarBase interactions are available.
 #'
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
 #' containing miRNA and gene data
+#' @param organism The specie for which you are retrieving miRNA target genes.
+#' Available species are: `Homo sapiens` (default), `Mus musculus`,
+#' `Rattus norvegicus`, `Arabidopsis thaliana`, `Bos taurus`,
+#' `Caenorhabditis elegans`, `Danio rerio`, `Drosophila melanogaster`,
+#' `Gallus gallus`, `Sus scrofa`
 #' @param score The minimum mirDIP confidence score. It must be one of
-#' `Very High`, `High`, `Medium` (default), `Low`, which correspond to ranks
+#' `Very High`, `High` (default), `Medium`, `Low`, which correspond to ranks
 #' among top 1%, top 5% (excluding top 1%), top 1/3 (excluding top 5%) and
-#' remaining predictions, respectively.
+#' remaining predictions, respectively
+#' @param includeValidated Logical, whether to include validated interactions
+#' from miRTarBase or not. Default is TRUE in order to retrieve both predicted
+#' and validated targets. Note that for species other than Homo sapines only
+#' validated interactions are considered.
 #' 
 #' @returns
 #' A [`MirnaExperiment`][MirnaExperiment-class] object containing miRNA targets
@@ -50,6 +71,11 @@
 #' Anne-Christin Hauschild and others, MirDIP 5.2: tissue context annotation
 #' and novel microRNA curation, Nucleic Acids Research, Volume 51, Issue D1,
 #' 6 January 2023, Pages D217–D225, \url{https://doi.org/10.1093/nar/gkac1070}.
+#' 
+#' Hsi-Yuan Huang and others, miRTarBase update 2022: an informative resource
+#' for experimentally validated miRNA–target interactions, Nucleic Acids
+#' Research, Volume 50, Issue D1, 7 January 2022, Pages D222–D230,
+#' \url{https://doi.org/10.1093/nar/gkab1079}.
 #' 
 #' @note
 #' To access mirDIP database at \url{https://ophid.utoronto.ca/mirDIP/}, this
@@ -103,60 +129,75 @@ getTargets <- function(mirnaObj,
   ## define miRNAs
   allMirnas <- mirnaDE(mirnaObj)$ID
   
-  ## collapse miRNA names
-  microRNAs <- paste(allMirnas, collapse = ", ")
+  ## use only miRTarBase for organisms other than Homo sapiens
+  if (organism != "Homo sapiens") {
+    use.mirDIP <- FALSE
+    includeValidated <- TRUE
+    message(paste("For specie", organism, "only miRTarBase database is",
+                  "available..."))
+  } else {
+    use.mirDIP <- TRUE
+  }
   
-  ## set mirDIP database url
-  url <- "http://ophid.utoronto.ca/mirDIP/Http_U"
-  
-  ## set mirDIP mapping score
-  mapScore <- list("0", "1", "2", "3");
-  names(mapScore) <- c("Very High", "High", "Medium", "Low")
-  
-  ## set API required parameters
-  parameters <- list(
-    genesymbol = "",
-    microrna = microRNAs,
-    scoreClass = mapScore[score]
-  )
-  
-  ## send http POST throug 'getURL' and 'mirDIP.query' helper functions
-  message("Retrieving targets from mirDIP database (this may take a while)...")
-  res <- getURL(url, mirDIP.query, body = parameters, encode = "form")
-  
-  ## extract results from query
-  response = httr::content(res, "text", encoding = "UTF-8")
-  arr = unlist(strsplit(response, "\001", fixed = TRUE))
-  
-  ## convert results to a list object
-  listMap <- lapply(arr, function(str) {
-    arrKeyValue = unlist(strsplit(str, "\002", fixed = TRUE))
-    if (length(arrKeyValue) > 1) {
-      arrKeyValue[2]
-    }
-  })
-  
-  ## define the names of the retrieved values
-  names(listMap) <- vapply(arr, function(str) {
-    arrKeyValue = unlist(strsplit(str, "\002", fixed = TRUE))
-    if (length(arrKeyValue) > 1) {
-      arrKeyValue[1]
-    } else {
-      item <- ""
-      item
-    }
-  }, FUN.VALUE = character(1), USE.NAMES = FALSE)
-  
-  ## build a data.frame with miRNA-target pairs
-  tg <- read.table(text = listMap$results, sep = "\t", header = TRUE)
-  
-  ## maintain only targets that are present in gene expression matrix
-  tg <- tg[tg$Gene.Symbol %in% rownames(mirnaObj[["genes"]]), ]
-  
-  ## retain only interesting columns
-  tg <- tg[, c("Gene.Symbol", "MicroRNA", "Integrated.Score",
-               "Number.of.Sources", "Score.Class")]
-  tg$Type <- "Predicted"
+  ## use mirDIP for human target prediction
+  if (use.mirDIP == TRUE) {
+    
+    ## collapse miRNA names
+    microRNAs <- paste(allMirnas, collapse = ", ")
+    
+    ## set mirDIP database url
+    url <- "http://ophid.utoronto.ca/mirDIP/Http_U"
+    
+    ## set mirDIP mapping score
+    mapScore <- list("0", "1", "2", "3");
+    names(mapScore) <- c("Very High", "High", "Medium", "Low")
+    
+    ## set API required parameters
+    parameters <- list(
+      genesymbol = "",
+      microrna = microRNAs,
+      scoreClass = mapScore[score]
+    )
+    
+    ## send http POST throug 'getURL' and 'mirDIP.query' helper functions
+    message("Retrieving targets from mirDIP (this may take a while)...")
+    res <- getURL(url, mirDIP.query, body = parameters, encode = "form")
+    
+    ## extract results from query
+    response = httr::content(res, "text", encoding = "UTF-8")
+    arr = unlist(strsplit(response, "\001", fixed = TRUE))
+    
+    ## convert results to a list object
+    listMap <- lapply(arr, function(str) {
+      arrKeyValue = unlist(strsplit(str, "\002", fixed = TRUE))
+      if (length(arrKeyValue) > 1) {
+        arrKeyValue[2]
+      }
+    })
+    
+    ## define the names of the retrieved values
+    names(listMap) <- vapply(arr, function(str) {
+      arrKeyValue = unlist(strsplit(str, "\002", fixed = TRUE))
+      if (length(arrKeyValue) > 1) {
+        arrKeyValue[1]
+      } else {
+        item <- ""
+        item
+      }
+    }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+    
+    ## build a data.frame with miRNA-target pairs
+    tg <- read.table(text = listMap$results, sep = "\t", header = TRUE)
+    
+    ## maintain only targets that are present in gene expression matrix
+    tg <- tg[tg$Gene.Symbol %in% rownames(mirnaObj[["genes"]]), ]
+    
+    ## retain only interesting columns
+    tg <- tg[, c("Gene.Symbol", "MicroRNA", "Integrated.Score",
+                 "Number.of.Sources", "Score.Class")]
+    tg$Type <- "Predicted"
+    
+  }
   
   ## add validated interactions from miRTarBase
   if (includeValidated == TRUE) {
@@ -195,12 +236,22 @@ getTargets <- function(mirnaObj,
     colnames(mt) <- c("MicroRNA", "Gene.Symbol", "Experiments",
                       "Support.Type", "References")
     
-    ## merge mirDIP and miRTarBase results
-    message("Merging predicted and validated results...")
-    tg <- merge(tg, mt, by = c("MicroRNA", "Gene.Symbol"), all = TRUE)
-    tg$Type[tg$Type == "Predicted" & !is.na(tg$References)] <- "Both"
-    tg$Type[is.na(tg$Type)] <- "Validated"
-    
+    ## create resulting data.frame
+    if (use.mirDIP == TRUE) {
+      
+      ## merge mirDIP and miRTarBase results
+      message("Merging predicted and validated results...")
+      tg <- merge(tg, mt, by = c("MicroRNA", "Gene.Symbol"), all = TRUE)
+      tg$Type[tg$Type == "Predicted" & !is.na(tg$References)] <- "Both"
+      tg$Type[is.na(tg$Type)] <- "Validated"
+      
+    } else {
+      
+      ## create a data.frame with only validated interactions
+      tg <- mt
+      tg$Type <- "Validated"
+      
+    }
   }
   
   ## add miRNA-target pairs to the MirnaExperiment object

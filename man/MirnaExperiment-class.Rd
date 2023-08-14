@@ -156,12 +156,8 @@ not the case.
 \section{targets}{
 
 
-\code{targets} is a \code{data.frame} with just two columns:
-\itemize{
-\item \code{mature_mirna_id}, which contains miRNA names; and
-\item \code{target_symbol}, which indicates the target gene for the corresponding
-miRNA.
-}
+\code{targets} is a \code{data.frame} with miRNA-target interactions, as retrieved by
+\code{\link[=getTargets]{getTargets()}} function.
 }
 
 \section{integration}{

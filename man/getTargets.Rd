@@ -4,16 +4,32 @@
 \alias{getTargets}
 \title{Get microRNA targets}
 \usage{
-getTargets(mirnaObj, score = "Medium")
+getTargets(
+  mirnaObj,
+  organism = "Homo sapiens",
+  score = "High",
+  includeValidated = TRUE
+)
 }
 \arguments{
 \item{mirnaObj}{A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object
 containing miRNA and gene data}
 
+\item{organism}{The specie for which you are retrieving miRNA target genes.
+Available species are: \verb{Homo sapiens} (default), \verb{Mus musculus},
+\verb{Rattus norvegicus}, \verb{Arabidopsis thaliana}, \verb{Bos taurus},
+\verb{Caenorhabditis elegans}, \verb{Danio rerio}, \verb{Drosophila melanogaster},
+\verb{Gallus gallus}, \verb{Sus scrofa}}
+
 \item{score}{The minimum mirDIP confidence score. It must be one of
-\verb{Very High}, \code{High}, \code{Medium} (default), \code{Low}, which correspond to ranks
+\verb{Very High}, \code{High} (default), \code{Medium}, \code{Low}, which correspond to ranks
 among top 1\%, top 5\% (excluding top 1\%), top 1/3 (excluding top 5\%) and
-remaining predictions, respectively.}
+remaining predictions, respectively}
+
+\item{includeValidated}{Logical, whether to include validated interactions
+from miRTarBase or not. Default is TRUE in order to retrieve both predicted
+and validated targets. Note that for species other than Homo sapines only
+validated interactions are considered.}
 }
 \value{
 A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing miRNA targets
@@ -21,28 +37,40 @@ stored in the \code{targets} slot. Results can be accessed with the
 \code{\link[=mirnaTargets]{mirnaTargets()}} function.
 }
 \description{
-This function allows to obtain human miRNA-target interactions using the
-microRNA Data Integration Portal (mirDIP) database, which aggregates miRNA
-target predictions from 24 different resources by using an integrated score
-inferred from different prediction metrics. In this way, as demonstrated by
-Tokar et al. 2018, mirDIP reports more accurate predictions compared to
-those of individual tools.
+This function allows to obtain human miRNA-target interactions using two
+databases, namely miRTarBase v9, which contains experimentally validated
+interactions, and the microRNA Data Integration Portal (mirDIP) database,
+which aggregates miRNA target predictions from 24 different resources by
+using an integrated score inferred from different prediction metrics. In
+this way, as demonstrated by Tokar et al. 2018, mirDIP reports more accurate
+predictions compared to those of individual tools. However, for species
+other than Homo sapiens only validated interactions are returned, since
+mirDIP is only available for human miRNAs.
 }
 \details{
-The downside of miRNA target prediction algorithms is the scarce extend of
-overlap existing between the different tools. To address this issue,
-several ensemble methods have been developed, trying to aggregate the
-predictions obtained by different algorithms. Initially, several researchers
-determined as significant miRNA-target pairs those predicted by more than
-one tool (intersection method). However, this method is not able to capture
-an important number of meaningful interactions. Alternatively, other
-strategies used to merge predictions from several algorithms (union method).
-Despite identifying more true relationships, the union method leads to a
-higher proportion of false discoveries. Therefore, other ensemble methods
-including mirDIP started using other statistics to rank miRNA-target
-predictions obtained by multiple algorithms. For additional information on
-mirDIP database and its ranking metric check Tokar et al. 2018 and
-Hauschild et al. 2023.
+To define miRNA target genes, we can consider both experimentally validated
+and computationally predicted interactions. Interactions of the former type
+are generally preferred, since they are corroborated by biomolecular
+experiments. However, they are often not sufficient, thus making it necessary
+to consider the predicted interactions as well. The downside of miRNA target
+prediction algorithms is the scarce extend of overlap existing between the
+different tools. To address this issue, several ensemble methods have been
+developed, trying to aggregate the predictions obtained by different
+algorithms. Initially, several researchers determined as significant
+miRNA-target pairs those predicted by more than one tool (intersection
+method). However, this method is not able to capture an important number of
+meaningful interactions. Alternatively, other strategies used to merge
+predictions from several algorithms (union method). Despite identifying more
+true relationships, the union method leads to a higher proportion of false
+discoveries. Therefore, other ensemble methods including mirDIP started using
+other statistics to rank miRNA-target predictions obtained by multiple
+algorithms. For additional information on mirDIP database and its ranking
+metric check Tokar et al. 2018 and Hauschild et al. 2023.
+
+This function defines miRNA targets by considering both validated
+interactions present in miRTarBase (version 9), and predicted interactions
+identified by mirDIP. Please note that for species other than Homo sapiens,
+only miRTarBase interactions are available.
 }
 \note{
 To access mirDIP database at \url{https://ophid.utoronto.ca/mirDIP/}, this
@@ -64,6 +92,11 @@ target predictions, Nucleic Acids Research, Volume 46, Issue D1, 4 January
 Anne-Christin Hauschild and others, MirDIP 5.2: tissue context annotation
 and novel microRNA curation, Nucleic Acids Research, Volume 51, Issue D1,
 6 January 2023, Pages D217–D225, \url{https://doi.org/10.1093/nar/gkac1070}.
+
+Hsi-Yuan Huang and others, miRTarBase update 2022: an informative resource
+for experimentally validated miRNA–target interactions, Nucleic Acids
+Research, Volume 50, Issue D1, 7 January 2022, Pages D222–D230,
+\url{https://doi.org/10.1093/nar/gkab1079}.
 }
 \author{
 Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
