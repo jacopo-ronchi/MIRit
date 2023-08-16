@@ -42,7 +42,11 @@
 #' may opt to include weighted surrogate variable analysis (WSVA) to correct
 #' for unknown sources of variation (`useWsva = TRUE`). Moreover, for
 #' microarray data, the `arrayWeights()` function in `limma` can be used to
-#' assess differential expression with respect to array qualities. Additionally,
+#' assess differential expression with respect to array qualities. Also, the
+#' `duplicateCorrelation()` function in `limma` may be included in the pipeline
+#' in order to block the effect of correlated samples. To do this, the user
+#' must set `useDuplicateCorrelation = TRUE`, and must specify the blocking
+#' variable through the `correlationBlockVariable` parameter. Additionally,
 #' when using `limma-voom`, the user may estimate voom transformation with or
 #' without quality weights (by specifying `useVoomWithQualityWeights = TRUE`).
 #' 
@@ -111,6 +115,14 @@
 #' @param wsva.args A `list` object containing additional arguments
 #' passed to [limma::wsva()] function. It is used when `method` is set
 #' to `limma`
+#' @param useDuplicateCorrelation Logical, whether to use the
+#' [limma::duplicateCorrelation()] function or not. It is used when `method` is
+#' set to `limma`. Default is FALSE
+#' @param correlationBlockVariable It is the blocking variable to use for
+#' [limma::duplicateCorrelation()]. Default is NULL
+#' @param duplicateCorrelation.args A `list` object containing additional
+#' arguments passed to [limma::duplicateCorrelation()] function. It is used
+#' when `method` is set to `limma`
 #' 
 #' @returns
 #' A [`MirnaExperiment`][MirnaExperiment-class] object containing differential
@@ -183,7 +195,10 @@ performMirnaDE <- function(mirnaObj,
                            useArrayWeights = TRUE,
                            useWsva = FALSE,
                            wsva.args = list(),
-                           arrayWeights.args = list()) {
+                           arrayWeights.args = list(),
+                           useDuplicateCorrelation = FALSE,
+                           correlationBlockVariable = NULL,
+                           duplicateCorrelation.args = list()) {
   
   ## perform differential expression analyis for miRNAs
   mirnaObj <- performDE(assay = "miRNAs",
@@ -208,7 +223,10 @@ performMirnaDE <- function(mirnaObj,
                         useArrayWeights = useArrayWeights,
                         useWsva = useWsva,
                         wsva.args = wsva.args,
-                        arrayWeights.args = arrayWeights.args)
+                        arrayWeights.args = arrayWeights.args,
+                        useDuplicateCorrelation = useDuplicateCorrelation,
+                        correlationBlockVariable = correlationBlockVariable,
+                        duplicateCorrelation.args = duplicateCorrelation.args)
   
   ## return mirnaObj
   return(mirnaObj)
@@ -242,7 +260,10 @@ performGeneDE <- function(mirnaObj,
                           useArrayWeights = TRUE,
                           useWsva = FALSE,
                           wsva.args = list(),
-                          arrayWeights.args = list()) {
+                          arrayWeights.args = list(),
+                          useDuplicateCorrelation = FALSE,
+                          correlationBlockVariable = NULL,
+                          duplicateCorrelation.args = list()) {
   
   ## perform differential expression analyis for genes
   mirnaObj <- performDE(assay = "genes",
@@ -267,7 +288,10 @@ performGeneDE <- function(mirnaObj,
                         useArrayWeights = useArrayWeights,
                         useWsva = useWsva,
                         wsva.args = wsva.args,
-                        arrayWeights.args = arrayWeights.args)
+                        arrayWeights.args = arrayWeights.args,
+                        useDuplicateCorrelation = useDuplicateCorrelation,
+                        correlationBlockVariable = correlationBlockVariable,
+                        duplicateCorrelation.args = duplicateCorrelation.args)
   
   ## return mirnaObj
   return(mirnaObj)
@@ -301,7 +325,10 @@ performDE <- function(assay,
                       useArrayWeights = TRUE,
                       useWsva = FALSE,
                       wsva.args = list(),
-                      arrayWeights.args = list()) {
+                      arrayWeights.args = list(),
+                      useDuplicateCorrelation = FALSE,
+                      correlationBlockVariable = NULL,
+                      duplicateCorrelation.args = list()) {
   
   ## check inputs
   if (!is(mirnaObj, "MirnaExperiment")) {
@@ -383,6 +410,18 @@ performDE <- function(assay,
     stop("'useWsva' must be logical (TRUE/FALSE)!",
          call. = FALSE)
   }
+  if (!is.logical(useDuplicateCorrelation) |
+      length(useDuplicateCorrelation) != 1) {
+    stop("'useDuplicateCorrelation' must be logical (TRUE/FALSE)!",
+         call. = FALSE)
+  }
+  if (useDuplicateCorrelation == TRUE &
+      !is.character(correlationBlockVariable)) {
+    stop(paste("'correlationBlockVariable' must be the column name of a",
+               "variable present in 'colData' for which we want to control",
+               "correlation among samples!"),
+         call. = FALSE)
+  }
   if (!is.list(filterByExpr.args) |
       !is.list(calcNormFactors.args) |
       !is.list(estimateDisp.args) |
@@ -393,7 +432,8 @@ performDE <- function(assay,
       !is.list(lmFit.args) |
       !is.list(eBayes.args) |
       !is.list(wsva.args) |
-      !is.list(arrayWeights.args)) {
+      !is.list(arrayWeights.args) |
+      !is.list(duplicateCorrelation.args)) {
     stop(paste("Additional arguments passed to the limma, edgeR and DESeq2",
                "functions must be passed as lists! See ?performMirnaDE",
                "or ?performGeneDE"),
@@ -502,6 +542,9 @@ performDE <- function(assay,
                        useWsva = useWsva,
                        wsva.args = wsva.args,
                        arrayWeights.args = arrayWeights.args,
+                       useDuplicateCorrelation = useDuplicateCorrelation,
+                       correlationBlockVariable = correlationBlockVariable,
+                       duplicateCorrelation.args = duplicateCorrelation.args,
                        lmFit.args = lmFit.args,
                        eBayes.args = eBayes.args)
   }
@@ -863,6 +906,9 @@ limma.DE <- function(expr,
                      useWsva,
                      wsva.args,
                      arrayWeights.args,
+                     useDuplicateCorrelation,
+                     correlationBlockVariable,
+                     duplicateCorrelation.args,
                      lmFit.args,
                      eBayes.args) {
   
@@ -884,14 +930,24 @@ limma.DE <- function(expr,
     des <- cbind(des, wcov)
   }
   
-  ## fit a linear model for each gene with or without array quality weights
+  ## estimate array quality weights
   if (useArrayWeights == TRUE) {
     arrayw <- do.call(limma::arrayWeights, c(list(expr), arrayWeights.args))
-    fit <- do.call(limma::lmFit, c(list(expr, design = des, weights = arrayw),
-                                   lmFit.args))
-  } else {
-    fit <- do.call(limma::lmFit, c(list(expr, design = des), lmFit.args))
+    lmFit.args <- c(list(weights = arrayw), lmFit.args)
   }
+  
+  ## account for correlated samples
+  if (useDuplicateCorrelation == TRUE) {
+    sampleCorr <- do.call(limma::duplicateCorrelation,
+                          c(list(expr, design = des,
+                                 block = correlationBlockVariable),
+                            duplicateCorrelation.args))
+    lmFit.args <- c(list(block = correlationBlockVariable,
+                         correlation = sampleCorr$consensus), lmFit.args)
+  }
+  
+  ## fit a linear model for each gene
+  fit <- do.call(limma::lmFit, c(list(expr, design = des), lmFit.args))
   
   ## determine if the supplied model has intercept
   intercept <- attributes(terms(design))["intercept"] == 1

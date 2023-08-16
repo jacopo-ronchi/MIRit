@@ -28,7 +28,10 @@ performMirnaDE(
   useArrayWeights = TRUE,
   useWsva = FALSE,
   wsva.args = list(),
-  arrayWeights.args = list()
+  arrayWeights.args = list(),
+  useDuplicateCorrelation = FALSE,
+  correlationBlockVariable = NULL,
+  duplicateCorrelation.args = list()
 )
 
 performGeneDE(
@@ -53,7 +56,10 @@ performGeneDE(
   useArrayWeights = TRUE,
   useWsva = FALSE,
   wsva.args = list(),
-  arrayWeights.args = list()
+  arrayWeights.args = list(),
+  useDuplicateCorrelation = FALSE,
+  correlationBlockVariable = NULL,
+  duplicateCorrelation.args = list()
 )
 }
 \arguments{
@@ -143,6 +149,17 @@ to \code{limma}}
 \item{arrayWeights.args}{A \code{list} object containing additional arguments
 passed to \code{\link[limma:arrayWeights]{limma::arrayWeights()}} function. It is used when \code{method} is set
 to \code{limma}}
+
+\item{useDuplicateCorrelation}{Logical, whether to use the
+\code{\link[limma:dupcor]{limma::duplicateCorrelation()}} function or not. It is used when \code{method} is
+set to \code{limma}. Default is FALSE}
+
+\item{correlationBlockVariable}{It is the blocking variable to use for
+\code{\link[limma:dupcor]{limma::duplicateCorrelation()}}. Default is NULL}
+
+\item{duplicateCorrelation.args}{A \code{list} object containing additional
+arguments passed to \code{\link[limma:dupcor]{limma::duplicateCorrelation()}} function. It is used
+when \code{method} is set to \code{limma}}
 }
 \value{
 A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing differential
@@ -192,7 +209,11 @@ analysis is performed. In this regard, for microarray studies, the user
 may opt to include weighted surrogate variable analysis (WSVA) to correct
 for unknown sources of variation (\code{useWsva = TRUE}). Moreover, for
 microarray data, the \code{arrayWeights()} function in \code{limma} can be used to
-assess differential expression with respect to array qualities. Additionally,
+assess differential expression with respect to array qualities. Also, the
+\code{duplicateCorrelation()} function in \code{limma} may be included in the pipeline
+in order to block the effect of correlated samples. To do this, the user
+must set \code{useDuplicateCorrelation = TRUE}, and must specify the blocking
+variable through the \code{correlationBlockVariable} parameter. Additionally,
 when using \code{limma-voom}, the user may estimate voom transformation with or
 without quality weights (by specifying \code{useVoomWithQualityWeights = TRUE}).
 }
