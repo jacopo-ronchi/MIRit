@@ -757,6 +757,9 @@ cameraInternal <- function(mirnaObj,
   meta <- MultiAssayExperiment::colData(mirnaObj)
   meta <- meta[!is.na(meta$geneCol), ]
   
+  ## reorder metadata based on expression matrix
+  meta <- meta[order(match(meta$geneCol, colnames(mirnaObj[["genes"]]))), ]
+  
   ## determine the appropriate expression matrix and the experimental design
   if (de$method == "limma") {
     expr <- mirnaObj[["genes"]]

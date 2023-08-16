@@ -718,6 +718,9 @@ fryMirnaTargets <- function(mirnaObj,
   meta <- MultiAssayExperiment::colData(mirnaObj)
   meta <- meta[!is.na(meta$geneCol), ]
   
+  ## reorder metadata based on expression matrix
+  meta <- meta[order(match(meta$geneCol, colnames(mirnaObj[["genes"]]))), ]
+  
   ## build miRNA-target sets
   tg <- mirnaTargets(mirnaObj)
   tgList <- split(tg$Gene.Symbol, tg$MicroRNA)

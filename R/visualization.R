@@ -2647,6 +2647,9 @@ plotDimensions <- function(mirnaObj,
   samplesMetadata <- MultiAssayExperiment::colData(mirnaObj)
   meta <- samplesMetadata[!is.na(samplesMetadata[, featCol]), ]
   
+  ## reorder metadata based on expression matrix
+  meta <- meta[order(match(meta[, featCol], colnames(featExpr))), ]
+  
   ## define condition vector
   if (is.character(condition) & length(condition) == 1) {
     cond <- meta[, condition]

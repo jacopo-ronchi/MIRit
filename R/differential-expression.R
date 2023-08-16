@@ -471,7 +471,10 @@ performDE <- function(assay,
   
   ## extract sample metadata
   samplesMetadata <- MultiAssayExperiment::colData(mirnaObj)
-  meta <- samplesMetadata[which(!is.na(samplesMetadata[, featCol])), ]
+  meta <- samplesMetadata[!is.na(samplesMetadata[, featCol]), ]
+  
+  ## reorder metadata based on expression matrix
+  meta <- meta[order(match(meta[, featCol], colnames(featExpr))), ]
   
   ## determine if data derive from RNA-Seq or microarray experiments
   if (!all(featExpr%%1 == 0) & method != "limma") {
@@ -940,9 +943,9 @@ limma.DE <- function(expr,
   if (useDuplicateCorrelation == TRUE) {
     sampleCorr <- do.call(limma::duplicateCorrelation,
                           c(list(expr, design = des,
-                                 block = correlationBlockVariable),
+                                 block = meta[, correlationBlockVariable]),
                             duplicateCorrelation.args))
-    lmFit.args <- c(list(block = correlationBlockVariable,
+    lmFit.args <- c(list(block = meta[, correlationBlockVariable],
                          correlation = sampleCorr$consensus), lmFit.args)
   }
   
@@ -984,7 +987,7 @@ limma.DE <- function(expr,
   fit <- do.call(limma::eBayes, c(list(fit), eBayes.args))
   
   ## retrieve differentially expressed features
-  compName <-ifelse(intercept == TRUE, comparison[[1]], contrast)
+  compName <- ifelse(intercept == TRUE, comparison[[1]], contrast)
   deRes <- limma::topTable(fit,
                            coef = compName,
                            number = Inf,
@@ -1011,7 +1014,7 @@ limma.DE <- function(expr,
                  pAdjustment = pAdjustment,
                  logFC = logFC,
                  deObject = fit,
-                 normExpr = normExpr)
+                 normExpr = expr)
   
   ## return differential expression results
   return(deList)
