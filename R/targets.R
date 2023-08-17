@@ -215,7 +215,7 @@ getTargets <- function(mirnaObj,
     if (!length(rid)) {
       
       ## download miRTarBase and add it to the cache directory
-      message("Downloading validated interactions from miRTarBase v9.0...")
+      message("\nDownloading validated interactions from miRTarBase v9.0...")
       rid <- names(BiocFileCache::bfcadd(bfc, "miRTarBase", mtUrl))
       
     } else {

@@ -331,7 +331,10 @@ visualizeNetwork <- function(object,
     connectedNodes <- unlist(strsplit(graph::edgeNames(p),
                                       split = "~",
                                       fixed = TRUE))
-    p <- graph::removeNode(setdiff(graph::nodes(p), connectedNodes), p)
+    unConn <- setdiff(graph::nodes(p), connectedNodes)
+    if (length(unConn) > 0) {
+      p <- graph::removeNode(unConn, p)
+    }
   }
   
   ## extract weights and edges
@@ -1913,10 +1916,10 @@ plotCorrelation <- function(mirnaObj,
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
 #' containing miRNA and gene data
 #' @param features A character vector containing the genes/miRNAs to plot
-#' @param condition It must be the column name of a variable specified in the
-#' metadata (colData) of a [`MirnaExperiment`][MirnaExperiment-class] object;
-#' or, alternatively, it must be a character/factor object that specifies
-#' group memberships (eg. c("healthy, "healthy", "disease", "disease"))
+#' @param condition It must be NULL (default) to plot expression based on the
+#' group variable used for differential expression analysis. Alternatively, it
+#' must be a character/factor object that specifies group memberships
+#' (eg. c("healthy, "healthy", "disease", "disease"))
 #' @param graph The type of plot to produce. It must be one of `boxplot`
 #' (default), `barplot`, `violinplot`
 #' @param showSignificance Logical, whether to display statistical significance
@@ -1951,14 +1954,14 @@ plotCorrelation <- function(mirnaObj,
 #' obj <- loadExamples()
 #'
 #' # produce a boxplot for PAX8 and miR-34a-5p
-#' plotDE(obj, features = c("hsa-miR-34a-5p", "PAX8"), condition = "disease")
+#' plotDE(obj, features = c("hsa-miR-34a-5p", "PAX8"))
 #' 
 #' # produce a barplot for PAX8 and miR-34a-5p without significance
-#' plotDE(obj, features = c("hsa-miR-34a-5p", "PAX8"), condition = "disease",
+#' plotDE(obj, features = c("hsa-miR-34a-5p", "PAX8"),
 #' graph = "barplot", showSignificance = FALSE)
 #' 
 #' # produce a violinplot for BCL2
-#' plotDE(obj, features = "BCL2", condition = "disease", graph = "violinplot")
+#' plotDE(obj, features = "BCL2", graph = "violinplot")
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -1967,7 +1970,7 @@ plotCorrelation <- function(mirnaObj,
 #' @export
 plotDE <- function(mirnaObj,
                    features,
-                   condition,
+                   condition = NULL,
                    graph = "boxplot",
                    showSignificance = TRUE,
                    starSig = TRUE,
@@ -2001,17 +2004,22 @@ plotDE <- function(mirnaObj,
                "For additional details see ?plotDE"),
          call. = FALSE)
   }
-  if (length(condition) == 1) {
-    if (!is.character(condition) |
-        !(condition %in% colnames(MultiAssayExperiment::colData(mirnaObj)) &
-          !condition %in% c("primary", "mirnaCol", "geneCol"))) {
-      stop(paste("'condition' must be the column name of a variable specified",
-                 "in the metadata (colData) of a MirnaExperiment object; or,",
-                 "alternatively, it must be a character/factor object that",
-                 "specifies group memberships."),
+  if (!is.null(condition)) {
+    if (mirnaObj@mirnaDE$group != mirnaObj@geneDE$group) {
+      stop(paste("For unpaired data, the 'group' variable used for",
+                 "differential expression analysis must be the same for both",
+                 "miRNAs and genes in order to use",
+                 "this function with 'condition = NULL'. Instead, try to",
+                 "supply 'condition' as a factor/character vector!"),
            call. = FALSE)
     }
-  } else {
+    if (is.null(mirnaObj@mirnaDE$group) |
+        is.null(mirnaObj@geneDE$group)) {
+      stop(paste("For objects where differential expression has been manually",
+                 "added, 'condition' must be specified as a factor/character",
+                 "vector!"),
+           call. = FALSE)
+    }
     if ((!is.character(condition) & !is.factor(condition)) |
         length(condition) != nrow(MultiAssayExperiment::colData(mirnaObj))) {
       stop(paste("'condition' must be the column name of a variable specified",
@@ -2086,12 +2094,23 @@ plotDE <- function(mirnaObj,
                     geneDE(mirnaObj, onlySignificant = FALSE))
   
   ## define condition vector
-  if (is.character(condition) & length(condition) == 1) {
-    cond <- MultiAssayExperiment::colData(mirnaObj)[, condition]
+  if (is.null(condition)) {
+    depM <- mirnaDE(mirnaObj, param = TRUE)
+    depG <- geneDE(mirnaObj, param = TRUE)
+    cond <- as.character(MultiAssayExperiment::colData(mirnaObj)[, depM$group])
+    cond[is.na(cond)] <- as.character(
+      MultiAssayExperiment::colData(mirnaObj)[, depG$group])[is.na(cond)]
+    contrast <- strsplit(depG$contrast, "-")[[1]]
+    lv1 <- contrast[1]
+    lv2 <- contrast[2]
   } else if (is.factor(condition)) {
     cond <- as.character(condition)
+    lv1 <- unique(cond)[1]
+    lv2 <- unique(cond)[2]
   } else {
     cond <- condition
+    lv1 <- unique(cond)[1]
+    lv2 <- unique(cond)[2]
   }
   names(cond) <- MultiAssayExperiment::colData(mirnaObj)[, "primary"]
   
@@ -2112,20 +2131,26 @@ plotDE <- function(mirnaObj,
       featExpr <- g
     }
     
+    ## subset condition vector based on available samples
+    subCond <- cond[names(featExpr)]
+    
     ## return feature expression, name and condition
     newDf <- data.frame("Expression" = featExpr,
-                        "Gene" = rep(gene, length(cond)),
-                        "Condition" = cond)
+                        "Gene" = rep(gene, length(subCond)),
+                        "Condition" = subCond)
     exprDf <- rbind(exprDf, newDf)
     
   }
+  
+  ## keep only the condition levels used for DE analysis
+  exprDf <- exprDf[exprDf$Condition %in% c(lv1, lv2), ]
   
   ## restrict differential expression to the selected miRNAs/genes
   statTest <- statTest[statTest$ID %in% features, ]
   
   ## add conditions to differential expression results
-  statTest$group1 <- unique(cond)[1]
-  statTest$group2 <- unique(cond)[2]
+  statTest$group1 <- lv1
+  statTest$group2 <- lv2
   statTest$Gene <- features
   
   ## add y position for p-value labels

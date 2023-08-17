@@ -8,7 +8,7 @@ violinplots}
 plotDE(
   mirnaObj,
   features,
-  condition,
+  condition = NULL,
   graph = "boxplot",
   showSignificance = TRUE,
   starSig = TRUE,
@@ -25,10 +25,10 @@ containing miRNA and gene data}
 
 \item{features}{A character vector containing the genes/miRNAs to plot}
 
-\item{condition}{It must be the column name of a variable specified in the
-metadata (colData) of a \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object;
-or, alternatively, it must be a character/factor object that specifies
-group memberships (eg. c("healthy, "healthy", "disease", "disease"))}
+\item{condition}{It must be NULL (default) to plot expression based on the
+group variable used for differential expression analysis. Alternatively, it
+must be a character/factor object that specifies group memberships
+(eg. c("healthy, "healthy", "disease", "disease"))}
 
 \item{graph}{The type of plot to produce. It must be one of \code{boxplot}
 (default), \code{barplot}, \code{violinplot}}
@@ -78,14 +78,14 @@ specified through the \code{graph} parameter.
 obj <- loadExamples()
 
 # produce a boxplot for PAX8 and miR-34a-5p
-plotDE(obj, features = c("hsa-miR-34a-5p", "PAX8"), condition = "disease")
+plotDE(obj, features = c("hsa-miR-34a-5p", "PAX8"))
 
 # produce a barplot for PAX8 and miR-34a-5p without significance
-plotDE(obj, features = c("hsa-miR-34a-5p", "PAX8"), condition = "disease",
+plotDE(obj, features = c("hsa-miR-34a-5p", "PAX8"),
 graph = "barplot", showSignificance = FALSE)
 
 # produce a violinplot for BCL2
-plotDE(obj, features = "BCL2", condition = "disease", graph = "violinplot")
+plotDE(obj, features = "BCL2", graph = "violinplot")
 
 }
 \author{
