@@ -448,7 +448,8 @@ normalizeGraph <- function(net, featDE, minPc) {
   
   ## return NULL if graph has less than X % of genes with measurement
   nN <- length(graph::nodes(net)[!grepl("miR", graph::nodes(net))])
-  if (nN < (minPc / 100) * n) {
+  if (nN < (minPc / 100) * n |
+      nN == 0) {
     return(NULL)
   }
   
