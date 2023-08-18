@@ -1030,13 +1030,15 @@ limma.DE <- function(expr,
 #' This function allows to add miRNA and gene differential expression results
 #' to a [`MirnaExperiment`][MirnaExperiment-class] object. Instead of running
 #' [performMirnaDE()] and [performGeneDE()] functions, this one allows to use
-#' differential expression analyses carried out in other ways. This is
-#' particularly useful in order to use the pipeline implemented in MIRit for
-#' proteomic data and for expression data deriving from different technologies.
+#' differential expression analyses carried out in other ways. Note that it is
+#' possible to manually add differential expression results just for miRNAs or
+#' just for genes. This is particularly useful in order to use the pipeline
+#' implemented in MIRit for proteomic data and for expression data deriving
+#' from different technologies.
 #' 
 #' @details
 #' The following paragraphs briefly explain the formats needed for mirnaDE,
-#' geneDE, significantMirnas and significantGenes.
+#' geneDE, and differential expression parameters.
 #' 
 #' ## mirnaDE and geneDE
 #'
@@ -1044,6 +1046,14 @@ limma.DE <- function(expr,
 #' the results of miRNA and gene differential expression analysis respectively.
 #' These tables should contain the differential expression results for all
 #' miRNAs/genes analyzed, not just for statistically significant species.
+#' 
+#' Note that you can individually add differential expression results for
+#' miRNAs and genes. For instance, it is possible to manually add gene
+#' differential expression through this function, while performing miRNA
+#' differential expression through the [performMirnaDE()] function, and vice
+#' versa. In order to only add miRNA or gene differential expression results,
+#' you must leave `mirnaDE` or `geneDE` slots to NULL.
+#' 
 #' All `data.frame` objects can be used, as long as they have:
 #' 
 #' * One column containing miRNA/gene names (according to miRBase/hgnc
@@ -1070,9 +1080,11 @@ limma.DE <- function(expr,
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
 #' containing miRNA and gene data
 #' @param mirnaDE A `data.frame` containing the output of miRNA differential
-#' expression analysis. Check the *details* section to see the required format
+#' expression analysis. Check the *details* section to see the required format.
+#' Default is NULL not to add miRNA differential expression results
 #' @param geneDE A `data.frame` containing the output of gene differential
-#' expression analysis. Check the *details* section to see the required format
+#' expression analysis. Check the *details* section to see the required format.
+#' Default is NULL not to add gene differential expression results
 #' @param mirna.logFC The minimum log2 fold change required to consider a miRNA
 #' as differentially expressed. Default is 1, to retain only two-fold
 #' differences
@@ -1098,7 +1110,7 @@ limma.DE <- function(expr,
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
 #' 
-#' # create samples metadata
+#' # create sample metadata
 #' meta <- data.frame("primary" = colnames(geneCounts),
 #' "mirnaCol" = colnames(mirnaCounts), "geneCol" = colnames(geneCounts),
 #' "disease" = c(rep("PTC", 8), rep("NTH", 8)), 
@@ -1132,8 +1144,8 @@ limma.DE <- function(expr,
 #' 
 #' @export
 addDifferentialExpression <- function(mirnaObj,
-                                      mirnaDE,
-                                      geneDE,
+                                      mirnaDE = NULL,
+                                      geneDE = NULL,
                                       mirna.logFC = 1,
                                       mirna.pCutoff = 0.05,
                                       mirna.pAdjustment = "fdr",
@@ -1146,32 +1158,6 @@ addDifferentialExpression <- function(mirnaObj,
     stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
          call. = FALSE)
   }
-  if (!is.data.frame(mirnaDE)) {
-    stop(paste("'mirnaDE' slot must be a data.frame object with miRNA",
-               "differential expression results, such as the output of",
-               "'topTable' in limma"), call. = FALSE)
-  }
-  if (!is.data.frame(geneDE)) {
-    stop(paste("'geneDE' slot must be a data.frame object with gene",
-               "differential expression results, such as the output of",
-               "'topTable' in limma"), call. = FALSE)
-  }
-  
-  ## check and set accepted column names in DE data.frames
-  mirnaDE <- identifyColNames(mirnaDE, "miRNA")
-  geneDE <- identifyColNames(geneDE, "gene")
-  
-  ## check that miRNA and gene names are the same across data
-  if (!identical(sort(rownames(mirnaObj[["microRNA"]])), sort(mirnaDE$ID))) {
-    stop(paste("Row names of 'mirnaObj[['microRNA']]' must match the miRNA",
-               "identifiers present in 'mirnaDE'"), call. = FALSE)
-  }
-  if (!identical(sort(rownames(mirnaObj[["microRNA"]])), sort(geneDE$ID))) {
-    stop(paste("Row names of 'mirnaObj[['genes']]' must match the gene",
-               "identifiers present in 'geneDE'"), call. = FALSE)
-  }
-  
-  ## check validity of DE parameters
   if (!is.numeric(mirna.logFC) |
       length(mirna.logFC) != 1 |
       mirna.logFC < 0) {
@@ -1219,33 +1205,79 @@ addDifferentialExpression <- function(mirnaObj,
          call. = FALSE)
   }
   
-  ## define significantly differentially expressed miRNAs and genes
-  significantMirnas <- mirnaDE$ID[abs(mirnaDE$logFC) > mirna.logFC &
-                                    mirnaDE$adj.P.Val < mirna.pCutoff, ]
-  significantgenes <- geneDE$ID[abs(geneDE$logFC) > gene.logFC &
-                                  geneDE$adj.P.Val < gene.pCutoff, ]
+  ## manually add miRNA differential expression
+  if (!is.null(mirnaDE)) {
+    
+    ## check the validity of DE data.frame
+    if (!is.data.frame(mirnaDE)) {
+      stop(paste("'mirnaDE' slot must be a data.frame object with miRNA",
+                 "differential expression results, such as the output of",
+                 "'topTable' in limma"), call. = FALSE)
+    }
+    
+    ## check and set accepted column names in DE data.frame
+    mirnaDE <- identifyColNames(mirnaDE, "miRNA")
+    
+    ## check that miRNA names are the same across data
+    if (!identical(sort(rownames(mirnaObj[["microRNA"]])), sort(mirnaDE$ID))) {
+      stop(paste("Row names of 'mirnaObj[['microRNA']]' must match the miRNA",
+                 "identifiers present in 'mirnaDE'"), call. = FALSE)
+    }
+    
+    ## define significantly differentially expressed miRNAs
+    significantMirnas <- mirnaDE$ID[abs(mirnaDE$logFC) > mirna.logFC &
+                                      mirnaDE$adj.P.Val < mirna.pCutoff, ]
+    
+    ## add miRNA differential expression results to mirnaObj
+    mirnaDE(mirnaObj) <- list(data = mirnaDE,
+                              significant = significantMirnas,
+                              method = "Manually added",
+                              group = NULL,
+                              contrast = NULL,
+                              design = NULL,
+                              pCutoff = mirna.pCutoff,
+                              pAdjustment = mirna.pAdjustment,
+                              logFC = mirna.logFC,
+                              deObject = NULL)
+    
+  }
   
-  ## add miRNA and gene differential expression results to mirnaObj
-  mirnaDE(mirnaObj) <- list(data = mirnaDE,
-                            significant = significantMirnas,
-                            method = "Manually added",
-                            group = NULL,
-                            contrast = NULL,
-                            design = NULL,
-                            pCutoff = mirna.pCutoff,
-                            pAdjustment = mirna.pAdjustment,
-                            logFC = mirna.logFC,
-                            deObject = NULL)
-  geneDE(mirnaObj) <- list(data = geneDE,
-                           significant = significantGenes,
-                           method = "Manually added",
-                           group = NULL,
-                           contrast = NULL,
-                           design = NULL,
-                           pCutoff = gene.pCutoff,
-                           pAdjustment = gene.pAdjustment,
-                           logFC = gene.logFC,
-                           deObject = NULL)
+  ## manually add gene differential expression
+  if (!is.null(geneDE)) {
+    
+    ## check the validity of DE data.frame
+    if (!is.data.frame(geneDE)) {
+      stop(paste("'geneDE' slot must be a data.frame object with gene",
+                 "differential expression results, such as the output of",
+                 "'topTable' in limma"), call. = FALSE)
+    }
+    
+    ## check and set accepted column names in DE data.frame
+    geneDE <- identifyColNames(geneDE, "gene")
+    
+    ## check that gene names are the same across data
+    if (!identical(sort(rownames(mirnaObj[["genes"]])), sort(geneDE$ID))) {
+      stop(paste("Row names of 'mirnaObj[['genes']]' must match the gene",
+                 "identifiers present in 'geneDE'"), call. = FALSE)
+    }
+    
+    ## define significantly differentially expressed genes
+    significantgenes <- geneDE$ID[abs(geneDE$logFC) > gene.logFC &
+                                    geneDE$adj.P.Val < gene.pCutoff, ]
+    
+    ## add gene differential expression results to mirnaObj
+    geneDE(mirnaObj) <- list(data = geneDE,
+                             significant = significantGenes,
+                             method = "Manually added",
+                             group = NULL,
+                             contrast = NULL,
+                             design = NULL,
+                             pCutoff = gene.pCutoff,
+                             pAdjustment = gene.pAdjustment,
+                             logFC = gene.logFC,
+                             deObject = NULL)
+    
+  }
   
   ## return mirnaObj
   return(mirnaObj)

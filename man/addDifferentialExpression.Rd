@@ -6,8 +6,8 @@
 \usage{
 addDifferentialExpression(
   mirnaObj,
-  mirnaDE,
-  geneDE,
+  mirnaDE = NULL,
+  geneDE = NULL,
   mirna.logFC = 1,
   mirna.pCutoff = 0.05,
   mirna.pAdjustment = "fdr",
@@ -21,10 +21,12 @@ addDifferentialExpression(
 containing miRNA and gene data}
 
 \item{mirnaDE}{A \code{data.frame} containing the output of miRNA differential
-expression analysis. Check the \emph{details} section to see the required format}
+expression analysis. Check the \emph{details} section to see the required format.
+Default is NULL not to add miRNA differential expression results}
 
 \item{geneDE}{A \code{data.frame} containing the output of gene differential
-expression analysis. Check the \emph{details} section to see the required format}
+expression analysis. Check the \emph{details} section to see the required format.
+Default is NULL not to add gene differential expression results}
 
 \item{mirna.logFC}{The minimum log2 fold change required to consider a miRNA
 as differentially expressed. Default is 1, to retain only two-fold
@@ -56,19 +58,29 @@ expression results. To access these results, the user may run the
 This function allows to add miRNA and gene differential expression results
 to a \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object. Instead of running
 \code{\link[=performMirnaDE]{performMirnaDE()}} and \code{\link[=performGeneDE]{performGeneDE()}} functions, this one allows to use
-differential expression analyses carried out in other ways. This is
-particularly useful in order to use the pipeline implemented in MIRit for
-proteomic data and for expression data deriving from different technologies.
+differential expression analyses carried out in other ways. Note that it is
+possible to manually add differential expression results just for miRNAs or
+just for genes. This is particularly useful in order to use the pipeline
+implemented in MIRit for proteomic data and for expression data deriving
+from different technologies.
 }
 \details{
 The following paragraphs briefly explain the formats needed for mirnaDE,
-geneDE, significantMirnas and significantGenes.
+geneDE, and differential expression parameters.
 \subsection{mirnaDE and geneDE}{
 
 \code{mirnaDE} and \code{geneDE} are two objects of class \code{data.frame} containing
 the results of miRNA and gene differential expression analysis respectively.
 These tables should contain the differential expression results for all
 miRNAs/genes analyzed, not just for statistically significant species.
+
+Note that you can individually add differential expression results for
+miRNAs and genes. For instance, it is possible to manually add gene
+differential expression through this function, while performing miRNA
+differential expression through the \code{\link[=performMirnaDE]{performMirnaDE()}} function, and vice
+versa. In order to only add miRNA or gene differential expression results,
+you must leave \code{mirnaDE} or \code{geneDE} slots to NULL.
+
 All \code{data.frame} objects can be used, as long as they have:
 \itemize{
 \item One column containing miRNA/gene names (according to miRBase/hgnc
@@ -99,7 +111,7 @@ differentially expressed.
 # load example MirnaExperiment object
 obj <- loadExamples()
 
-# create samples metadata
+# create sample metadata
 meta <- data.frame("primary" = colnames(geneCounts),
 "mirnaCol" = colnames(mirnaCounts), "geneCol" = colnames(geneCounts),
 "disease" = c(rep("PTC", 8), rep("NTH", 8)), 
