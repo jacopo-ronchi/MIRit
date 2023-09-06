@@ -294,12 +294,12 @@ getURL <- function(URL, FUN, ..., N.TRIES = 3L) {
     if (!inherits(result, "error"))
       break
     N.TRIES <- N.TRIES - 1L
-    message(paste("Attempting again to reach the resource..."))
+    message("\nAttempting again to reach the resource...")
   }
   
   ## if attempts are finished, print error message
   if (N.TRIES == 0L) {
-    stop("'getURL()' failed:",
+    stop("\n'getURL()' failed:",
          "\n  URL: ", URL,
          "\n  error: ", conditionMessage(result))
   }
