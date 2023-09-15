@@ -231,10 +231,9 @@ getTargets <- function(mirnaObj,
     mt <- quiet(readxl::read_xlsx(BiocFileCache::bfcrpath(bfc, rids = rid)))
     
     ## keep interactions involving measured miRNAs
-    mt <- mt[mt$miRNA %in% allMirnas, c("miRNA", "Target Gene", "Experiments",
-                                        "Support Type", "References (PMID)")]
-    colnames(mt) <- c("MicroRNA", "Gene.Symbol", "Experiments",
-                      "Support.Type", "References")
+    mt <- mt[mt$miRNA %in% allMirnas, c("miRNA", "Target Gene")]
+    mt <- unique(mt)
+    colnames(mt) <- c("MicroRNA", "Gene.Symbol")
     
     ## create resulting data.frame
     if (use.mirDIP == TRUE) {
