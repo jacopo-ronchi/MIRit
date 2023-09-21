@@ -846,7 +846,7 @@ setReplaceMethod("enrichmentDatabase", "FunctionalEnrichment",
 #'
 #' This class stores the output of integrative multi-omic pathway analyses.
 #' In particular, the slots of this class are suitable to represent the results
-#' of topologically-aware integrative pathway analyses (TAIPA) returned from
+#' of topologically-aware integrative pathway analysis (TAIPA) returned from
 #' the [topologicalAnalysis()] function.
 #' 
 #' @details
@@ -857,11 +857,12 @@ setReplaceMethod("enrichmentDatabase", "FunctionalEnrichment",
 #' columns, namely:
 #' 
 #' * `pathway`, which indicates the name of the biological network;
-#' * `considered.nodes`, which specifies the number of nodes with expression
+#' * `coverage`, which specifies the fraction of nodes with expression
 #' measurement available;
-#' * `total.nodes`, which states the total number of nodes for this pathway;
 #' * `score`, which expresses the score of each individual pathway;
-#' * `P.Val`, the p-value of each pathway;
+#' * `normalized.score`, which indicates the pathway scores after standardizing
+#' the values for the null distribution computed through permutations;
+#' * `P.Val`, the resulting p-value of each pathway;
 #' * `adj.P.Val`, the p-value adjusted for multiple testing.
 #' 
 #' ## Organisms and databases
@@ -878,7 +879,7 @@ setReplaceMethod("enrichmentDatabase", "FunctionalEnrichment",
 #' `pCutoff` and `pAdjustment` slots refer to the cutoff used for the analysis.
 #' `pCutoff` is the threshold used for defining statistically significant
 #' pathways, whereas `pAdjustment` refers to the multiple testing correction
-#' method used. It must be one of `stats::p.adjust.methods`.
+#' method used.
 #' 
 #' Furthermore, since the statistical significance of each pathway is defined
 #' on the basis of a permutation test, the number of permutations is also
@@ -893,11 +894,12 @@ setReplaceMethod("enrichmentDatabase", "FunctionalEnrichment",
 #' and -1 for repression interactions, such as those occurring between miRNAs
 #' and mRNAs.
 #' 
-#' ## Log2 fold changes of miRNAs and genes
+#' ## Differential expression results for both miRNAs and genes
 #' 
 #' The expression variation of all miRNAs and genes measured in the study is
 #' stored in the `expression` slot. In particular, this slot consists of a
-#' named `numeric` vector of log2 fold changes.
+#' `data.frame` object with different information, including log2 fold changes,
+#' node weights and p-values.
 #' 
 #' ## Minimum percentage of measured features
 #' 
@@ -921,8 +923,8 @@ setReplaceMethod("enrichmentDatabase", "FunctionalEnrichment",
 #' @slot pathways A `list` of `graph` objects containing the biological
 #' networks retrieved from `database`, and augmented with
 #' miRNA-mRNA interactions
-#' @slot expression A named `numeric` vector containing log2 fold changes of
-#' all miRNAs and genes
+#' @slot expression A `data.frame` object containing differential expression
+#' results for both miRNAs and genes
 #' @slot minPc The minimum percentage of measured features that a pathway must
 #' have for being considered in the analysis
 #' @slot nPerm The number of permutation used for assessing the statistical
@@ -943,7 +945,7 @@ setClass("IntegrativePathwayAnalysis",
                         pCutoff = "numeric",
                         pAdjustment = "character",
                         pathways = "list",
-                        expression = "numeric",
+                        expression = "data.frame",
                         minPc = "numeric",
                         nPerm = "numeric"))
 
@@ -983,9 +985,9 @@ setValidity("IntegrativePathwayAnalysis", function(object) {
     return(paste("'pathways' slot must be a list object containing graph",
                  "objects with augmented biological networks. Please",
                  "see ?IntegrativePathwayAnalysis-class"))
-  } else if (!is.numeric(object@expression)) {
-    return(paste("'expression' slot must be a named numeric object containing",
-                 "the log2 fold changes of all miRNAs/mRNAs in study. Please",
+  } else if (!is.data.frame(object@expression)) {
+    return(paste("'expression' slot must be a data.frame object containing",
+                 "differential expression results of miRNAs and genes. Please",
                  "see ?IntegrativePathwayAnalysis-class"))
   } else if (!is.numeric(object@minPc)) {
     return(paste("'minPc' slot must be a numeric object that specifies",

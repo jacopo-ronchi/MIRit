@@ -17,7 +17,7 @@
 \description{
 This class stores the output of integrative multi-omic pathway analyses.
 In particular, the slots of this class are suitable to represent the results
-of topologically-aware integrative pathway analyses (TAIPA) returned from
+of topologically-aware integrative pathway analysis (TAIPA) returned from
 the \code{\link[=topologicalAnalysis]{topologicalAnalysis()}} function.
 }
 \details{
@@ -27,11 +27,12 @@ The \code{data} slot of this class consists in a \code{data.frame} object with s
 columns, namely:
 \itemize{
 \item \code{pathway}, which indicates the name of the biological network;
-\item \code{considered.nodes}, which specifies the number of nodes with expression
+\item \code{coverage}, which specifies the fraction of nodes with expression
 measurement available;
-\item \code{total.nodes}, which states the total number of nodes for this pathway;
 \item \code{score}, which expresses the score of each individual pathway;
-\item \code{P.Val}, the p-value of each pathway;
+\item \code{normalized.score}, which indicates the pathway scores after standardizing
+the values for the null distribution computed through permutations;
+\item \code{P.Val}, the resulting p-value of each pathway;
 \item \code{adj.P.Val}, the p-value adjusted for multiple testing.
 }
 }
@@ -51,7 +52,7 @@ species for each database.
 \code{pCutoff} and \code{pAdjustment} slots refer to the cutoff used for the analysis.
 \code{pCutoff} is the threshold used for defining statistically significant
 pathways, whereas \code{pAdjustment} refers to the multiple testing correction
-method used. It must be one of \code{stats::p.adjust.methods}.
+method used.
 
 Furthermore, since the statistical significance of each pathway is defined
 on the basis of a permutation test, the number of permutations is also
@@ -68,11 +69,12 @@ and -1 for repression interactions, such as those occurring between miRNAs
 and mRNAs.
 }
 
-\subsection{Log2 fold changes of miRNAs and genes}{
+\subsection{Differential expression results for both miRNAs and genes}{
 
 The expression variation of all miRNAs and genes measured in the study is
 stored in the \code{expression} slot. In particular, this slot consists of a
-named \code{numeric} vector of log2 fold changes.
+\code{data.frame} object with different information, including log2 fold changes,
+node weights and p-values.
 }
 
 \subsection{Minimum percentage of measured features}{
@@ -120,8 +122,8 @@ p-values for multiple testing (e.g. \code{fdr})}
 networks retrieved from \code{database}, and augmented with
 miRNA-mRNA interactions}
 
-\item{\code{expression}}{A named \code{numeric} vector containing log2 fold changes of
-all miRNAs and genes}
+\item{\code{expression}}{A \code{data.frame} object containing differential expression
+results for both miRNAs and genes}
 
 \item{\code{minPc}}{The minimum percentage of measured features that a pathway must
 have for being considered in the analysis}

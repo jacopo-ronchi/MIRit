@@ -11,16 +11,16 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // computePathwayScore
-double computePathwayScore(NumericVector lfc, List edges, List weights, int nN);
-RcppExport SEXP _MIRit_computePathwayScore(SEXP lfcSEXP, SEXP edgesSEXP, SEXP weightsSEXP, SEXP nNSEXP) {
+double computePathwayScore(DataFrame expr, NumericVector bfs, List edges, List weights);
+RcppExport SEXP _MIRit_computePathwayScore(SEXP exprSEXP, SEXP bfsSEXP, SEXP edgesSEXP, SEXP weightsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type lfc(lfcSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type expr(exprSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type bfs(bfsSEXP);
     Rcpp::traits::input_parameter< List >::type edges(edgesSEXP);
     Rcpp::traits::input_parameter< List >::type weights(weightsSEXP);
-    Rcpp::traits::input_parameter< int >::type nN(nNSEXP);
-    rcpp_result_gen = Rcpp::wrap(computePathwayScore(lfc, edges, weights, nN));
+    rcpp_result_gen = Rcpp::wrap(computePathwayScore(expr, bfs, edges, weights));
     return rcpp_result_gen;
 END_RCPP
 }

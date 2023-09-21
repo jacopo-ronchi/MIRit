@@ -8,10 +8,10 @@
 #' `WikiPathways` and `Reactome`. Then, a score that estimates the degree of
 #' impairment is calculated for each pathway, and statistical significance is
 #' calculated through a permutation test. The main advantages of this method
-#' is that it doesn't require matched samples, and that it allows to perform
-#' an integrative miRNA-mRNA pathway analysis that take into account the
-#' topology of biological pathways and miRNA-mRNA interactions. See the
-#' *details* section for additional information.
+#' are that it doesn't require matched samples, and that it allows to perform
+#' an integrative miRNA-mRNA pathway analysis that takes into account the
+#' topology of biological networks. See the *details* section for
+#' additional information.
 #'
 #' @details
 #' 
@@ -21,30 +21,62 @@
 #' by miRNA and mRNA dysregulations. In this analysis, biological pathways are
 #' retrieved from a pathway database such as KEGG, and the interplay between
 #' miRNAs and genes is then added to the networks. Each network is defined as
-#' a graph \eqn{G(N,E)}, where \eqn{N} represents nodes, and \eqn{E} represents
-#' the relationships between nodes. For each pathway, a score is a computed as:
+#' a graph \eqn{G(V, E)}, where \eqn{V} represents nodes, and \eqn{E}
+#' represents the relationships between nodes.
 #' 
-#' \deqn{s = \frac{1}{N}\cdot \sum_{i = 0}^{N}\sum_{j = 0}^{U}\beta_{i\to j}
-#' \left( \Delta E_i\cdot \Delta E_j\right)\,,}
+#' Then, nodes that are not significantly differentially expressed are assigned
+#' a weight \eqn{w_i = 1}, whereas differentially expressed nodes are assigned
+#' a weight \eqn{w_i = \left| \Delta E_i \right|}, where \eqn{\Delta E_i} is
+#' the linear fold change of the node. Moreover, to consider the biological
+#' interaction between two nodes, namely \eqn{i} and \eqn{j}, we define an
+#' interaction parameter \eqn{\beta_{i \rightarrow j} = 1} for activation
+#' interactions and \eqn{\beta_{i \rightarrow j} = -1} for repression
+#' interactions. Subsequently, the concordance coefficient
+#' \eqn{\gamma_{i \rightarrow j}} is defined as:
 #' 
-#' where \eqn{N} is the total number of nodes in the pathway, \eqn{U} is the
-#' total number of interactors for each node, \eqn{\Delta E} is the log2 fold
-#' change of each node, and \eqn{\beta} is an interaction factor that
-#' represents the direction of a specific interaction (+1 for activation,
-#' -1 for inhibition).
+#' \deqn{\gamma_{i \rightarrow j} = \begin{cases} \beta_{i \rightarrow j}
+#' &\text{if } sign(\Delta E_i) = sign(\Delta E_j) \\ - \beta_{i \rightarrow j}
+#' &\text{if } sign(\Delta E_i) \not= sign(\Delta E_j) \end{cases}\,.}
 #' 
-#' The higher is the score, and the more affected is a pathway. Then, to
-#' compute the statistical significance of each pathway score, a permutation
-#' procedure is applied. Indeed, for each pathway log2 fold changes are
-#' permuted several times, and for each permutation pathway score is calculated.
-#' In the end, the p-value is defined as the fraction of permutations that
-#' reported a higher pathway score than the observed one.
+#' Later in the process, a breadth-first search (BFS) algorithm is applied to
+#' topologically sort pathway nodes so that each individual node occurs after
+#' all its upstream nodes. Nodes within cycles are considered leaf nodes. At
+#' this point, a node score \eqn{\phi} is calculated for each pathway node
+#' \eqn{i} as:
+#' 
+#' \deqn{\phi_i = w_i + \sum_{j=1}^{U} \gamma_{i \rightarrow j} \cdot k_j\,.}
+#' 
+#' where \eqn{U} represents the number of upstream nodes,
+#' \eqn{\gamma_{i \rightarrow j}} denotes the concordance coefficient, and
+#' \eqn{k_j} is a propagation factor defined as:
+#' 
+#' \deqn{k_j = \begin{cases} w_j &\text{if } \phi_j = 0 \\ \phi_j &\text{if }
+#' \phi_j \not = 0 \end{cases}\,.}
+#' 
+#' Finally, the pathway score \eqn{\Psi} is calculated as:
+#' 
+#' \deqn{\Psi = \frac{1 - M}{N} \cdot \sum_{i=1}^{N} \phi_i\,,}
+#' 
+#' where \eqn{M} represents the proportion of miRNAs in the pathway, and
+#' \eqn{N} represents the total number of nodes in the network.
+#' 
+#' Then, to compute the statistical significance of each pathway score, a
+#' permutation procedure is applied. Later, both observed pathway scores and
+#' permuted scores are standardized by subtracting the mean score of the
+#' permuted sets \eqn{\mu_{\Psi_P}} and then dividing by the standard deviation
+#' of the permuted scores \eqn{\sigma_{\Psi_P}}.
+#' 
+#' Finally, the p-value is defined as the fraction of permutations that
+#' reported a higher normalized pathway score than the observed one. In the
+#' end, p-values are corrected for multiple testing either through the max-T
+#' procedure (default option) which is particularly suited for permutation
+#' tests, or through the standard multiple testing approaches.
 #' 
 #' ## Implementation details
 #' 
 #' To create augmented pathways, this function uses the `graphite` R package
 #' to download biological networks from the above mentioned database. Then,
-#' each pathway is converted to a graph object, and significant miRNA-mRNA
+#' each pathway is converted to a `graph` object, and significant miRNA-mRNA
 #' interactions are added to the network. Further, edge weights are added
 #' according to interaction type.
 #' 
@@ -81,8 +113,8 @@
 #' @param pCutoff The adjusted p-value cutoff to use for statistical
 #' significance. The default value is `0.05`
 #' @param pAdjustment The p-value correction method for multiple testing. It
-#' must be one of: `fdr` (default), `BH`, `none`, `holm`, `hochberg`, `hommel`,
-#' `bonferroni`, `BY`
+#' must be one of: `max-T` (default), `fdr`, `BH`, `none`, `holm`, `hochberg`,
+#' `hommel`, `bonferroni`, `BY`
 #' @param nPerm The number of permutation used for assessing the statistical
 #' significance of each pathway. Default is 10000. See the *details* section
 #' for additional information
@@ -122,6 +154,10 @@
 #' package to convert pathway topology to gene network.
 #' BMC Bioinformatics 13, 20 (2012),
 #' \url{https://doi.org/10.1186/1471-2105-13-20}.
+#' 
+#' Peter H. Westfall and S. Stanley Young. Resampling-Based Multiple Testing:
+#' Examples and Methods for p-Value Adjustment. John Wiley & Sons.
+#' ISBN 978-0-471-55761-6.
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -132,7 +168,7 @@ topologicalAnalysis <- function(mirnaObj,
                                 database = "KEGG",
                                 organism = "Homo sapiens",
                                 pCutoff = 0.05,
-                                pAdjustment = "fdr",
+                                pAdjustment = "max-T",
                                 nPerm = 10000,
                                 minPc = 10,
                                 BPPARAM = bpparam()) {
@@ -164,10 +200,10 @@ topologicalAnalysis <- function(mirnaObj,
   }
   if (!is.character(pAdjustment) |
       length(pAdjustment) != 1 |
-      !pAdjustment %in% c("none", "fdr", "bonferroni", "BY", "hochberg",
-                          "holm", "hommel", "BH")) {
-    stop(paste("'pAdjustment' must be  one of: 'none', 'fdr' (default),",
-               "'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg',",
+      !pAdjustment %in% c("none", "max-T", "fdr", "bonferroni", "BY",
+                          "hochberg", "holm", "hommel", "BH")) {
+    stop(paste("'pAdjustment' must be  one of: 'none', 'max-T' (default),",
+               "'fdr', 'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg',",
                "'holm', 'hommel'"),
          call. = FALSE)
   }
@@ -200,12 +236,21 @@ topologicalAnalysis <- function(mirnaObj,
   
   ## get differential expression results
   deg <- geneDE(mirnaObj, onlySignificant = FALSE)
-  dem <- mirnaDE(mirnaObj, onlySignificant = FALSE)
-  featDE <- rbind(dem, deg)
+  dem <- mirnaDE(mirnaObj, onlySignificant = TRUE)
   
-  ## create a named vector with logFCs for each feature
-  lfc <- featDE$logFC
-  names(lfc) <- featDE$ID
+  ## define genes and miRNAs with measurments
+  features <- c(dem$ID, deg$ID)
+  
+  ## consider both logFCs and p-values in the definition of weights
+  deg$weights <- 1
+  sigDeg <- which(deg$ID %in% significantGenes(mirnaObj))
+  dem$weights <- 2^abs(dem$logFC)
+  deg$weights[sigDeg] <- 2^abs(deg$logFC[sigDeg])
+  
+  ## merge miRNA and gene DE results
+  dem$type <- "miRNA"
+  deg$type <- "gene"
+  featDE <- rbind(dem, deg)
   
   ## extract integrated miRNA targets
   intTargets <- c(selectTargets(mirnaObj, "upregulated"),
@@ -213,115 +258,91 @@ topologicalAnalysis <- function(mirnaObj,
   targ <- mirnaTargets(mirnaObj)
   targ <- targ[targ$Gene.Symbol %in% intTargets, ]
   
-  ## download pathways from specified database
-  message(paste("Downloading pathways from", database, "database..."))
-  pathDb <- graphite::pathways(species = org, database = tolower(database))
+  ## prepare miRNA augmented pathways
+  graphList <- preparePathways(database = database,
+                               org = org,
+                               targ = targ,
+                               features = features,
+                               minPc = minPc,
+                               BPPARAM = BPPARAM)
   
-  ## convert pathway identifiers to gene symbols
-  message("Converting identifiers to gene symbols...")
-  pathDb <- bplapply(as.list(pathDb), function(x) {
-    suppressMessages(graphite::convertIdentifiers(x, to = "SYMBOL"))
-  }, BPPARAM = BPPARAM)
+  ## extract pathway coverage
+  pCov <- vapply(graphList, function(pa) {
+    pa@graphData$pathway.coverage
+  }, FUN.VALUE = numeric(1))
+  names(pCov) <- names(graphList)
   
-  ## create a list of augmented pathways without inversion
-  message("Adding miRNA-gene interactions to biological pathways...")
-  realPaths <- bplapply(pathDb,
-                        augmentPathway,
-                        targets = targ,
-                        inverted = FALSE,
-                        BPPARAM = BPPARAM)
-  
-  ## create a list of inverted networks for pathway score calculation
-  netList <- bplapply(pathDb,
-                      augmentPathway,
-                      targets = targ,
-                      inverted = TRUE,
-                      BPPARAM = BPPARAM)
-  
-  ## determine the number of nodes for each augmented pathway
-  pNodes <- vapply(netList, function(g) {
-    if (!is.null(g)) {
-      graph::numNodes(g)
-    } else {
-      NA
-    }
-  }, FUN.VALUE = integer(1))
-  
-  ## normalize networks before computing pathway score
-  graphList <- bplapply(netList,
-                        normalizeGraph,
-                        featDE = featDE,
-                        minPc = minPc,
-                        BPPARAM = BPPARAM)
-  
-  ## remove NULL pathways
-  nullPath <- which(lengths(graphList) == 0)
-  if (length(nullPath) > 0) {
-    warning(paste(length(nullPath), "pathways have been ignored because they",
-                  "contain too few nodes with gene expression measurement."),
-            call. = FALSE)
-    graphList <- graphList[-nullPath]
-    pNodes <- pNodes[-nullPath]
-  }
-  
-  ## obtain the number of considered nodes for each pathway
-  cNodes <- unlist(lapply(graphList, graph::numNodes))
-  
-  ## randomly create vector of logFCs with permuted names
-  randomVec <- lapply(seq(nPerm), function(i) {
-    randomNames <- sample(names(lfc))
-    rVec <- setNames(lfc, randomNames)
-    rVec
-  })
+  ## perform topological sorting for each graph
+  message("Performing topological sorting of pathway nodes...")
+  topoSort <- bplapply(graphList, topologicalSorting, BPPARAM = BPPARAM)
   
   ## calculate the observed score for each pathway
   message("Calculating pathway scores...")
-  pS <- bplapply(names(graphList),
-                 score.helper,
-                 lfc = lfc,
-                 gList = graphList,
-                 pN = pNodes,
+  pS <- bpmapply(score.helper,
+                 graphList,
+                 topoSort,
+                 MoreArgs = list(featDE = featDE),
                  BPPARAM = BPPARAM)
-  names(pS) <- names(graphList)
-  pS <- unlist(pS)
   
-  ## combine pathway networks and permuted vectors
-  paths <- rep(names(graphList), times = nPerm)
+  ## generate n random permutations
+  message("Generating random permutations...")
+  randomVec <- generatePermutations(deg, dem, nPerm)
+  
+  ## prepare permutation vectors
+  paths <- rep(graphList, times = nPerm)
   permVec <- rep(randomVec, each = length(graphList))
+  topoPerm <- rep(topoSort, times = nPerm)
   
-  ## use parallel mapply to compute score for each pathway and for each set
+  ## use parallel mapply to compute permutation scores for each pathway
   message(paste("Calculating p-values with", nPerm, "permutations..."))
   permScores <- bpmapply(score.helper,
                          paths,
+                         topoPerm,
                          permVec,
-                         MoreArgs = list(gList = graphList,
-                                         pN = pNodes),
                          BPPARAM = BPPARAM,
                          BPOPTIONS = bpoptions(tasks = 500,
                                                progressbar = TRUE))
   
-  ## split the permuted scores according to the pathways
-  permScores <- split(permScores, paths)
+  ## split permuted scores according to pathways
+  permList <- split(permScores, names(paths))
   
   ## order permuted scores based on observed scores
-  permScores <- permScores[names(pS)]
+  permList <- permList[names(pS)]
+  
+  ## define mean and standard deviation of permuted scores for each pathway
+  meanPerm <- lapply(permList, mean)
+  stdPerm <- lapply(permList, sd)
+  
+  ## normalize observed pathway scores
+  normPS <- (as.numeric(pS) - as.numeric(meanPerm)) / as.numeric(stdPerm)
+  names(normPS) <- names(pS)
+  
+  ## normalize permuted scores as well
+  normPerm <- mapply(function(permutedVal, m, sdP) {
+    (permutedVal - m) / sdP
+  }, permList, meanPerm, stdPerm, SIMPLIFY = FALSE)
   
   ## define p-values as the fraction of more extreme random values
-  pval <- lapply(names(permScores), function(pa) {
-    sum(permScores[[pa]] >= pS[[pa]]) / nPerm
+  pval <- lapply(names(permList), function(pa) {
+    sum(normPerm[[pa]] >= normPS[pa]) / nPerm
   })
-  names(pval) <- names(permScores)
+  names(pval) <- names(permList)
   pval <- unlist(pval)
   
   ## create result data.frame
   resDf <- data.frame(pathway = names(pS),
-                      considered.nodes = cNodes,
-                      total.nodes = pNodes,
+                      coverage = pCov,
                       score = pS,
+                      normalized.score = normPS,
                       P.Val = pval)
   
   ## correct p-values for multiple testing
-  resDf$adj.P.Val <- stats::p.adjust(resDf$P.Val, method = pAdjustment)
+  if (pAdjustment == "max-T") {
+    message("Correcting p-values through the max-T procedure...")
+    resDf$adj.P.Val <- maxT.correction(normPerm, normPS, nPerm)
+  } else {
+    resDf$adj.P.Val <- stats::p.adjust(resDf$P.Val, method = pAdjustment)
+  }
   
   ## order results by adjusted p-values
   resDf <- resDf[order(resDf$adj.P.Val), ]
@@ -333,7 +354,7 @@ topologicalAnalysis <- function(mirnaObj,
   message(paste("The topologically-aware integrative pathway analysis",
                 "reported", nrow(resDf), "significantly altered pathways!"))
   
-  ## create a IntegrativePathwayAnalysis object
+  ## create an IntegrativePathwayAnalysis object
   res <- new("IntegrativePathwayAnalysis",
              data = resDf,
              method = paste("Topologically-Aware Integrative",
@@ -342,8 +363,8 @@ topologicalAnalysis <- function(mirnaObj,
              database = database,
              pCutoff = pCutoff,
              pAdjustment = pAdjustment,
-             pathways = realPaths,
-             expression = lfc,
+             pathways = graphList,
+             expression = featDE,
              minPc = minPc,
              nPerm = nPerm)
   
@@ -356,7 +377,76 @@ topologicalAnalysis <- function(mirnaObj,
 
 
 
-## helper function for creating and normalizing miRNA augmented pathways
+## helper function for creating miRNA augmented pathways
+preparePathways <- function(database, org, targ, features, minPc, BPPARAM) {
+  
+  ## download pathways from the specified database
+  message(paste("Downloading pathways from", database, "database..."))
+  pathDb <- graphite::pathways(species = org, database = tolower(database))
+  
+  ## convert pathway identifiers to gene symbols
+  message("Converting identifiers to gene symbols...")
+  pathDb <- bplapply(as.list(pathDb), function(x) {
+    suppressMessages(graphite::convertIdentifiers(x, to = "SYMBOL"))
+  }, BPPARAM = BPPARAM)
+  
+  ## create a list of augmented pathways
+  message("Adding miRNA-gene interactions to biological pathways...")
+  realPaths <- bplapply(pathDb,
+                        augmentPathway,
+                        targets = targ,
+                        inverted = FALSE,
+                        BPPARAM = BPPARAM)
+  
+  ## determine the number of nodes for each augmented pathway
+  pNodes <- vapply(realPaths, function(g) {
+    if (!is.null(g)) {
+      graph::numNodes(g)
+    } else {
+      NA
+    }
+  }, FUN.VALUE = integer(1))
+  
+  ## normalize networks before computing pathway score
+  graphList <- bplapply(realPaths,
+                        normalizeGraph,
+                        features = features,
+                        minPc = minPc,
+                        BPPARAM = BPPARAM)
+  
+  ## remove NULL pathways
+  nullPath <- which(lengths(graphList) == 0)
+  if (length(nullPath) > 0) {
+    warning(paste(length(nullPath), "pathways have been ignored because they",
+                  "contain too few nodes with gene expression measurement."),
+            call. = FALSE)
+    graphList <- graphList[-nullPath]
+  }
+  
+  ## obtain the number of considered nodes for each pathway
+  cNodes <- vapply(graphList, graph::numNodes, FUN.VALUE = numeric(1))
+  
+  ## define pathway coverage as the fraction of considered nodes
+  pathCov <- cNodes / pNodes[names(cNodes)]
+  
+  ## set pathway coverage as a graph attribute of each pathway
+  graphList <- lapply(names(graphList), function(pa) {
+    net <- graphList[[pa]]
+    net@graphData$pathway.coverage <- pathCov[pa]
+    net
+  })
+  names(graphList) <- names(pathCov)
+  
+  ## return pathways
+  return(graphList)
+  
+}
+
+
+
+
+
+## helper function for adding miRNA-target pairs to network objects
 augmentPathway <- function(pathway,
                            targets,
                            inverted = FALSE) {
@@ -426,7 +516,7 @@ augmentPathway <- function(pathway,
 
 
 ## helper function for removing unmeasured and unconnected nodes
-normalizeGraph <- function(net, featDE, minPc) {
+normalizeGraph <- function(net, features, minPc) {
   
   ## check if graph is NULL
   if (is.null(net)) {
@@ -437,7 +527,7 @@ normalizeGraph <- function(net, featDE, minPc) {
   n <- length(graph::nodes(net)[!grepl("miR", graph::nodes(net))])
   
   ## remove nodes and edges without measurement
-  net <- graph::subGraph(intersect(featDE$ID,
+  net <- graph::subGraph(intersect(features,
                                    unique(graph::nodes(net))),
                          net)
   
@@ -462,21 +552,142 @@ normalizeGraph <- function(net, featDE, minPc) {
 
 
 
-## helper function for calculating pathway score for each graph in a list
-score.helper <- function(pathName, lfc, gList, pN) {
+## helper function to topologically sort nodes through a modified BFS algorithm
+topologicalSorting <- function(pathway) {
   
-  ## set graph object and number of nodes
-  path <- gList[[pathName]]
-  nN <- pN[[pathName]]
+  ## extract node names
+  nodes <- graph::nodes(pathway)
   
-  ## define pathway score for each graph
-  sc <- computePathwayScore(lfc,
-                            edges = graph::edges(path),
-                            weights = graph::edgeWeights(path),
-                            nN = nN)
+  ## initialize levels to -1
+  nodeLevels <- rep(-1, length(nodes))
+  names(nodeLevels) <- nodes
   
-  ## return the resulting score
-  return(sc)
+  ## identify nodes with no ingoing edges (level 0)
+  ingEdges <- graph::degree(pathway)$inDegree
+  noOut <- names(ingEdges)[ingEdges == 0]
+  nodeLevels[noOut] <- 0
+  
+  ## calculate levels iteratively
+  changed <- TRUE
+  currentLevel <- 1
+  while (changed) {
+    changed <- FALSE
+    for (node in nodes) {
+      if (nodeLevels[node] == -1) {
+        neighborNodes <- unlist(graph::inEdges(node, pathway))
+        if (all(nodeLevels[neighborNodes] < currentLevel &
+                all(nodeLevels[neighborNodes] != -1))) {
+          nodeLevels[node] <- currentLevel
+          changed <- TRUE
+        }
+      }
+    }
+    currentLevel <- currentLevel + 1
+  }
+  
+  ## set nodes belonging to cycles to level 0
+  nodeLevels[nodeLevels == -1] <- 0
+  
+  ## order node levels
+  nodeLevels <- nodeLevels[order(nodeLevels)]
+  
+  ## return the topological order
+  return(nodeLevels)
+  
+}
+
+
+
+
+
+## helper function for calculating pathway score through C++ TAIPA
+score.helper <- function(pathway, topoSort, featDE) {
+  
+  ## create a list with upstream genes for each node
+  interactions <- graph::inEdges(graph::nodes(pathway), pathway)
+  
+  ## extract edge weights
+  eW <- lapply(names(interactions), function(node) {
+    nodeInt <- interactions[[node]]
+    if (length(nodeInt) > 0) {
+      wInt <- graph::edgeData(pathway, from = nodeInt,
+                              to = node, attr = "weight")
+      wInt <- unlist(wInt)
+      names(wInt) <- nodeInt
+      wInt
+    } else {
+      character(0)
+    }
+  })
+  names(eW) <- names(interactions)
+  
+  ## compute pathway score
+  score <- computePathwayScore(expr = featDE,
+                               bfs = topoSort,
+                               edges = interactions,
+                               weights = eW)
+  
+  ## return score
+  return(score)
+  
+}
+
+
+
+
+
+## helper function for randomly permuting miRNA and gene expression
+generatePermutations <- function(deg, dem, nPerm) {
+  
+  ## generate n random permutations for miRNAs and genes
+  randomDfList <- lapply(seq(nPerm), function(i) {
+    
+    ## permute miRNAs
+    mirPerm <- dem
+    mirPerm$ID <- sample(mirPerm$ID)
+    rownames(mirPerm) <- mirPerm$ID
+    
+    ## permute genes
+    genePerm <- deg
+    genePerm$ID <- sample(genePerm$ID)
+    rownames(genePerm) <- genePerm$ID
+    
+    ## combine miRNAs and genes in a single data.frame
+    permDf <- rbind(mirPerm, genePerm)
+    permDf
+    
+  })
+  
+  ## return the computed permutations
+  return(randomDfList)
+  
+}
+
+
+
+
+
+## helper function for performing max-T correction on permutation values
+maxT.correction <- function(normPerm, normPS, nPerm) {
+  
+  ## split permuted scores into a list with each permutation step
+  npList <- lapply(seq(nPerm), function(perm) {
+    paPerm <- lapply(normPerm, function(pa) {
+      pa[perm]
+    })
+    unlist(paPerm)
+  })
+  
+  ## record the maximum score for each permutation step
+  maxT <- vapply(npList, max, FUN.VALUE = numeric(1))
+  
+  ## calculate p-values corrected with max-T procedure
+  maxT.pval <- vapply(names(normPS), function(pa) {
+    sum(maxT >= normPS[pa]) / nPerm
+  }, FUN.VALUE = numeric(1))
+  
+  ## return max-T corrected p-values
+  return(maxT.pval)
   
 }
 

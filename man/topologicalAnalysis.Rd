@@ -9,7 +9,7 @@ topologicalAnalysis(
   database = "KEGG",
   organism = "Homo sapiens",
   pCutoff = 0.05,
-  pAdjustment = "fdr",
+  pAdjustment = "max-T",
   nPerm = 10000,
   minPc = 10,
   BPPARAM = bpparam()
@@ -31,8 +31,8 @@ Default specie is \verb{Homo sapiens}}
 significance. The default value is \code{0.05}}
 
 \item{pAdjustment}{The p-value correction method for multiple testing. It
-must be one of: \code{fdr} (default), \code{BH}, \code{none}, \code{holm}, \code{hochberg}, \code{hommel},
-\code{bonferroni}, \code{BY}}
+must be one of: \code{max-T} (default), \code{fdr}, \code{BH}, \code{none}, \code{holm}, \code{hochberg},
+\code{hommel}, \code{bonferroni}, \code{BY}}
 
 \item{nPerm}{The number of permutation used for assessing the statistical
 significance of each pathway. Default is 10000. See the \emph{details} section
@@ -60,10 +60,10 @@ biological pathways retrieved from a pathway database such as \code{KEGG},
 \code{WikiPathways} and \code{Reactome}. Then, a score that estimates the degree of
 impairment is calculated for each pathway, and statistical significance is
 calculated through a permutation test. The main advantages of this method
-is that it doesn't require matched samples, and that it allows to perform
-an integrative miRNA-mRNA pathway analysis that take into account the
-topology of biological pathways and miRNA-mRNA interactions. See the
-\emph{details} section for additional information.
+are that it doesn't require matched samples, and that it allows to perform
+an integrative miRNA-mRNA pathway analysis that takes into account the
+topology of biological networks. See the \emph{details} section for
+additional information.
 }
 \details{
 \subsection{Topologically-Aware Integrative Pathway Analysis (TAIPA)}{
@@ -72,31 +72,63 @@ This analysis aims to identify the biological pathways that result affected
 by miRNA and mRNA dysregulations. In this analysis, biological pathways are
 retrieved from a pathway database such as KEGG, and the interplay between
 miRNAs and genes is then added to the networks. Each network is defined as
-a graph \eqn{G(N,E)}, where \eqn{N} represents nodes, and \eqn{E} represents
-the relationships between nodes. For each pathway, a score is a computed as:
+a graph \eqn{G(V, E)}, where \eqn{V} represents nodes, and \eqn{E}
+represents the relationships between nodes.
 
-\deqn{s = \frac{1}{N}\cdot \sum_{i = 0}^{N}\sum_{j = 0}^{U}\beta_{i\to j}
-\left( \Delta E_i\cdot \Delta E_j\right)\,,}
+Then, nodes that are not significantly differentially expressed are assigned
+a weight \eqn{w_i = 1}, whereas differentially expressed nodes are assigned
+a weight \eqn{w_i = \left| \Delta E_i \right|}, where \eqn{\Delta E_i} is
+the linear fold change of the node. Moreover, to consider the biological
+interaction between two nodes, namely \eqn{i} and \eqn{j}, we define an
+interaction parameter \eqn{\beta_{i \rightarrow j} = 1} for activation
+interactions and \eqn{\beta_{i \rightarrow j} = -1} for repression
+interactions. Subsequently, the concordance coefficient
+\eqn{\gamma_{i \rightarrow j}} is defined as:
 
-where \eqn{N} is the total number of nodes in the pathway, \eqn{U} is the
-total number of interactors for each node, \eqn{\Delta E} is the log2 fold
-change of each node, and \eqn{\beta} is an interaction factor that
-represents the direction of a specific interaction (+1 for activation,
--1 for inhibition).
+\deqn{\gamma_{i \rightarrow j} = \begin{cases} \beta_{i \rightarrow j}
+&\text{if } sign(\Delta E_i) = sign(\Delta E_j) \\ - \beta_{i \rightarrow j}
+&\text{if } sign(\Delta E_i) \not= sign(\Delta E_j) \end{cases}\,.}
 
-The higher is the score, and the more affected is a pathway. Then, to
-compute the statistical significance of each pathway score, a permutation
-procedure is applied. Indeed, for each pathway log2 fold changes are
-permuted several times, and for each permutation pathway score is calculated.
-In the end, the p-value is defined as the fraction of permutations that
-reported a higher pathway score than the observed one.
+Later in the process, a breadth-first search (BFS) algorithm is applied to
+topologically sort pathway nodes so that each individual node occurs after
+all its upstream nodes. Nodes within cycles are considered leaf nodes. At
+this point, a node score \eqn{\phi} is calculated for each pathway node
+\eqn{i} as:
+
+\deqn{\phi_i = w_i + \sum_{j=1}^{U} \gamma_{i \rightarrow j} \cdot k_j\,.}
+
+where \eqn{U} represents the number of upstream nodes,
+\eqn{\gamma_{i \rightarrow j}} denotes the concordance coefficient, and
+\eqn{k_j} is a propagation factor defined as:
+
+\deqn{k_j = \begin{cases} w_j &\text{if } \phi_j = 0 \\ \phi_j &\text{if }
+\phi_j \not = 0 \end{cases}\,.}
+
+Finally, the pathway score \eqn{\Psi} is calculated as:
+
+\deqn{\Psi = \frac{1 - M}{N} \cdot \sum_{i=1}^{N} \phi_i\,,}
+
+where \eqn{M} represents the proportion of miRNAs in the pathway, and
+\eqn{N} represents the total number of nodes in the network.
+
+Then, to compute the statistical significance of each pathway score, a
+permutation procedure is applied. Later, both observed pathway scores and
+permuted scores are standardized by subtracting the mean score of the
+permuted sets \eqn{\mu_{\Psi_P}} and then dividing by the standard deviation
+of the permuted scores \eqn{\sigma_{\Psi_P}}.
+
+Finally, the p-value is defined as the fraction of permutations that
+reported a higher normalized pathway score than the observed one. In the
+end, p-values are corrected for multiple testing either through the max-T
+procedure (default option) which is particularly suited for permutation
+tests, or through the standard multiple testing approaches.
 }
 
 \subsection{Implementation details}{
 
 To create augmented pathways, this function uses the \code{graphite} R package
 to download biological networks from the above mentioned database. Then,
-each pathway is converted to a graph object, and significant miRNA-mRNA
+each pathway is converted to a \code{graph} object, and significant miRNA-mRNA
 interactions are added to the network. Further, edge weights are added
 according to interaction type.
 
@@ -148,6 +180,10 @@ Sales, G., Calura, E., Cavalieri, D. et al. graphite - a Bioconductor
 package to convert pathway topology to gene network.
 BMC Bioinformatics 13, 20 (2012),
 \url{https://doi.org/10.1186/1471-2105-13-20}.
+
+Peter H. Westfall and S. Stanley Young. Resampling-Based Multiple Testing:
+Examples and Methods for p-Value Adjustment. John Wiley & Sons.
+ISBN 978-0-471-55761-6.
 }
 \author{
 Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
