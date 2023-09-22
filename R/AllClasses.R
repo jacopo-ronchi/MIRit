@@ -977,7 +977,7 @@ setValidity("IntegrativePathwayAnalysis", function(object) {
                  "the p-value cutoff used. Please see",
                  "?IntegrativePathwayAnalysis-class"))
   } else if (!is.character(object@pAdjustment) |
-             !object@pAdjustment %in% stats::p.adjust.methods) {
+             !object@pAdjustment %in% c(stats::p.adjust.methods, "max-T")) {
     return(paste("'pAdjustment' slot must be a character object that specifies",
                  "the p-value correction method used. Please see",
                  "?IntegrativePathwayAnalysis-class"))

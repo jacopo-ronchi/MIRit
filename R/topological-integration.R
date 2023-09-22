@@ -386,9 +386,10 @@ preparePathways <- function(database, org, targ, features, minPc, BPPARAM) {
   
   ## convert pathway identifiers to gene symbols
   message("Converting identifiers to gene symbols...")
-  pathDb <- bplapply(as.list(pathDb), function(x) {
-    suppressMessages(graphite::convertIdentifiers(x, to = "SYMBOL"))
-  }, BPPARAM = BPPARAM)
+  pathDb <- suppressMessages(
+    graphite::convertIdentifiers(pathDb, to = "SYMBOL")
+  )
+  pathDb <- as.list(pathDb)
   
   ## create a list of augmented pathways
   message("Adding miRNA-gene interactions to biological pathways...")

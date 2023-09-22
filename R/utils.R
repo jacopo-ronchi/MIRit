@@ -61,7 +61,8 @@ selectTargets <- function(mirnaObj, miRNA.Direction) {
     targets <- unique(intRes$Target[intRes$microRNA.Direction ==
                                       miRNA.Direction])
   } else if (colnames(intRes)[2] == "mirna.direction") {
-    targets <- intRes$DE_targets[intRes$mirna.direction == miRNA.Direction]
+    unpDir <- ifelse(miRNA.Direction == "downregulated", "Down", "Up")
+    targets <- intRes$DE.targets[intRes$mirna.direction == unpDir]
     targets <- paste(targets, collapse = "/")
     targets <- strsplit(targets, "/")
     targets <- unlist(targets)
