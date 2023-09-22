@@ -7,7 +7,7 @@
 integrationDotplot(
   object,
   showTerms = 10,
-  showTermsParam = "score",
+  showTermsParam = "normalized.score",
   title = NULL
 )
 }
@@ -20,8 +20,8 @@ order determined by the parameter \code{showTermsParam}; or, alternatively, a
 character vector indicating the pathways to plot. Default is \code{10}}
 
 \item{showTermsParam}{The order in which the top pathways are selected as
-specified by the \code{showTerms} parameter. It must be one of \code{ratio}, \code{padj},
-\code{pval} and \code{score} (default)}
+specified by the \code{showTerms} parameter. It must be one of \code{coverage},
+\code{padj}, \code{pval}, \code{score} and \code{normalized.score} (default)}
 
 \item{title}{The title of the plot. Default is \code{NULL} not to include a plot
 title}
@@ -36,12 +36,13 @@ the \code{\link[=topologicalAnalysis]{topologicalAnalysis()}} function.
 }
 \details{
 When producing the dotplot with this function, significant pathways
-are ordered on the x-axis on the basis of their pathway score computed by
-\code{\link[=topologicalAnalysis]{topologicalAnalysis()}}. The higher is this score, and the more affected a
-pathway result between biological conditions. Moreover, the size of each
-dot is equal to the ratio between the number of nodes for which a
-measurement is available, and the total number of nodes. Finally, the color
-scale of dots is relative to the adjusted p-values of each pathway.
+are ordered on the x-axis on the basis of their normalized pathway score
+computed by \code{\link[=topologicalAnalysis]{topologicalAnalysis()}}. The higher is this score, and the more
+affected a pathway is between biological conditions. Moreover, the size
+of each dot is equal to the ratio between the number of nodes for which a
+measurement is available, and the total number of nodes (pathway coverage).
+Finally, the color scale of dots is relative to the adjusted p-values of
+each pathway.
 }
 \examples{
 # load example MirnaExperiment object

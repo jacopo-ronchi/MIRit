@@ -11,23 +11,13 @@
 #' @details
 #' The network created by this function is highly flexible, allowing to tweak
 #' different parameters that can influence the resulting graph, including
-#' node selection, node highlighting, layout algorithms, colors, and legends. 
-#' 
-#' ## Included nodes
-#' 
-#' When performing differential expression analysis, lowly expressed features
-#' are usually excluded to reduce multiple testing penalties and increase
-#' power. Therefore, log2 fold changes are not available for several
-#' miRNAs/genes. In this regard, the user has the opportunity to display all
-#' the genes involved in a given pathway (`onlyMeasured = FALSE`), or just to
-#' plot a network for miRNA/genes with log2 fold changes
-#' (`onlyMeasured = TRUE`).
+#' node highlighting, layout algorithms, colors, and legends.
 #' 
 #' ## Highlight nodes and edges
 #' 
 #' One interesting feature offered by this function consists in highlighting
 #' specific nodes and edges within a network. This results particularly useful
-#' when we want to put in evidence affected routes in a biological pathways.
+#' when we want to put in evidence affected routes in a biological pathway.
 #' To highlight nodes, you must provide the `highlightNodes` parameter with a
 #' `character` vector that lists all the desired nodes. As a result, the
 #' borders of highlighted nodes will be colored according to `highlightCol`
@@ -65,8 +55,6 @@
 #' 
 #' * the color scale for log2 fold changes, that can be set with `lfcScale`;
 #' * the font size of nodes, which can be changed through `fontsize`;
-#' * the fill color of nodes for which log2 fold changes have not been
-#' calculated, customizable with the `naCol` parameter;
 #' * the border color for nodes, which can be edited with `nodeBorderCol`;
 #' * the text color of nodes, which can be changed through `nodeTextCol`;
 #' * the color used for edges, set by `edgeCol`;
@@ -91,11 +79,6 @@
 #' @param pathway The name of the biological pathway to show. The available
 #' pathways for a given database can be seen through the [listPathways()]
 #' function
-#' @param onlyMeasured Logical. It must be set to `TRUE` for building the
-#' network with only miRNAs/genes for which expression measurement is
-#' available. Instead, to reproduce the complete biological pathway,
-#' `onlyMeasured` must be set to `FALSE` (default). See the *details* section
-#' for further information
 #' @param algorithm The layout algorithm used to arrange nodes in the network.
 #' It must be one of `dot` (default), `circo`, `fdp`, `neato`, `osage` or
 #' `twopi`. For more information regarding these algorithms, please check the
@@ -106,9 +89,6 @@
 #' refers to downregulation, the middle one to stable expression, and the last
 #' one to upregulation. Default value is `c('royalblue', 'white', 'red')`. All
 #' available colors can be listed with [grDevices::colors()]
-#' @param naCol It must be an R color name that specifies the fill color of
-#' nodes without expression measurements. Default is `lightgrey`. All available
-#' colors can be listed with [grDevices::colors()]
 #' @param nodeBorderCol It must be an R color name that specifies the color of
 #' node borders. Default is `black`. All available colors can be listed
 #' with [grDevices::colors()]
@@ -166,11 +146,9 @@
 #' @export
 visualizeNetwork <- function(object,
                              pathway,
-                             onlyMeasured = FALSE,
                              algorithm = "dot",
                              fontsize = 14,
                              lfcScale = c("royalblue", "white", "red"),
-                             naCol = "lightgrey",
                              nodeBorderCol = "black",
                              nodeTextCol = "black",
                              edgeCol = "darkgrey",
@@ -198,11 +176,6 @@ visualizeNetwork <- function(object,
                "see ?visualizeNetwork"),
          call. = FALSE)
   }
-  if (!is.logical(onlyMeasured) |
-      length(onlyMeasured) != 1) {
-    stop("'onlyMeasured' must be logical (TRUE/FALSE)! See ?visualizeNetwork",
-         call. = FALSE)
-  }
   if (!is.character(algorithm) |
       length(algorithm) != 1 |
       !algorithm %in% c("dot", "circo", "fdp", "neato", "osage", "twopi")) {
@@ -224,13 +197,6 @@ visualizeNetwork <- function(object,
                "upregulated features. The default value is",
                "c('royalblue', 'white', 'red'). All available colors",
                "can be listed with 'colors()'."), call. = FALSE)
-  }
-  if (!is.character(naCol) |
-      length(naCol) != 1 |
-      !naCol %in% grDevices::colors()) {
-    stop(paste("'naCol' must be an R color name. All available colors",
-               "can be listed with 'colors()'."),
-         call. = FALSE)
   }
   if (!is.character(nodeBorderCol) |
       length(nodeBorderCol) != 1 |
@@ -323,19 +289,7 @@ visualizeNetwork <- function(object,
   }
   
   ## extract expression changes
-  lfc <- object@expression
-  
-  ## extract only connected nodes with expression measurement
-  if (onlyMeasured == TRUE) {
-    p <- graph::subGraph(intersect(names(lfc), graph::nodes(p)), p)
-    connectedNodes <- unlist(strsplit(graph::edgeNames(p),
-                                      split = "~",
-                                      fixed = TRUE))
-    unConn <- setdiff(graph::nodes(p), connectedNodes)
-    if (length(unConn) > 0) {
-      p <- graph::removeNode(unConn, p)
-    }
-  }
+  featDE <- object@expression
   
   ## extract weights and edges
   e <- vapply(Rgraphviz::edgeData(p), function(x) {
@@ -345,30 +299,27 @@ visualizeNetwork <- function(object,
   ## extract nodes
   nodes <- graph::nodes(p)
   
-  ## retain fold changes of nodes
-  exprNodes <- lfc[nodes]
-  exprNodes <- exprNodes[!is.na(exprNodes)]
+  ## retain expression changes just for nodes
+  exprNodes <- featDE[nodes, ]
   
   ## change edge names according to Rgraphviz
   names(e) <- gsub("|", "~", names(e), fixed = TRUE)
   
   ## use different shapes for genes and miRNAs
   nS <- rep("ellipse", length(nodes))
-  nS[grep("miR", nodes)] <- "box"
+  nS[exprNodes$type == "miRNA"] <- "box"
   names(nS) <- nodes
   
   ## use larger node shapes for miRNAs
   fixedsize <- rep(TRUE, length(nodes))
-  fixedsize[grep("miR", nodes)] <- FALSE
+  fixedsize[exprNodes$type == "miRNA"] <- FALSE
   names(fixedsize) <- nodes
   
-  ## use different color scales for genes and miRNA fold changes
-  filCol <- rep(naCol, length(nodes))
+  ## set color scale for genes and miRNA fold changes
+  filCol <- setColorScale(exprNodes$logFC,
+                          cols = lfcScale,
+                          numColors = 300)
   names(filCol) <- nodes
-  exprColors <- setColorScale(exprNodes,
-                              cols = lfcScale,
-                              numColors = 300)
-  filCol[names(exprNodes)] <- exprColors
   
   ## change arrowheads on the basis of interaction type
   arrHead <- rep("open", length(e))
@@ -407,7 +358,7 @@ visualizeNetwork <- function(object,
   if (!is.null(highlightNodes)) {
     
     ## check that supplied nodes are present
-    if (!any(highlightNodes) %in% nodes) {
+    if (!any(highlightNodes %in% nodes)) {
       warning(paste(paste(highlightNodes[!highlightNodes %in% nodes],
                           collapse = ", "), "not belonging to this network!",
                     "Highlighting is ignored..."),
@@ -442,17 +393,17 @@ visualizeNetwork <- function(object,
   if (legendColorbar == TRUE &
       legendInteraction == TRUE) {
     layout(matrix(c(1, 1, 1, 0, 2, 3), ncol = 2),
-           widths = c(3, 1),
+           widths = c(4, 1),
            heights = c(0.5, 2, 2))
   } else if (legendColorbar == TRUE &
              legendInteraction == FALSE) {
     layout(matrix(c(1, 1, 1, 0, 2, 0), ncol = 2),
-           widths = c(3, 1),
+           widths = c(4, 1),
            heights = c(1.2, 2, 1.2))
   } else if (legendColorbar == FALSE &
              legendInteraction == TRUE) {
     layout(matrix(c(1, 1, 1, 0, 2, 0), ncol = 2),
-           widths = c(3, 1),
+           widths = c(4, 1),
            heights = c(1.4, 2, 1))
   } else {
     layout(1)
@@ -474,12 +425,13 @@ visualizeNetwork <- function(object,
   ## produce logFC color bar legend
   if (legendColorbar == TRUE) {
     par(mar = c(2, 4.2, 4, 4.2))
-    legMat <- matrix(seq(min(exprNodes), max(exprNodes), length.out = 300))
+    legMat <- matrix(seq(min(exprNodes$logFC), max(exprNodes$logFC),
+                         length.out = 300))
     image(x = 1,
           y = legMat,
           z = matrix(1:300, nrow=1),
-          col = setColorScale(seq(min(exprNodes),
-                                  max(exprNodes),
+          col = setColorScale(seq(min(exprNodes$logFC),
+                                  max(exprNodes$logFC),
                                   len = 300),
                               cols = c("royalblue", "white", "red"),
                               numColors = 300),
@@ -2776,12 +2728,13 @@ plotDimensions <- function(mirnaObj,
 #' the [topologicalAnalysis()] function.
 #' 
 #' When producing the dotplot with this function, significant pathways
-#' are ordered on the x-axis on the basis of their pathway score computed by
-#' [topologicalAnalysis()]. The higher is this score, and the more affected a
-#' pathway result between biological conditions. Moreover, the size of each
-#' dot is equal to the ratio between the number of nodes for which a
-#' measurement is available, and the total number of nodes. Finally, the color
-#' scale of dots is relative to the adjusted p-values of each pathway.
+#' are ordered on the x-axis on the basis of their normalized pathway score
+#' computed by [topologicalAnalysis()]. The higher is this score, and the more
+#' affected a pathway is between biological conditions. Moreover, the size
+#' of each dot is equal to the ratio between the number of nodes for which a
+#' measurement is available, and the total number of nodes (pathway coverage).
+#' Finally, the color scale of dots is relative to the adjusted p-values of
+#' each pathway.
 #'
 #' @param object An object of class
 #' [`IntegrativePathwayAnalysis`][IntegrativePathwayAnalysis-class]
@@ -2789,8 +2742,8 @@ plotDimensions <- function(mirnaObj,
 #' order determined by the parameter `showTermsParam`; or, alternatively, a
 #' character vector indicating the pathways to plot. Default is `10`
 #' @param showTermsParam The order in which the top pathways are selected as
-#' specified by the `showTerms` parameter. It must be one of `ratio`, `padj`,
-#' `pval` and `score` (default)
+#' specified by the `showTerms` parameter. It must be one of `coverage`,
+#' `padj`, `pval`, `score` and `normalized.score` (default)
 #' @param title The title of the plot. Default is `NULL` not to include a plot
 #' title
 #'
@@ -2819,7 +2772,7 @@ plotDimensions <- function(mirnaObj,
 #' @export
 integrationDotplot <- function(object,
                                showTerms = 10,
-                               showTermsParam = "score",
+                               showTermsParam = "normalized.score",
                                title = NULL) {
   
   ## check inputs
@@ -2845,9 +2798,10 @@ integrationDotplot <- function(object,
   }
   if (!is.character(showTermsParam) |
       length(showTermsParam) != 1 |
-      !showTermsParam %in% c("ratio", "padj", "pval", "score")) {
-    stop(paste("'showTermsParam' must be one of: 'ratio', 'padj',",
-               "'pval', 'score' (default)"),
+      !showTermsParam %in% c("coverage", "padj", "pval", "score",
+                             "normalized.score")) {
+    stop(paste("'showTermsParam' must be one of: 'coverage', 'padj',",
+               "'pval', 'score', 'normalized.score' (default)"),
          call. = FALSE)
   }
   if (!(is.character(title) | is.null(title)) |
@@ -2859,9 +2813,6 @@ integrationDotplot <- function(object,
   
   ## extract results from object object
   res <- integratedPathways(object)
-  
-  ## compute nodes ratio
-  res$ratio <- res$considered.nodes / res$total.nodes
   
   ## rename column p-value column names
   colnames(res)[colnames(res) %in% c("P.Val", "adj.P.Val")] <- c("pval", "padj")
@@ -2881,12 +2832,12 @@ integrationDotplot <- function(object,
   }
   
   ## set the parameters for plotting
-  ordBy <- "score"
-  sizeBy <- "ratio"
+  ordBy <- "normalized.score"
+  sizeBy <- "coverage"
   colBy <- "padj"
   
   ## set x-axis label
-  ordLabel <- "Pathway Score (s)"
+  ordLabel <- "Normalized pathway Score"
   
   ## create a dotplot
   dotRes <- ggplot2::ggplot(res,

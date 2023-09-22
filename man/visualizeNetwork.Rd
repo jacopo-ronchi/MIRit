@@ -7,11 +7,9 @@
 visualizeNetwork(
   object,
   pathway,
-  onlyMeasured = FALSE,
   algorithm = "dot",
   fontsize = 14,
   lfcScale = c("royalblue", "white", "red"),
-  naCol = "lightgrey",
   nodeBorderCol = "black",
   nodeTextCol = "black",
   edgeCol = "darkgrey",
@@ -35,12 +33,6 @@ the results of a miRNA-mRNA pathway analysis}
 pathways for a given database can be seen through the \code{\link[=listPathways]{listPathways()}}
 function}
 
-\item{onlyMeasured}{Logical. It must be set to \code{TRUE} for building the
-network with only miRNAs/genes for which expression measurement is
-available. Instead, to reproduce the complete biological pathway,
-\code{onlyMeasured} must be set to \code{FALSE} (default). See the \emph{details} section
-for further information}
-
 \item{algorithm}{The layout algorithm used to arrange nodes in the network.
 It must be one of \code{dot} (default), \code{circo}, \code{fdp}, \code{neato}, \code{osage} or
 \code{twopi}. For more information regarding these algorithms, please check the
@@ -53,10 +45,6 @@ R color names for creating a gradient of log2 fold changes. The first value
 refers to downregulation, the middle one to stable expression, and the last
 one to upregulation. Default value is \code{c('royalblue', 'white', 'red')}. All
 available colors can be listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
-
-\item{naCol}{It must be an R color name that specifies the fill color of
-nodes without expression measurements. Default is \code{lightgrey}. All available
-colors can be listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
 
 \item{nodeBorderCol}{It must be an R color name that specifies the color of
 node borders. Default is \code{black}. All available colors can be listed
@@ -113,23 +101,12 @@ investigate the consequences of miRNA/gene dysregulations.
 \details{
 The network created by this function is highly flexible, allowing to tweak
 different parameters that can influence the resulting graph, including
-node selection, node highlighting, layout algorithms, colors, and legends.
-\subsection{Included nodes}{
-
-When performing differential expression analysis, lowly expressed features
-are usually excluded to reduce multiple testing penalties and increase
-power. Therefore, log2 fold changes are not available for several
-miRNAs/genes. In this regard, the user has the opportunity to display all
-the genes involved in a given pathway (\code{onlyMeasured = FALSE}), or just to
-plot a network for miRNA/genes with log2 fold changes
-(\code{onlyMeasured = TRUE}).
-}
-
+node highlighting, layout algorithms, colors, and legends.
 \subsection{Highlight nodes and edges}{
 
 One interesting feature offered by this function consists in highlighting
 specific nodes and edges within a network. This results particularly useful
-when we want to put in evidence affected routes in a biological pathways.
+when we want to put in evidence affected routes in a biological pathway.
 To highlight nodes, you must provide the \code{highlightNodes} parameter with a
 \code{character} vector that lists all the desired nodes. As a result, the
 borders of highlighted nodes will be colored according to \code{highlightCol}
@@ -170,8 +147,6 @@ different graphical parameters, including:
 \itemize{
 \item the color scale for log2 fold changes, that can be set with \code{lfcScale};
 \item the font size of nodes, which can be changed through \code{fontsize};
-\item the fill color of nodes for which log2 fold changes have not been
-calculated, customizable with the \code{naCol} parameter;
 \item the border color for nodes, which can be edited with \code{nodeBorderCol};
 \item the text color of nodes, which can be changed through \code{nodeTextCol};
 \item the color used for edges, set by \code{edgeCol};
