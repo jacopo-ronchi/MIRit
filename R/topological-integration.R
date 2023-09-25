@@ -253,15 +253,12 @@ topologicalAnalysis <- function(mirnaObj,
   featDE <- rbind(dem, deg)
   
   ## extract integrated miRNA targets
-  intTargets <- c(selectTargets(mirnaObj, "upregulated"),
-                  selectTargets(mirnaObj, "downregulated"))
-  targ <- mirnaTargets(mirnaObj)
-  targ <- targ[targ$Gene.Symbol %in% intTargets, ]
+  intTargets <- selectTargets(mirnaObj, pairs = TRUE)
   
   ## prepare miRNA augmented pathways
   graphList <- preparePathways(database = database,
                                org = org,
-                               targ = targ,
+                               targ = intTargets,
                                features = features,
                                minPc = minPc,
                                BPPARAM = BPPARAM)
@@ -396,7 +393,6 @@ preparePathways <- function(database, org, targ, features, minPc, BPPARAM) {
   realPaths <- bplapply(pathDb,
                         augmentPathway,
                         targets = targ,
-                        inverted = FALSE,
                         BPPARAM = BPPARAM)
   
   ## determine the number of nodes for each augmented pathway
@@ -449,8 +445,7 @@ preparePathways <- function(database, org, targ, features, minPc, BPPARAM) {
 
 ## helper function for adding miRNA-target pairs to network objects
 augmentPathway <- function(pathway,
-                           targets,
-                           inverted = FALSE) {
+                           targets) {
   
   ## convert pathway to a graph network
   pathGraph <- graphite::pathwayGraph(pathway = pathway)
@@ -462,11 +457,11 @@ augmentPathway <- function(pathway,
   }
   
   ## keep only targets involved in the specified pathway
-  pathTargs <- targets[targets$Gene.Symbol %in% graph::nodes(pathGraph), ]
+  pathTargs <- targets[targets$Target %in% graph::nodes(pathGraph), ]
   
   ## add miRNA-target pairs to the biological network
-  pathGraph <- graph::addNode(unique(pathTargs$MicroRNA), pathGraph)
-  pathGraph <- graph::addEdge(pathTargs$MicroRNA, pathTargs$Gene.Symbol,
+  pathGraph <- graph::addNode(unique(pathTargs$microRNA), pathGraph)
+  pathGraph <- graph::addEdge(pathTargs$microRNA, pathTargs$Target,
                               pathGraph, weights = -1)
   
   ## assign weights based on interaction type
@@ -498,14 +493,6 @@ augmentPathway <- function(pathway,
   suppressWarnings(
     pathGraph <- graph::addEdge(gMat[, 1], gMat[, 2], pathGraph, w)
   )
-  
-  ## invert graph object for pathway score calculation
-  if (inverted == TRUE) {
-    pathGraph <- graph::reverseEdgeDirections(pathGraph)
-    suppressWarnings(
-      pathGraph <- graph::addEdge(gMat[, 2], gMat[, 1], pathGraph, w)
-    )
-  }
   
   ## return the graph network
   return(pathGraph)

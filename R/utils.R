@@ -53,23 +53,46 @@ identifyColNames <- function(tabOutput, tabID = "") {
 
 
 ## helper function to obtain integrated targets to enrich
-selectTargets <- function(mirnaObj, miRNA.Direction) {
+selectTargets <- function(mirnaObj, miRNA.Direction = NULL, pairs = FALSE) {
   
-  ## extract integrated targets
+  ## extract integration results
   intRes <- integration(mirnaObj)
-  if (colnames(intRes)[2] == "Target") {
-    targets <- unique(intRes$Target[intRes$microRNA.Direction ==
-                                      miRNA.Direction])
-  } else if (colnames(intRes)[2] == "mirna.direction") {
-    unpDir <- ifelse(miRNA.Direction == "downregulated", "Down", "Up")
-    targets <- intRes$DE.targets[intRes$mirna.direction == unpDir]
-    targets <- paste(targets, collapse = "/")
-    targets <- strsplit(targets, "/")
-    targets <- unlist(targets)
+  
+  ## determine the integration method
+  method <- integration(mirnaObj, param = TRUE)$method
+  
+  ## extract integrated miRNA-target pairs
+  if (grepl("correlation", method) == TRUE) {
+    intPairs <- intRes[, c(1, 2, 3)]
+  } else {
+    intRes = intRes[intRes$DE.targets != "", ]
+    intPairs <- do.call(rbind, 
+                        apply(intRes, 1, function(x) 
+                          data.frame(microRNA = x["microRNA"], 
+                                     Target = strsplit(x["DE.targets"], "/"),
+                                     microRNA.Direction = x["mirna.direction"],
+                                     row.names = NULL)))
+    colnames(intPairs)[2] <- "Target"
   }
   
-  ## return targets
-  return(targets)
+  ## select miRNA-target pairs that vary in a specific direction
+  if(!is.null(miRNA.Direction)) {
+    if (miRNA.Direction == "downregulated") {
+      intPairs <- intPairs[intPairs$microRNA.Direction == "Down" |
+                             intPairs$microRNA.Direction == "downregulated", ]
+    } else {
+      intPairs <- intPairs[intPairs$microRNA.Direction == "Up" |
+                             intPairs$microRNA.Direction == "upregulated", ]
+    }
+  }
+  
+  ## retain just target names
+  if (pairs == FALSE) {
+    intPairs <- unique(intPairs$Target)
+  }
+  
+  ## return integrated pairs
+  return(intPairs)
   
 }
 
