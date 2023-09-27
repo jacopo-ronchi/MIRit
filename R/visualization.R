@@ -1264,6 +1264,48 @@ theme_enr <- function() {
 
 
 
+## helper function for the definition of a ggplot2 theme for MIRit
+#' @import ggplot2
+theme.MIRit <- function(base_size = 12,
+                        base_family = "",
+                        legend = "top",
+                        borderWidth = 1,
+                        allBorders = TRUE,
+                        grid = FALSE) {
+  
+  ## set plot borders
+  if(allBorders == TRUE){
+    br <- element_rect(size = borderWidth,
+                       fill = NA,
+                       color = "black")
+    al <- element_blank()
+  } else {
+    br <- element_blank()
+    al <- element_line(linewidth = borderWidth/2, color = "black")
+  }
+  
+  ## define ggplot2 theme
+  th <- theme_linedraw(base_size = base_size, base_family = base_family) +
+    theme(panel.border = br,
+          axis.line = al,
+          legend.key = element_blank(),
+          legend.position = legend,
+          plot.title = ggplot2::element_text(hjust = 0.5))
+  
+  ## set grid lines
+  if (grid == FALSE) {
+    th <- th + theme(panel.grid = element_blank())
+  }
+  
+  ## return the theme
+  return(th)
+  
+}
+
+
+
+
+
 #' Create a trackplot to show the association between miRNAs and disease-SNPs
 #'
 #' This function plots a trackplot that shows the genomic position of
@@ -1327,7 +1369,7 @@ mirVariantPlot <- function(variantId,
                            mirFill = "orange",
                            title = NULL,
                            ...) {
-
+  
   ## check inputs
   if (!is.character(variantId) |
       length(variantId) != 1 |
@@ -1382,65 +1424,65 @@ mirVariantPlot <- function(variantId,
                "For additional details see ?mirVariantPlot"),
          call. = FALSE)
   }
-
+  
   ## select the specified variant
   snpAssociation <- snpAssociation[snpAssociation$variant == variantId, ]
-
+  
   ## extract and format SNP genomic locations
   snpSeq <- snpAssociation[, c(5, 6, 6, 1)]
   colnames(snpSeq) <- c("chr", "start", "end", "variant")
   snpSeq$strand <- "*"
-
+  
   ## create GRanges object containing SNP positions
   snpSeq <- GenomicRanges::makeGRangesFromDataFrame(snpSeq,
                                                     keep.extra.columns = TRUE)
-
+  
   ## extract and format miRNA genomic coordinates
   mirSeq <- snpAssociation[, c(5, 8, 9, 10, 3)]
   colnames(mirSeq) <- c("chr", "start", "end", "strand", "miRNA_gene")
-
+  
   ## create GRanges object containing miRNA positions
   mirSeq <- GenomicRanges::makeGRangesFromDataFrame(mirSeq,
                                                     keep.extra.columns = TRUE)
-
+  
   ## set parameters
   chr <- paste("chr", snpAssociation$chromosome, sep = "")
   g <- "hg38"
   lf <- 0.1
   rf <- 0.1
-
+  
   ## create ideomTrack
   iTrack <- Gviz::IdeogramTrack(genome = g, chromosome = chr, lwd = 4)
-
+  
   ## create genome axis track
   gTrack <- Gviz::GenomeAxisTrack()
-
+  
   ## create SNPs track
   snpTrack <- Gviz::GeneRegionTrack(snpSeq,
                                     name = "SNP",
                                     symbol = paste(variantId, "   "),
                                     fill = snpFill)
-
+  
   ## create miRNA track
   mirTrack <- Gviz::GeneRegionTrack(mirSeq,
                                     genome = g,
                                     chromosome = chr,
                                     name = "miRNA",
                                     symbol = snpAssociation$mirnaGene)
-
+  
   ## create sequence track
   if (showSequence == TRUE) {
     sTrack <- Gviz::SequenceTrack(BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38,
                                   chromosome = chr)
   }
-
+  
   ## create genomic context track
   if (showContext == TRUE) {
     biomTrack <- Gviz::BiomartGeneRegionTrack(genome = g,
                                               symbol = snpAssociation$mirnaGene,
                                               name = "Gene context")
   }
-
+  
   ## create trackplot element list
   if (showContext == TRUE) {
     pList <- list(iTrack, gTrack, biomTrack, snpTrack)
@@ -1453,7 +1495,7 @@ mirVariantPlot <- function(variantId,
       pList <- list(iTrack, gTrack, snpTrack, mirTrack)
     }
   }
-
+  
   ## create the trackplot object
   trackPlot <- Gviz::plotTracks(pList,
                                 extend.left = lf,
@@ -1461,8 +1503,8 @@ mirVariantPlot <- function(variantId,
                                 transcriptAnnotation = "symbol",
                                 main = title,
                                 ...)
-
-
+  
+  
 }
 
 
@@ -1492,10 +1534,10 @@ mirVariantPlot <- function(variantId,
 #' correlation
 #' @param gene The name of the gene for which we want to observe the
 #' correlation
-#' @param condition It must be the column name of a variable specified in the
-#' metadata (colData) of a [`MirnaExperiment`][MirnaExperiment-class] object;
-#' or, alternatively, it must be a character/factor object that specifies
-#' group memberships (eg. c("healthy, "healthy", "disease", "disease"))
+#' @param condition It must be NULL (default) to plot expression based on the
+#' group variable used for differential expression analysis. Alternatively, it
+#' must be a character/factor object that specifies group memberships
+#' (eg. c("healthy, "healthy", "disease", "disease"))
 #' @param showCoeff Logical, whether to show the correlation coeffficient or
 #' not. Note that the "R" is used for Pearson's correlation", "rho" for
 #' Spearman's correlation, and "tau" for Kendall's correlation. Default is TRUE
@@ -1517,6 +1559,17 @@ mirVariantPlot <- function(variantId,
 #' correspond to R colors, while names coincide with the groups specified in
 #' the `condition` parameter (eg. c("healthy" = "green", "disease" = "red")).
 #' Default is NULL, in order to use the default color scale
+#' @param fontSize The base size for text elements within the plot.
+#' Default is 12
+#' @param fontFamily The base family for text elements within the plot
+#' @param legend The position of the legend. Allowed values are `top`,
+#' `bottom`, `right`, `left` and `none`. The default setting is `top` to show
+#' a legend above the plot. If `none` is specified, the legend will not be
+#' included in the graph.
+#' @param borderWidth The width of plot borders (default is 1)
+#' @param allBorders Logical, whetether to show all panel borders, or just the
+#' bottom and left borders. Default is TRUE
+#' @param grid Logical, whether to show grid lines or not. Default is TRUE
 #' 
 #' @references
 #' K. Murray, S. Müller & B. A. Turlach (2016) Fast and flexible methods for
@@ -1543,7 +1596,7 @@ mirVariantPlot <- function(variantId,
 plotCorrelation <- function(mirnaObj,
                             mirna,
                             gene,
-                            condition,
+                            condition = NULL,
                             showCoeff = TRUE,
                             regression = TRUE,
                             useRanks = FALSE,
@@ -1551,7 +1604,13 @@ plotCorrelation <- function(mirnaObj,
                             lineType = "dashed",
                             lineWidth = 0.8,
                             pointSize = 3,
-                            colorScale = NULL) {
+                            colorScale = NULL,
+                            fontSize = 12,
+                            fontFamily = "",
+                            legend = "top",
+                            borderWidth = 1,
+                            allBorders = TRUE,
+                            grid = TRUE) {
   
   ## input checks
   if (!is(mirnaObj, "MirnaExperiment")) {
@@ -1583,24 +1642,41 @@ plotCorrelation <- function(mirnaObj,
                "gene expression matrix."),
          call. = FALSE)
   }
-  if (length(condition) == 1) {
-    if (!is.character(condition) |
-        !(condition %in% colnames(MultiAssayExperiment::colData(mirnaObj)) &
-          !condition %in% c("primary", "mirnaCol", "geneCol"))) {
-      stop(paste("'condition' must be the column name of a variable specified",
-                 "in the metadata (colData) of a MirnaExperiment object; or,",
-                 "alternatively, it must be a character/factor object that",
-                 "specifies group memberships."),
+  if (!is.null(condition)) {
+    if (mirnaObj@mirnaDE$group != mirnaObj@geneDE$group) {
+      stop(paste("For unpaired data, the 'group' variable used for",
+                 "differential expression analysis must be the same for both",
+                 "miRNAs and genes in order to use",
+                 "this function with 'condition = NULL'. Instead, try to",
+                 "supply 'condition' as a factor/character vector!"),
            call. = FALSE)
     }
-  } else {
-    if ((!is.character(condition) & !is.factor(condition)) |
-        length(condition) != nrow(MultiAssayExperiment::colData(mirnaObj))) {
-      stop(paste("'condition' must be the column name of a variable specified",
-                 "in the metadata (colData) of a MirnaExperiment object; or,",
-                 "alternatively, it must be a character/factor object that",
-                 "specifies group memberships."),
+    if (length(mirnaObj@mirnaDE$group) == 0 |
+        length(mirnaObj@geneDE$group) == 0) {
+      stop(paste("For objects where differential expression has been manually",
+                 "added, 'condition' must be specified as a factor/character",
+                 "vector!"),
            call. = FALSE)
+    }
+    if (length(condition) == 1) {
+      if (!is.character(condition) |
+          !(condition %in% colnames(MultiAssayExperiment::colData(mirnaObj)) &
+            !condition %in% c("primary", "mirnaCol", "geneCol"))) {
+        stop(paste("'condition' must be the column name of a variable present",
+                   "in the metadata (colData) of a MirnaExperiment object; or,",
+                   "alternatively, it must be a character/factor object that",
+                   "specifies group memberships."),
+             call. = FALSE)
+      }
+    } else {
+      if ((!is.character(condition) & !is.factor(condition)) |
+          length(condition) != nrow(MultiAssayExperiment::colData(mirnaObj))) {
+        stop(paste("'condition' must be the column name of a variable present",
+                   "in the metadata (colData) of a MirnaExperiment object; or,",
+                   "alternatively, it must be a character/factor object that",
+                   "specifies group memberships."),
+             call. = FALSE)
+      }
     }
   }
   if (!is.logical(showCoeff) |
@@ -1643,34 +1719,43 @@ plotCorrelation <- function(mirnaObj,
     stop("'pointSize' must be a non-neagtive number! (default is 3)",
          call. = FALSE)
   }
-  if (length(condition) == 1 & !is.null(colorScale)) {
-    if ((!is.null(colorScale) & !is.character(colorScale)) |
-        any(!colorScale %in% grDevices::colors()) |
-        !identical(
-          sort(names(colorScale)),
-          sort(unique(MultiAssayExperiment::colData(mirnaObj)[, condition])))) {
-      stop(paste("'colorScale' must be a named character vector where values",
-                 "consist of R colors, whereas names coincide to the different",
-                 "conditions. For additional details see ?plotCorrelation."),
-           call. = FALSE)
-    }
-  } else if (length(condition) != 1 & !is.null(colorScale)) {
-    if ((!is.null(colorScale) & !is.character(colorScale)) |
-        any(!colorScale %in% grDevices::colors()) |
-        !identical(sort(names(colorScale)),
-                   as.character(sort(unique(condition))))) {
-      stop(paste("'colorScale' must be a named character vector where values",
-                 "consist of R colors, whereas names coincide to the different",
-                 "conditions. For additional details see ?plotCorrelation."),
-           call. = FALSE)
-    }
+  if (!is.numeric(fontSize) |
+      length(fontSize) != 1 |
+      fontSize < 0) {
+    stop("'fontSize' must be a non-neagtive number! (default is 12)",
+         call. = FALSE)
+  }
+  if (!is.character(fontFamily) |
+      length(fontFamily) != 1) {
+    stop("'fontFamily' must be a character of length 1",
+         call. = FALSE)
+  }
+  if (!is.character(legend) |
+      length(legend) != 1 |
+      !legend %in% c("top", "bottom", "right", "left", "none")) {
+    stop("'legend' must be one of 'top', 'bottom' 'right', 'left', and 'none'",
+         call. = FALSE)
+  }
+  if (!is.numeric(borderWidth) |
+      length(borderWidth) != 1 |
+      borderWidth < 0) {
+    stop("'borderWidth' must be a non-neagtive number! (default is 1)",
+         call. = FALSE)
+  }
+  if (!is.logical(allBorders) |
+      length(allBorders) != 1) {
+    stop("'allBorders' must be logical (TRUE/FALSE)!", call. = FALSE)
+  }
+  if (!is.logical(grid) |
+      length(grid) != 1) {
+    stop("'grid' must be logical (TRUE/FALSE)!", call. = FALSE)
   }
   
   ## get integration results
   intRes <- integration(mirnaObj)
   
   ## verify that correlation analysis has been performed
-  if (colnames(intRes)[2] != "Target") {
+  if (grepl("correlation", mirnaObj@integration$method) == FALSE) {
     stop(paste("Correlation analysis must be performed before using this",
                "function! See ?integration"), call. = FALSE)
   }
@@ -1697,7 +1782,13 @@ plotCorrelation <- function(mirnaObj,
   geneExpr <- mirnaObj[["genes"]]
   
   ## define condition vector
-  if (is.character(condition) & length(condition) == 1) {
+  if (is.null(condition)) {
+    depM <- mirnaDE(mirnaObj, param = TRUE)
+    depG <- geneDE(mirnaObj, param = TRUE)
+    cond <- as.character(MultiAssayExperiment::colData(mirnaObj)[, depM$group])
+    cond[is.na(cond)] <- as.character(
+      MultiAssayExperiment::colData(mirnaObj)[, depG$group])[is.na(cond)]
+  } else if (is.character(condition) & length(condition) == 1) {
     cond <- MultiAssayExperiment::colData(mirnaObj)[, condition]
   } else if (is.factor(condition)) {
     cond <- as.character(condition)
@@ -1705,6 +1796,30 @@ plotCorrelation <- function(mirnaObj,
     cond <- condition
   }
   names(cond) <- MultiAssayExperiment::colData(mirnaObj)[, "primary"]
+  
+  ## check the validity of color scale
+  if (length(condition) == 1 & !is.null(colorScale)) {
+    if (!is.character(colorScale) |
+        any(!colorScale %in% grDevices::colors()) |
+        !identical(
+          sort(names(colorScale)),
+          sort(unique(MultiAssayExperiment::colData(mirnaObj)[, condition])))) {
+      stop(paste("'colorScale' must be a named character vector where values",
+                 "consist of R colors, whereas names coincide to the different",
+                 "conditions. For additional details see ?plotCorrelation."),
+           call. = FALSE)
+    }
+  } else if (length(condition) != 1 & !is.null(colorScale)) {
+    if (!is.character(colorScale) |
+        any(!colorScale %in% grDevices::colors()) |
+        !identical(sort(names(colorScale)),
+                   as.character(sort(unique(cond))))) {
+      stop(paste("'colorScale' must be a named character vector where values",
+                 "consist of R colors, whereas names coincide to the different",
+                 "conditions. For additional details see ?plotCorrelation."),
+           call. = FALSE)
+    }
+  }
   
   ## check if samples are paired, otherwise exclude unpaired samples
   sMap <- MultiAssayExperiment::sampleMap(mirnaObj)
@@ -1842,10 +1957,18 @@ plotCorrelation <- function(mirnaObj,
       ggplot2::scale_color_manual(values = colorScale)
   }
   
-  ## rename plot labels and set ggplot2 theme
+  ## rename plot labels
   corPlot <- corPlot +
-    ggplot2::labs(x = xlab, y = ylab) +
-    ggplot2::theme_bw()
+    ggplot2::labs(x = xlab, y = ylab)
+  
+  ## apply MIRit ggplot2 theme
+  corPlot <- corPlot +
+    theme.MIRit(base_size = fontSize,
+                base_family = fontFamily,
+                legend = legend,
+                borderWidth = borderWidth,
+                allBorders = allBorders,
+                grid = grid)
   
   ## return the generated plot
   return(corPlot)
@@ -1868,10 +1991,6 @@ plotCorrelation <- function(mirnaObj,
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
 #' containing miRNA and gene data
 #' @param features A character vector containing the genes/miRNAs to plot
-#' @param condition It must be NULL (default) to plot expression based on the
-#' group variable used for differential expression analysis. Alternatively, it
-#' must be a character/factor object that specifies group memberships
-#' (eg. c("healthy, "healthy", "disease", "disease"))
 #' @param graph The type of plot to produce. It must be one of `boxplot`
 #' (default), `barplot`, `violinplot`
 #' @param showSignificance Logical, whether to display statistical significance
@@ -1895,8 +2014,19 @@ plotCorrelation <- function(mirnaObj,
 #' numbers (when `starSig` is FALSE). Default is 3
 #' @param colorScale It must be a named character vector where values
 #' correspond to R colors, while names coincide with the genes/miRNAs specified
-#' in the `condition` parameter (eg. c("hsa-miR-34a-5p" = "blue",
+#' in the `features` parameter (eg. c("hsa-miR-34a-5p" = "blue",
 #' "PAX8" = "red")). Default is NULL, in order to use the default color scale
+#' @param fontSize The base size for text elements within the plot.
+#' Default is 12
+#' @param fontFamily The base family for text elements within the plot
+#' @param legend The position of the legend. Allowed values are `top`,
+#' `bottom`, `right`, `left` and `none`. The default setting is `top` to show
+#' a legend above the plot. If `none` is specified, the legend will not be
+#' included in the graph.
+#' @param borderWidth The width of plot borders (default is 1)
+#' @param allBorders Logical, whetether to show all panel borders, or just the
+#' bottom and left borders. Default is FALSE
+#' @param grid Logical, whether to show grid lines or not. Default is FALSE
 #'
 #' @returns
 #' An object of class `ggplot` containing the plot.
@@ -1922,7 +2052,6 @@ plotCorrelation <- function(mirnaObj,
 #' @export
 plotDE <- function(mirnaObj,
                    features,
-                   condition = NULL,
                    graph = "boxplot",
                    showSignificance = TRUE,
                    starSig = TRUE,
@@ -1930,7 +2059,13 @@ plotDE <- function(mirnaObj,
                    sigOffset = 1.5,
                    sigLabelSize = 7,
                    digits = 3,
-                   colorScale = NULL) {
+                   colorScale = NULL,
+                   fontSize = 12,
+                   fontFamily = "",
+                   legend = "top",
+                   borderWidth = 1,
+                   allBorders = FALSE,
+                   grid = FALSE) {
   
   ## input checks
   if (!is(mirnaObj, "MirnaExperiment")) {
@@ -1955,31 +2090,6 @@ plotDE <- function(mirnaObj,
                "gene symbols (e.g. c('hsa-miR-34a-5p', 'PAX8').",
                "For additional details see ?plotDE"),
          call. = FALSE)
-  }
-  if (!is.null(condition)) {
-    if (mirnaObj@mirnaDE$group != mirnaObj@geneDE$group) {
-      stop(paste("For unpaired data, the 'group' variable used for",
-                 "differential expression analysis must be the same for both",
-                 "miRNAs and genes in order to use",
-                 "this function with 'condition = NULL'. Instead, try to",
-                 "supply 'condition' as a factor/character vector!"),
-           call. = FALSE)
-    }
-    if (is.null(mirnaObj@mirnaDE$group) |
-        is.null(mirnaObj@geneDE$group)) {
-      stop(paste("For objects where differential expression has been manually",
-                 "added, 'condition' must be specified as a factor/character",
-                 "vector!"),
-           call. = FALSE)
-    }
-    if ((!is.character(condition) & !is.factor(condition)) |
-        length(condition) != nrow(MultiAssayExperiment::colData(mirnaObj))) {
-      stop(paste("'condition' must be the column name of a variable specified",
-                 "in the metadata (colData) of a MirnaExperiment object; or,",
-                 "alternatively, it must be a character/factor object that",
-                 "specifies group memberships."),
-           call. = FALSE)
-    }
   }
   if (!is.character(graph) |
       length(graph) != 1 |
@@ -2036,6 +2146,37 @@ plotDE <- function(mirnaObj,
            call. = FALSE)
     }
   }
+  if (!is.numeric(fontSize) |
+      length(fontSize) != 1 |
+      fontSize < 0) {
+    stop("'fontSize' must be a non-neagtive number! (default is 12)",
+         call. = FALSE)
+  }
+  if (!is.character(fontFamily) |
+      length(fontFamily) != 1) {
+    stop("'fontFamily' must be a character of length 1",
+         call. = FALSE)
+  }
+  if (!is.character(legend) |
+      length(legend) != 1 |
+      !legend %in% c("top", "bottom", "right", "left", "none")) {
+    stop("'legend' must be one of 'top', 'bottom' 'right', 'left', and 'none'",
+         call. = FALSE)
+  }
+  if (!is.numeric(borderWidth) |
+      length(borderWidth) != 1 |
+      borderWidth < 0) {
+    stop("'borderWidth' must be a non-neagtive number! (default is 1)",
+         call. = FALSE)
+  }
+  if (!is.logical(allBorders) |
+      length(allBorders) != 1) {
+    stop("'allBorders' must be logical (TRUE/FALSE)!", call. = FALSE)
+  }
+  if (!is.logical(grid) |
+      length(grid) != 1) {
+    stop("'grid' must be logical (TRUE/FALSE)!", call. = FALSE)
+  }
   
   ## extract miRNA and gene expression values
   mirnaExpr <- mirnaObj[["microRNA"]]
@@ -2046,24 +2187,14 @@ plotDE <- function(mirnaObj,
                     geneDE(mirnaObj, onlySignificant = FALSE))
   
   ## define condition vector
-  if (is.null(condition)) {
-    depM <- mirnaDE(mirnaObj, param = TRUE)
-    depG <- geneDE(mirnaObj, param = TRUE)
-    cond <- as.character(MultiAssayExperiment::colData(mirnaObj)[, depM$group])
-    cond[is.na(cond)] <- as.character(
-      MultiAssayExperiment::colData(mirnaObj)[, depG$group])[is.na(cond)]
-    contrast <- strsplit(depG$contrast, "-")[[1]]
-    lv1 <- contrast[1]
-    lv2 <- contrast[2]
-  } else if (is.factor(condition)) {
-    cond <- as.character(condition)
-    lv1 <- unique(cond)[1]
-    lv2 <- unique(cond)[2]
-  } else {
-    cond <- condition
-    lv1 <- unique(cond)[1]
-    lv2 <- unique(cond)[2]
-  }
+  depM <- mirnaDE(mirnaObj, param = TRUE)
+  depG <- geneDE(mirnaObj, param = TRUE)
+  cond <- as.character(MultiAssayExperiment::colData(mirnaObj)[, depM$group])
+  cond[is.na(cond)] <- as.character(
+    MultiAssayExperiment::colData(mirnaObj)[, depG$group])[is.na(cond)]
+  contrast <- strsplit(depG$contrast, "-")[[1]]
+  lv1 <- contrast[1]
+  lv2 <- contrast[2]
   names(cond) <- MultiAssayExperiment::colData(mirnaObj)[, "primary"]
   
   ## create a dataframe with miRNA and gene expression
@@ -2180,6 +2311,15 @@ plotDE <- function(mirnaObj,
     ggplot2::ylim(c(NA, max(statTest$y.position) +
                       0.1 * max(statTest$y.position)))
   
+  ## apply MIRit ggplot2 theme
+  dePlot <- dePlot +
+    theme.MIRit(base_size = fontSize,
+                base_family = fontFamily,
+                legend = legend,
+                borderWidth = borderWidth,
+                allBorders = allBorders,
+                grid = grid)
+  
   ## return the plot object
   return(dePlot)
   
@@ -2220,13 +2360,22 @@ plotDE <- function(mirnaObj,
 #' @param interceptType It specifies the line type used for cutoff intercepts.
 #' It must be either 'blank', 'solid', 'dashed' (default), 'dotted', 'dotdash',
 #' 'longdash' or 'twodash'
-#' @param borderWidth The width of plot borders (default is 1)
 #' @param colorScale It must be a character vector of length 3 containing valid
 #' R color names for downregulated, non significant, and upregulated features,
 #' respectively. Default value is `c('blue', 'grey', 'red')`. All available
 #' colors can be listed with [grDevices::colors()]
 #' @param title The title of the plot. Default is `NULL` not to include a plot
 #' title
+#' @param fontSize The base size for text elements within the plot.
+#' Default is 12
+#' @param fontFamily The base family for text elements within the plot
+#' @param legend The position of the legend. Allowed values are `top`,
+#' `bottom`, `right`, `left` and `none`. The default setting is `none` so that
+#' the legend will not be included in the graph.
+#' @param borderWidth The width of plot borders (default is 1)
+#' @param allBorders Logical, whetether to show all panel borders, or just the
+#' bottom and left borders. Default is TRUE
+#' @param grid Logical, whether to show grid lines or not. Default is FALSE
 #'
 #' @returns
 #' An object of class `ggplot` containing the plot.
@@ -2254,9 +2403,14 @@ plotVolcano <- function(mirnaObj,
                         interceptWidth = 0.6,
                         interceptColor = "black",
                         interceptType = "dashed",
-                        borderWidth = 1,
                         colorScale = c("blue", "grey","red"),
-                        title = NULL) {
+                        title = NULL,
+                        fontSize = 12,
+                        fontFamily = "",
+                        legend = "none",
+                        borderWidth = 1,
+                        allBorders = TRUE,
+                        grid = FALSE) {
   
   ## input checks
   if (!is(mirnaObj, "MirnaExperiment")) {
@@ -2328,12 +2482,6 @@ plotVolcano <- function(mirnaObj,
                "For additional details see ?plotCorrelation"),
          call. = FALSE)
   }
-  if (!is.numeric(borderWidth) |
-      length(borderWidth) != 1 |
-      borderWidth < 0) {
-    stop("'borderWidth' must be a non-neagtive number! (default is 1)",
-         call. = FALSE)
-  }
   if (length(colorScale) != 3 |
       any(!colorScale %in% grDevices::colors())) {
     stop(paste("'colorScale' must be a vector with R color names for",
@@ -2347,6 +2495,37 @@ plotVolcano <- function(mirnaObj,
     stop(paste("'title' must be the title of the plot.",
                "For additional details see ?plotVolcano"),
          call. = FALSE)
+  }
+  if (!is.numeric(fontSize) |
+      length(fontSize) != 1 |
+      fontSize < 0) {
+    stop("'fontSize' must be a non-neagtive number! (default is 12)",
+         call. = FALSE)
+  }
+  if (!is.character(fontFamily) |
+      length(fontFamily) != 1) {
+    stop("'fontFamily' must be a character of length 1",
+         call. = FALSE)
+  }
+  if (!is.character(legend) |
+      length(legend) != 1 |
+      !legend %in% c("top", "bottom", "right", "left", "none")) {
+    stop("'legend' must be one of 'top', 'bottom' 'right', 'left', and 'none'",
+         call. = FALSE)
+  }
+  if (!is.numeric(borderWidth) |
+      length(borderWidth) != 1 |
+      borderWidth < 0) {
+    stop("'borderWidth' must be a non-neagtive number! (default is 1)",
+         call. = FALSE)
+  }
+  if (!is.logical(allBorders) |
+      length(allBorders) != 1) {
+    stop("'allBorders' must be logical (TRUE/FALSE)!", call. = FALSE)
+  }
+  if (!is.logical(grid) |
+      length(grid) != 1) {
+    stop("'grid' must be logical (TRUE/FALSE)!", call. = FALSE)
   }
   
   ## extract miRNA/gene differential expression and cutoffs
@@ -2400,15 +2579,16 @@ plotVolcano <- function(mirnaObj,
     ggplot2::geom_hline(yintercept = -log10(pCutoff), lty = interceptType,
                         col = interceptColor, lwd = interceptWidth) +
     ggplot2::labs(x = "log2(fold change)",
-                  y = "-log10 (p-value)")  +
-    ggplot2::theme_bw() +
-    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5), 
-                   legend.position = "right", 
-                   legend.title = ggplot2::element_blank(),
-                   panel.grid.major = ggplot2::element_blank(),
-                   panel.grid.minor = ggplot2::element_blank(),
-                   panel.background = ggplot2::element_rect(
-                     colour = "black", linewidth = borderWidth))
+                  y = "-log10 (p-value)")
+  
+  ## apply MIRit ggplot2 theme
+  pVol <- pVol +
+    theme.MIRit(base_size = fontSize,
+                base_family = fontFamily,
+                legend = legend,
+                borderWidth = borderWidth,
+                allBorders = allBorders,
+                grid = grid)
   
   ## add desired labels through ggrepel
   if (!is.null(labels)) {
@@ -2464,13 +2644,23 @@ plotVolcano <- function(mirnaObj,
 #' @param pointSize The size of points in the MDS plot (default is 3)
 #' @param pointAlpha The transparency of points in the MDS plot (default
 #' is 1)
-#' @param borderWidth The width of plot borders (default is 1)
 #' @param colorScale It must be a named character vector where values
 #' correspond to R colors, while names coincide with the groups specified in
 #' the `condition` parameter (eg. c("healthy" = "green", "disease" = "red")).
 #' Default is NULL, in order to use the default color scale
 #' @param title The title of the plot. Default is `NULL` not to include a plot
 #' title
+#' @param fontSize The base size for text elements within the plot.
+#' Default is 12
+#' @param fontFamily The base family for text elements within the plot
+#' @param legend The position of the legend. Allowed values are `top`,
+#' `bottom`, `right`, `left` and `none`. The default setting is `top` to show
+#' a legend above the plot. If `none` is specified, the legend will not be
+#' included in the graph.
+#' @param borderWidth The width of plot borders (default is 1)
+#' @param allBorders Logical, whetether to show all panel borders, or just the
+#' bottom and left borders. Default is TRUE
+#' @param grid Logical, whether to show grid lines or not. Default is FALSE
 #' @param ... Other parameters that can be passed to [limma::plotMDS()] function
 #'
 #' @returns
@@ -2507,9 +2697,14 @@ plotDimensions <- function(mirnaObj,
                            boxedLabel = TRUE,
                            pointSize = 3,
                            pointAlpha = 1,
-                           borderWidth = 1,
                            colorScale = NULL,
                            title = NULL,
+                           fontSize = 12,
+                           fontFamily = "",
+                           legend = "top",
+                           borderWidth = 1,
+                           allBorders = TRUE,
+                           grid = FALSE,
                            ...) {
   
   ## input checks
@@ -2531,13 +2726,15 @@ plotDimensions <- function(mirnaObj,
            call. = FALSE)
     }
   } else {
-    if ((!is.character(condition) & !is.factor(condition)) |
-        length(condition) != nrow(MultiAssayExperiment::colData(mirnaObj))) {
-      stop(paste("'condition' must be the column name of a variable specified",
-                 "in the metadata (colData) of a MirnaExperiment object; or,",
-                 "alternatively, it must be a character/factor object that",
-                 "specifies group memberships."),
-           call. = FALSE)
+    if (!is.null(condition)) {
+      if ((!is.character(condition) & !is.factor(condition)) |
+          length(condition) != nrow(MultiAssayExperiment::colData(mirnaObj))) {
+        stop(paste("'condition' must be the column name of a variable present",
+                   "in the metadata (colData) of a MirnaExperiment object; or,",
+                   "alternatively, it must be a character/factor object that",
+                   "specifies group memberships."),
+             call. = FALSE)
+      }
     }
   }
   if (!is.numeric(dimensions) |
@@ -2575,12 +2772,6 @@ plotDimensions <- function(mirnaObj,
     stop("'pointAlpha' must be a number between 0 and 1! (default is 1)",
          call. = FALSE)
   }
-  if (!is.numeric(borderWidth) |
-      length(borderWidth) != 1 |
-      borderWidth < 0) {
-    stop("'borderWidth' must be a non-neagtive number! (default is 1)",
-         call. = FALSE)
-  }
   if (length(condition) == 1 & !is.null(colorScale)) {
     if ((!is.null(colorScale) & !is.character(colorScale)) |
         any(!colorScale %in% grDevices::colors()) |
@@ -2608,6 +2799,37 @@ plotDimensions <- function(mirnaObj,
     stop(paste("'title' must be the title of the plot.",
                "For additional details see ?plotDimensions"),
          call. = FALSE)
+  }
+  if (!is.numeric(fontSize) |
+      length(fontSize) != 1 |
+      fontSize < 0) {
+    stop("'fontSize' must be a non-neagtive number! (default is 12)",
+         call. = FALSE)
+  }
+  if (!is.character(fontFamily) |
+      length(fontFamily) != 1) {
+    stop("'fontFamily' must be a character of length 1",
+         call. = FALSE)
+  }
+  if (!is.character(legend) |
+      length(legend) != 1 |
+      !legend %in% c("top", "bottom", "right", "left", "none")) {
+    stop("'legend' must be one of 'top', 'bottom' 'right', 'left', and 'none'",
+         call. = FALSE)
+  }
+  if (!is.numeric(borderWidth) |
+      length(borderWidth) != 1 |
+      borderWidth < 0) {
+    stop("'borderWidth' must be a non-neagtive number! (default is 1)",
+         call. = FALSE)
+  }
+  if (!is.logical(allBorders) |
+      length(allBorders) != 1) {
+    stop("'allBorders' must be logical (TRUE/FALSE)!", call. = FALSE)
+  }
+  if (!is.logical(grid) |
+      length(grid) != 1) {
+    stop("'grid' must be logical (TRUE/FALSE)!", call. = FALSE)
   }
   
   ## define assay column in sample map
@@ -2658,9 +2880,10 @@ plotDimensions <- function(mirnaObj,
   
   ## create MDS plot based on biological condition or not
   if (!is.null(condition)) {
+    Condition <- cond
     mdsPlot <- ggplot2::ggplot(mds, ggplot2::aes(x = x,
                                                  y = y,
-                                                 color = condition,
+                                                 color = Condition,
                                                  label = primary))
   } else {
     mdsPlot <- ggplot2::ggplot(mds, ggplot2::aes(x = x,
@@ -2678,15 +2901,14 @@ plotDimensions <- function(mirnaObj,
       ggplot2::scale_color_manual(values = colorScale)
   }
   
-  ## add plot theme
+  ## apply MIRit ggplot2 theme
   mdsPlot <- mdsPlot +
-    ggplot2::theme_bw() +
-    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5), 
-                   legend.position = "right",
-                   panel.grid.major = ggplot2::element_blank(),
-                   panel.grid.minor = ggplot2::element_blank(),
-                   panel.background = ggplot2::element_rect(
-                     colour = "black", linewidth = borderWidth))
+    theme.MIRit(base_size = fontSize,
+                base_family = fontFamily,
+                legend = legend,
+                borderWidth = borderWidth,
+                allBorders = allBorders,
+                grid = grid)
   
   ## set axis labels
   mdsPlot <- mdsPlot +

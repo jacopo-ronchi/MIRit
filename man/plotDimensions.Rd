@@ -14,9 +14,14 @@ plotDimensions(
   boxedLabel = TRUE,
   pointSize = 3,
   pointAlpha = 1,
-  borderWidth = 1,
   colorScale = NULL,
   title = NULL,
+  fontSize = 12,
+  fontFamily = "",
+  legend = "top",
+  borderWidth = 1,
+  allBorders = TRUE,
+  grid = FALSE,
   ...
 )
 }
@@ -46,8 +51,6 @@ dimensions that account for the highest portion of variability}
 \item{pointAlpha}{The transparency of points in the MDS plot (default
 is 1)}
 
-\item{borderWidth}{The width of plot borders (default is 1)}
-
 \item{colorScale}{It must be a named character vector where values
 correspond to R colors, while names coincide with the groups specified in
 the \code{condition} parameter (eg. c("healthy" = "green", "disease" = "red")).
@@ -55,6 +58,23 @@ Default is NULL, in order to use the default color scale}
 
 \item{title}{The title of the plot. Default is \code{NULL} not to include a plot
 title}
+
+\item{fontSize}{The base size for text elements within the plot.
+Default is 12}
+
+\item{fontFamily}{The base family for text elements within the plot}
+
+\item{legend}{The position of the legend. Allowed values are \code{top},
+\code{bottom}, \code{right}, \code{left} and \code{none}. The default setting is \code{top} to show
+a legend above the plot. If \code{none} is specified, the legend will not be
+included in the graph.}
+
+\item{borderWidth}{The width of plot borders (default is 1)}
+
+\item{allBorders}{Logical, whetether to show all panel borders, or just the
+bottom and left borders. Default is TRUE}
+
+\item{grid}{Logical, whether to show grid lines or not. Default is FALSE}
 
 \item{...}{Other parameters that can be passed to \code{\link[limma:plotMDS]{limma::plotMDS()}} function}
 }

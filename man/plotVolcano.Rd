@@ -14,9 +14,14 @@ plotVolcano(
   interceptWidth = 0.6,
   interceptColor = "black",
   interceptType = "dashed",
-  borderWidth = 1,
   colorScale = c("blue", "grey", "red"),
-  title = NULL
+  title = NULL,
+  fontSize = 12,
+  fontFamily = "",
+  legend = "none",
+  borderWidth = 1,
+  allBorders = TRUE,
+  grid = FALSE
 )
 }
 \arguments{
@@ -50,8 +55,6 @@ with \code{\link[grDevices:colors]{grDevices::colors()}}}
 It must be either 'blank', 'solid', 'dashed' (default), 'dotted', 'dotdash',
 'longdash' or 'twodash'}
 
-\item{borderWidth}{The width of plot borders (default is 1)}
-
 \item{colorScale}{It must be a character vector of length 3 containing valid
 R color names for downregulated, non significant, and upregulated features,
 respectively. Default value is \code{c('blue', 'grey', 'red')}. All available
@@ -59,6 +62,22 @@ colors can be listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
 
 \item{title}{The title of the plot. Default is \code{NULL} not to include a plot
 title}
+
+\item{fontSize}{The base size for text elements within the plot.
+Default is 12}
+
+\item{fontFamily}{The base family for text elements within the plot}
+
+\item{legend}{The position of the legend. Allowed values are \code{top},
+\code{bottom}, \code{right}, \code{left} and \code{none}. The default setting is \code{none} so that
+the legend will not be included in the graph.}
+
+\item{borderWidth}{The width of plot borders (default is 1)}
+
+\item{allBorders}{Logical, whetether to show all panel borders, or just the
+bottom and left borders. Default is TRUE}
+
+\item{grid}{Logical, whether to show grid lines or not. Default is FALSE}
 }
 \value{
 An object of class \code{ggplot} containing the plot.
