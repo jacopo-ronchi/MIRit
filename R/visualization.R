@@ -2341,7 +2341,7 @@ plotDE <- function(mirnaObj,
     maxExpr <- vapply(features, function(g) {
       max(exprDf$Expression[exprDf$Gene == g])
     }, FUN.VALUE = numeric(1))
-    maxExpr <- maxExpr + 0.2 * mean(maxExpr)
+    maxExpr <- maxExpr + 0.1 * mean(maxExpr)
     statTest$y.position <- maxExpr[match(names(maxExpr), statTest$ID)]
     
     ## round p-values if plotting numbers
