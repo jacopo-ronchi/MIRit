@@ -8,13 +8,15 @@ violinplots}
 plotDE(
   mirnaObj,
   features,
+  condition = NULL,
   graph = "boxplot",
+  linear = TRUE,
   showSignificance = TRUE,
   starSig = TRUE,
   pCol = "adj.P.Val",
-  sigOffset = 1.5,
   sigLabelSize = 7,
   digits = 3,
+  nameAsTitle = FALSE,
   colorScale = NULL,
   fontSize = 12,
   fontFamily = "",
@@ -30,25 +32,29 @@ containing miRNA and gene data}
 
 \item{features}{A character vector containing the genes/miRNAs to plot}
 
+\item{condition}{It must be NULL (default) to plot expression based on the
+group variable used for differential expression analysis. Alternatively, it
+must be a character/factor object that specifies group memberships
+(eg. c("healthy, "healthy", "disease", "disease"))}
+
 \item{graph}{The type of plot to produce. It must be one of \code{boxplot}
 (default), \code{barplot}, \code{violinplot}}
+
+\item{linear}{Logical, whether to plot expression levels in linear scale
+or in log2 space. Default is TRUE in order to use the linear space}
 
 \item{showSignificance}{Logical, whether to display statistical significance
 or not. Default is TRUE}
 
 \item{starSig}{Logical, whether to represent statistical significance through
-stars. Default is TRUE, and the significance scale is: \* for $p < 0.05$, \**
-for $p < 0.01$, \*** for $p < 0.001$, and \**** for $p < 0.0001$. If
-\code{starSig} is set to FALSE, p-values or adjusted p-values will be reported on
-the plot as numbers}
+stars. Default is TRUE, and the significance scale is: * for \eqn{p < 0.05},
+** for \eqn{p < 0.01}, *** for \eqn{p < 0.001}, and **** for
+\eqn{p < 0.0001}. If \code{starSig} is set to FALSE, p-values or adjusted
+p-values will be reported on the plot as numbers}
 
 \item{pCol}{The statistics used to evaluate comparison significance. It must
 be one of \code{P.Value}, to use unadjusted p-values, and \code{adj.P.Val} (default),
 to use p-values corrected for multiple testing}
-
-\item{sigOffset}{The distance between the different brackets used to
-show statistical significance. Default is 1.5, but the user can increment it
-to enlarge the distance between significance brackets}
 
 \item{sigLabelSize}{The size for the labels used to show statistical
 significance. Default is 7, which is well suited for representing p-values
@@ -58,10 +64,15 @@ have to downsize this parameter}
 \item{digits}{The number of digits to show when p-values are reported as
 numbers (when \code{starSig} is FALSE). Default is 3}
 
+\item{nameAsTitle}{Logical, if set to TRUE, the miRNA/gene name will be
+added as plot title, and the x-axis and legend will be removed. Note that
+this option is only considered if \code{features} contains just one miRNA/gene.
+Default is FALSE}
+
 \item{colorScale}{It must be a named character vector where values
-correspond to R colors, while names coincide with the genes/miRNAs specified
-in the \code{features} parameter (eg. c("hsa-miR-34a-5p" = "blue",
-"PAX8" = "red")). Default is NULL, in order to use the default color scale}
+correspond to R colors, while names coincide with the groups specified in
+the \code{condition} parameter (eg. c("healthy" = "green", "disease" = "red")).
+Default is NULL, in order to use the default color scale}
 
 \item{fontSize}{The base size for text elements within the plot.
 Default is 12}

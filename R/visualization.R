@@ -1642,7 +1642,7 @@ plotCorrelation <- function(mirnaObj,
                "gene expression matrix."),
          call. = FALSE)
   }
-  if (!is.null(condition)) {
+  if (is.null(condition)) {
     if (mirnaObj@mirnaDE$group != mirnaObj@geneDE$group) {
       stop(paste("For unpaired data, the 'group' variable used for",
                  "differential expression analysis must be the same for both",
@@ -1658,6 +1658,8 @@ plotCorrelation <- function(mirnaObj,
                  "vector!"),
            call. = FALSE)
     }
+  }
+  if (!is.null(condition)) {
     if (length(condition) == 1) {
       if (!is.character(condition) |
           !(condition %in% colnames(MultiAssayExperiment::colData(mirnaObj)) &
@@ -1798,18 +1800,7 @@ plotCorrelation <- function(mirnaObj,
   names(cond) <- MultiAssayExperiment::colData(mirnaObj)[, "primary"]
   
   ## check the validity of color scale
-  if (length(condition) == 1 & !is.null(colorScale)) {
-    if (!is.character(colorScale) |
-        any(!colorScale %in% grDevices::colors()) |
-        !identical(
-          sort(names(colorScale)),
-          sort(unique(MultiAssayExperiment::colData(mirnaObj)[, condition])))) {
-      stop(paste("'colorScale' must be a named character vector where values",
-                 "consist of R colors, whereas names coincide to the different",
-                 "conditions. For additional details see ?plotCorrelation."),
-           call. = FALSE)
-    }
-  } else if (length(condition) != 1 & !is.null(colorScale)) {
+  if (!is.null(colorScale)) {
     if (!is.character(colorScale) |
         any(!colorScale %in% grDevices::colors()) |
         !identical(sort(names(colorScale)),
@@ -1991,31 +1982,38 @@ plotCorrelation <- function(mirnaObj,
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
 #' containing miRNA and gene data
 #' @param features A character vector containing the genes/miRNAs to plot
+#' @param condition It must be NULL (default) to plot expression based on the
+#' group variable used for differential expression analysis. Alternatively, it
+#' must be a character/factor object that specifies group memberships
+#' (eg. c("healthy, "healthy", "disease", "disease"))
 #' @param graph The type of plot to produce. It must be one of `boxplot`
 #' (default), `barplot`, `violinplot`
+#' @param linear Logical, whether to plot expression levels in linear scale
+#' or in log2 space. Default is TRUE in order to use the linear space
 #' @param showSignificance Logical, whether to display statistical significance
 #' or not. Default is TRUE
 #' @param starSig Logical, whether to represent statistical significance through
-#' stars. Default is TRUE, and the significance scale is: \* for $p < 0.05$, \**
-#' for $p < 0.01$, \*** for $p < 0.001$, and \**** for $p < 0.0001$. If
-#' `starSig` is set to FALSE, p-values or adjusted p-values will be reported on
-#' the plot as numbers
+#' stars. Default is TRUE, and the significance scale is: * for \eqn{p < 0.05},
+#' ** for \eqn{p < 0.01}, *** for \eqn{p < 0.001}, and **** for
+#' \eqn{p < 0.0001}. If `starSig` is set to FALSE, p-values or adjusted
+#' p-values will be reported on the plot as numbers
 #' @param pCol The statistics used to evaluate comparison significance. It must
 #' be one of `P.Value`, to use unadjusted p-values, and `adj.P.Val` (default),
 #' to use p-values corrected for multiple testing
-#' @param sigOffset The distance between the different brackets used to
-#' show statistical significance. Default is 1.5, but the user can increment it
-#' to enlarge the distance between significance brackets
 #' @param sigLabelSize The size for the labels used to show statistical
 #' significance. Default is 7, which is well suited for representing p-values
 #' as significance stars. However, if `starSig` is set to FALSE, the user might
 #' have to downsize this parameter
 #' @param digits The number of digits to show when p-values are reported as
 #' numbers (when `starSig` is FALSE). Default is 3
+#' @param nameAsTitle Logical, if set to TRUE, the miRNA/gene name will be
+#' added as plot title, and the x-axis and legend will be removed. Note that
+#' this option is only considered if `features` contains just one miRNA/gene.
+#' Default is FALSE
 #' @param colorScale It must be a named character vector where values
-#' correspond to R colors, while names coincide with the genes/miRNAs specified
-#' in the `features` parameter (eg. c("hsa-miR-34a-5p" = "blue",
-#' "PAX8" = "red")). Default is NULL, in order to use the default color scale
+#' correspond to R colors, while names coincide with the groups specified in
+#' the `condition` parameter (eg. c("healthy" = "green", "disease" = "red")).
+#' Default is NULL, in order to use the default color scale
 #' @param fontSize The base size for text elements within the plot.
 #' Default is 12
 #' @param fontFamily The base family for text elements within the plot
@@ -2052,13 +2050,15 @@ plotCorrelation <- function(mirnaObj,
 #' @export
 plotDE <- function(mirnaObj,
                    features,
+                   condition = NULL,
                    graph = "boxplot",
+                   linear = TRUE,
                    showSignificance = TRUE,
                    starSig = TRUE,
                    pCol = "adj.P.Val",
-                   sigOffset = 1.5,
                    sigLabelSize = 7,
                    digits = 3,
+                   nameAsTitle = FALSE,
                    colorScale = NULL,
                    fontSize = 12,
                    fontFamily = "",
@@ -2091,11 +2091,55 @@ plotDE <- function(mirnaObj,
                "For additional details see ?plotDE"),
          call. = FALSE)
   }
+  if (is.null(condition)) {
+    if (mirnaObj@mirnaDE$group != mirnaObj@geneDE$group) {
+      stop(paste("For unpaired data, the 'group' variable used for",
+                 "differential expression analysis must be the same for both",
+                 "miRNAs and genes in order to use",
+                 "this function with 'condition = NULL'. Instead, try to",
+                 "supply 'condition' as a factor/character vector!"),
+           call. = FALSE)
+    }
+    if (length(mirnaObj@mirnaDE$group) == 0 |
+        length(mirnaObj@geneDE$group) == 0) {
+      stop(paste("For objects where differential expression has been manually",
+                 "added, 'condition' must be specified as a factor/character",
+                 "vector!"),
+           call. = FALSE)
+    }
+  }
+  if (!is.null(condition)) {
+    if (length(condition) == 1) {
+      if (!is.character(condition) |
+          !(condition %in% colnames(MultiAssayExperiment::colData(mirnaObj)) &
+            !condition %in% c("primary", "mirnaCol", "geneCol"))) {
+        stop(paste("'condition' must be the column name of a variable present",
+                   "in the metadata (colData) of a MirnaExperiment object; or,",
+                   "alternatively, it must be a character/factor object that",
+                   "specifies group memberships."),
+             call. = FALSE)
+      }
+    } else {
+      if ((!is.character(condition) & !is.factor(condition)) |
+          length(condition) != nrow(MultiAssayExperiment::colData(mirnaObj))) {
+        stop(paste("'condition' must be the column name of a variable present",
+                   "in the metadata (colData) of a MirnaExperiment object; or,",
+                   "alternatively, it must be a character/factor object that",
+                   "specifies group memberships."),
+             call. = FALSE)
+      }
+    }
+  }
   if (!is.character(graph) |
       length(graph) != 1 |
       !graph %in% c("boxplot", "barplot", "violinplot")) {
     stop(paste("'graph' must be either 'boxplot' (default), `barplot`",
                "or 'violinplot'. For additional details see ?plotDE"),
+         call. = FALSE)
+  }
+  if (!is.logical(linear) |
+      length(linear) != 1) {
+    stop("'linear' must be logical (TRUE/FALSE)! See ?plotDE",
          call. = FALSE)
   }
   if (!is.logical(showSignificance) |
@@ -2115,12 +2159,6 @@ plotDE <- function(mirnaObj,
                "For additional details see ?plotDE"),
          call. = FALSE)
   }
-  if (!is.numeric(sigOffset) |
-      length(sigOffset) != 1 |
-      sigOffset < 0) {
-    stop("'sigOffset' must be a non-neagtive number! (default is 1.5)",
-         call. = FALSE)
-  }
   if (!is.numeric(sigLabelSize) |
       length(sigLabelSize) != 1 |
       sigLabelSize < 0) {
@@ -2134,17 +2172,16 @@ plotDE <- function(mirnaObj,
     stop("'digits' must be a non-neagtive integer! (default is 3)",
          call. = FALSE)
   }
-  if (!is.null(colorScale)) {
-    if (!is.character(colorScale) |
-        any(!colorScale %in% grDevices::colors()) |
-        !identical(sort(names(colorScale)),
-                   sort(features))) {
-      stop(paste("'colorScale' must be a named character vector where values",
-                 "consist of R colors, whereas names coincide to the different",
-                 "genes specified in 'features'. For additional details",
-                 "see ?plotDE"),
-           call. = FALSE)
-    }
+  if (!is.logical(nameAsTitle) |
+      length(nameAsTitle) != 1) {
+    stop("'nameAsTitle' must be logical (TRUE/FALSE)! See ?plotDE",
+         call. = FALSE)
+  }
+  if (nameAsTitle == TRUE & length(features) > 1) {
+    warning(paste("'nameAsTitle' can only be used for 1 miRNA/gene!",
+                  "This option has benn set to FALSE. See ?plotDE"),
+            call. = FALSE)
+    nameAsTitle <- FALSE
   }
   if (!is.numeric(fontSize) |
       length(fontSize) != 1 |
@@ -2182,20 +2219,39 @@ plotDE <- function(mirnaObj,
   mirnaExpr <- mirnaObj[["microRNA"]]
   geneExpr <- mirnaObj[["genes"]]
   
-  ## load differential expression results
-  statTest <- rbind(mirnaDE(mirnaObj, onlySignificant = FALSE),
-                    geneDE(mirnaObj, onlySignificant = FALSE))
-  
   ## define condition vector
-  depM <- mirnaDE(mirnaObj, param = TRUE)
-  depG <- geneDE(mirnaObj, param = TRUE)
-  cond <- as.character(MultiAssayExperiment::colData(mirnaObj)[, depM$group])
-  cond[is.na(cond)] <- as.character(
-    MultiAssayExperiment::colData(mirnaObj)[, depG$group])[is.na(cond)]
-  contrast <- strsplit(depG$contrast, "-")[[1]]
-  lv1 <- contrast[1]
-  lv2 <- contrast[2]
+  if (is.null(condition)) {
+    depM <- mirnaDE(mirnaObj, param = TRUE)
+    depG <- geneDE(mirnaObj, param = TRUE)
+    cond <- as.character(MultiAssayExperiment::colData(mirnaObj)[, depM$group])
+    cond[is.na(cond)] <- as.character(
+      MultiAssayExperiment::colData(mirnaObj)[, depG$group])[is.na(cond)]
+    contrast <- strsplit(depG$contrast, "-")[[1]]
+    lv1 <- contrast[1]
+    lv2 <- contrast[2]
+  } else if (is.factor(condition)) {
+    cond <- as.character(condition)
+    lv1 <- unique(cond)[1]
+    lv2 <- unique(cond)[2]
+  } else {
+    cond <- condition
+    lv1 <- unique(cond)[1]
+    lv2 <- unique(cond)[2]
+  }
   names(cond) <- MultiAssayExperiment::colData(mirnaObj)[, "primary"]
+  
+  ## check the validity of color scale
+  if (!is.null(colorScale)) {
+    if (!is.character(colorScale) |
+        any(!colorScale %in% grDevices::colors()) |
+        !identical(sort(names(colorScale)),
+                   as.character(sort(unique(cond))))) {
+      stop(paste("'colorScale' must be a named character vector where values",
+                 "consist of R colors, whereas names coincide to the different",
+                 "conditions. For additional details see ?plotDE"),
+           call. = FALSE)
+    }
+  }
   
   ## create a dataframe with miRNA and gene expression
   exprDf <- data.frame("Expression" = numeric(),
@@ -2228,74 +2284,92 @@ plotDE <- function(mirnaObj,
   ## keep only the condition levels used for DE analysis
   exprDf <- exprDf[exprDf$Condition %in% c(lv1, lv2), ]
   
-  ## restrict differential expression to the selected miRNAs/genes
-  statTest <- statTest[statTest$ID %in% features, ]
-  
-  ## add conditions to differential expression results
-  statTest$group1 <- lv1
-  statTest$group2 <- lv2
-  statTest$Gene <- features
-  
-  ## add y position for p-value labels
-  yCo <- max(exprDf$Expression) + 0.1 * max(exprDf$Expression)
-  statTest$y.position <- seq(yCo,
-                             yCo +
-                               sigOffset*(length(unique(exprDf$Gene)) - 1),
-                             sigOffset)
-  
-  ## round p-values if plotting numbers
-  if (starSig == FALSE) {
-    statTest[, pCol] <- round(statTest[, pCol], digits = digits)
-  }
-  
-  ## use stars to show statistical significance
-  if (starSig == TRUE) {
-    statTest$star <- "ns"
-    statTest$star[statTest[, pCol] < 0.05] <- "*"
-    statTest$star[statTest[, pCol] < 0.01] <- "**"
-    statTest$star[statTest[, pCol] < 0.001] <- "***"
-    statTest$star[statTest[, pCol] < 0.0001] <- "****"
-    pCol <- "star"
+  ## transform data in linear space
+  if (linear == TRUE) {
+    exprDf$Expression <- 2^exprDf$Expression
   }
   
   ## produce the desired plot
   if (graph == "boxplot") {
     
     ## create a grouped boxplot
-    dePlot <- ggpubr::ggboxplot(data = exprDf, x = "Condition",
-                                y = "Expression", fill = "Gene") +
-      ggplot2::ylab(expression(paste(log[2], " expression")))
+    dePlot <- ggpubr::ggboxplot(data = exprDf, x = "Gene",
+                                y = "Expression", fill = "Condition")
     
   } else if (graph == "barplot") {
     
     ## create a grouped barplot
     dePlot <- ggpubr::ggbarplot(data = exprDf,
-                                x = "Condition",
+                                x = "Gene",
                                 y = "Expression",
-                                fill = "Gene",
+                                fill = "Condition",
                                 position = ggplot2::position_dodge(0.8),
                                 add = "mean_sd",
-                                error.plot = "upper_errorbar") +
-      ggplot2::ylab(expression(paste(log[2], " expression")))
+                                error.plot = "upper_errorbar")
     
   } else if (graph == "violinplot") {
     
     ## create a grouped violinplot
     dePlot <- ggpubr::ggviolin(data = exprDf,
-                               x = "Condition",
+                               x = "Gene",
                                y = "Expression",
-                               fill = "Gene",
+                               fill = "Condition",
                                add = "boxplot")
     
+  }
+  
+  ## change y-axis label for log2 expression data
+  if (linear == FALSE) {
+    dePlot <- dePlot + ggplot2::ylab(expression(paste(log[2], " expression")))
   }
   
   ## add significance levels
   if (showSignificance == TRUE) {
     
+    ## load differential expression results
+    statTest <- rbind(mirnaDE(mirnaObj, onlySignificant = FALSE),
+                      geneDE(mirnaObj, onlySignificant = FALSE))
+    
+    ## restrict differential expression to the selected miRNAs/genes
+    statTest <- statTest[statTest$ID %in% features, ]
+    
+    ## add conditions to differential expression results
+    statTest$group1 <- lv1
+    statTest$group2 <- lv2
+    
+    ## add y position for p-value labels
+    maxExpr <- vapply(features, function(g) {
+      max(exprDf$Expression[exprDf$Gene == g])
+    }, FUN.VALUE = numeric(1))
+    maxExpr <- maxExpr + 0.2 * mean(maxExpr)
+    statTest$y.position <- maxExpr[match(names(maxExpr), statTest$ID)]
+    
+    ## round p-values if plotting numbers
+    if (starSig == FALSE) {
+      statTest[, pCol] <- round(statTest[, pCol], digits = digits)
+    }
+    
+    ## use stars to show statistical significance
+    if (starSig == TRUE) {
+      statTest$star <- "ns"
+      statTest$star[statTest[, pCol] < 0.05] <- "*"
+      statTest$star[statTest[, pCol] < 0.01] <- "**"
+      statTest$star[statTest[, pCol] < 0.001] <- "***"
+      statTest$star[statTest[, pCol] < 0.0001] <- "****"
+      pCol <- "star"
+    }
+    
+    ## add significance to the ggplot2 object
     dePlot <- dePlot +
-      ggpubr::stat_pvalue_manual(data = statTest, label = pCol,
-                                 step.increase = 0.1, size = sigLabelSize,
-                                 step.group.by = "Gene", color = "Gene")
+      ggpubr::stat_pvalue_manual(data = statTest,
+                                 label = pCol,
+                                 x = "ID",
+                                 size = sigLabelSize)
+    
+    ## expand y-limit
+    dePlot <- dePlot +
+      ggplot2::ylim(c(NA, max(statTest$y.position) +
+                        0.05 * max(statTest$y.position)))
     
   }
   
@@ -2306,11 +2380,6 @@ plotDE <- function(mirnaObj,
       ggplot2::scale_fill_manual(values = colorScale)
   }
   
-  ## expand y-limit
-  dePlot <- dePlot +
-    ggplot2::ylim(c(NA, max(statTest$y.position) +
-                      0.1 * max(statTest$y.position)))
-  
   ## apply MIRit ggplot2 theme
   dePlot <- dePlot +
     theme.MIRit(base_size = fontSize,
@@ -2319,6 +2388,15 @@ plotDE <- function(mirnaObj,
                 borderWidth = borderWidth,
                 allBorders = allBorders,
                 grid = grid)
+  
+  ## remove x-axis and set gene name as title
+  if (nameAsTitle == TRUE) {
+    dePlot <- dePlot + ggplot2::ggtitle(features) +
+      ggplot2::theme(legend.position = "none",
+                     axis.title.x = ggplot2::element_blank(),
+                     axis.text.x = ggplot2::element_blank(),
+                     axis.ticks.x = ggplot2::element_blank())
+  }
   
   ## return the plot object
   return(dePlot)
@@ -2912,9 +2990,9 @@ plotDimensions <- function(mirnaObj,
   
   ## set axis labels
   mdsPlot <- mdsPlot +
-    ggplot2::xlab(paste("Leading logFC dim ", dimensions[1], " (",
+    ggplot2::xlab(paste("Dim ", dimensions[1], " (",
                         round(var.exp[1]*100), "%)", sep = "")) +
-    ggplot2::ylab(paste("Leading logFC dim ", dimensions[2], " (",
+    ggplot2::ylab(paste("Dim ", dimensions[2], " (",
                         round(var.exp[2]*100), "%)", sep = ""))
   
   ## add labels
