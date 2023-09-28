@@ -1285,9 +1285,11 @@ theme.MIRit <- function(base_size = 12,
   }
   
   ## define ggplot2 theme
-  th <- theme_linedraw(base_size = base_size, base_family = base_family) +
+  th <- theme_bw(base_size = base_size, base_family = base_family) +
     theme(panel.border = br,
           axis.line = al,
+          axis.text = element_text(color = "black"),
+          axis.ticks = element_line(color = "black"),
           legend.key = element_blank(),
           legend.position = legend,
           plot.title = ggplot2::element_text(hjust = 0.5))
