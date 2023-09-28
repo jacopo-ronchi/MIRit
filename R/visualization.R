@@ -2392,8 +2392,7 @@ plotDE <- function(mirnaObj,
   ## remove x-axis and set gene name as title
   if (nameAsTitle == TRUE) {
     dePlot <- dePlot + ggplot2::ggtitle(features) +
-      ggplot2::theme(legend.position = "none",
-                     axis.title.x = ggplot2::element_blank(),
+      ggplot2::theme(axis.title.x = ggplot2::element_blank(),
                      axis.text.x = ggplot2::element_blank(),
                      axis.ticks.x = ggplot2::element_blank())
   }
