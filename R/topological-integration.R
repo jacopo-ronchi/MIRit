@@ -397,22 +397,14 @@ preparePathways <- function(database, org, targ, features, minPc, BPPARAM) {
   message("Converting identifiers to gene symbols...")
   pathDb <- BiocParallel::bplapply(pathDb, function(path) {
     db <- getFromNamespace(dbName, dbName)
-<<<<<<< HEAD
     db <- suppressPackageStartupMessages(
       AnnotationDbi::loadDb(AnnotationDbi::dbfile(db))
     )
-=======
-    db <- AnnotationDbi::loadDb(AnnotationDbi::dbfile(db))
->>>>>>> 84b7fa96a6ee19d7255276587bc9a74fc7bcc6ab
     on.exit(RSQLite::dbDisconnect(dbconn(db)))
     suppressMessages(
       convertNodes(path, db = db)
     )
-<<<<<<< HEAD
   }, BPPARAM = BPPARAM)
-=======
-  }, BPPARAM = BPPAAM)
->>>>>>> 84b7fa96a6ee19d7255276587bc9a74fc7bcc6ab
   
   ## create a list of augmented pathways
   message("Adding miRNA-gene interactions to biological pathways...")
