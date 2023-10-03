@@ -250,6 +250,35 @@ listPathways <- function(organism, database) {
 
 
 
+## helper function for pathway node conversion
+## this function has been adapted from the graphite package to run via
+## BiocParallel parallelization
+convertNodes <- function(x, db) {
+  
+  ## define conversion mapping
+  mapping <- list(to = "SYMBOL", db = db)
+  
+  ## convert node identifiers
+  x@protEdges <- graphite:::convertEdges(x@protEdges, mapping)
+  x@protPropEdges <- graphite:::convertEdges(x@protPropEdges, mapping)
+  x@metabolEdges <- graphite:::convertEdges(x@metabolEdges, mapping)
+  x@metabolPropEdges <- graphite:::convertEdges(x@metabolPropEdges, mapping)
+  x@mixedEdges <- graphite:::convertEdges(x@mixedEdges, mapping)
+  
+  if (nrow(x@protEdges) + nrow(x@protPropEdges) + nrow(x@metabolEdges) +
+      nrow(x@metabolPropEdges) + nrow(x@mixedEdges) == 0) {
+    warning("the conversion lost all edges of pathway \"", x@title, "\"")
+  }
+  
+  ## return the pathway with converted nodes
+  return(x)
+  
+}
+
+
+
+
+
 #' Create example [`MirnaExperiment`][MirnaExperiment-class] objects
 #' 
 #' This helper function allows to create a

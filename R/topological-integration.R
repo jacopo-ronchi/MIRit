@@ -381,12 +381,28 @@ preparePathways <- function(database, org, targ, features, minPc, BPPARAM) {
   message(paste("Downloading pathways from", database, "database..."))
   pathDb <- graphite::pathways(species = org, database = tolower(database))
   
-  ## convert pathway identifiers to gene symbols
+  ## retrieve the appropriate organism database
+  dbName <- graphite:::selectDb(org)
+  
+  ## check if the user has installed the required database
+  if (!requireNamespace(dbName, quietly = TRUE)) {
+    stop(paste("The", dbName, "package is not installed. Install it before",
+               "runnning this function through:",
+               paste("`BiocManager::install(\"", dbName, "\")`.", sep = "")),
+         call. = FALSE)
+  }
+  
+  ## convert pathway identifiers to gene symbols by accessing OrgDb through
+  ## parallel workers
   message("Converting identifiers to gene symbols...")
-  pathDb <- suppressMessages(
-    graphite::convertIdentifiers(pathDb, to = "SYMBOL")
-  )
-  pathDb <- as.list(pathDb)
+  pathDb <- BiocParallel::bplapply(pathDb, function(path) {
+    db <- getFromNamespace(dbName, dbName)
+    db <- AnnotationDbi::loadDb(AnnotationDbi::dbfile(db))
+    on.exit(RSQLite::dbDisconnect(dbconn(db)))
+    suppressMessages(
+      convertNodes(path, db = db)
+    )
+  }, BPPARAM = BPPAAM)
   
   ## create a list of augmented pathways
   message("Adding miRNA-gene interactions to biological pathways...")
