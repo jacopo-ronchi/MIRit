@@ -269,36 +269,37 @@ topologicalAnalysis <- function(mirnaObj,
   }, FUN.VALUE = numeric(1))
   names(pCov) <- names(graphList)
   
-  ## perform topological sorting for each graph
+  ## prepare graph objects for pathway score calculation
   message("Performing topological sorting of pathway nodes...")
-  topoSort <- bplapply(graphList, topologicalSorting, BPPARAM = BPPARAM)
+  graphList <- BiocParallel::bplapply(graphList,
+                                      setUpPathways,
+                                      BPPARAM = BPPARAM)
   
   ## calculate the observed score for each pathway
   message("Calculating pathway scores...")
-  pS <- bpmapply(score.helper,
-                 graphList,
-                 topoSort,
-                 MoreArgs = list(featDE = featDE),
-                 BPPARAM = BPPARAM)
+  pS <- bplapply(graphList, function(pathway) {
+    computePathwayScore(expr = featDE,
+                        bfs = pathway@graphData$topoSort,
+                        edges = pathway@graphData$interactions,
+                        weights = pathway@graphData$eW)
+  }, BPPARAM = BPPARAM)
+  pS <- unlist(pS)
   
   ## generate n random permutations
   message("Generating random permutations...")
   randomVec <- generatePermutations(deg, dem, nPerm)
-  
-  ## prepare permutation vectors
   paths <- rep(graphList, times = nPerm)
   permVec <- rep(randomVec, each = length(graphList))
-  topoPerm <- rep(topoSort, times = nPerm)
   
   ## use parallel mapply to compute permutation scores for each pathway
   message(paste("Calculating p-values with", nPerm, "permutations..."))
-  permScores <- bpmapply(score.helper,
-                         paths,
-                         topoPerm,
-                         permVec,
-                         BPPARAM = BPPARAM,
-                         BPOPTIONS = bpoptions(tasks = 500,
-                                               progressbar = TRUE))
+  permScores <- bpmapply(function(pathway, permExpr) {
+    computePathwayScore(expr = permExpr,
+                        bfs = pathway@graphData$topoSort,
+                        edges = pathway@graphData$interactions,
+                        weights = pathway@graphData$eW)
+  }, paths, permVec, BPPARAM = BPPARAM,
+  BPOPTIONS = bpoptions(tasks = 500, progressbar = TRUE))
   
   ## split permuted scores according to pathways
   permList <- split(permScores, names(paths))
@@ -606,11 +607,15 @@ topologicalSorting <- function(pathway) {
 
 
 
-## helper function for calculating pathway score through C++ TAIPA
-score.helper <- function(pathway, topoSort, featDE) {
+## helper function for setting up graphs as required for score calculation
+setUpPathways <- function(pathway) {
+  
+  ## perform topological sorting
+  pathway@graphData$topoSort <- topologicalSorting(pathway)
   
   ## create a list with upstream genes for each node
   interactions <- graph::inEdges(graph::nodes(pathway), pathway)
+  pathway@graphData$interactions <- interactions
   
   ## extract edge weights
   eW <- lapply(names(interactions), function(node) {
@@ -627,14 +632,11 @@ score.helper <- function(pathway, topoSort, featDE) {
   })
   names(eW) <- names(interactions)
   
-  ## compute pathway score
-  score <- computePathwayScore(expr = featDE,
-                               bfs = topoSort,
-                               edges = interactions,
-                               weights = eW)
+  ## store edge weights in the graph object
+  pathway@graphData$eW <- eW
   
-  ## return score
-  return(score)
+  ## return pathway object
+  return(pathway)
   
 }
 
