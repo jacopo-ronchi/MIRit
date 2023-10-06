@@ -82,11 +82,11 @@ searchDisease <- function(diseaseName) {
 
 #' Find disease-associated SNPs occurring at DE-miRNA loci
 #'
-#' This function allows to identify genomic variants affecting
-#' differentially expressed miRNA genes, that are associated with a
-#' particular disease of interest. To do so, this function uses `gwasrapidd`
-#' to retrieve SNPs-disease associations, and then retains only
-#' SNPs that affect DE-miRNA genes.
+#' This function allows to identify disease-associated genomic variants
+#' affecting differentially expressed miRNA genes or their host genes.
+#' To do so, this function uses `gwasrapidd` to retrieve SNPs-disease
+#' associations, and then retains only SNPs that affect DE-miRNA genes or their
+#' relative host genes (for intronic miRNAs).
 #'
 #' @details
 #' SNPs occurring within miRNAs may have important effects on the biological
@@ -109,7 +109,11 @@ searchDisease <- function(diseaseName) {
 #' differentially expressed miRNAs:
 #' 
 #' * `variant` contains SNP identifiers;
-#' * `miRNA` specifies the DE-miRNA gene present;
+#' * `gene` defines the gene affected by a disease-SNP (it may be the miRNA
+#' gene itself or the host gene of an intronic miRNA);
+#' * `miRNA.gene` specifies the DE-miRNA gene present;
+#' * `miRNA.precursor` specifies the name of the miRNA precursor affected
+#' by disease-SNPs;
 #' * `chr` indicates the chromosome of SNPs;
 #' * `position` shows the SNP position;
 #' * `allele` displays possible alleles for this SNPs;
@@ -178,6 +182,10 @@ findMirnaSNPs <- function(mirnaObj,
   
   ## extract genomic context
   varDf <- varDf@genomic_contexts
+  if (nrow(varDf) == 0) {
+    stop("No variants exist for this biological trait!", call. = FALSE)
+  }
+  varDf <- as.data.frame(varDf)
   varDf <- varDf[varDf$chromosome_name %in% c(seq(22), "X", "Y"), seq(10)]
   varDf <- unique(varDf)
   
@@ -189,24 +197,32 @@ findMirnaSNPs <- function(mirnaObj,
   ensembl <- biomaRt::useEnsembl(biomart = "ensembl",
                                  dataset = "hsapiens_gene_ensembl",
                                  mirror = "useast")
-  deMirnas <- mirnaDE(mirnaObj)
-  deMirnas <- deMirnas$ID
-  deMirnas <- gsub("-5p|-3p", "", deMirnas)
+  dem <- mirnaDE(mirnaObj)$ID
+  deMirnas <- gsub("-5p|-3p", "", dem)
   mirGenes <- biomaRt::select(ensembl,
                               keys = deMirnas,
                               keytype = "mirbase_id",
                               columns = c("hgnc_symbol",
+                                          "mirbase_id",
                                           "gene_biotype",
                                           "chromosome_name",
                                           "strand",
                                           "start_position",
                                           "end_position"))
+  mirGenes <- mirGenes[mirGenes$chromosome_name %in% c(seq(22), "X", "Y"), ]
+  mirGenes$chromosome_name <- NULL
   
   ## intersect differentially expressed miRNAs with genes mapped with SNPs
-  names(mirGenes)[which(names(mirGenes) == "hgnc_symbol")] <- "gene_name"
-  mirMatches <- paste(mirGenes$gene_name, collapse = "|")
+  mirMatches <- paste(mirGenes$hgnc_symbol, collapse = "|")
   resDf <- varDf[grepl(mirMatches, varDf$gene_name), ]
-  resDf <- merge(resDf, mirGenes, by = c("gene_name", "chromosome_name"))
+  if (nrow(resDf) == 0) {
+    message("No disease-related SNPs are present within DE-miRNA loci.")
+    return(NULL)
+  }
+  idx2 <- sapply(mirGenes$hgnc_symbol, grep, resDf$gene_name)
+  idx1 <- sapply(seq_along(idx2), function(i) rep(i, length(idx2[[i]])))
+  resDf <- cbind(mirGenes[unlist(idx1),, drop = FALSE],
+                 resDf[unlist(idx2),, drop = FALSE])
   
   ## add allele information
   snpData <- biomaRt::useEnsembl(biomart = "snps", dataset = "hsapiens_snp")
@@ -219,13 +235,14 @@ findMirnaSNPs <- function(mirnaObj,
   resDf <- merge(resDf, snpInfo, by = "variant_id")
   
   ## prepare resulting data.frame
-  resDf <- resDf[, c("variant_id", "gene_name", "chromosome_name",
-                     "chromosome_position", "allele", "distance", "is_upstream",
-                     "is_downstream", "strand", "start_position",
-                     "end_position")]
-  colnames(resDf) <- c("variant", "miRNA", "chr", "position", "allele",
-                       "distance", "is_upstream", "is_downstream",
-                       "mirnaStrand", "mirnaStartPosition", "mirnaEndPosition")
+  resDf <- resDf[, c("variant_id", "gene_name", "hgnc_symbol", "mirbase_id",
+                     "chromosome_name", "chromosome_position", "allele",
+                     "distance", "is_upstream", "is_downstream", "strand",
+                     "start_position", "end_position")]
+  colnames(resDf) <- c("variant", "gene", "miRNA.gene", "miRNA.precursor",
+                       "chr", "position", "allele", "distance", "is_upstream",
+                       "is_downstream", "mirnaStrand", "mirnaStartPosition",
+                       "mirnaEndPosition")
   
   ## display a message with miRNA-SNPs association results
   message(paste("After the analysis,", nrow(resDf), "variants associated with",

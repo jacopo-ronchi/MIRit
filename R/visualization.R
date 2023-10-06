@@ -1330,6 +1330,10 @@ theme.MIRit <- function(base_size = 12,
 #' @param mirFill It must be an R color name that specifies the fill color of
 #' the miRNA locus. Default is `orange`. All available colors can be listed
 #' with [grDevices::colors()]
+#' @param from The start position of the plotted genomic range. Default is
+#' NULL to automatically determine an appropriate position
+#' @param to The end position of the plotted genomic range. Default is
+#' NULL to automatically determine an appropriate position
 #' @param title The title of the plot. Default is `NULL` not to include a plot
 #' title
 #' @param ... Other parameters that can be passed to [Gviz::plotTracks()]
@@ -1369,6 +1373,8 @@ mirVariantPlot <- function(variantId,
                            showSequence = TRUE,
                            snpFill = "lightblue",
                            mirFill = "orange",
+                           from = NULL,
+                           to = NULL,
                            title = NULL,
                            ...) {
   
@@ -1380,12 +1386,11 @@ mirVariantPlot <- function(variantId,
          call. = FALSE)
   }
   if (!is.data.frame(snpAssociation) |
-      !identical(colnames(snpAssociation), c("variant", "disease", "mirnaGene",
-                                             "allele", "chromosome", "position",
-                                             "genesPresent", "mirnaStart",
-                                             "mirnaEnd", "mirnaStrand",
-                                             "variantDSI", "variantDPI",
-                                             "ei", "score"))) {
+      !identical(colnames(snpAssociation),
+                 c("variant", "gene", "miRNA.gene", "miRNA.precursor",
+                   "chr", "position", "allele", "distance", "is_upstream",
+                   "is_downstream", "mirnaStrand", "mirnaStartPosition",
+                   "mirnaEndPosition"))) {
     stop(paste("'snpAssociation' must be a data.frame containing the",
                "list of SNPs occurring at DE-miRNA genes. To obtain this",
                "association you can use the 'findMirnaSNPs()' function.",
@@ -1426,6 +1431,22 @@ mirVariantPlot <- function(variantId,
                "For additional details see ?mirVariantPlot"),
          call. = FALSE)
   }
+  if (!is.null(from)) {
+    if (!is.numeric(from) |
+        length(from) != 1 |
+        from < 0) {
+      stop("'from' must be a non-neagtive number!",
+           call. = FALSE)
+    }
+  }
+  if (!is.null(to)) {
+    if (!is.numeric(to) |
+        length(to) != 1 |
+        to < 0) {
+      stop("'to' must be a non-neagtive number!",
+           call. = FALSE)
+    }
+  }
   
   ## select the specified variant
   snpAssociation <- snpAssociation[snpAssociation$variant == variantId, ]
@@ -1440,15 +1461,16 @@ mirVariantPlot <- function(variantId,
                                                     keep.extra.columns = TRUE)
   
   ## extract and format miRNA genomic coordinates
-  mirSeq <- snpAssociation[, c(5, 8, 9, 10, 3)]
+  mirSeq <- snpAssociation[, c(5, 12, 13, 11, 2)]
   colnames(mirSeq) <- c("chr", "start", "end", "strand", "miRNA_gene")
+  mirSeq$strand <- ifelse(mirSeq$strand == 1, "+", "-")
   
   ## create GRanges object containing miRNA positions
   mirSeq <- GenomicRanges::makeGRangesFromDataFrame(mirSeq,
                                                     keep.extra.columns = TRUE)
   
   ## set parameters
-  chr <- paste("chr", snpAssociation$chromosome, sep = "")
+  chr <- paste("chr", snpAssociation$chr, sep = "")
   g <- "hg38"
   lf <- 0.1
   rf <- 0.1
@@ -1470,19 +1492,25 @@ mirVariantPlot <- function(variantId,
                                     genome = g,
                                     chromosome = chr,
                                     name = "miRNA",
-                                    symbol = snpAssociation$mirnaGene)
+                                    symbol = snpAssociation$miRNA.gene)
   
   ## create sequence track
   if (showSequence == TRUE) {
-    sTrack <- Gviz::SequenceTrack(BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38,
-                                  chromosome = chr)
+    sTrack <- Gviz::SequenceTrack(
+      BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38,
+      chromosome = chr)
   }
   
   ## create genomic context track
   if (showContext == TRUE) {
-    biomTrack <- Gviz::BiomartGeneRegionTrack(genome = g,
-                                              symbol = snpAssociation$mirnaGene,
-                                              name = "Gene context")
+    message("Retrieving genomic context from Ensembl...")
+    mart <- biomaRt::useMart("ensembl")
+    mart <- biomaRt::useDataset("hsapiens_gene_ensembl", mart)
+    biomTrack <- Gviz::BiomartGeneRegionTrack(
+      biomart = mart,
+      genome = g,
+      symbol = snpAssociation$miRNA.gene,
+      name = "Genomic context")
   }
   
   ## create trackplot element list
@@ -1504,8 +1532,10 @@ mirVariantPlot <- function(variantId,
                                 extend.right = rf,
                                 transcriptAnnotation = "symbol",
                                 main = title,
+                                collapseTranscripts = "meta",
+                                from = from,
+                                to = to,
                                 ...)
-  
   
 }
 

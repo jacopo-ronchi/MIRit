@@ -18,7 +18,11 @@ A \code{data.frame} containing details about disease-SNPs and the associated
 differentially expressed miRNAs:
 \itemize{
 \item \code{variant} contains SNP identifiers;
-\item \code{miRNA} specifies the DE-miRNA gene present;
+\item \code{gene} defines the gene affected by a disease-SNP (it may be the miRNA
+gene itself or the host gene of an intronic miRNA);
+\item \code{miRNA.gene} specifies the DE-miRNA gene present;
+\item \code{miRNA.precursor} specifies the name of the miRNA precursor affected
+by disease-SNPs;
 \item \code{chr} indicates the chromosome of SNPs;
 \item \code{position} shows the SNP position;
 \item \code{allele} displays possible alleles for this SNPs;
@@ -31,11 +35,11 @@ differentially expressed miRNAs:
 }
 }
 \description{
-This function allows to identify genomic variants affecting
-differentially expressed miRNA genes, that are associated with a
-particular disease of interest. To do so, this function uses \code{gwasrapidd}
-to retrieve SNPs-disease associations, and then retains only
-SNPs that affect DE-miRNA genes.
+This function allows to identify disease-associated genomic variants
+affecting differentially expressed miRNA genes or their host genes.
+To do so, this function uses \code{gwasrapidd} to retrieve SNPs-disease
+associations, and then retains only SNPs that affect DE-miRNA genes or their
+relative host genes (for intronic miRNAs).
 }
 \details{
 SNPs occurring within miRNAs may have important effects on the biological
