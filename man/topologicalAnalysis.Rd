@@ -117,11 +117,16 @@ permuted scores are standardized by subtracting the mean score of the
 permuted sets \eqn{\mu_{\Psi_P}} and then dividing by the standard deviation
 of the permuted scores \eqn{\sigma_{\Psi_P}}.
 
-Finally, the p-value is defined as the fraction of permutations that
-reported a higher normalized pathway score than the observed one. In the
-end, p-values are corrected for multiple testing either through the max-T
-procedure (default option) which is particularly suited for permutation
-tests, or through the standard multiple testing approaches.
+Finally, the p-value is defined based on the fraction of permutations that
+reported a higher normalized pathway score than the observed one.
+However, to prevent p-values equal to zero, we define p-values as:
+
+\deqn{p = \frac{\sum_{n=1}^{N_p} \left[ \Psi_{P_N} \ge \Psi_N \right] + 1}
+{N_p + 1}\,.}
+
+In the end, p-values are corrected for multiple testing either through the
+max-T procedure (default option) which is particularly suited for
+permutation tests, or through the standard multiple testing approaches.
 }
 
 \subsection{Implementation details}{
