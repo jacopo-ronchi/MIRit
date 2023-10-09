@@ -78,3 +78,35 @@ setMethod("show", "FunctionalEnrichment", function(object) {
       "'enrichmentDotplot()' can be used for visualization.\n\n", sep = "")
 })
 
+
+
+## ==========================================================================
+## Show method for IntegrativePathwayAnalysis class
+## ==========================================================================
+
+
+#' @describeIn IntegrativePathwayAnalysis-class Show method for objects of
+#' class IntegrativePathwayAnalysis
+#' @export
+setMethod("show", "IntegrativePathwayAnalysis", function(object) {
+  cat("Object of class IntegrativePathwayAnalysis containing:\n\n",
+      "\t- Topology-Aware Integrative Pathway Analysis (TAIPA) results: ",
+      class(integratedPathways(object)), " with ",
+      nrow(integratedPathways(object)), " rows and ",
+      ncol(integratedPathways(object)), " columns\n",
+      "\t- feature expression: ", class(object@expression), " with ",
+      nrow(object@expression), " rows and ", ncol(object@expression),
+      " columns\n",
+      "\t- organism: ", object@organism, "\n",
+      "\t- database: ", object@database, "\n",
+      "\t- method: ", object@method, "\n",
+      "\t- p-value cutoff used: ", object@pCutoff, "\n",
+      "\t- p-value adjustment method: ", object@pAdjustment, "\n",
+      "\t- miRNA-augmented pathways: ", class(object@pathways),
+      " of length ", length(object@pathways), "\n",
+      "\t- minimum pathway coverage used: ", object@minPc, "%\n",
+      "\t- number of permutations: ", object@nPerm, "\n",
+      "\nResults can be accessed with 'integratedPathways()' while ",
+      "'integrationDotplot()' can be used for visualization.\n\n", sep = "")
+})
+
