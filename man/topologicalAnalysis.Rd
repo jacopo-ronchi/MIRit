@@ -6,12 +6,10 @@
 \usage{
 topologicalAnalysis(
   mirnaObj,
-  database = "KEGG",
-  organism = "Homo sapiens",
+  pathways,
   pCutoff = 0.05,
   pAdjustment = "max-T",
   nPerm = 10000,
-  minPc = 10,
   BPPARAM = bpparam()
 )
 }
@@ -19,13 +17,8 @@ topologicalAnalysis(
 \item{mirnaObj}{A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object
 containing miRNA and gene data}
 
-\item{database}{The name of the database to use. It must be one of: \code{KEGG},
-\code{Reactome}, and \code{WikiPathways}. Default is \code{KEGG}}
-
-\item{organism}{The name of the organism under consideration. The different
-databases have different supported organisms. To see the list of supported
-organisms for a given database, use the \code{\link[=supportedOrganisms]{supportedOrganisms()}} function.
-Default specie is \verb{Homo sapiens}}
+\item{pathways}{A \code{list} of miRNA-augmented pathways returned by the
+\code{\link[=preparePathways]{preparePathways()}} function}
 
 \item{pCutoff}{The adjusted p-value cutoff to use for statistical
 significance. The default value is \code{0.05}}
@@ -37,10 +30,6 @@ must be one of: \code{max-T} (default), \code{fdr}, \code{BH}, \code{none}, \cod
 \item{nPerm}{The number of permutation used for assessing the statistical
 significance of each pathway. Default is 10000. See the \emph{details} section
 for additional information}
-
-\item{minPc}{The minimum percentage of measured features that a pathway must
-have for being considered in the analysis. Default is 10. See the \emph{details}
-section for additional information}
 
 \item{BPPARAM}{The desired parallel computing behavior. This paramete
 defaults to \code{BiocParallel::bpparam()}, but this can be edited. See
@@ -54,16 +43,14 @@ the results of the analysis. See the relative help page for further details.
 \description{
 This function allows to perform an integrative pathway analysis that aims
 to identify the biological networks that are most affected by miRNomic
-and transcriptomic dysregulations. Briefly, influential miRNA-mRNA
-interactions, identified by the \code{\link[=mirnaIntegration]{mirnaIntegration()}} function, are added to
-biological pathways retrieved from a pathway database such as \code{KEGG},
-\code{WikiPathways} and \code{Reactome}. Then, a score that estimates the degree of
-impairment is calculated for each pathway, and statistical significance is
-calculated through a permutation test. The main advantages of this method
-are that it doesn't require matched samples, and that it allows to perform
-an integrative miRNA-mRNA pathway analysis that takes into account the
-topology of biological networks. See the \emph{details} section for
-additional information.
+and transcriptomic dysregulations. This function takes miRNA-augmented
+pathways, created by the \code{\link[=preparePathways]{preparePathways()}} function, and then calculates
+a score that estimates the degree of impairment for each pathway. Later,
+statistical significance is calculated through a permutation test. The main
+advantages of this method are that it doesn't require matched samples, and
+that it allows to perform an integrative miRNA-mRNA pathway analysis that
+takes into account the topology of biological networks. See the \emph{details}
+section for additional information.
 }
 \details{
 \subsection{Topologically-Aware Integrative Pathway Analysis (TAIPA)}{
@@ -131,27 +118,11 @@ permutation tests, or through the standard multiple testing approaches.
 
 \subsection{Implementation details}{
 
-To create augmented pathways, this function uses the \code{graphite} R package
-to download biological networks from the above mentioned database. Then,
-each pathway is converted to a \code{graph} object, and significant miRNA-mRNA
-interactions are added to the network. Further, edge weights are added
-according to interaction type.
-
-At this point, biological pathways with few nodes measured are excluded
-from this analysis. This is required because, during differential expression
-analysis, lowly expressed features are removed. Therefore, some pathways
-might result significantly affected even if only 1\% of nodes is perturbed.
-The default behavior is to exclude pathways with less than 10\% of
-representation (\code{minPc = 10}).
-
-After this normalization step, the score of each pathway is calculated.
 For computational efficiency, pathway score computation has been implemented
-in C++ language.
-
-Moreover, to define the statistical significance of each network, a
-permutation test is applied following the number of permutations specified
-with \code{nPerm}. The default setting is to perform 10000 permutations. The
-higher is the number of permutations, the more stable are the calculated
+in C++ language. Moreover, to define the statistical significance of each
+network, a permutation test is applied following the number of permutations
+specified with \code{nPerm}. The default setting is to perform 10000 permutations.
+The higher is the number of permutations, the more stable are the calculated
 p-values, even though the time needed will increase. In this regard, since
 computing pathway score for 10000 networks for each pathway is
 computationally intensive, parallel computing has been employed to reduce
@@ -167,8 +138,11 @@ obj <- loadExamples()
 # perform integration analysis with default settings
 obj <- mirnaIntegration(obj)
 
+# retrieve pathways from KEGG and augment them with miRNA-gene interactions
+paths <- preparePathways(obj)
+
 # perform the integrative pathway analysis with default settings
-#ipa <- topologicalAnalysis(obj)
+#ipa <- topologicalAnalysis(obj, paths)
 
 # access the results of pathway analysis
 #integratedPathways(ipa)
@@ -181,11 +155,6 @@ obj <- mirnaIntegration(obj)
 
 }
 \references{
-Sales, G., Calura, E., Cavalieri, D. et al. graphite - a Bioconductor
-package to convert pathway topology to gene network.
-BMC Bioinformatics 13, 20 (2012),
-\url{https://doi.org/10.1186/1471-2105-13-20}.
-
 Peter H. Westfall and S. Stanley Young. Resampling-Based Multiple Testing:
 Examples and Methods for p-Value Adjustment. John Wiley & Sons.
 ISBN 978-0-471-55761-6.

@@ -1,17 +1,184 @@
+#' Prepare miRNA-augmented pathways for integrative miRNA-mRNA pathway analyses
+#' 
+#' This function takes influential miRNA-mRNA interactions, identified by the
+#' [mirnaIntegration()] function, and adds them to biological pathways
+#' retrieved from a pathway database such as `KEGG`, `WikiPathways` and
+#' `Reactome`. The pathways returned from this function are needed to perform
+#' a topologically-aware integrative pathway analysis (TAIPA) through the
+#' [topologicalAnalysis()] function.
+#' 
+#' @details
+#' To create augmented pathways, this function uses the `graphite` R package
+#' to download biological networks from the above mentioned databases. Then,
+#' each pathway is converted to a `graph` object, and significant miRNA-mRNA
+#' interactions are added to the network. Further, edge weights are added
+#' according to interaction type.
+#' 
+#' At this point, biological pathways with few nodes measured are excluded
+#' from this analysis. This is required because, during differential expression
+#' analysis, lowly expressed features are removed. Therefore, some pathways
+#' might result significantly affected even if only 1% of nodes is perturbed.
+#' The default behavior is to exclude pathways with less than 10% of
+#' representation (`minPc = 10`).
+#' 
+#' Finally, this function performs a breadth-first search (BFS) algorithm to
+#' topologically sort pathway nodes so that each individual node occurs after
+#' all its upstream nodes. Nodes within cycles are considered leaf nodes.
+#' 
+#' Information about pathway coverage, i.e. the percentage of nodes with
+#' expression measurments, edge weights, topological sorting order, and the
+#' parameters used to create the networks are all stored in the `graphData`
+#' slot of each `graphNEL` object.
+#' 
+#' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
+#' containing miRNA and gene data
+#' @param database The name of the database to use. It must be one of: `KEGG`,
+#' `Reactome`, and `WikiPathways`. Default is `KEGG`
+#' @param organism The name of the organism under consideration. The different
+#' databases have different supported organisms. To see the list of supported
+#' organisms for a given database, use the [supportedOrganisms()] function.
+#' Default specie is `Homo sapiens`
+#' @param minPc The minimum percentage of measured features that a pathway must
+#' have for being considered in the analysis. Default is 10. See the *details*
+#' section for additional information
+#' @param BPPARAM The desired parallel computing behavior. This paramete
+#' defaults to `BiocParallel::bpparam()`, but this can be edited. See
+#' [BiocParallel::bpparam()] for information on parallel computing in R
+#' 
+#' @returns
+#' A `list` object containing the miRNA-augmented pathways as `graphNEL`
+#' objects.
+#' 
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform integration analysis with default settings
+#' obj <- mirnaIntegration(obj)
+#' 
+#' # retrieve pathways from KEGG and augment them with miRNA-gene interactions
+#' paths <- preparePathways(obj)
+#'
+#' # perform the integrative pathway analysis with default settings
+#' #ipa <- topologicalAnalysis(obj, paths)
+#' 
+#' # access the results of pathway analysis
+#' #integratedPathways(ipa)
+#' 
+#' # create a dotplot of integrated pathways
+#' #integrationDotplot(ipa)
+#' 
+#' # explore a specific biological network
+#' #visualizeNetwork(ipa, "Thyroid hormone synthesis")
+#' 
+#' @references
+#' Sales, G., Calura, E., Cavalieri, D. et al. graphite - a Bioconductor
+#' package to convert pathway topology to gene network.
+#' BMC Bioinformatics 13, 20 (2012),
+#' \url{https://doi.org/10.1186/1471-2105-13-20}.
+#' 
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#' 
+#' @import BiocParallel
+#' @export
+preparePathways <- function(mirnaObj,
+                            database = "KEGG",
+                            organism = "Homo sapiens",
+                            minPc = 10,
+                            BPPARAM = bpparam()) {
+  
+  ## input checks
+  if (!is(mirnaObj, "MirnaExperiment")) {
+    stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
+         call. = FALSE)
+  }
+  if (max(dim(integration(mirnaObj))) == 0) {
+    stop(paste("Integration analysis is not detected in 'mirnaObj'!",
+               "Before using this function, expression levels of miRNAs and",
+               "genes must be integrated with the 'mirnaIntegration()'",
+               "function. See '?mirnaIntegration' for details."),
+         call. = FALSE)
+  }
+  if (!is.character(database) |
+      length(database) != 1 |
+      !database %in% c("KEGG", "Reactome", "WikiPathways")) {
+    stop("Supported databases are: 'KEGG', 'Reactome' and 'WikiPathways'",
+         call. = FALSE)
+  }
+  if (!is.numeric(minPc) |
+      length(minPc) != 1 |
+      minPc < 0 |
+      minPc > 100) {
+    stop("'minPc' must be a positive number between 0 and 100! (default is 10)",
+         call. = FALSE)
+  }
+  
+  ## check if database is supported for the given specie
+  supp <- species[!is.na(species[, paste("graph", database, sep = "_")]),
+                  "specie"]
+  if (!organism %in% supp) {
+    stop(paste("For", database, "database, 'organism' must be one of:",
+               paste(supp, collapse = ", ")))
+  }
+  
+  ## convert organism name to graphite name
+  org <- species[species$specie == organism,
+                 paste("graph", database, sep = "_")]
+  
+  ## get differential expression results
+  deg <- geneDE(mirnaObj, onlySignificant = FALSE)
+  dem <- mirnaDE(mirnaObj, onlySignificant = TRUE)
+  
+  ## define genes and miRNAs with measurments
+  features <- c(dem$ID, deg$ID)
+  
+  ## extract integrated miRNA targets
+  intTargets <- selectTargets(mirnaObj, pairs = TRUE)
+  
+  ## prepare miRNA augmented pathways
+  graphList <- preparePathways.internal(database = database,
+                                        org = org,
+                                        targ = intTargets,
+                                        features = features,
+                                        minPc = minPc,
+                                        BPPARAM = BPPARAM)
+  
+  ## prepare graph objects for pathway score calculation
+  message("Performing topological sorting of pathway nodes...")
+  graphList <- BiocParallel::bplapply(graphList,
+                                      setUpPathways,
+                                      BPPARAM = BPPARAM)
+  
+  ## add analysis parameters to each graph object
+  graphList <- lapply(graphList, function(p) {
+    p@graphData$organism <- organism
+    p@graphData$database <- database
+    p@graphData$minPc <- minPc
+    p
+  })
+  
+  ## returned miRNA-augmented pathways
+  return(graphList)
+  
+}
+
+
+
+
+
 #' Perform a topologically-aware integrative pathway analysis (TAIPA)
 #'
 #' This function allows to perform an integrative pathway analysis that aims
 #' to identify the biological networks that are most affected by miRNomic
-#' and transcriptomic dysregulations. Briefly, influential miRNA-mRNA
-#' interactions, identified by the [mirnaIntegration()] function, are added to
-#' biological pathways retrieved from a pathway database such as `KEGG`,
-#' `WikiPathways` and `Reactome`. Then, a score that estimates the degree of
-#' impairment is calculated for each pathway, and statistical significance is
-#' calculated through a permutation test. The main advantages of this method
-#' are that it doesn't require matched samples, and that it allows to perform
-#' an integrative miRNA-mRNA pathway analysis that takes into account the
-#' topology of biological networks. See the *details* section for
-#' additional information.
+#' and transcriptomic dysregulations. This function takes miRNA-augmented
+#' pathways, created by the [preparePathways()] function, and then calculates
+#' a score that estimates the degree of impairment for each pathway. Later,
+#' statistical significance is calculated through a permutation test. The main
+#' advantages of this method are that it doesn't require matched samples, and
+#' that it allows to perform an integrative miRNA-mRNA pathway analysis that
+#' takes into account the topology of biological networks. See the *details*
+#' section for additional information.
 #'
 #' @details
 #' 
@@ -79,27 +246,11 @@
 #' 
 #' ## Implementation details
 #' 
-#' To create augmented pathways, this function uses the `graphite` R package
-#' to download biological networks from the above mentioned database. Then,
-#' each pathway is converted to a `graph` object, and significant miRNA-mRNA
-#' interactions are added to the network. Further, edge weights are added
-#' according to interaction type.
-#' 
-#' At this point, biological pathways with few nodes measured are excluded
-#' from this analysis. This is required because, during differential expression
-#' analysis, lowly expressed features are removed. Therefore, some pathways
-#' might result significantly affected even if only 1% of nodes is perturbed.
-#' The default behavior is to exclude pathways with less than 10% of
-#' representation (`minPc = 10`).
-#' 
-#' After this normalization step, the score of each pathway is calculated.
 #' For computational efficiency, pathway score computation has been implemented
-#' in C++ language.
-#' 
-#' Moreover, to define the statistical significance of each network, a
-#' permutation test is applied following the number of permutations specified
-#' with `nPerm`. The default setting is to perform 10000 permutations. The
-#' higher is the number of permutations, the more stable are the calculated
+#' in C++ language. Moreover, to define the statistical significance of each
+#' network, a permutation test is applied following the number of permutations
+#' specified with `nPerm`. The default setting is to perform 10000 permutations.
+#' The higher is the number of permutations, the more stable are the calculated
 #' p-values, even though the time needed will increase. In this regard, since
 #' computing pathway score for 10000 networks for each pathway is
 #' computationally intensive, parallel computing has been employed to reduce
@@ -109,23 +260,16 @@
 #'
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
 #' containing miRNA and gene data
-#' @param database The name of the database to use. It must be one of: `KEGG`,
-#' `Reactome`, and `WikiPathways`. Default is `KEGG`
-#' @param organism The name of the organism under consideration. The different
-#' databases have different supported organisms. To see the list of supported
-#' organisms for a given database, use the [supportedOrganisms()] function.
-#' Default specie is `Homo sapiens`
+#' @param pathways A `list` of miRNA-augmented pathways returned by the
+#' [preparePathways()] function
 #' @param pCutoff The adjusted p-value cutoff to use for statistical
 #' significance. The default value is `0.05`
 #' @param pAdjustment The p-value correction method for multiple testing. It
 #' must be one of: `max-T` (default), `fdr`, `BH`, `none`, `holm`, `hochberg`,
 #' `hommel`, `bonferroni`, `BY`
 #' @param nPerm The number of permutation used for assessing the statistical
-#' significance of each pathway. Default is 10000. See the *details* section
+#' significance of each pathway. Default is 10000. See the *details* section 
 #' for additional information
-#' @param minPc The minimum percentage of measured features that a pathway must
-#' have for being considered in the analysis. Default is 10. See the *details*
-#' section for additional information
 #' @param BPPARAM The desired parallel computing behavior. This paramete
 #' defaults to `BiocParallel::bpparam()`, but this can be edited. See
 #' [BiocParallel::bpparam()] for information on parallel computing in R
@@ -141,9 +285,12 @@
 #' 
 #' # perform integration analysis with default settings
 #' obj <- mirnaIntegration(obj)
+#' 
+#' # retrieve pathways from KEGG and augment them with miRNA-gene interactions
+#' paths <- preparePathways(obj)
 #'
 #' # perform the integrative pathway analysis with default settings
-#' #ipa <- topologicalAnalysis(obj)
+#' #ipa <- topologicalAnalysis(obj, paths)
 #' 
 #' # access the results of pathway analysis
 #' #integratedPathways(ipa)
@@ -155,11 +302,6 @@
 #' #visualizeNetwork(ipa, "Thyroid hormone synthesis")
 #' 
 #' @references
-#' Sales, G., Calura, E., Cavalieri, D. et al. graphite - a Bioconductor
-#' package to convert pathway topology to gene network.
-#' BMC Bioinformatics 13, 20 (2012),
-#' \url{https://doi.org/10.1186/1471-2105-13-20}.
-#' 
 #' Peter H. Westfall and S. Stanley Young. Resampling-Based Multiple Testing:
 #' Examples and Methods for p-Value Adjustment. John Wiley & Sons.
 #' ISBN 978-0-471-55761-6.
@@ -170,12 +312,10 @@
 #' @import BiocParallel
 #' @export
 topologicalAnalysis <- function(mirnaObj,
-                                database = "KEGG",
-                                organism = "Homo sapiens",
+                                pathways,
                                 pCutoff = 0.05,
                                 pAdjustment = "max-T",
                                 nPerm = 10000,
-                                minPc = 10,
                                 BPPARAM = bpparam()) {
   
   ## input checks
@@ -190,10 +330,12 @@ topologicalAnalysis <- function(mirnaObj,
                "function. See '?mirnaIntegration' for details."),
          call. = FALSE)
   }
-  if (!is.character(database) |
-      length(database) != 1 |
-      !database %in% c("KEGG", "Reactome", "WikiPathways")) {
-    stop("Supported databases are: 'KEGG', 'Reactome' and 'WikiPathways'",
+  if (!is.list(pathways) |
+      length(pathways) == 0 |
+      !any(class(pathways) != "graphNEL")) {
+    stop(paste("'pathways' must be a list object with miRNA-augmented",
+               "pathways returned from the 'preparePathways()' function.",
+               "Please use the 'preparePathways()' function before this call."),
          call. = FALSE)
   }
   if (!is.numeric(pCutoff) |
@@ -219,32 +361,10 @@ topologicalAnalysis <- function(mirnaObj,
     stop("'nPerm' must be a positive integer! (default is 10000)",
          call. = FALSE)
   }
-  if (!is.numeric(minPc) |
-      length(minPc) != 1 |
-      minPc < 0 |
-      minPc > 100) {
-    stop("'minPc' must be a positive number between 0 and 100! (default is 10)",
-         call. = FALSE)
-  }
-  
-  ## check if database is supported for the given specie
-  supp <- species[!is.na(species[, paste("graph", database, sep = "_")]),
-                  "specie"]
-  if (!organism %in% supp) {
-    stop(paste("For", database, "database, 'organism' must be one of:",
-               paste(supp, collapse = ", ")))
-  }
-  
-  ## convert organism name to graphite name
-  org <- species[species$specie == organism,
-                 paste("graph", database, sep = "_")]
   
   ## get differential expression results
   deg <- geneDE(mirnaObj, onlySignificant = FALSE)
   dem <- mirnaDE(mirnaObj, onlySignificant = TRUE)
-  
-  ## define genes and miRNAs with measurments
-  features <- c(dem$ID, deg$ID)
   
   ## consider both logFCs and p-values in the definition of weights
   deg$weights <- 1
@@ -257,32 +377,9 @@ topologicalAnalysis <- function(mirnaObj,
   deg$type <- "gene"
   featDE <- rbind(dem, deg)
   
-  ## extract integrated miRNA targets
-  intTargets <- selectTargets(mirnaObj, pairs = TRUE)
-  
-  ## prepare miRNA augmented pathways
-  graphList <- preparePathways(database = database,
-                               org = org,
-                               targ = intTargets,
-                               features = features,
-                               minPc = minPc,
-                               BPPARAM = BPPARAM)
-  
-  ## extract pathway coverage
-  pCov <- vapply(graphList, function(pa) {
-    pa@graphData$pathway.coverage
-  }, FUN.VALUE = numeric(1))
-  names(pCov) <- names(graphList)
-  
-  ## prepare graph objects for pathway score calculation
-  message("Performing topological sorting of pathway nodes...")
-  graphList <- BiocParallel::bplapply(graphList,
-                                      setUpPathways,
-                                      BPPARAM = BPPARAM)
-  
   ## calculate the observed score for each pathway
   message("Calculating pathway scores...")
-  pS <- bplapply(graphList, function(pathway) {
+  pS <- bplapply(pathways, function(pathway) {
     computePathwayScore(expr = featDE,
                         bfs = pathway@graphData$topoSort,
                         edges = pathway@graphData$interactions,
@@ -293,8 +390,8 @@ topologicalAnalysis <- function(mirnaObj,
   ## generate n random permutations
   message("Generating random permutations...")
   randomVec <- generatePermutations(deg, dem, nPerm)
-  paths <- rep(graphList, times = nPerm)
-  permVec <- rep(randomVec, each = length(graphList))
+  paths <- rep(pathways, times = nPerm)
+  permVec <- rep(randomVec, each = length(pathways))
   
   ## use parallel mapply to compute permutation scores for each pathway
   message(paste("Calculating p-values with", nPerm, "permutations..."))
@@ -332,6 +429,12 @@ topologicalAnalysis <- function(mirnaObj,
   names(pval) <- names(permList)
   pval <- unlist(pval)
   
+  ## extract pathway coverage
+  pCov <- vapply(pathways, function(pa) {
+    pa@graphData$pathway.coverage
+  }, FUN.VALUE = numeric(1))
+  names(pCov) <- names(pathways)
+  
   ## create result data.frame
   resDf <- data.frame(pathway = names(pS),
                       coverage = pCov,
@@ -362,13 +465,13 @@ topologicalAnalysis <- function(mirnaObj,
              data = resDf,
              method = paste("Topologically-Aware Integrative",
                             "Pathway Analysis (TAIPA)"),
-             organism = organism,
-             database = database,
+             organism = pathways[[1]]@graphData$organism,
+             database = pathways[[1]]@graphData$database,
              pCutoff = pCutoff,
              pAdjustment = pAdjustment,
-             pathways = graphList,
+             pathways = pathways,
              expression = featDE,
-             minPc = minPc,
+             minPc = pathways[[1]]@graphData$minPc,
              nPerm = nPerm)
   
   ## return the results of the integrative analysis
@@ -381,7 +484,8 @@ topologicalAnalysis <- function(mirnaObj,
 
 
 ## helper function for creating miRNA augmented pathways
-preparePathways <- function(database, org, targ, features, minPc, BPPARAM) {
+preparePathways.internal <- function(database, org, targ, features,
+                                     minPc, BPPARAM) {
   
   ## download pathways from the specified database
   message(paste("Downloading pathways from", database, "database..."))
@@ -391,12 +495,14 @@ preparePathways <- function(database, org, targ, features, minPc, BPPARAM) {
   dbName <- graphite:::selectDb(org)
   
   ## check if the user has installed the required database
-  if (!requireNamespace(dbName, quietly = TRUE)) {
-    stop(paste("The", dbName, "package is not installed. Install it before",
-               "runnning this function through:",
-               paste("`BiocManager::install(\"", dbName, "\")`.", sep = "")),
-         call. = FALSE)
-  }
+  suppressMessages(
+    if (!requireNamespace(dbName, quietly = TRUE)) {
+      stop(paste("The", dbName, "package is not installed. Install it before",
+                 "runnning this function through:",
+                 paste("`BiocManager::install(\"", dbName, "\")`.", sep = "")),
+           call. = FALSE)
+    }
+  )
   
   ## convert pathway identifiers to gene symbols by accessing OrgDb through
   ## parallel workers
