@@ -13,6 +13,13 @@
 #' different parameters that can influence the resulting graph, including
 #' node highlighting, layout algorithms, colors, and legends.
 #' 
+#' ## Nodes included in the plot
+#' 
+#' For huge messy networks, the user can specify the nodes to include in the
+#' plot through the `subgraph` parameter, in order to represent only the
+#' features that he wants to display. Alternatively, this parameter can be set
+#' to NULL (default), to plot all nodes of that biological pathway.
+#' 
 #' ## Highlight nodes and edges
 #' 
 #' One interesting feature offered by this function consists in highlighting
@@ -99,6 +106,10 @@
 #' edges between nodes. Default is `darkgrey`. All available colors can be
 #' listed with [grDevices::colors()]
 #' @param edgeWidth The width of edges. Default is 1
+#' @param subgraph An optional `character` vector containing the nodes that you
+#' want to maintain in the final plot. All the other nodes will not be shown.
+#' This is useful to display specific features of extremely messy graphs.
+#' Default is NULL
 #' @param highlightNodes A `character` vector containing the names of nodes
 #' that you want to highlight. Default is NULL not to highlight any nodes.
 #' See the *details* section for additional information
@@ -153,6 +164,7 @@ visualizeNetwork <- function(object,
                              nodeTextCol = "black",
                              edgeCol = "darkgrey",
                              edgeWidth = 1,
+                             subgraph = NULL,
                              highlightNodes = NULL,
                              highlightCol = "gold",
                              highlightWidth = 2,
@@ -225,6 +237,12 @@ visualizeNetwork <- function(object,
     stop("'edgeWidth' must be a non-negative number! (default is 1)",
          call. = FALSE)
   }
+  if (!is.null(subgraph) &
+      !is.character(subgraph)) {
+    stop(paste("'subgraph' must contain the names of nodes to",
+               "maintain. For additional details see ?visualizeNetwork."),
+         call. = FALSE)
+  }
   if (!is.null(highlightNodes) &
       !is.character(highlightNodes)) {
     stop(paste("'highlightNodes' must contain the names of nodes to",
@@ -286,6 +304,23 @@ visualizeNetwork <- function(object,
   ## return NULL for invalid pathways
   if (is.null(p)) {
     stop("The selected pathway is NULL!", call. = FALSE)
+  }
+  
+  ## retain just the nodes specified by the user
+  if (!is.null(subgraph)) {
+    
+    ## check that supplied nodes are present
+    if (any(!subgraph %in% graph::nodes(p))) {
+      warning(paste(paste(subgraph[!subgraph %in% graph::nodes(p)],
+                          collapse = ", "), "not belonging to this network!",
+                    "Ignoring these nodes..."),
+              call. = FALSE)
+      subgraph <- subgraph[subgraph %in% graph::nodes(p)]
+    }
+    
+    ## maintein only desired nodes
+    p <- graph::subGraph(subgraph, p)
+    
   }
   
   ## extract expression changes
@@ -358,7 +393,7 @@ visualizeNetwork <- function(object,
   if (!is.null(highlightNodes)) {
     
     ## check that supplied nodes are present
-    if (!any(highlightNodes %in% nodes)) {
+    if (any(!highlightNodes %in% nodes)) {
       warning(paste(paste(highlightNodes[!highlightNodes %in% nodes],
                           collapse = ", "), "not belonging to this network!",
                     "Highlighting is ignored..."),

@@ -14,6 +14,7 @@ visualizeNetwork(
   nodeTextCol = "black",
   edgeCol = "darkgrey",
   edgeWidth = 1,
+  subgraph = NULL,
   highlightNodes = NULL,
   highlightCol = "gold",
   highlightWidth = 2,
@@ -60,6 +61,11 @@ listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
 
 \item{edgeWidth}{The width of edges. Default is 1}
 
+\item{subgraph}{An optional \code{character} vector containing the nodes that you
+want to maintain in the final plot. All the other nodes will not be shown.
+This is useful to display specific features of extremely messy graphs.
+Default is NULL}
+
 \item{highlightNodes}{A \code{character} vector containing the names of nodes
 that you want to highlight. Default is NULL not to highlight any nodes.
 See the \emph{details} section for additional information}
@@ -102,6 +108,14 @@ investigate the consequences of miRNA/gene dysregulations.
 The network created by this function is highly flexible, allowing to tweak
 different parameters that can influence the resulting graph, including
 node highlighting, layout algorithms, colors, and legends.
+\subsection{Nodes included in the plot}{
+
+For huge messy networks, the user can specify the nodes to include in the
+plot through the \code{subgraph} parameter, in order to represent only the
+features that he wants to display. Alternatively, this parameter can be set
+to NULL (default), to plot all nodes of that biological pathway.
+}
+
 \subsection{Highlight nodes and edges}{
 
 One interesting feature offered by this function consists in highlighting
