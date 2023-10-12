@@ -1561,6 +1561,11 @@ mirVariantPlot <- function(variantId,
     }
   }
   
+  ## ignore title if missing
+  if (is.null(title)) {
+    title <- ""
+  }
+  
   ## create the trackplot object
   trackPlot <- Gviz::plotTracks(pList,
                                 extend.left = lf,
