@@ -72,7 +72,9 @@ Default is FALSE}
 \item{colorScale}{It must be a named character vector where values
 correspond to R colors, while names coincide with the groups specified in
 the \code{condition} parameter (eg. c("healthy" = "green", "disease" = "red")).
-Default is NULL, in order to use the default color scale}
+Default is NULL, in order to use the default color scale. Available color
+formats include color names, such as 'blue' and 'red', and hexadecimal
+colors specified as #RRGGBB}
 
 \item{fontSize}{The base size for text elements within the plot.
 Default is 12}

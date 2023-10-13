@@ -48,8 +48,9 @@ is 0.4)}
 \item{interceptWidth}{The width of cutoff intercepts (default is 0.6)}
 
 \item{interceptColor}{It must be an R color name that specifies the color of
-cutoff intercepts. Default is \code{black}. All available colors can be listed
-with \code{\link[grDevices:colors]{grDevices::colors()}}}
+cutoff intercepts. Default is \code{black}. Available color formats include
+color names, such as 'blue' and 'red', and hexadecimal colors specified
+as #RRGGBB}
 
 \item{interceptType}{It specifies the line type used for cutoff intercepts.
 It must be either 'blank', 'solid', 'dashed' (default), 'dotted', 'dotdash',
@@ -57,8 +58,9 @@ It must be either 'blank', 'solid', 'dashed' (default), 'dotted', 'dotdash',
 
 \item{colorScale}{It must be a character vector of length 3 containing valid
 R color names for downregulated, non significant, and upregulated features,
-respectively. Default value is \code{c('blue', 'grey', 'red')}. All available
-colors can be listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
+respectively. Default value is \code{c('blue', 'grey', 'red')}. Available color
+formats include color names, such as 'blue' and 'red', and hexadecimal
+colors specified as #RRGGBB}
 
 \item{title}{The title of the plot. Default is \code{NULL} not to include a plot
 title}

@@ -53,8 +53,9 @@ data. Note that in this case, linear regression is performed on ranked
 data instead of monotonic regression. Default is FALSE}
 
 \item{lineCol}{It must be an R color name that specifies the color of
-the regression line. Default is \code{red}. All available colors can be listed
-with \code{\link[grDevices:colors]{grDevices::colors()}}}
+the regression line. Default is \code{red}. Available color formats include
+color names, such as 'blue' and 'red', and hexadecimal colors specified
+as #RRGGBB}
 
 \item{lineType}{It specifies the line type used for the regression line. It
 must be either 'blank', 'solid', 'dashed' (default), 'dotted', 'dotdash',
@@ -67,7 +68,9 @@ must be either 'blank', 'solid', 'dashed' (default), 'dotted', 'dotdash',
 \item{colorScale}{It must be a named character vector where values
 correspond to R colors, while names coincide with the groups specified in
 the \code{condition} parameter (eg. c("healthy" = "green", "disease" = "red")).
-Default is NULL, in order to use the default color scale}
+Default is NULL, in order to use the default color scale. Available color
+formats include color names, such as 'blue' and 'red', and hexadecimal
+colors specified as #RRGGBB}
 
 \item{fontSize}{The base size for text elements within the plot.
 Default is 12}

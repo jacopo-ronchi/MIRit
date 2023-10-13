@@ -44,20 +44,24 @@ It must be one of \code{dot} (default), \code{circo}, \code{fdp}, \code{neato}, 
 \item{lfcScale}{It must be a \code{character} vector of length 3 containing valid
 R color names for creating a gradient of log2 fold changes. The first value
 refers to downregulation, the middle one to stable expression, and the last
-one to upregulation. Default value is \code{c('royalblue', 'white', 'red')}. All
-available colors can be listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
+one to upregulation. Default value is \code{c('royalblue', 'white', 'red')}.
+Available color formats include color names, such as 'blue' and 'red', and
+hexadecimal colors specified as #RRGGBB}
 
-\item{nodeBorderCol}{It must be an R color name that specifies the color of
-node borders. Default is \code{black}. All available colors can be listed
-with \code{\link[grDevices:colors]{grDevices::colors()}}}
+\item{nodeBorderCol}{It must be an R color name that specifies the color
+of node borders. Default is \code{black}. Available color formats include
+color names, such as 'blue' and 'red', and hexadecimal colors specified
+as #RRGGBB}
 
 \item{nodeTextCol}{It must be an R color name that specifies the color of
-miRNA/gene names. Default is \code{black}. All available colors can be listed
-with \code{\link[grDevices:colors]{grDevices::colors()}}}
+miRNA/gene names. Default is \code{black}. Available color formats include
+color names, such as 'blue' and 'red', and hexadecimal colors specified
+as #RRGGBB}
 
 \item{edgeCol}{It must be an R color name that specifies the color of
-edges between nodes. Default is \code{darkgrey}. All available colors can be
-listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
+edges between nodes. Default is \code{darkgrey}. Available color formats include
+color names, such as 'blue' and 'red', and hexadecimal colors specified
+as #RRGGBB}
 
 \item{edgeWidth}{The width of edges. Default is 1}
 
@@ -71,8 +75,9 @@ that you want to highlight. Default is NULL not to highlight any nodes.
 See the \emph{details} section for additional information}
 
 \item{highlightCol}{It must be an R color name that specifies the color of
-edges and borders for highlighted nodes. Default is \code{gold}. All available
-colors can be listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
+edges and borders for highlighted nodes. Default is \code{gold}. Available color
+formats include color names, such as 'blue' and 'red', and hexadecimal colors
+specified as #RRGGBB}
 
 \item{highlightWidth}{The width of edges between highlighted nodes. Default
 is 2}

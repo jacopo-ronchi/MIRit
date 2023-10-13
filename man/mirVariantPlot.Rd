@@ -32,12 +32,14 @@ the bottom of the trackplot. Default is \code{TRUE}. This parameter will be set
 to \code{FALSE} if \code{showContext} is \code{TRUE}}
 
 \item{snpFill}{It must be an R color name that specifies the fill color of
-the SNP locus. Default is \code{lightblue}. All available colors can be listed
-with \code{\link[grDevices:colors]{grDevices::colors()}}}
+the SNP locus. Default is \code{lightblue}. Available color formats include
+color names, such as 'blue' and 'red', and hexadecimal colors specified
+as #RRGGBB}
 
 \item{mirFill}{It must be an R color name that specifies the fill color of
-the miRNA locus. Default is \code{orange}. All available colors can be listed
-with \code{\link[grDevices:colors]{grDevices::colors()}}}
+the miRNA locus. Default is \code{orange}. Available color formats include
+color names, such as 'blue' and 'red', and hexadecimal colors specified
+as #RRGGBB}
 
 \item{from}{The start position of the plotted genomic range. Default is
 NULL to automatically determine an appropriate position}

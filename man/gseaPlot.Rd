@@ -31,14 +31,16 @@ plot title. Default is TRUE}
 metric below the plot. Default is FALSE}
 
 \item{lineColor}{It must be an R color name that specifies the color of
-the running score line. Default is \code{green}. All available colors
-can be listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
+the running score line. Default is \code{green}. Available color formats include
+color names, such as 'blue' and 'red', and hexadecimal colors specified
+as #RRGGBB}
 
 \item{lineSize}{The line width of the running score line. Default is \code{1}}
 
 \item{vlineColor}{It must be an R color name that specifies the color of
 the vertical line indicating the enrichment score (ES). Default is \code{red}.
-All available colors can be listed with \code{\link[grDevices:colors]{grDevices::colors()}}}
+Available color formats include color names, such as 'blue' and 'red', and
+hexadecimal colors specified as #RRGGBB}
 
 \item{vlineSize}{The line width of the vertical line indicating the
 enrichment score (ES). Default is \code{0.6}}
