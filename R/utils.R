@@ -121,6 +121,18 @@ quiet <- function(x) {
 
 
 
+## helper function for checking the validity of color names
+areColors <- function(x) {
+  vapply(x, function(X) {
+    tryCatch(is.matrix(col2rgb(X)), 
+             error = function(e) FALSE)
+  }, FUN.VALUE = logical(1))
+}
+
+
+
+
+
 #' Get the list of supported organisms for a given database
 #'
 #' This function provides the list of supported organisms for different

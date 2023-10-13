@@ -94,17 +94,21 @@
 #' @param lfcScale It must be a `character` vector of length 3 containing valid
 #' R color names for creating a gradient of log2 fold changes. The first value
 #' refers to downregulation, the middle one to stable expression, and the last
-#' one to upregulation. Default value is `c('royalblue', 'white', 'red')`. All
-#' available colors can be listed with [grDevices::colors()]
-#' @param nodeBorderCol It must be an R color name that specifies the color of
-#' node borders. Default is `black`. All available colors can be listed
-#' with [grDevices::colors()]
+#' one to upregulation. Default value is `c('royalblue', 'white', 'red')`.
+#' Available color formats include color names, such as 'blue' and 'red', and
+#' hexadecimal colors specified as #RRGGBB
+#' @param nodeBorderCol It must be an R color name that specifies the color
+#' of node borders. Default is `black`. Available color formats include
+#' color names, such as 'blue' and 'red', and hexadecimal colors specified
+#' as #RRGGBB
 #' @param nodeTextCol It must be an R color name that specifies the color of
-#' miRNA/gene names. Default is `black`. All available colors can be listed
-#' with [grDevices::colors()]
+#' miRNA/gene names. Default is `black`. Available color formats include
+#' color names, such as 'blue' and 'red', and hexadecimal colors specified
+#' as #RRGGBB
 #' @param edgeCol It must be an R color name that specifies the color of
-#' edges between nodes. Default is `darkgrey`. All available colors can be
-#' listed with [grDevices::colors()]
+#' edges between nodes. Default is `darkgrey`. Available color formats include
+#' color names, such as 'blue' and 'red', and hexadecimal colors specified
+#' as #RRGGBB
 #' @param edgeWidth The width of edges. Default is 1
 #' @param subgraph An optional `character` vector containing the nodes that you
 #' want to maintain in the final plot. All the other nodes will not be shown.
@@ -114,8 +118,9 @@
 #' that you want to highlight. Default is NULL not to highlight any nodes.
 #' See the *details* section for additional information
 #' @param highlightCol It must be an R color name that specifies the color of
-#' edges and borders for highlighted nodes. Default is `gold`. All available
-#' colors can be listed with [grDevices::colors()]
+#' edges and borders for highlighted nodes. Default is `gold`. Available color
+#' formats include color names, such as 'blue' and 'red', and hexadecimal colors
+#' specified as #RRGGBB
 #' @param highlightWidth The width of edges between highlighted nodes. Default
 #' is 2
 #' @param legendColorbar Logical, whether to add a legend with a color bar for
@@ -203,32 +208,28 @@ visualizeNetwork <- function(object,
          call. = FALSE)
   }
   if (length(lfcScale) != 3 |
-      any(!lfcScale %in% grDevices::colors())) {
+      any(areColors(lfcScale) == FALSE)) {
     stop(paste("'lfcScale' must be a vector with R color names for",
                "downregulated features, non significant features, and",
                "upregulated features. The default value is",
-               "c('royalblue', 'white', 'red'). All available colors",
-               "can be listed with 'colors()'."), call. = FALSE)
+               "c('royalblue', 'white', 'red')."), call. = FALSE)
   }
   if (!is.character(nodeBorderCol) |
       length(nodeBorderCol) != 1 |
-      !nodeBorderCol %in% grDevices::colors()) {
-    stop(paste("'nodeBorderCol' must be an R color name. All available colors",
-               "can be listed with 'colors()'."),
+      areColors(nodeBorderCol) == FALSE) {
+    stop(paste("'nodeBorderCol' must be an R color name."),
          call. = FALSE)
   }
   if (!is.character(nodeTextCol) |
       length(nodeTextCol) != 1 |
-      !nodeTextCol %in% grDevices::colors()) {
-    stop(paste("'nodeTextCol' must be an R color name. All available colors",
-               "can be listed with 'colors()'."),
+      areColors(nodeTextCol) == FALSE) {
+    stop(paste("'nodeTextCol' must be an R color name."),
          call. = FALSE)
   }
   if (!is.character(edgeCol) |
       length(edgeCol) != 1 |
-      !edgeCol %in% grDevices::colors()) {
-    stop(paste("'edgeCol' must be an R color name. All available colors",
-               "can be listed with 'colors()'."),
+      areColors(edgeCol) == FALSE) {
+    stop(paste("'edgeCol' must be an R color name."),
          call. = FALSE)
   }
   if (!is.numeric(edgeWidth) |
@@ -251,9 +252,8 @@ visualizeNetwork <- function(object,
   }
   if (!is.character(highlightCol) |
       length(highlightCol) != 1 |
-      !highlightCol %in% grDevices::colors()) {
-    stop(paste("'highlightCol' must be an R color name. All available colors",
-               "can be listed with 'colors()'."),
+      areColors(highlightCol) == FALSE) {
+    stop(paste("'highlightCol' must be an R color name."),
          call. = FALSE)
   }
   if (!is.numeric(highlightWidth) |
@@ -468,7 +468,7 @@ visualizeNetwork <- function(object,
           col = setColorScale(seq(min(exprNodes$logFC),
                                   max(exprNodes$logFC),
                                   len = 300),
-                              cols = c("royalblue", "white", "red"),
+                              cols = lfcScale,
                               numColors = 300),
           axes = FALSE,
           xlab = "",
@@ -1067,12 +1067,14 @@ gseaRidgeplot <- function(enrichment,
 #' @param rankingMetric Logical, whether to show the variations of the ranking
 #' metric below the plot. Default is FALSE
 #' @param lineColor It must be an R color name that specifies the color of
-#' the running score line. Default is `green`. All available colors
-#' can be listed with [grDevices::colors()]
+#' the running score line. Default is `green`. Available color formats include
+#' color names, such as 'blue' and 'red', and hexadecimal colors specified
+#' as #RRGGBB
 #' @param lineSize The line width of the running score line. Default is `1`
 #' @param vlineColor It must be an R color name that specifies the color of
 #' the vertical line indicating the enrichment score (ES). Default is `red`.
-#' All available colors can be listed with [grDevices::colors()]
+#' Available color formats include color names, such as 'blue' and 'red', and
+#' hexadecimal colors specified as #RRGGBB
 #' @param vlineSize The line width of the vertical line indicating the
 #' enrichment score (ES). Default is `0.6`
 #'
@@ -1132,9 +1134,8 @@ gseaPlot <- function(enrichment,
   }
   if (!is.character(lineColor) |
       length(lineColor) != 1 |
-      !lineColor %in% grDevices::colors()) {
-    stop(paste("'lineColor' must be an R color name. All available colors",
-               "can be listed with 'colors()'."),
+      areColors(lineColor) == FALSE) {
+    stop(paste("'lineColor' must be an R color name."),
          call. = FALSE)
   }
   if (!is.numeric(lineSize) |
@@ -1145,9 +1146,8 @@ gseaPlot <- function(enrichment,
   }
   if (!is.character(vlineColor) |
       length(vlineColor) != 1 |
-      !vlineColor %in% grDevices::colors()) {
-    stop(paste("'vlineColor' must be an R color name. All available colors",
-               "can be listed with 'colors()'."),
+      areColors(vlineColor) == FALSE) {
+    stop(paste("'vlineColor' must be an R color name."),
          call. = FALSE)
   }
   if (!is.numeric(vlineSize) |
@@ -1360,11 +1360,13 @@ theme.MIRit <- function(base_size = 12,
 #' the bottom of the trackplot. Default is `TRUE`. This parameter will be set
 #' to `FALSE` if `showContext` is `TRUE`
 #' @param snpFill It must be an R color name that specifies the fill color of
-#' the SNP locus. Default is `lightblue`. All available colors can be listed
-#' with [grDevices::colors()]
+#' the SNP locus. Default is `lightblue`. Available color formats include
+#' color names, such as 'blue' and 'red', and hexadecimal colors specified
+#' as #RRGGBB
 #' @param mirFill It must be an R color name that specifies the fill color of
-#' the miRNA locus. Default is `orange`. All available colors can be listed
-#' with [grDevices::colors()]
+#' the miRNA locus. Default is `orange`. Available color formats include
+#' color names, such as 'blue' and 'red', and hexadecimal colors specified
+#' as #RRGGBB
 #' @param from The start position of the plotted genomic range. Default is
 #' NULL to automatically determine an appropriate position
 #' @param to The end position of the plotted genomic range. Default is
@@ -1448,16 +1450,14 @@ mirVariantPlot <- function(variantId,
   }
   if (!is.character(snpFill) |
       length(snpFill) != 1 |
-      !snpFill %in% grDevices::colors()) {
-    stop(paste("'snpFill' must be an R color name. All available colors",
-               "can be listed with 'colors()'. Default is: 'lightblue'"),
+      areColors(snpFill) == FALSE) {
+    stop(paste("'snpFill' must be an R color name. Default is: 'lightblue'"),
          call. = FALSE)
   }
   if (!is.character(mirFill) |
       length(mirFill) != 1 |
-      !mirFill %in% grDevices::colors()) {
-    stop(paste("'mirFill' must be an R color name. All available colors",
-               "can be listed with 'colors()'. Default is: 'orange'"),
+      areColors(mirFill) == FALSE) {
+    stop(paste("'mirFill' must be an R color name. Default is: 'orange'"),
          call. = FALSE)
   }
   if (!(is.character(title) | is.null(title)) |
@@ -1527,7 +1527,8 @@ mirVariantPlot <- function(variantId,
                                     genome = g,
                                     chromosome = chr,
                                     name = "miRNA",
-                                    symbol = snpAssociation$miRNA.gene)
+                                    symbol = snpAssociation$miRNA.gene,
+                                    fill = mirFill)
   
   ## create sequence track
   if (showSequence == TRUE) {
@@ -1620,8 +1621,9 @@ mirVariantPlot <- function(variantId,
 #' data. Note that in this case, linear regression is performed on ranked
 #' data instead of monotonic regression. Default is FALSE
 #' @param lineCol It must be an R color name that specifies the color of
-#' the regression line. Default is `red`. All available colors can be listed
-#' with [grDevices::colors()]
+#' the regression line. Default is `red`. Available color formats include
+#' color names, such as 'blue' and 'red', and hexadecimal colors specified
+#' as #RRGGBB
 #' @param lineType It specifies the line type used for the regression line. It
 #' must be either 'blank', 'solid', 'dashed' (default), 'dotted', 'dotdash',
 #' 'longdash' or 'twodash'
@@ -1630,7 +1632,9 @@ mirVariantPlot <- function(variantId,
 #' @param colorScale It must be a named character vector where values
 #' correspond to R colors, while names coincide with the groups specified in
 #' the `condition` parameter (eg. c("healthy" = "green", "disease" = "red")).
-#' Default is NULL, in order to use the default color scale
+#' Default is NULL, in order to use the default color scale. Available color
+#' formats include color names, such as 'blue' and 'red', and hexadecimal
+#' colors specified as #RRGGBB
 #' @param fontSize The base size for text elements within the plot.
 #' Default is 12
 #' @param fontFamily The base family for text elements within the plot
@@ -1767,9 +1771,8 @@ plotCorrelation <- function(mirnaObj,
   }
   if (!is.character(lineCol) |
       length(lineCol) != 1 |
-      !lineCol %in% grDevices::colors()) {
-    stop(paste("'lineCol' must be an R color name. All available colors",
-               "can be listed with 'colors()'."),
+      areColors(lineCol) == FALSE) {
+    stop(paste("'lineCol' must be an R color name."),
          call. = FALSE)
   }
   if (!is.character(lineType) |
@@ -1874,7 +1877,7 @@ plotCorrelation <- function(mirnaObj,
   ## check the validity of color scale
   if (!is.null(colorScale)) {
     if (!is.character(colorScale) |
-        any(!colorScale %in% grDevices::colors()) |
+        any(areColors(colorScale) == FALSE) |
         !identical(sort(names(colorScale)),
                    as.character(sort(unique(cond))))) {
       stop(paste("'colorScale' must be a named character vector where values",
@@ -2085,7 +2088,9 @@ plotCorrelation <- function(mirnaObj,
 #' @param colorScale It must be a named character vector where values
 #' correspond to R colors, while names coincide with the groups specified in
 #' the `condition` parameter (eg. c("healthy" = "green", "disease" = "red")).
-#' Default is NULL, in order to use the default color scale
+#' Default is NULL, in order to use the default color scale. Available color
+#' formats include color names, such as 'blue' and 'red', and hexadecimal
+#' colors specified as #RRGGBB
 #' @param fontSize The base size for text elements within the plot.
 #' Default is 12
 #' @param fontFamily The base family for text elements within the plot
@@ -2315,7 +2320,7 @@ plotDE <- function(mirnaObj,
   ## check the validity of color scale
   if (!is.null(colorScale)) {
     if (!is.character(colorScale) |
-        any(!colorScale %in% grDevices::colors()) |
+        any(areColors(colorScale) == FALSE) |
         !identical(sort(names(colorScale)),
                    as.character(sort(unique(cond))))) {
       stop(paste("'colorScale' must be a named character vector where values",
@@ -2504,15 +2509,17 @@ plotDE <- function(mirnaObj,
 #' is 0.4)
 #' @param interceptWidth The width of cutoff intercepts (default is 0.6)
 #' @param interceptColor It must be an R color name that specifies the color of
-#' cutoff intercepts. Default is `black`. All available colors can be listed
-#' with [grDevices::colors()]
+#' cutoff intercepts. Default is `black`. Available color formats include
+#' color names, such as 'blue' and 'red', and hexadecimal colors specified
+#' as #RRGGBB
 #' @param interceptType It specifies the line type used for cutoff intercepts.
 #' It must be either 'blank', 'solid', 'dashed' (default), 'dotted', 'dotdash',
 #' 'longdash' or 'twodash'
 #' @param colorScale It must be a character vector of length 3 containing valid
 #' R color names for downregulated, non significant, and upregulated features,
-#' respectively. Default value is `c('blue', 'grey', 'red')`. All available
-#' colors can be listed with [grDevices::colors()]
+#' respectively. Default value is `c('blue', 'grey', 'red')`. Available color
+#' formats include color names, such as 'blue' and 'red', and hexadecimal
+#' colors specified as #RRGGBB
 #' @param title The title of the plot. Default is `NULL` not to include a plot
 #' title
 #' @param fontSize The base size for text elements within the plot.
@@ -2617,9 +2624,8 @@ plotVolcano <- function(mirnaObj,
   }
   if (!is.character(interceptColor) |
       length(interceptColor) != 1 |
-      !interceptColor %in% grDevices::colors()) {
-    stop(paste("'interceptColor' must be an R color name. All available colors",
-               "can be listed with 'colors()'."),
+      areColors(interceptColor) == FALSE) {
+    stop(paste("'interceptColor' must be an R color name."),
          call. = FALSE)
   }
   if (!is.character(interceptType) |
@@ -2632,12 +2638,11 @@ plotVolcano <- function(mirnaObj,
          call. = FALSE)
   }
   if (length(colorScale) != 3 |
-      any(!colorScale %in% grDevices::colors())) {
+      any(areColors(colorScale) == FALSE)) {
     stop(paste("'colorScale' must be a vector with R color names for",
                "downregulated features, non significant features, and",
                "upregulated features. The default value is",
-               "c('blue', 'grey', 'red'). All available colors",
-               "can be listed with 'colors()'."), call. = FALSE)
+               "c('blue', 'grey', 'red')."), call. = FALSE)
   }
   if (!(is.character(title) | is.null(title)) |
       !length(title) %in% c(0, 1)) {
@@ -2796,7 +2801,9 @@ plotVolcano <- function(mirnaObj,
 #' @param colorScale It must be a named character vector where values
 #' correspond to R colors, while names coincide with the groups specified in
 #' the `condition` parameter (eg. c("healthy" = "green", "disease" = "red")).
-#' Default is NULL, in order to use the default color scale
+#' Default is NULL, in order to use the default color scale. Available color
+#' formats include color names, such as 'blue' and 'red', and hexadecimal
+#' colors specified as #RRGGBB
 #' @param title The title of the plot. Default is `NULL` not to include a plot
 #' title
 #' @param fontSize The base size for text elements within the plot.
@@ -2923,7 +2930,7 @@ plotDimensions <- function(mirnaObj,
   }
   if (length(condition) == 1 & !is.null(colorScale)) {
     if ((!is.null(colorScale) & !is.character(colorScale)) |
-        any(!colorScale %in% grDevices::colors()) |
+        any(areColors(colorScale) == FALSE) |
         !identical(
           sort(names(colorScale)),
           sort(unique(MultiAssayExperiment::colData(mirnaObj)[, condition])))) {
@@ -2934,7 +2941,7 @@ plotDimensions <- function(mirnaObj,
     }
   } else if (length(condition) != 1 & !is.null(colorScale)) {
     if ((!is.null(colorScale) & !is.character(colorScale)) |
-        any(!colorScale %in% grDevices::colors()) |
+        any(areColors(colorScale) == FALSE) |
         !identical(sort(names(colorScale)),
                    as.character(sort(unique(condition))))) {
       stop(paste("'colorScale' must be a named character vector where values",
