@@ -291,27 +291,43 @@ convertNodes <- function(x, db) {
 
 
 
-#' Create example [`MirnaExperiment`][MirnaExperiment-class] objects
+#' Load example MIRit objects
 #' 
 #' This helper function allows to create a
-#' [`MirnaExperiment`][MirnaExperiment-class] containing miRNA and gene
-#' expression data deriving from Riesco-Eizaguirre et al (2015).
+#' [`MirnaExperiment`][MirnaExperiment-class] object containing miRNA and gene
+#' expression data deriving from Riesco-Eizaguirre et al (2015), or an
+#' [`IntegrativePathwayAnalysis`][IntegrativePathwayAnalysis-class] object
+#' containing TAIPA results for the same dataset.
 #'
 #' @returns
-#' An example `MirnaExperiment` object.
+#' An example `MirnaExperiment` object or an `IntegrativePathwayAnalysis`
+#' object.
 #'
 #' @examples
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
+#' 
+#' # load example IntegrativePathwayAnalysis object
+#' obj <- loadExamples("IntegrativePathwayAnalysis")
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-loadExamples <- function() {
+loadExamples <- function(class = "MirnaExperiment") {
+  
+  ## check input
+  if (!class %in% c("MirnaExperiment", "IntegrativePathwayAnalysis")) {
+    stop(paste("'class' must be one of 'MirnaExperiment' and",
+               "'IntegrativePathwayAnalysis'"), call. = FALSE)
+  }
   
   ## return the example object
-  return(exampleObject)
+  if (class == "MirnaExperiment") {
+    return(exampleObject)
+  } else {
+    return(exampleTAIPA)
+  }
   
 }
 

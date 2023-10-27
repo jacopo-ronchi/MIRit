@@ -2,21 +2,27 @@
 % Please edit documentation in R/utils.R
 \name{loadExamples}
 \alias{loadExamples}
-\title{Create example \code{\link[=MirnaExperiment-class]{MirnaExperiment}} objects}
+\title{Load example MIRit objects}
 \usage{
-loadExamples()
+loadExamples(class = "MirnaExperiment")
 }
 \value{
-An example \code{MirnaExperiment} object.
+An example \code{MirnaExperiment} object or an \code{IntegrativePathwayAnalysis}
+object.
 }
 \description{
 This helper function allows to create a
-\code{\link[=MirnaExperiment-class]{MirnaExperiment}} containing miRNA and gene
-expression data deriving from Riesco-Eizaguirre et al (2015).
+\code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing miRNA and gene
+expression data deriving from Riesco-Eizaguirre et al (2015), or an
+\code{\link[=IntegrativePathwayAnalysis-class]{IntegrativePathwayAnalysis}} object
+containing TAIPA results for the same dataset.
 }
 \examples{
 # load example MirnaExperiment object
 obj <- loadExamples()
+
+# load example IntegrativePathwayAnalysis object
+obj <- loadExamples("IntegrativePathwayAnalysis")
 
 }
 \author{
