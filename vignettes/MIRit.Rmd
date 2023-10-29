@@ -362,22 +362,22 @@ Finally, if we are interested in specific genes/miRNAs, MIRit implements the `pl
 
 ```{r mirBox, fig.wide=FALSE, fig.cap="Differential expression box plots for the two most significant miRNAs."}
 ## craete a box plot for the most significant miRNA
-topMir <- plotDE(experiment, features = deMirnas$ID[1])
+topMir <- plotDE(experiment, features = deMirnas$ID[1], nameAsTitle = TRUE)
 
 ## create a boxplot for the second most significant miRNA
-secondMir <- plotDE(experiment, features = deMirnas$ID[2])
+secondMir <- plotDE(experiment, features = deMirnas$ID[2], nameAsTitle = TRUE)
 
 ## plot graphs side by side
 ggpubr::ggarrange(topMir, secondMir, nrow = 1, labels = "AUTO",
-                  common.legend = TRUE)
+                  common.legend = TRUE, legend = "bottom")
 ```
 
-Moreover, we can visualize expression changes of different genes involved in the normal functioning of thyroid gland, including thyroglobulin (TG), which is the thyroid hormone; thyroid peroxidase (TPO), which is an enzyme needed for TG production; iodothyronine deiodinase 2 (DIO2), which is involved in the activation of TG; and PAX8, which is a transcription factor needed for TG transcription.
+Moreover, we can visualize expression changes of different genes involved in the normal functioning of thyroid gland, including thyreoglobulin (TG), which is the thyroid hormone; thyroid peroxidase (TPO), which is an enzyme needed for TG production; iodothyronine deiodinase 2 (DIO2), which is involved in the activation of TG; and PAX8, which is a transcription factor needed for TG transcription. Note that we use the `linear = FALSE` option to plot data in log scale.
 
 ```{r thyroidBars, fig.wide=FALSE, fig.cap="Differential expression bar plots for different thyroid genes. Differential expression analysis demonstrated how TG, TPO, DIO2 and PAX8 result downregulated in thyroid cancer."}
 ## create a bar plot for all thyroid features
 thyrBar <- plotDE(experiment, features = c("TG", "TPO", "DIO2", "PAX8"),
-                  graph = "barplot")
+                  graph = "barplot", linear = FALSE)
 
 ## show the resulting plot
 thyrBar
