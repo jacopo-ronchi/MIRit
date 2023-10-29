@@ -2408,7 +2408,7 @@ plotDE <- function(mirnaObj,
                       geneDE(mirnaObj, onlySignificant = FALSE))
     
     ## restrict differential expression to the selected miRNAs/genes
-    statTest <- statTest[statTest$ID %in% features, ]
+    statTest <- statTest[features, ]
     
     ## add conditions to differential expression results
     statTest$group1 <- lv1
@@ -2419,7 +2419,7 @@ plotDE <- function(mirnaObj,
       max(exprDf$Expression[exprDf$Gene == g])
     }, FUN.VALUE = numeric(1))
     maxExpr <- maxExpr + 0.1 * mean(maxExpr)
-    statTest$y.position <- maxExpr[match(names(maxExpr), statTest$ID)]
+    statTest$y.position <- maxExpr
     
     ## round p-values if plotting numbers
     if (starSig == FALSE) {
