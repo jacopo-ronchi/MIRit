@@ -663,6 +663,11 @@ edgeR.DE <- function(counts,
   deRes <- as.data.frame(edgeR::topTags(de, n = Inf,
                                         adjust.method = pAdjustment))
   
+  ## add pAdjustment column id pAdjustment is 'none'
+  if (pAdjustment == "none") {
+    deRes$adj.P.Val <- deRes$PValue
+  }
+  
   ## add 'ID' column to differentially expressed results
   deRes$ID <- rownames(deRes)
   
