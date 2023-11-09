@@ -447,7 +447,7 @@ topologicalAnalysis <- function(mirnaObj,
     message("Correcting p-values through the max-T procedure...")
     resDf$adj.P.Val <- maxT.correction(normPerm, normPS, nPerm)
   } else {
-    resDf$adj.P.Val <- stats::p.adjust(resDf$P.Val, method = pAdjustment)
+    resDf$adj.P.Val <- p.adjust(resDf$P.Val, method = pAdjustment)
   }
   
   ## order results by adjusted p-values
@@ -512,7 +512,7 @@ preparePathways.internal <- function(database, org, targ, features,
     db <- suppressPackageStartupMessages(
       AnnotationDbi::loadDb(AnnotationDbi::dbfile(db))
     )
-    on.exit(RSQLite::dbDisconnect(dbconn(db)))
+    on.exit(RSQLite::dbDisconnect(BiocGenerics::dbconn(db)))
     suppressMessages(
       convertNodes(path, db = db)
     )

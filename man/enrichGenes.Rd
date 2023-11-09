@@ -204,7 +204,7 @@ vaccinations;
 \subsection{Supported organisms}{
 
 For each database, different organisms are supported. To check the supported
-organisms for a given database, MIRit provides the \code{\link[=supportedOrganism]{supportedOrganism()}}
+organisms for a given database, MIRit provides the \code{\link[=supportedOrganisms]{supportedOrganisms()}}
 function.
 }
 

@@ -286,7 +286,7 @@ correlateMirnaTargets <- function(mirnaObj,
   geneExpr <- mirnaObj[["genes"]]
   
   ## check if samples are paired, otherwise exclude unpaired samples
-  sMap <- MultiAssayExperiment::sampleMap(mirnaObj)
+  sMap <- sampleMap(mirnaObj)
   mirnaSamples <- sMap$primary[sMap$assay == "microRNA"]
   geneSamples <- sMap$primary[sMap$assay == "genes"]
   
@@ -294,7 +294,7 @@ correlateMirnaTargets <- function(mirnaObj,
     
     ## determine common and uncommon samples
     common <- intersect(mirnaSamples, geneSamples)
-    unpaired  <- setdiff(mirnaSamples, geneSamples)
+    unpaired  <- setdiff(c(mirnaSamples, geneSamples), common)
     
     ## stop if common samples are less than 3
     if (length(common) < 3) {
@@ -313,12 +313,14 @@ correlateMirnaTargets <- function(mirnaObj,
       warning(paste("Some samples don't have expression values for both",
                     "miRNAs and genes, thus they have been excluded from the",
                     "correlation analysis. Removed samples are:",
-                    paste(unpaired, collapse = ", ")))
+                    paste(unpaired, collapse = ", ")), call. = FALSE)
     }
     
     ## order the columns of expression matrices in the same way
-    mirnaMap = sMap[sMap$assay == "microRNA", ]
-    geneMap = sMap[sMap$assay == "genes", ]
+    mirnaMap = sMap[sMap$assay == "microRNA" &
+                      sMap$primary %in% common, ]
+    geneMap = sMap[sMap$assay == "genes" &
+                     sMap$primary %in% common, ]
     mirnaOrder <- mirnaMap$primary[order(match(mirnaMap$colname,
                                                colnames(mirnaExpr)))]
     geneExpr <- geneExpr[, geneMap$colname[order(match(geneMap$primary,
@@ -354,7 +356,7 @@ correlateMirnaTargets <- function(mirnaObj,
     geneInt <- as.numeric(targetExpr[gene, ])
     
     ## perform the correlation analysis
-    corPair <- stats::cor.test(mirnaInt,
+    corPair <- cor.test(mirnaInt,
                                geneInt,
                                method = corMethod,
                                alternative = "less",
@@ -382,7 +384,7 @@ correlateMirnaTargets <- function(mirnaObj,
   corRes$Corr.P.Value <- as.numeric(corRes$Corr.P.Value)
   
   ## correct correlation p values for multiple testing
-  pAdj <- stats::p.adjust(corRes$Corr.P.Value, method = pAdjustment)
+  pAdj <- p.adjust(corRes$Corr.P.Value, method = pAdjustment)
   corRes$Corr.Adjusted.P.Val <- pAdj
   
   ## select statistically significant associations
@@ -509,7 +511,7 @@ associateMirnaTargets <- function(mirnaObj,
                              "DE.targets")
   
   ## correct p-values
-  pAdj <- stats::p.adjust(association$P.Val, method = pAdjustment)
+  pAdj <- p.adjust(association$P.Val, method = pAdjustment)
   association$adj.P.Val <- pAdj
   association <- association[, c(1, 2, 3, 4, 5, 6, 8, 7)]
   association <- association[order(association$adj.P.Val), ]
@@ -571,9 +573,9 @@ fisher.midp <- function(mat, midpAdjustment) {
   k <- sum(mat[1L, ])
   mat <- mat[1L, 1L]
   if (midpAdjustment == TRUE) {
-    midp <- stats::phyper(mat, m, n, k) - 0.5 * stats::dhyper(mat, m, n, k)
+    midp <- phyper(mat, m, n, k) - 0.5 * dhyper(mat, m, n, k)
   } else {
-    midp <- stats::phyper(mat, m, n, k)
+    midp <- phyper(mat, m, n, k)
   }
   return(midp)
 }
@@ -715,7 +717,7 @@ fryMirnaTargets <- function(mirnaObj,
   de <- geneDE(mirnaObj, param = TRUE)
   
   ## access sample metadata
-  meta <- MultiAssayExperiment::colData(mirnaObj)
+  meta <- colData(mirnaObj)
   meta <- meta[!is.na(meta$geneCol), ]
   
   ## reorder metadata based on expression matrix
@@ -728,21 +730,21 @@ fryMirnaTargets <- function(mirnaObj,
   ## determine the appropriate expression matrix and the experimental design
   if (de$method == "limma") {
     expr <- mirnaObj[["genes"]]
-    des <- stats::model.matrix(de$design, data = meta)
+    des <- model.matrix(de$design, data = meta)
   } else if (de$method == "edgeR" |
              de$method == "limma-voom") {
     expr <- geneDE(mirnaObj, returnObject = TRUE)
     des <- expr$design
   } else if (de$method == "DESeq2") {
     message("Applying 'limma-voom' pipeline before using 'fry' method...")
-    counts <- MultiAssayExperiment::metadata(mirnaObj)[["oldCounts"]][["genes"]]
+    counts <- metadata(mirnaObj)[["oldCounts"]][["genes"]]
     features <- edgeR::DGEList(counts = counts,
                                group = meta[, de$group],
                                samples = meta)
     keep <- edgeR::filterByExpr(features)
     features <- features[keep, , keep.lib.sizes = FALSE]
     features <- edgeR::calcNormFactors(features)
-    des <- stats::model.matrix(de$design, data = meta)
+    des <- model.matrix(de$design, data = meta)
     expr <- limma::voom(features, design = des)
   }
   

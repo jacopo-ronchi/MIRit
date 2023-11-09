@@ -298,6 +298,11 @@ convertNodes <- function(x, db) {
 #' expression data deriving from Riesco-Eizaguirre et al (2015), or an
 #' [`IntegrativePathwayAnalysis`][IntegrativePathwayAnalysis-class] object
 #' containing TAIPA results for the same dataset.
+#' 
+#' @param class It must be `MirnaExperiment` (default) to load an example
+#' object of class [`MirnaExperiment`][MirnaExperiment-class], or
+#' `IntegrativePathwayAnalysis`, to load an example object of class
+#' [`IntegrativePathwayAnalysis`][IntegrativePathwayAnalysis-class].
 #'
 #' @returns
 #' An example `MirnaExperiment` object or an `IntegrativePathwayAnalysis`

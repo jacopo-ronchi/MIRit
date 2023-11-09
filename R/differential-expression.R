@@ -337,7 +337,7 @@ performDE <- function(assay,
   }
   if (!is.character(group) |
       length(group) != 1 |
-      !(group %in% colnames(MultiAssayExperiment::colData(mirnaObj)) &
+      !(group %in% colnames(colData(mirnaObj)) &
         !group %in% c("primary", "mirnaCol", "geneCol"))) {
     stop(paste("'group' must be the column name of a variable specified",
                "in the metadata (colData) of a MirnaExperiment object."),
@@ -347,7 +347,7 @@ performDE <- function(assay,
       length(contrast) != 1 |
       length(strsplit(contrast, "-")[[1]]) != 2 |
       !all(strsplit(contrast, "-")[[1]] %in%
-           MultiAssayExperiment::colData(mirnaObj)[, group])) {
+           colData(mirnaObj)[, group])) {
     stop(paste("'contrast' must be a character that specifies the groups",
                "for which you want to calculate differential expression",
                "(e.g. 'PTC-NTH'). For details, see ?performMirnaDE or",
@@ -355,9 +355,9 @@ performDE <- function(assay,
          call. = FALSE)
   }
   if (!rlang::is_formula(design) |
-      !all(labels(stats::terms(design)) %in%
-           colnames(MultiAssayExperiment::colData(mirnaObj)) &
-           !labels(stats::terms(design)) %in%
+      !all(labels(terms(design)) %in%
+           colnames(colData(mirnaObj)) &
+           !labels(terms(design)) %in%
            c("primary", "mirnaCol", "geneCol"))) {
     stop(paste("'design' must be an R formula that specifies the variables",
                "in colData that will be used to model expression. For",
@@ -452,7 +452,7 @@ performDE <- function(assay,
   }
   
   ## check if differential expression has already been carried out
-  oldCounts <- MultiAssayExperiment::metadata(mirnaObj)[["oldCounts"]]
+  oldCounts <- metadata(mirnaObj)[["oldCounts"]]
   if (!is.null(oldCounts[[assayName]])) {
     
     ## set expression back to counts
@@ -462,7 +462,7 @@ performDE <- function(assay,
     
     ## move raw count matrices to metadata slot
     oldCounts[[assayName]] <- mirnaObj[[assayName]]
-    MultiAssayExperiment::metadata(mirnaObj) <- list(oldCounts = oldCounts)
+    metadata(mirnaObj) <- list(oldCounts = oldCounts)
     
   }
   
@@ -470,7 +470,7 @@ performDE <- function(assay,
   featExpr <- mirnaObj[[assayName]]
   
   ## extract sample metadata
-  samplesMetadata <- MultiAssayExperiment::colData(mirnaObj)
+  samplesMetadata <- colData(mirnaObj)
   meta <- samplesMetadata[!is.na(samplesMetadata[, featCol]), ]
   
   ## reorder metadata based on expression matrix
@@ -600,7 +600,7 @@ edgeR.DE <- function(counts,
   contrast <- strsplit(contrast, "-")[[1]]
   
   ## convert group variable to factor with specified reference level
-  meta[, group] <- stats::relevel(factor(meta[, group]), ref = contrast[2])
+  meta[, group] <- relevel(factor(meta[, group]), ref = contrast[2])
   
   ## create edgeR object from counts
   features <- edgeR::DGEList(counts = counts,
@@ -617,7 +617,7 @@ edgeR.DE <- function(counts,
                       c(list(features), calcNormFactors.args))
   
   ## design the model
-  des <- stats::model.matrix(design, data = meta)
+  des <- model.matrix(design, data = meta)
   
   ## estimate dispersion and fit negative binomial distribution
   features <- do.call(edgeR::estimateDisp,
@@ -795,7 +795,7 @@ voom.DE <- function(counts,
   contrast <- strsplit(contrast, "-")[[1]]
   
   ## convert group variable to factor with specified reference level
-  meta[, group] <- stats::relevel(factor(meta[, group]), ref = contrast[2])
+  meta[, group] <- relevel(factor(meta[, group]), ref = contrast[2])
   
   ## create edgeR object from counts
   features <- edgeR::DGEList(counts = counts,
@@ -815,7 +815,7 @@ voom.DE <- function(counts,
   normExpr <- edgeR::cpm(features, normalized.lib.sizes = TRUE, log = TRUE)
   
   ## design the model
-  des <- stats::model.matrix(design, data = meta)
+  des <- model.matrix(design, data = meta)
   
   ## apply voom transformation (with or without quality weights)
   if (useVoomWithQualityWeights == TRUE) {
@@ -927,10 +927,10 @@ limma.DE <- function(expr,
   contrast <- strsplit(contrast, "-")[[1]]
   
   ## convert group variable to factor with specified reference level
-  meta[, group] <- stats::relevel(factor(meta[, group]), ref = contrast[2])
+  meta[, group] <- relevel(factor(meta[, group]), ref = contrast[2])
   
   ## design the linear model
-  des <- stats::model.matrix(design, data = meta)
+  des <- model.matrix(design, data = meta)
   
   ## correct for unknown sources of variability with WSVA
   if (useWsva == TRUE) {
@@ -1116,8 +1116,9 @@ limma.DE <- function(expr,
 #' obj <- loadExamples()
 #' 
 #' # create sample metadata
-#' meta <- data.frame("primary" = colnames(geneCounts),
-#' "mirnaCol" = colnames(mirnaCounts), "geneCol" = colnames(geneCounts),
+#' meta <- data.frame("primary" = colnames(obj[["genes"]]),
+#' "mirnaCol" = colnames(obj[["microRNA"]]),
+#' "geneCol" = colnames(obj[["genes"]]),
 #' "disease" = c(rep("PTC", 8), rep("NTH", 8)), 
 #' "patient" = c(rep(paste("Sample_", seq(8), sep = ""), 2)))
 #' 

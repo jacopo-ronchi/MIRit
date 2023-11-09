@@ -68,7 +68,7 @@ Genes (NCG), DisGeNET, and COVID19.
 }
 \details{
 For each database, different organisms are supported. To check the supported
-organisms for a given database, MIRit provides the \code{\link[=supportedOrganism]{supportedOrganism()}}
+organisms for a given database, MIRit provides the \code{\link[=supportedOrganisms]{supportedOrganisms()}}
 function.
 
 Moreover, since different database support multiple subcategories, the

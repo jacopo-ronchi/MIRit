@@ -189,7 +189,7 @@ NULL
 #' @docType class
 #' @export
 #' @import methods
-#' @importClassesFrom MultiAssayExperiment MultiAssayExperiment
+#' @import MultiAssayExperiment
 setClass("MirnaExperiment",
          contains = "MultiAssayExperiment",
          slots = representation(
@@ -510,7 +510,7 @@ MirnaExperiment <- function(
   colnames(geneMap)[which(colnames(geneMap) == "geneCol")] <- "colname"
   geneMap <- geneMap[, colnames(mirnaMap)]
   mapList <- list("microRNA" = mirnaMap, "genes" = geneMap)
-  sMap <- MultiAssayExperiment::listToMap(mapList)
+  sMap <- listToMap(mapList)
   
   ## add rownames to metadata table
   rownames(samplesMetadata) <- samplesMetadata$primary
@@ -519,7 +519,7 @@ MirnaExperiment <- function(
   expList <- list("microRNA" = mirnaExpr, "genes" = geneExpr)
   
   ## create a MultiAssayExperiment object based on user's input
-  objMulti <- MultiAssayExperiment::MultiAssayExperiment(
+  objMulti <- MultiAssayExperiment(
     experiments = expList,
     colData = samplesMetadata,
     sampleMap = sMap)
@@ -539,7 +539,9 @@ MirnaExperiment <- function(
 ## Accessors
 ## ---------
 
-#' @rdname mirnaDE
+#' @describeIn MirnaExperiment-class Access the results of miRNA differential
+#' expression
+#' @inheritParams deAccessors
 #' @export
 setMethod("mirnaDE",
           "MirnaExperiment",
@@ -561,7 +563,9 @@ setMethod("mirnaDE",
             }
           })
 
-#' @rdname geneDE
+#' @describeIn MirnaExperiment-class Access the results of gene differential
+#' expression
+#' @inheritParams deAccessors
 #' @export
 setMethod("geneDE",
           "MirnaExperiment",
@@ -583,31 +587,41 @@ setMethod("geneDE",
             }
           })
 
-#' @rdname significantMirnas
+#' @describeIn MirnaExperiment-class Access the names of differentially
+#' expressed miRNAs
+#' @inheritParams significantAccessors
 #' @export
 setMethod("significantMirnas", "MirnaExperiment", function(object) {
   object@mirnaDE$significant
 })
 
-#' @rdname significantGenes
+#' @describeIn MirnaExperiment-class Access the names of differentially
+#' expressed genes
+#' @inheritParams significantAccessors
 #' @export
 setMethod("significantGenes", "MirnaExperiment", function(object) {
   object@geneDE$significant
 })
 
-#' @rdname pairedSamples
+#' @describeIn MirnaExperiment-class Check if the object derives from
+#' sample-matched data
+#' @inheritParams pairedSamples
 #' @export
 setMethod("pairedSamples", "MirnaExperiment", function(object) {
   object@pairedSamples
 })
 
-#' @rdname mirnaTargets
+#' @describeIn MirnaExperiment-class Extract the miRNA-targets interactions
+#' retrieved for the differentially expressed miRNAs
+#' @inheritParams mirnaTargets
 #' @export
 setMethod("mirnaTargets", "MirnaExperiment", function(object) {
   object@targets
 })
 
-#' @rdname integration
+#' @describeIn MirnaExperiment-class Access the results of the integrative
+#' miRNA-mRNA analysis
+#' @inheritParams integration
 #' @export
 setMethod("integration", "MirnaExperiment",
           function(object, param) {
@@ -673,8 +687,8 @@ setReplaceMethod("integration",
 #' enrichment analyses such as over-representation analysis (ORA), gene set
 #' enrichment analysis (GSEA), and competitive gene set test accounting for
 #' inter-gene correlation (CAMERA). The different slots contained in this class
-#' are used to store enrichment results generated through different functions,
-#' including [enrichGenes()] and [enrichMirnas()].
+#' are used to store enrichment results generated through the [enrichGenes()]
+#' function.
 #'
 #' @slot data A `data.frame` object holding the output of enrichment analysis
 #' @slot method The method used to perform functional enrichment analysis
@@ -699,8 +713,9 @@ setReplaceMethod("integration",
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
-#'
+#' 
 #' @name FunctionalEnrichment-class
+#' @aliases FunctionalEnrichment
 #' @docType class
 #' @export
 #' @import methods
@@ -744,7 +759,7 @@ setValidity("FunctionalEnrichment", function(object) {
                  "the p-value cutoff used. Please see",
                  "?FunctionalEnrichment-class"))
   } else if (!is.character(object@pAdjustment) |
-             !object@pAdjustment %in% stats::p.adjust.methods) {
+             !object@pAdjustment %in% p.adjust.methods) {
     return(paste("'pAdjustment' slot must be a character object that specifies",
                  "the p-value correction method used. Please see",
                  "?FunctionalEnrichment-class"))
@@ -772,6 +787,7 @@ setValidity("FunctionalEnrichment", function(object) {
 
 #' @describeIn FunctionalEnrichment-class Access the `data` slot to take a
 #' closer look at all the enriched terms of an enrichment analysis
+#' @inheritParams enrichmentResults
 #' @export
 setMethod("enrichmentResults", "FunctionalEnrichment", function(object) {
   object@data
@@ -779,6 +795,7 @@ setMethod("enrichmentResults", "FunctionalEnrichment", function(object) {
 
 #' @describeIn FunctionalEnrichment-class See the database used for the
 #' functional enrichment
+#' @inheritParams enrichmentDatabase
 #' @export
 setMethod("enrichmentDatabase", "FunctionalEnrichment", function(object) {
   object@database
@@ -786,6 +803,7 @@ setMethod("enrichmentDatabase", "FunctionalEnrichment", function(object) {
 
 #' @describeIn FunctionalEnrichment-class Visualize the approach used for the
 #' functional enrichment analysis
+#' @inheritParams enrichmentMethod
 #' @export
 setMethod("enrichmentMethod", "FunctionalEnrichment", function(object) {
   object@method
@@ -793,12 +811,14 @@ setMethod("enrichmentMethod", "FunctionalEnrichment", function(object) {
 
 #' @describeIn FunctionalEnrichment-class Access the `geneSet` slot to see
 #' the collection of gene sets used for GSEA
+#' @inheritParams geneSet
 #' @export
 setMethod("geneSet", "FunctionalEnrichment", function(object) {
   object@geneSet
 })
 
 #' @describeIn FunctionalEnrichment-class View the ranking metric used for GSEA
+#' @inheritParams enrichmentMetric
 #' @export
 setMethod("enrichmentMetric", "FunctionalEnrichment", function(object) {
   object@statistic
@@ -806,6 +826,7 @@ setMethod("enrichmentMetric", "FunctionalEnrichment", function(object) {
 
 #' @describeIn FunctionalEnrichment-class View the names of the pre-ranked
 #' features used for GSEA
+#' @inheritParams enrichedFeatures
 #' @export
 setMethod("enrichedFeatures", "FunctionalEnrichment", function(object) {
   object@features
@@ -934,6 +955,7 @@ setReplaceMethod("enrichmentDatabase", "FunctionalEnrichment",
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @name IntegrativePathwayAnalysis-class
+#' @aliases IntegrativePathwayAnalysis
 #' @docType class
 #' @export
 #' @import methods
@@ -977,7 +999,7 @@ setValidity("IntegrativePathwayAnalysis", function(object) {
                  "the p-value cutoff used. Please see",
                  "?IntegrativePathwayAnalysis-class"))
   } else if (!is.character(object@pAdjustment) |
-             !object@pAdjustment %in% c(stats::p.adjust.methods, "max-T")) {
+             !object@pAdjustment %in% c(p.adjust.methods, "max-T")) {
     return(paste("'pAdjustment' slot must be a character object that specifies",
                  "the p-value correction method used. Please see",
                  "?IntegrativePathwayAnalysis-class"))
@@ -1009,6 +1031,7 @@ setValidity("IntegrativePathwayAnalysis", function(object) {
 
 #' @describeIn IntegrativePathwayAnalysis-class Access the results of
 #' integrative miRNA-mRNA pathway analysis
+#' @inheritParams integratedPathways
 #' @export
 setMethod("integratedPathways",
           "IntegrativePathwayAnalysis",
@@ -1018,6 +1041,7 @@ setMethod("integratedPathways",
 
 #' @describeIn IntegrativePathwayAnalysis-class View the database used for
 #' the integrative pathway analysis
+#' @inheritParams integrationDatabase
 #' @export
 setMethod("integrationDatabase",
           "IntegrativePathwayAnalysis",
@@ -1027,6 +1051,7 @@ setMethod("integrationDatabase",
 
 #' @describeIn IntegrativePathwayAnalysis-class Extract the list of biological
 #' networks augmented with miRNA-mRNA interactions
+#' @inheritParams augmentedPathways
 #' @export
 setMethod("augmentedPathways",
           "IntegrativePathwayAnalysis",

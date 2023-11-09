@@ -112,8 +112,9 @@ differentially expressed.
 obj <- loadExamples()
 
 # create sample metadata
-meta <- data.frame("primary" = colnames(geneCounts),
-"mirnaCol" = colnames(mirnaCounts), "geneCol" = colnames(geneCounts),
+meta <- data.frame("primary" = colnames(obj[["genes"]]),
+"mirnaCol" = colnames(obj[["microRNA"]]),
+"geneCol" = colnames(obj[["genes"]]),
 "disease" = c(rep("PTC", 8), rep("NTH", 8)), 
 "patient" = c(rep(paste("Sample_", seq(8), sep = ""), 2)))
 

@@ -288,7 +288,7 @@ validateCategories <- function(database, category, organism) {
 #' ## Supported organisms
 #' 
 #' For each database, different organisms are supported. To check the supported
-#' organisms for a given database, MIRit provides the [supportedOrganism()]
+#' organisms for a given database, MIRit provides the [supportedOrganisms()]
 #' function.
 #' 
 #' ## GSEA ranking statistic
@@ -606,8 +606,8 @@ oraInternal <- function(mirnaObj,
                          maxSize = maxSize)
   
   ## adjust p-values through the desired approach
-  oraUp$padj <- stats::p.adjust(oraUp$pval, method = pAdjustment)
-  oraDown$padj <- stats::p.adjust(oraDown$pval, method = pAdjustment)
+  oraUp$padj <- p.adjust(oraUp$pval, method = pAdjustment)
+  oraDown$padj <- p.adjust(oraDown$pval, method = pAdjustment)
   
   ## restrict the results to significant terms
   oraUp <- oraUp[oraUp$padj < pCutoff, ]
@@ -699,7 +699,7 @@ gseaInternal <- function(mirnaObj,
                       eps = eps)
   
   ## adjust p-values through the desired approach
-  gse$padj <- stats::p.adjust(gse$pval, method = pAdjustment)
+  gse$padj <- p.adjust(gse$pval, method = pAdjustment)
   
   ## restrict the results to significant terms
   gse <- gse[gse$padj < pCutoff, ]
@@ -754,7 +754,7 @@ cameraInternal <- function(mirnaObj,
   de <- geneDE(mirnaObj, param = TRUE)
   
   ## access sample metadata
-  meta <- MultiAssayExperiment::colData(mirnaObj)
+  meta <- colData(mirnaObj)
   meta <- meta[!is.na(meta$geneCol), ]
   
   ## reorder metadata based on expression matrix
@@ -763,21 +763,21 @@ cameraInternal <- function(mirnaObj,
   ## determine the appropriate expression matrix and the experimental design
   if (de$method == "limma") {
     expr <- mirnaObj[["genes"]]
-    des <- stats::model.matrix(de$design, data = meta)
+    des <- model.matrix(de$design, data = meta)
   } else if (de$method == "edgeR" |
              de$method == "limma-voom") {
     expr <- geneDE(mirnaObj, returnObject = TRUE)
     des <- expr$design
   } else if (de$method == "DESeq2") {
     message("Applying 'limma-voom' pipeline before using CAMERA...")
-    counts <- MultiAssayExperiment::metadata(mirnaObj)[["oldCounts"]][["genes"]]
+    counts <- metadata(mirnaObj)[["oldCounts"]][["genes"]]
     features <- edgeR::DGEList(counts = counts,
                                group = meta[, de$group],
                                samples = meta)
     keep <- edgeR::filterByExpr(features)
     features <- features[keep, , keep.lib.sizes = FALSE]
     features <- edgeR::calcNormFactors(features)
-    des <- stats::model.matrix(de$design, data = meta)
+    des <- model.matrix(de$design, data = meta)
     expr <- limma::voom(features, design = des)
   }
   
@@ -827,7 +827,7 @@ cameraInternal <- function(mirnaObj,
   }
   
   ## adjust p-values according to the specified method
-  rs$FDR <- stats::p.adjust(rs$PValue, method = pAdjustment)
+  rs$FDR <- p.adjust(rs$PValue, method = pAdjustment)
   
   ## reshape the resulting data.frame
   rs$pathway <- rownames(rs)
@@ -879,7 +879,7 @@ cameraInternal <- function(mirnaObj,
 #'
 #' @details
 #' For each database, different organisms are supported. To check the supported
-#' organisms for a given database, MIRit provides the [supportedOrganism()]
+#' organisms for a given database, MIRit provides the [supportedOrganisms()]
 #' function.
 #' 
 #' Moreover, since different database support multiple subcategories, the

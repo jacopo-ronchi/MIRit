@@ -17,31 +17,38 @@ RoxygenNote: 7.2.3
 Imports: 
     AnnotationDbi,
     BiocFileCache,
+    BiocGenerics,
     BiocParallel,
     biomaRt,
     BSgenome.Hsapiens.UCSC.hg38,
     DESeq2,
     edgeR,
+    fgsea,
+    genekitr,
+    geneset,
     GenomicRanges,
     ggplot2,
     ggpubr,
     ggrepel,
     ggridges,
     graph,
+    graphics,
     graphite,
     grDevices,
     Gviz,
     gwasrapidd,
+    httr,
     limma,
     methods,
     MonoPoly,
     MultiAssayExperiment,
-    multiMiR,
-    rbioapi,
     Rcpp,
+    readxl,
     Rgraphviz (>= 2.44.0),
     rlang,
-    stringr
+    RSQLite,
+    stats,
+    utils
 Collate: 
     'AllGenerics.R'
     'AllClasses.R'
@@ -59,11 +66,9 @@ Collate:
     'visualization.R'
 Suggests: 
     BiocStyle,
-    enrichplot (>= 1.16.2),
     knitr,
     org.Hs.eg.db,
     rmarkdown,
-    statmod,
     testthat (>= 3.0.0)
 Depends: 
     R (>= 4.2.0)

@@ -2,28 +2,29 @@
 ## Generics for MirnaExperiment class
 ## ==========================================================================
 
-#' Extract differentially expressed miRNAs from a
+#' Extract differentially expressed miRNAs and genes from a
 #' [`MirnaExperiment`][MirnaExperiment-class] object
 #'
-#' This function is an accessor for the `mirnaDE` slot of
-#' [`MirnaExperiment`][MirnaExperiment-class] class, and thus, it can be used
-#' to retrieve the results of miRNA differential expression stored in a
+#' The `mirnaDE()` and `geneDE()` are two accessor functions for the `mirnaDE`
+#' and `geneDE` slots of [`MirnaExperiment`][MirnaExperiment-class] class,
+#' respectively. Thus, they can be used to explore the results of miRNA and
+#' gene differential expression analysis stored in a
 #' [`MirnaExperiment`][MirnaExperiment-class] object.
 #'
 #' @param object A [`MirnaExperiment`][MirnaExperiment-class] object containing
 #' miRNA and gene data
 #' @param onlySignificant Logical, if `TRUE` differential expression results
-#' will be returned just for statistically significant miRNAs, if `FALSE` the
-#' full table of miRNA differential expression will be provided. Default is
-#' `TRUE` to only report significant miRNAs
+#' will be returned just for statistically significant miRNAs/genes, if `FALSE`
+#' the full table of miRNA/gene differential expression will be provided.
+#' Default is `TRUE` to only report significant miRNAs/genes
 #' @param param Logical, whether to return the complete `list` object with
 #' the parameters used, or just the results stored in `data`. Default is FALSE
 #' @param returnObject Logical, if `TRUE` this function will return the
 #' limma/edgeR/DESeq2 object used for differential expression analysis
 #'
 #' @returns
-#' A `data.frame` with miRNA differential expression, or a `list` object with
-#' the parameters used if `param = TRUE`.
+#' A `data.frame` with miRNA/gene differential expression, or a `list` object
+#' with the parameters used if `param = TRUE`.
 #'
 #' @examples
 #' # load example MirnaExperiment object
@@ -32,10 +33,20 @@
 #' # access miRNA differential expression of a MirnaExperiment object
 #' sig <- mirnaDE(obj)
 #' all <- mirnaDE(obj, onlySignificant = FALSE)
+#' 
+#' # access gene differential expression of a MirnaExperiment object
+#' sig <- geneDE(obj)
+#' all <- geneDE(obj, onlySignificant = FALSE)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
-#'
+#' 
+#' @name deAccessors
+NULL
+
+
+
+#' @describeIn deAccessors Extract miRNA differential expression results
 #' @export
 setGeneric("mirnaDE", function(object,
                                onlySignificant = TRUE,
@@ -45,40 +56,7 @@ setGeneric("mirnaDE", function(object,
 
 
 
-#' Extract differentially expressed genes from a
-#' [`MirnaExperiment`][MirnaExperiment-class] object
-#'
-#' This function is an accessor for the `geneDE` slot of
-#' [`MirnaExperiment`][MirnaExperiment-class]  class, and thus, it can be used
-#' to retrieve the results of gene differential expression stored in a
-#' [`MirnaExperiment`][MirnaExperiment-class] object.
-#'
-#' @param object A [`MirnaExperiment`][MirnaExperiment-class] object containing
-#' miRNA and gene data
-#' @param onlySignificant Logical, if `TRUE` differential expression results
-#' will be returned just for statistically significant genes, if `FALSE` the
-#' full table of gene differential expression will be provided. Default is
-#' `TRUE` to only report significant genes
-#' @param param Logical, whether to return the complete `list` object with
-#' the parameters used, or just the results stored in `data`. Default is FALSE
-#' @param returnObject Logical, if `TRUE` this function will return the
-#' limma/edgeR/DESeq2 object used for differential expression analysis
-#'
-#' @returns
-#' A `data.frame` with gene differential expression, or a `list` object with
-#' the parameters used if `param = TRUE`.
-#'
-#' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
-#' 
-#' # access gene differential expression of a MirnaExperiment object
-#' sig <- geneDE(obj)
-#' all <- geneDE(obj, onlySignificant = FALSE)
-#'
-#' @author
-#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
-#'
+#' @describeIn deAccessors Extract gene differential expression results
 #' @export
 setGeneric("geneDE", function(object,
                               onlySignificant = TRUE,
@@ -88,18 +66,20 @@ setGeneric("geneDE", function(object,
 
 
 
-#' Get the IDs of statistically differentially expressed miRNAs
+#' Get the IDs of statistically differentially expressed miRNAs/genes
 #'
-#' This function accesses the `significant` features contained in the `mirnaDE`
-#' slot of a [`MirnaExperiment`][MirnaExperiment-class] object, and can be used
-#' to obtain the IDs of statistically differentially expressed miRNAs.
+#' The `significantMirnas()` and `significantGenes()` functions access the
+#' `significant` features contained in the `mirnaDE` or `geneDE` slots
+#' of a [`MirnaExperiment`][MirnaExperiment-class] object, and can be used
+#' to obtain the IDs of statistically differentially expressed miRNAs and genes.
 #'
 #' @param object A [`MirnaExperiment`][MirnaExperiment-class] object containing
 #' miRNA and gene data
 #'
 #' @returns
 #' A `character` vector of miRNA IDs (e.g. 'hsa-miR-16-5p',
-#' 'hsa-miR-29a-3p'...).
+#' hsa-miR-29a-3p'...), or a`character` vector of gene symbols (e.g. 'TP53',
+#' 'FOXP2', 'TIGAR', CASP1'...).
 #'
 #' @examples
 #' # load example MirnaExperiment object
@@ -107,39 +87,28 @@ setGeneric("geneDE", function(object,
 #' 
 #' # extract significant DE-miRNAs
 #' sigMirnas <- significantMirnas(obj)
-#'
-#' @author
-#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
-#'
-#' @export
-setGeneric("significantMirnas", function(object)
-  standardGeneric("significantMirnas"))
-
-
-
-#' Get the IDs of statistically differentially expressed genes
-#'
-#' This function accesses the `significant` features contained in the `geneDE`
-#' slot of a [`MirnaExperiment`][MirnaExperiment-class] object, and can be used
-#' to obtain the IDs of statistically differentially expressed genes.
-#'
-#' @param object A [`MirnaExperiment`][MirnaExperiment-class] object containing
-#' miRNA and gene data
-#'
-#' @returns
-#' A `character` vector of gene symbols (e.g. 'TP53', 'FOXP2', 'TIGAR'
-#' 'CASP1'...).
-#'
-#' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
 #' 
 #' # extract significant DEGs
 #' sigGenes <- significantGenes(obj)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
-#'
+#' 
+#' @name significantAccessors
+NULL
+
+
+
+#' @describeIn significantAccessors Get the IDs of differentially expressed
+#' miRNAs
+#' @export
+setGeneric("significantMirnas", function(object)
+  standardGeneric("significantMirnas"))
+
+
+
+#' @describeIn significantAccessors Get the IDs of differentially expressed
+#' genes
 #' @export
 setGeneric("significantGenes", function(object)
   standardGeneric("significantGenes"))
@@ -273,23 +242,205 @@ setGeneric("integration<-", function(object, value)
 ## Generics for FunctionalEnrichment class
 ## ==========================================================================
 
+#' Access the results of functional enrichment analyses
+#'
+#' This function accesses the `data` slot of a
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] object and returns
+#' a `data.frame` with enrichment results.
+#'
+#' @param object An object of class
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] containing
+#' enrichment results
+#'
+#' @returns
+#' A `data.frame` object containing the results of functional enrichment
+#' analyses, as returned by the [enrichGenes()] function.
+#'
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform GSEA with KEGG
+#' de_enr <- enrichGenes(obj, database = "KEGG")
+#'
+#' # extract results
+#' de_df <- enrichmentResults(de_enr)
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
 setGeneric("enrichmentResults", function(object)
   standardGeneric("enrichmentResults"))
 
+
+
+#' Access the database used for functional enrichment analyses
+#'
+#' This function accesses the `database` slot of a
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] object and returns
+#' a the name of the database used by the [enrichGenes()] function to perform
+#' the enrichment analysis.
+#'
+#' @param object An object of class
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] containing
+#' enrichment results
+#'
+#' @returns
+#' A `character` containing the name of the database, such as `KEGG`.
+#'
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform GSEA with KEGG
+#' de_enr <- enrichGenes(obj, database = "KEGG")
+#'
+#' # see the database
+#' enrichmentDatabase(de_enr)
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
 setGeneric("enrichmentDatabase", function(object)
   standardGeneric("enrichmentDatabase"))
 
+
+
+#' Access the method used for functional enrichment analyses
+#'
+#' This function accesses the `method` slot of a
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] object and returns
+#' a the name of the enrichment strategy used by the [enrichGenes()] function
+#' to perform the enrichment analysis.
+#'
+#' @param object An object of class
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] containing
+#' enrichment results
+#'
+#' @returns
+#' A `character` containing the enrichment method, such as `GSEA`.
+#'
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform GSEA with KEGG
+#' de_enr <- enrichGenes(obj, database = "KEGG")
+#'
+#' # see the method
+#' enrichmentMethod(de_enr)
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
 setGeneric("enrichmentMethod", function(object)
   standardGeneric("enrichmentMethod"))
 
+
+
+#' Extract the gene-sets used for functional enrichment analyses
+#'
+#' This function accesses the `geneSet` slot of a
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] object and returns
+#' a `list` with the collection of genes used for the enrichment.
+#'
+#' @param object An object of class
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] containing
+#' enrichment results
+#'
+#' @returns
+#' A `list` containing the gene-sets.
+#'
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform GSEA with KEGG
+#' de_enr <- enrichGenes(obj, database = "KEGG")
+#'
+#' # extract the gene-sets
+#' gs <- geneSet(de_enr)
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
 setGeneric("geneSet", function(object)
   standardGeneric("geneSet"))
 
+
+
+#' Extract the GSEA ranking metric used for functional enrichment analyses
+#'
+#' This function accesses the `statistic` slot of a
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] object and returns
+#' a `numeric` vector with the metric used to rank genes in GSEA.
+#'
+#' @param object An object of class
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] containing
+#' enrichment results
+#'
+#' @returns
+#' A `numeric` vector containing the ranking metric.
+#'
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform GSEA with KEGG
+#' de_enr <- enrichGenes(obj, database = "KEGG")
+#'
+#' # extract the ranking metric
+#' rmet <- enrichmentMetric(de_enr)
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
 setGeneric("enrichmentMetric", function(object)
   standardGeneric("enrichmentMetric"))
 
+
+
+#' Extract the names of the pre-ranked features in a GSEA experiment
+#'
+#' This function accesses the `features` slot of a
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] object and returns
+#' a `character` vector with the names of the features considered in GSEA in
+#' the same order as the ranking metric.
+#'
+#' @param object An object of class
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] containing
+#' enrichment results
+#'
+#' @returns
+#' A `character` vector with the names of the genes ordered based on the
+#' ranking metric.
+#'
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform GSEA with KEGG
+#' de_enr <- enrichGenes(obj, database = "KEGG")
+#'
+#' # extract the ranking metric
+#' rmet <- enrichmentMetric(de_enr)
+#' 
+#' ## extract the corresponding names
+#' rnames <- enrichedFeatures(de_enr)
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
 setGeneric("enrichedFeatures", function(object)
   standardGeneric("enrichedFeatures"))
+
+
 
 setGeneric("enrichmentResults<-", function(object, value)
   standardGeneric("enrichmentResults<-")
@@ -305,14 +456,97 @@ setGeneric("enrichmentDatabase<-", function(object, value)
 ## Generics for IntegrativePathwayAnalysis class
 ## ==========================================================================
 
+#' Access the results of integrative miRNA-mRNA pathway analyses
+#'
+#' This function accesses the `data` slot of a
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] object and returns
+#' a `data.frame` with the results of an integrative topological analysis
+#' carried out through the [topologicalAnalysis()] function.
+#'
+#' @param object An object of class
+#' [`IntegrativePathwayAnalysis`][IntegrativePathwayAnalysis-class] containing
+#' the results of a miRNA-mRNA pathway analysis
+#'
+#' @returns
+#' A `data.frame` object containing the results of the topological analysis,
+#' as returned by the [topologicalAnalysis()] function.
+#'
+#' @examples
+#' # load the example IntegrativePathwayAnalysis object
+#' obj <- loadExamples("IntegrativePathwayAnalysis")
+#' 
+#' # extract results
+#' taipaRes <- integratedPathways(obj)
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
 setGeneric("integratedPathways", function(object)
   standardGeneric("integratedPathways"))
 
+
+
+#' Extract the database used for integrative miRNA-mRNA pathway analyses
+#'
+#' This function accesses the `database` slot of a
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] object and returns
+#' the name of the database used by the [topologicalAnalysis()] function to
+#' perform the integrative topological analysis.
+#'
+#' @param object An object of class
+#' [`IntegrativePathwayAnalysis`][IntegrativePathwayAnalysis-class] containing
+#' the results of a miRNA-mRNA pathway analysis
+#'
+#' @returns
+#' A `character` object with the name of the database used by the
+#' [topologicalAnalysis()] function, such as `KEGG`.
+#'
+#' @examples
+#' # load the example IntegrativePathwayAnalysis object
+#' obj <- loadExamples("IntegrativePathwayAnalysis")
+#' 
+#' # see the database
+#' integrationDatabase(obj)
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
 setGeneric("integrationDatabase", function(object)
   standardGeneric("integrationDatabase"))
 
+
+
+#' Access the miRNA-augmented pathways that were used during TAIPA
+#'
+#' This function accesses the `pathways` slot of a
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] object and returns
+#' a `list` object with the augmented pathways that were considered by the
+#' [topologicalAnalysis()] function to perform the integrative analysis.
+#'
+#' @param object An object of class
+#' [`IntegrativePathwayAnalysis`][IntegrativePathwayAnalysis-class] containing
+#' the results of a miRNA-mRNA pathway analysis
+#'
+#' @returns
+#' A `list` object with the miRNA-augmented biological pathways.
+#'
+#' @examples
+#' # load the example IntegrativePathwayAnalysis object
+#' obj <- loadExamples("IntegrativePathwayAnalysis")
+#' 
+#' # extract the pathways
+#' ps <- augmentedPathways(obj)
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
 setGeneric("augmentedPathways", function(object)
   standardGeneric("augmentedPathways"))
+
+
 
 setGeneric("integratedPathways<-", function(object, value)
   standardGeneric("integratedPathways<-")

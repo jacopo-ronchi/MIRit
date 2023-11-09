@@ -3,6 +3,7 @@
 \docType{class}
 \name{IntegrativePathwayAnalysis-class}
 \alias{IntegrativePathwayAnalysis-class}
+\alias{IntegrativePathwayAnalysis}
 \alias{integratedPathways,IntegrativePathwayAnalysis-method}
 \alias{integrationDatabase,IntegrativePathwayAnalysis-method}
 \alias{augmentedPathways,IntegrativePathwayAnalysis-method}
@@ -16,6 +17,11 @@
 \S4method{augmentedPathways}{IntegrativePathwayAnalysis}(object)
 
 \S4method{show}{IntegrativePathwayAnalysis}(object)
+}
+\arguments{
+\item{object}{An object of class
+\code{\link[=IntegrativePathwayAnalysis-class]{IntegrativePathwayAnalysis}} containing
+the results of a miRNA-mRNA pathway analysis}
 }
 \description{
 This class stores the output of integrative multi-omic pathway analyses.

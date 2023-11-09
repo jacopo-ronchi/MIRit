@@ -6,6 +6,12 @@
 \usage{
 loadExamples(class = "MirnaExperiment")
 }
+\arguments{
+\item{class}{It must be \code{MirnaExperiment} (default) to load an example
+object of class \code{\link[=MirnaExperiment-class]{MirnaExperiment}}, or
+\code{IntegrativePathwayAnalysis}, to load an example object of class
+\code{\link[=IntegrativePathwayAnalysis-class]{IntegrativePathwayAnalysis}}.}
+}
 \value{
 An example \code{MirnaExperiment} object or an \code{IntegrativePathwayAnalysis}
 object.

@@ -3,6 +3,7 @@
 \docType{class}
 \name{FunctionalEnrichment-class}
 \alias{FunctionalEnrichment-class}
+\alias{FunctionalEnrichment}
 \alias{enrichmentResults,FunctionalEnrichment-method}
 \alias{enrichmentDatabase,FunctionalEnrichment-method}
 \alias{enrichmentMethod,FunctionalEnrichment-method}
@@ -26,13 +27,18 @@
 
 \S4method{show}{FunctionalEnrichment}(object)
 }
+\arguments{
+\item{object}{An object of class
+\code{\link[=FunctionalEnrichment-class]{FunctionalEnrichment}} containing
+enrichment results}
+}
 \description{
 This class introduces the possibility to store the results of functional
 enrichment analyses such as over-representation analysis (ORA), gene set
 enrichment analysis (GSEA), and competitive gene set test accounting for
 inter-gene correlation (CAMERA). The different slots contained in this class
-are used to store enrichment results generated through different functions,
-including \code{\link[=enrichGenes]{enrichGenes()}} and \code{\link[=enrichMirnas]{enrichMirnas()}}.
+are used to store enrichment results generated through the \code{\link[=enrichGenes]{enrichGenes()}}
+function.
 }
 \section{Functions}{
 \itemize{

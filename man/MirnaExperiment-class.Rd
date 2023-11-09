@@ -3,13 +3,45 @@
 \docType{class}
 \name{MirnaExperiment-class}
 \alias{MirnaExperiment-class}
+\alias{mirnaDE,MirnaExperiment-method}
+\alias{geneDE,MirnaExperiment-method}
+\alias{significantMirnas,MirnaExperiment-method}
+\alias{significantGenes,MirnaExperiment-method}
+\alias{pairedSamples,MirnaExperiment-method}
+\alias{mirnaTargets,MirnaExperiment-method}
+\alias{integration,MirnaExperiment-method}
 \alias{show,MirnaExperiment-method}
 \title{The 'MirnaExperiment' class}
 \usage{
+\S4method{mirnaDE}{MirnaExperiment}(object, onlySignificant = TRUE, param = FALSE, returnObject = FALSE)
+
+\S4method{geneDE}{MirnaExperiment}(object, onlySignificant = TRUE, param = FALSE, returnObject = FALSE)
+
+\S4method{significantMirnas}{MirnaExperiment}(object)
+
+\S4method{significantGenes}{MirnaExperiment}(object)
+
+\S4method{pairedSamples}{MirnaExperiment}(object)
+
+\S4method{mirnaTargets}{MirnaExperiment}(object)
+
+\S4method{integration}{MirnaExperiment}(object, param = FALSE)
+
 \S4method{show}{MirnaExperiment}(object)
 }
 \arguments{
 \item{object}{An object of class \code{\link[=MirnaExperiment-class]{MirnaExperiment}}}
+
+\item{onlySignificant}{Logical, if \code{TRUE} differential expression results
+will be returned just for statistically significant miRNAs/genes, if \code{FALSE}
+the full table of miRNA/gene differential expression will be provided.
+Default is \code{TRUE} to only report significant miRNAs/genes}
+
+\item{param}{Logical, whether to return the complete \code{list} object with
+the parameters used, or just the results stored in \code{data}. Default is FALSE}
+
+\item{returnObject}{Logical, if \code{TRUE} this function will return the
+limma/edgeR/DESeq2 object used for differential expression analysis}
 }
 \description{
 This class extends the
@@ -26,6 +58,27 @@ and gene expression levels may originate from the same individuals
 }
 \section{Functions}{
 \itemize{
+\item \code{mirnaDE(MirnaExperiment)}: Access the results of miRNA differential
+expression
+
+\item \code{geneDE(MirnaExperiment)}: Access the results of gene differential
+expression
+
+\item \code{significantMirnas(MirnaExperiment)}: Access the names of differentially
+expressed miRNAs
+
+\item \code{significantGenes(MirnaExperiment)}: Access the names of differentially
+expressed genes
+
+\item \code{pairedSamples(MirnaExperiment)}: Check if the object derives from
+sample-matched data
+
+\item \code{mirnaTargets(MirnaExperiment)}: Extract the miRNA-targets interactions
+retrieved for the differentially expressed miRNAs
+
+\item \code{integration(MirnaExperiment)}: Access the results of the integrative
+miRNA-mRNA analysis
+
 \item \code{show(MirnaExperiment)}: Show method for objects of class
 MirnaExperiment
 
