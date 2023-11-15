@@ -55,6 +55,7 @@ Collate:
     'MIRit-package.R'
     'RcppExports.R'
     'association.R'
+    'batch-correction.R'
     'data.R'
     'differential-expression.R'
     'enrichment.R'

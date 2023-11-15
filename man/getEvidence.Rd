@@ -26,8 +26,11 @@ To retrieve evidences of disease-SNP association, this function makes use of
 the \code{gwasrapidd} package.
 }
 \examples{
+
+\donttest{
 # searchDisease("Alzheimer disease")
-# evidence <- getEvidence("rs2075650", diseaseEFO = dis[1])
+evidence <- getEvidence("rs2075650", diseaseEFO = "Alzheimer disease")
+}
 
 }
 \references{

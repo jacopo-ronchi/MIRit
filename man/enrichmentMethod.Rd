@@ -21,14 +21,11 @@ a the name of the enrichment strategy used by the \code{\link[=enrichGenes]{enri
 to perform the enrichment analysis.
 }
 \examples{
-# load example MirnaExperiment object
-obj <- loadExamples()
-
-# perform GSEA with KEGG
-de_enr <- enrichGenes(obj, database = "KEGG")
+# load example FunctionalEnrichment object
+obj <- loadExamples("FunctionalEnrichment")
 
 # see the method
-enrichmentMethod(de_enr)
+enrichmentMethod(obj)
 
 }
 \author{

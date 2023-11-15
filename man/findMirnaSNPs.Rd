@@ -60,13 +60,14 @@ To retrieve disease-associated SNPs, this function makes use of the
 # load example MirnaExperiment object
 obj <- loadExamples()
 
+\donttest{
 # search disease
-# searchDisease("Alzheimer disease")
-# disId <- "Alzheimer disease"
+searchDisease("Alzheimer disease")
+disId <- "Alzheimer disease"
 
 # retrieve associated SNPs
-# association <- findMirnaSNPs(obj, disId)
-# association
+association <- findMirnaSNPs(obj, disId)
+}
 
 }
 \references{

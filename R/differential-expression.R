@@ -466,6 +466,16 @@ performDE <- function(assay,
     
   }
   
+  ## verify that batch correction has not been performed yet
+  if (!is.null(mirnaObj@metadata$uncorrectedMatrices[[assayName]])) {
+    warning(paste("Batch effect-corrected matrices can't be used for",
+                  "differential expression analyses! The uncorrected matrix",
+                  "has been restored before performing differential",
+                  "expression analysis."),
+            call. = FALSE)
+    mirnaObj[[assayName]] <- mirnaObj@metadata$uncorrectedMatrices[[assayName]]
+  }
+  
   ## extract feature expression
   featExpr <- mirnaObj[[assayName]]
   
@@ -1112,26 +1122,30 @@ limma.DE <- function(expr,
 #' [mirnaDE()] and [geneDE()] functions for miRNAs and genes, respectively.
 #' 
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
+#' # load example data
+#' data(geneCounts, package = "MIRit")
+#' data(mirnaCounts, package = "MIRit")
 #' 
-#' # create sample metadata
-#' meta <- data.frame("primary" = colnames(obj[["genes"]]),
-#' "mirnaCol" = colnames(obj[["microRNA"]]),
-#' "geneCol" = colnames(obj[["genes"]]),
+#' # create samples metadata
+#' meta <- data.frame("primary" = colnames(geneCounts),
+#' "mirnaCol" = colnames(mirnaCounts), "geneCol" = colnames(geneCounts),
 #' "disease" = c(rep("PTC", 8), rep("NTH", 8)), 
 #' "patient" = c(rep(paste("Sample_", seq(8), sep = ""), 2)))
 #' 
+#' # create a 'MirnaExperiment' object
+#' obj <- MirnaExperiment(mirnaExpr = mirnaCounts, geneExpr = geneCounts,
+#' samplesMetadata = meta, pairedSamples = TRUE)
+#' 
 #' # perform miRNA DE with DESeq2 separately
-#' dds_m <- DESeq2::DESeqDataSetFromMatrix(countData = obj[["microRNA"]],
-#' colData = meta, design = ~ 0 + disease + patient)
+#' dds_m <- DESeq2::DESeqDataSetFromMatrix(
+#' countData = mirnaCounts, colData = meta, design = ~ 0 + disease + patient)
 #' dds_m <- DESeq2::DESeq(dds_m)
 #' de_m <- as.data.frame(DESeq2::results(dds_m,
 #' contrast = c("disease", "PTC", "NTH"), pAdjustMethod = "fdr"))
 #' 
 #' # perform gene DE with DESeq2 separately
-#' dds_g <- DESeq2::DESeqDataSetFromMatrix(countData = obj[["genes"]],
-#' colData = meta, design = ~ 0 + disease + patient)
+#' dds_g <- DESeq2::DESeqDataSetFromMatrix(
+#' countData = geneCounts, colData = meta, design = ~ 0 + disease + patient)
 #' dds_g <- DESeq2::DESeq(dds_g)
 #' de_g <- as.data.frame(DESeq2::results(dds_g,
 #' contrast = c("disease", "PTC", "NTH"), pAdjustMethod = "fdr"))
@@ -1143,7 +1157,9 @@ limma.DE <- function(expr,
 #' de_g <- na.omit(de_g)
 #' 
 #' # add DE results to MirnaExperiment object
-#' obj <- addDifferentialExpression(obj, de_m, de_g, 0.05, 1, 0.05, 1)
+#' obj <- addDifferentialExpression(obj, de_m, de_g,
+#' mirna.logFC = 1, mirna.pCutoff = 0.05,
+#' gene.logFC = 1, gene.pCutoff = 0.05)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -1225,14 +1241,15 @@ addDifferentialExpression <- function(mirnaObj,
     mirnaDE <- identifyColNames(mirnaDE, "miRNA")
     
     ## check that miRNA names are the same across data
-    if (!identical(sort(rownames(mirnaObj[["microRNA"]])), sort(mirnaDE$ID))) {
-      stop(paste("Row names of 'mirnaObj[['microRNA']]' must match the miRNA",
-                 "identifiers present in 'mirnaDE'"), call. = FALSE)
+    if (any(!mirnaDE$ID %in% rownames(mirnaObj[["microRNA"]]))) {
+      stop(paste("The miRNA identifiers in 'mirnaDE' must be all present",
+                 "within the row names of 'mirnaObj[['microRNA']]'"),
+           call. = FALSE)
     }
     
     ## define significantly differentially expressed miRNAs
     significantMirnas <- mirnaDE$ID[abs(mirnaDE$logFC) > mirna.logFC &
-                                      mirnaDE$adj.P.Val < mirna.pCutoff, ]
+                                      mirnaDE$adj.P.Val < mirna.pCutoff]
     
     ## add miRNA differential expression results to mirnaObj
     mirnaDE(mirnaObj) <- list(data = mirnaDE,
@@ -1262,14 +1279,15 @@ addDifferentialExpression <- function(mirnaObj,
     geneDE <- identifyColNames(geneDE, "gene")
     
     ## check that gene names are the same across data
-    if (!identical(sort(rownames(mirnaObj[["genes"]])), sort(geneDE$ID))) {
-      stop(paste("Row names of 'mirnaObj[['genes']]' must match the gene",
-                 "identifiers present in 'geneDE'"), call. = FALSE)
+    if (any(!geneDE$ID %in% rownames(mirnaObj[["genes"]]))) {
+      stop(paste("The gene symbols in 'geneDE' must be all present",
+                 "within the row names of 'mirnaObj[['genes']]'"),
+           call. = FALSE)
     }
     
     ## define significantly differentially expressed genes
-    significantgenes <- geneDE$ID[abs(geneDE$logFC) > gene.logFC &
-                                    geneDE$adj.P.Val < gene.pCutoff, ]
+    significantGenes <- geneDE$ID[abs(geneDE$logFC) > gene.logFC &
+                                    geneDE$adj.P.Val < gene.pCutoff]
     
     ## add gene differential expression results to mirnaObj
     geneDE(mirnaObj) <- list(data = geneDE,

@@ -21,14 +21,11 @@ a the name of the database used by the \code{\link[=enrichGenes]{enrichGenes()}}
 the enrichment analysis.
 }
 \examples{
-# load example MirnaExperiment object
-obj <- loadExamples()
-
-# perform GSEA with KEGG
-de_enr <- enrichGenes(obj, database = "KEGG")
+# load example FunctionalEnrichment object
+obj <- loadExamples("FunctionalEnrichment")
 
 # see the database
-enrichmentDatabase(de_enr)
+enrichmentDatabase(obj)
 
 }
 \author{

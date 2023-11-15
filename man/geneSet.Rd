@@ -20,14 +20,11 @@ This function accesses the \code{geneSet} slot of a
 a \code{list} with the collection of genes used for the enrichment.
 }
 \examples{
-# load example MirnaExperiment object
-obj <- loadExamples()
-
-# perform GSEA with KEGG
-de_enr <- enrichGenes(obj, database = "KEGG")
+# load example FunctionalEnrichment object
+obj <- loadExamples("FunctionalEnrichment")
 
 # extract the gene-sets
-gs <- geneSet(de_enr)
+gs <- geneSet(obj)
 
 }
 \author{

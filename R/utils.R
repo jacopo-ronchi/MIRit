@@ -295,18 +295,22 @@ convertNodes <- function(x, db) {
 #' 
 #' This helper function allows to create a
 #' [`MirnaExperiment`][MirnaExperiment-class] object containing miRNA and gene
-#' expression data deriving from Riesco-Eizaguirre et al (2015), or an
+#' expression data deriving from Riesco-Eizaguirre et al (2015), an
 #' [`IntegrativePathwayAnalysis`][IntegrativePathwayAnalysis-class] object
-#' containing TAIPA results for the same dataset.
+#' containing TAIPA results for the same dataset, or a
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class] with example GSEA
+#' enrichment results.
 #' 
 #' @param class It must be `MirnaExperiment` (default) to load an example
-#' object of class [`MirnaExperiment`][MirnaExperiment-class], or
+#' object of class [`MirnaExperiment`][MirnaExperiment-class],
 #' `IntegrativePathwayAnalysis`, to load an example object of class
-#' [`IntegrativePathwayAnalysis`][IntegrativePathwayAnalysis-class].
+#' [`IntegrativePathwayAnalysis`][IntegrativePathwayAnalysis-class], or
+#' `FunctionalEnrichment`, to load an example object of class
+#' [`FunctionalEnrichment`][FunctionalEnrichment-class].
 #'
 #' @returns
-#' An example `MirnaExperiment` object or an `IntegrativePathwayAnalysis`
-#' object.
+#' An example `MirnaExperiment` object, an `IntegrativePathwayAnalysis`
+#' object, or a `FunctionalEnrichment` object.
 #'
 #' @examples
 #' # load example MirnaExperiment object
@@ -314,6 +318,9 @@ convertNodes <- function(x, db) {
 #' 
 #' # load example IntegrativePathwayAnalysis object
 #' obj <- loadExamples("IntegrativePathwayAnalysis")
+#' 
+#' # load example FunctionalEnrichment object
+#' obj <- loadExamples("FunctionalEnrichment")
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -322,16 +329,20 @@ convertNodes <- function(x, db) {
 loadExamples <- function(class = "MirnaExperiment") {
   
   ## check input
-  if (!class %in% c("MirnaExperiment", "IntegrativePathwayAnalysis")) {
-    stop(paste("'class' must be one of 'MirnaExperiment' and",
-               "'IntegrativePathwayAnalysis'"), call. = FALSE)
+  if (!class %in% c("MirnaExperiment", "IntegrativePathwayAnalysis",
+                    "FunctionalEnrichment")) {
+    stop(paste("'class' must be one of 'MirnaExperiment',",
+               "'IntegrativePathwayAnalysis', and 'FunctionalEnrichment'"),
+         call. = FALSE)
   }
   
   ## return the example object
   if (class == "MirnaExperiment") {
     return(exampleObject)
-  } else {
+  } else if (class == "IntegrativePathwayAnalysis") {
     return(exampleTAIPA)
+  } else if (class == "FunctionalEnrichment") {
+    return(exampleGSEA)
   }
   
 }

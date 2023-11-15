@@ -35,6 +35,10 @@
 #' Regarding correlation direction, since miRNAs mainly act as negative
 #' regulators, only negatively correlated miRNA-target pairs are evaluated, and
 #' statistical significance is calculated through a one-tailed t-test.
+#' 
+#' Please notice that if strong batch effects are noticed in expression data,
+#' it is recommended to remove them through the [batchCorrection()] function
+#' implemented in MIRit.
 #'
 #' Moreover, if gene expression data and miRNA expression data derive from
 #' different samples (unpaired data), a correlation analysis can't be
@@ -100,10 +104,6 @@
 #' 
 #' # perform integration analysis with default settings
 #' obj <- mirnaIntegration(obj)
-#'
-#' # use Boschloo's exact test with FDR < 0.05 as significance threshold
-#' obj <- mirnaIntegration(obj, test = "association",
-#' pAdjustment = "fdr")
 #'
 #' # perform Kendall's correlation analysis with tau > 0.8 and p < 0.05
 #' obj <- mirnaIntegration(obj, test = "correlation",
@@ -585,7 +585,7 @@ fisher.midp <- function(mat, midpAdjustment) {
 
 
 ## optimization helper function for p-value refinement
-optimization.heper <- function(p, Ns, moreExtremeMat){
+optimization.helper <- function(p, Ns, moreExtremeMat){
   sum(matrix(dbinom(seq(0, Ns[1]), Ns[1], p), ncol = 1) *
         (moreExtremeMat %*% dbinom(seq(0, Ns[2]), Ns[2], p)))
 }
@@ -684,7 +684,7 @@ boshloo.test <- function(data, npNumbers) {
   refNp <- refPvalue
   for (i in seq_along(np)) {
     ref <- suppressWarnings(
-      optimize(f = optimization.heper,
+      optimize(f = optimization.helper,
                interval = c(max(int[1], np[i]-1/npNumbers),
                             min(int[npNumbers], np[i]+1/npNumbers)),
                Ns = Ns,

@@ -8,20 +8,24 @@ loadExamples(class = "MirnaExperiment")
 }
 \arguments{
 \item{class}{It must be \code{MirnaExperiment} (default) to load an example
-object of class \code{\link[=MirnaExperiment-class]{MirnaExperiment}}, or
+object of class \code{\link[=MirnaExperiment-class]{MirnaExperiment}},
 \code{IntegrativePathwayAnalysis}, to load an example object of class
-\code{\link[=IntegrativePathwayAnalysis-class]{IntegrativePathwayAnalysis}}.}
+\code{\link[=IntegrativePathwayAnalysis-class]{IntegrativePathwayAnalysis}}, or
+\code{FunctionalEnrichment}, to load an example object of class
+\code{\link[=FunctionalEnrichment-class]{FunctionalEnrichment}}.}
 }
 \value{
-An example \code{MirnaExperiment} object or an \code{IntegrativePathwayAnalysis}
-object.
+An example \code{MirnaExperiment} object, an \code{IntegrativePathwayAnalysis}
+object, or a \code{FunctionalEnrichment} object.
 }
 \description{
 This helper function allows to create a
 \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing miRNA and gene
-expression data deriving from Riesco-Eizaguirre et al (2015), or an
+expression data deriving from Riesco-Eizaguirre et al (2015), an
 \code{\link[=IntegrativePathwayAnalysis-class]{IntegrativePathwayAnalysis}} object
-containing TAIPA results for the same dataset.
+containing TAIPA results for the same dataset, or a
+\code{\link[=FunctionalEnrichment-class]{FunctionalEnrichment}} with example GSEA
+enrichment results.
 }
 \examples{
 # load example MirnaExperiment object
@@ -29,6 +33,9 @@ obj <- loadExamples()
 
 # load example IntegrativePathwayAnalysis object
 obj <- loadExamples("IntegrativePathwayAnalysis")
+
+# load example FunctionalEnrichment object
+obj <- loadExamples("FunctionalEnrichment")
 
 }
 \author{

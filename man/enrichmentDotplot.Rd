@@ -51,18 +51,14 @@ features. Finally, the color scale of dots is relative to the adjusted
 p-values of each category.
 }
 \examples{
-# load example MirnaExperiment object
-obj <- loadExamples()
-
-# perform GSEA with KEGG database
-gse <- enrichGenes(obj, method = "GSEA",
-database = "KEGG", organism = "Homo sapiens")
+# load example FunctionalEnrichment object
+obj <- loadExamples("FunctionalEnrichment")
 
 # extract results
-res <- enrichmentResults(gse)
+res <- enrichmentResults(obj)
 
 # plot results
-enrichmentDotplot(gse)
+enrichmentDotplot(obj)
 
 }
 \author{

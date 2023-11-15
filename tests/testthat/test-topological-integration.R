@@ -8,10 +8,9 @@ test_that("the integrative topological miRNA-mRNA analysis works", {
   pt <- loadExamples(class = "IntegrativePathwayAnalysis")
   
   ## extract the augmented pathways
-  paths <- augmentedPathways(pt)[seq(80, 100)]
+  paths <- augmentedPathways(pt)
   
   ## perform topological analysis with TAIPA
-  library(BiocParallel)
   expect_no_error(
     tp <- topologicalAnalysis(obj, paths, nPerm = 100)
   )

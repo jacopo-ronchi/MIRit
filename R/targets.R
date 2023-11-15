@@ -60,8 +60,13 @@
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
 #' 
-#' # retrieve targets 
-#' # obj <- getTargets(mirnaObj = obj)
+#' \donttest{
+#' # retrieve targets
+#' obj <- getTargets(mirnaObj = obj)
+#' }
+#' 
+#' # access targets
+#' tg <- mirnaTargets(obj)
 #'
 #' @references
 #' Tomas Tokar and others, mirDIP 4.1—integrative database of human microRNA

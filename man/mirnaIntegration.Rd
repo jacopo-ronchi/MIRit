@@ -95,6 +95,10 @@ Regarding correlation direction, since miRNAs mainly act as negative
 regulators, only negatively correlated miRNA-target pairs are evaluated, and
 statistical significance is calculated through a one-tailed t-test.
 
+Please notice that if strong batch effects are noticed in expression data,
+it is recommended to remove them through the \code{\link[=batchCorrection]{batchCorrection()}} function
+implemented in MIRit.
+
 Moreover, if gene expression data and miRNA expression data derive from
 different samples (unpaired data), a correlation analysis can't be
 performed. However, one-sided association tests can be applied in these
@@ -126,10 +130,6 @@ obj <- loadExamples()
 
 # perform integration analysis with default settings
 obj <- mirnaIntegration(obj)
-
-# use Boschloo's exact test with FDR < 0.05 as significance threshold
-obj <- mirnaIntegration(obj, test = "association",
-pAdjustment = "fdr")
 
 # perform Kendall's correlation analysis with tau > 0.8 and p < 0.05
 obj <- mirnaIntegration(obj, test = "correlation",

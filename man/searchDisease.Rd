@@ -23,8 +23,10 @@ To retrieve EFO IDs for specific diseases, this function makes use of the
 \code{gwasrapidd} package.
 }
 \examples{
+\donttest{
 # search the EFO identifier of Alzheimer disease
-# searchDisease("Alzheimer disease")
+searchDisease("Alzheimer disease")
+}
 
 }
 \references{

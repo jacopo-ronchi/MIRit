@@ -22,17 +22,14 @@ a \code{character} vector with the names of the features considered in GSEA in
 the same order as the ranking metric.
 }
 \examples{
-# load example MirnaExperiment object
-obj <- loadExamples()
-
-# perform GSEA with KEGG
-de_enr <- enrichGenes(obj, database = "KEGG")
+# load example FunctionalEnrichment object
+obj <- loadExamples("FunctionalEnrichment")
 
 # extract the ranking metric
-rmet <- enrichmentMetric(de_enr)
+rmet <- enrichmentMetric(obj)
 
 ## extract the corresponding names
-rnames <- enrichedFeatures(de_enr)
+rnames <- enrichedFeatures(obj)
 
 }
 \author{

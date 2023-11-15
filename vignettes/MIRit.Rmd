@@ -654,6 +654,12 @@ As we can see from the output, a statistically significant correlation between 2
 
 Please note that all the parameters used for the correlation analysis are customizable. For instance, the user can change the significance threshold and the multiple testing correction method by setting the `pCutoff` and `pAdjustment` parameters, respectively. Further, it is also possible to change the correlation coefficient used, by editing the `corMethod` option, and the minimum required value of the correlation coefficient, by changing the `corCutoff` setting.
 
+
+### Account for batch effects prior to correlation analysis
+
+Sometimes, when exploring expression variability through MDS plots, as we do with the `plotDimensions()` function, we notice the presence of batch effects that prevent a clear separation of our biological groups. Indeed, batch effects consist in unwanted sources of technical variation that confound expression variability and limit downstream analyses. Since the reliability of biological conclusions of integrative miRNA-mRNA analyses depends on the correlation between miRNA and gene expression levels, it is pivotal to ensure that expression measurements are not affected by technical variation. In this regard, if batch effects are noticed in the data, MIRit provides the `batchCorrection()` function, which removes batch effects from expression data before moving to correlation analysis. Please note that this procedure can only be used prior to correlation analysis, because for differential expression analysis it is more appropriate to include batch variables in the linear model, as specified in Section \@ref(model). For additional information, please refer to the manual of the `batchCorrection()` function.
+
+
 ### Explore the succesfully integrated miRNA-target pairs
 
 Before moving on to the identification of the altered miRNAs regulatory networks, we can explore correlated miRNA-target pairs thanks to the `integration()` function, which returns a `data.frame` object with comprehensive details about the computed correlations.

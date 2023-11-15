@@ -138,20 +138,13 @@
 #' A base R plot with the augmented pathway.
 #'
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
+#' # load example IntegrativePathwayAnalysis object
+#' obj <- loadExamples("IntegrativePathwayAnalysis")
 #' 
-#' # perform integration analysis with default settings
-#' obj <- mirnaIntegration(obj)
-#'
-#' # perform the integrative pathway analysis with default settings
-#' #ipa <- topologicalAnalysis(obj)
-#' 
-#' # access the results of pathway analysis
-#' #integratedPathways(ipa)
-#' 
+#' \donttest{
 #' # explore a specific biological network
-#' #visualizeNetwork(ipa, "Thyroid hormone synthesis")
+#' visualizeNetwork(obj, "Thyroid hormone synthesis")
+#' }
 #' 
 #' @note
 #' This function uses the `Rgraphviz` package to render the network object.
@@ -572,18 +565,14 @@ setColorScale <- function(values, cols, numColors) {
 #' A `ggplot` graph with a dotplot of enrichment results.
 #'
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
-#' 
-#' # perform GSEA with KEGG database
-#' gse <- enrichGenes(obj, method = "GSEA",
-#' database = "KEGG", organism = "Homo sapiens")
+#' # load example FunctionalEnrichment object
+#' obj <- loadExamples("FunctionalEnrichment")
 #'
 #' # extract results
-#' res <- enrichmentResults(gse)
+#' res <- enrichmentResults(obj)
 #'
 #' # plot results
-#' enrichmentDotplot(gse)
+#' enrichmentDotplot(obj)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -745,18 +734,14 @@ enrichmentDotplot <- function(enrichment,
 #' A `ggplot` graph with a barplot of enrichment results.
 #'
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
-#' 
-#' # perform GSEA with KEGG database
-#' gse <- enrichGenes(obj, method = "GSEA",
-#' database = "KEGG", organism = "Homo sapiens")
+#' # load example FunctionalEnrichment object
+#' obj <- loadExamples("FunctionalEnrichment")
 #'
 #' # extract results
-#' res <- enrichmentResults(gse)
+#' res <- enrichmentResults(obj)
 #'
 #' # plot results
-#' enrichmentBarplot(gse)
+#' enrichmentBarplot(obj)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -905,18 +890,14 @@ enrichmentBarplot <- function(enrichment,
 #' An object of class `ggplot` containing the ridgeplot of GSEA results.
 #'
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
-#' 
-#' # perform GSEA with KEGG database
-#' gse <- enrichGenes(obj, method = "GSEA",
-#' database = "KEGG", organism = "Homo sapiens")
+#' # load example FunctionalEnrichment object
+#' obj <- loadExamples("FunctionalEnrichment")
 #'
 #' # extract results
-#' res <- enrichmentResults(gse)
+#' res <- enrichmentResults(obj)
 #'
-#' # plot results as a ridgeplot
-#' gseaRidgeplot(gse)
+#' # plot results
+#' gseaRidgeplot(obj)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -1079,18 +1060,14 @@ gseaRidgeplot <- function(enrichment,
 #' An object of class `ggplot` containing the GSEA plot.
 #'
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
-#' 
-#' # perform GSEA with KEGG database
-#' gse <- enrichGenes(obj, method = "GSEA",
-#' database = "KEGG", organism = "Homo sapiens")
+#' # load example FunctionalEnrichment object
+#' obj <- loadExamples("FunctionalEnrichment")
 #'
 #' # extract results
-#' res <- enrichmentResults(gse)
+#' res <- enrichmentResults(obj)
 #'
 #' # plot results
-#' gseaPlot(gse, pathway = "Thyroid hormone synthesis")
+#' gseaPlot(obj, pathway = "Thyroid hormone synthesis")
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -1393,11 +1370,13 @@ theme.MIRit <- function(base_size = 12,
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
 #' 
+#' \dontrun{
 #' # retrieve associated SNPs
-#' # association <- findMirnaSNPs(obj, disId)
+#' association <- findMirnaSNPs(obj, disId)
 #'
 #' # visualize association as a trackplot
-#' # mirVariantPlot(variantId = varId, snpAssociation = association)
+#' mirVariantPlot(variantId = varId, snpAssociation = association)
+#' }
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -1661,8 +1640,8 @@ mirVariantPlot <- function(variantId,
 #' # perform miRNA-target integration
 #' obj <- mirnaIntegration(obj)
 #'
-#' # plot correlation between miR-34a and PAX8 with monotonic regression curve
-#' plotCorrelation(obj, "hsa-miR-34a-5p", "PAX8", condition = "disease")
+#' # plot correlation between miR-146b and PAX8 with monotonic regression curve
+#' plotCorrelation(obj, "hsa-miR-146b-5p", "PAX8", condition = "disease")
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -3132,20 +3111,14 @@ plotDimensions <- function(mirnaObj,
 #' A `ggplot` graph with a dotplot of integrated pathways.
 #'
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
-#' 
-#' # perform integration analysis with default settings
-#' obj <- mirnaIntegration(obj)
-#'
-#' # perform the integrative pathway analysis with default settings
-#' #ipa <- topologicalAnalysis(obj)
+#' # load example IntegrativePathwayAnalysis object
+#' obj <- loadExamples("IntegrativePathwayAnalysis")
 #' 
 #' # access the results of pathway analysis
-#' #integratedPathways(ipa)
+#' integratedPathways(obj)
 #' 
 #' # create a dotplot of integrated pathways
-#' #integrationDotplot(ipa)
+#' integrationDotplot(obj)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}

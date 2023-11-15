@@ -8,5 +8,5 @@
       GnRH signaling pathway       GnRH signaling pathway 0.1818182  5.831885
                                 normalized.score      P.Val adj.P.Val
       Thyroid hormone synthesis         7.222084 0.00990099      0.00
-      GnRH signaling pathway            4.728861 0.00990099      0.03
+      GnRH signaling pathway            4.728861 0.00990099      0.04
 

@@ -85,8 +85,8 @@ To download gene sets from the above mentioned databases, MIRit uses the
 # load example MirnaExperiment object
 obj <- loadExamples()
 
-# perform enrichment analysis of integrated targets with KEGG
-targets_enrichment <- enrichTargets(obj, method = "ORA", database = "KEGG")
+# perform enrichment analysis of integrated targets with DO
+targets_enrichment <- enrichTargets(obj, database = "DO")
 
 # extract enrichment results of downregulated targets
 enr_down <- targets_enrichment[["downregulated"]]

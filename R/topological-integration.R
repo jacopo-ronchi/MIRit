@@ -56,20 +56,22 @@
 #' # perform integration analysis with default settings
 #' obj <- mirnaIntegration(obj)
 #' 
+#' \donttest{
 #' # retrieve pathways from KEGG and augment them with miRNA-gene interactions
 #' paths <- preparePathways(obj)
-#'
-#' # perform the integrative pathway analysis with default settings
-#' #ipa <- topologicalAnalysis(obj, paths)
+#' 
+#' # perform the integrative pathway analysis with 1000 permutations
+#' ipa <- topologicalAnalysis(obj, paths, nPerm = 1000)
 #' 
 #' # access the results of pathway analysis
-#' #integratedPathways(ipa)
+#' integratedPathways(ipa)
 #' 
 #' # create a dotplot of integrated pathways
-#' #integrationDotplot(ipa)
+#' integrationDotplot(ipa)
 #' 
 #' # explore a specific biological network
-#' #visualizeNetwork(ipa, "Thyroid hormone synthesis")
+#' visualizeNetwork(ipa, "Thyroid hormone synthesis")
+#' }
 #' 
 #' @references
 #' Sales, G., Calura, E., Cavalieri, D. et al. graphite - a Bioconductor
@@ -80,7 +82,6 @@
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #' 
-#' @import BiocParallel
 #' @export
 preparePathways <- function(mirnaObj,
                             database = "KEGG",
@@ -286,20 +287,22 @@ preparePathways <- function(mirnaObj,
 #' # perform integration analysis with default settings
 #' obj <- mirnaIntegration(obj)
 #' 
+#' \donttest{
 #' # retrieve pathways from KEGG and augment them with miRNA-gene interactions
 #' paths <- preparePathways(obj)
-#'
-#' # perform the integrative pathway analysis with default settings
-#' #ipa <- topologicalAnalysis(obj, paths)
+#' 
+#' # perform the integrative pathway analysis with 1000 permutations
+#' ipa <- topologicalAnalysis(obj, paths, nPerm = 1000)
 #' 
 #' # access the results of pathway analysis
-#' #integratedPathways(ipa)
+#' integratedPathways(ipa)
 #' 
 #' # create a dotplot of integrated pathways
-#' #integrationDotplot(ipa)
+#' integrationDotplot(ipa)
 #' 
 #' # explore a specific biological network
-#' #visualizeNetwork(ipa, "Thyroid hormone synthesis")
+#' visualizeNetwork(ipa, "Thyroid hormone synthesis")
+#' }
 #' 
 #' @references
 #' Peter H. Westfall and S. Stanley Young. Resampling-Based Multiple Testing:
@@ -309,7 +312,6 @@ preparePathways <- function(mirnaObj,
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #' 
-#' @import BiocParallel
 #' @export
 topologicalAnalysis <- function(mirnaObj,
                                 pathways,

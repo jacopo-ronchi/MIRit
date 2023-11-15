@@ -20,14 +20,11 @@ This function accesses the \code{statistic} slot of a
 a \code{numeric} vector with the metric used to rank genes in GSEA.
 }
 \examples{
-# load example MirnaExperiment object
-obj <- loadExamples()
-
-# perform GSEA with KEGG
-de_enr <- enrichGenes(obj, database = "KEGG")
+# load example FunctionalEnrichment object
+obj <- loadExamples("FunctionalEnrichment")
 
 # extract the ranking metric
-rmet <- enrichmentMetric(de_enr)
+rmet <- enrichmentMetric(obj)
 
 }
 \author{

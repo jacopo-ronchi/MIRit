@@ -39,18 +39,14 @@ areas represent the density of signed p-values, log2 fold changes, or
 log.p-values belonging to genes annotated to that category.
 }
 \examples{
-# load example MirnaExperiment object
-obj <- loadExamples()
-
-# perform GSEA with KEGG database
-gse <- enrichGenes(obj, method = "GSEA",
-database = "KEGG", organism = "Homo sapiens")
+# load example FunctionalEnrichment object
+obj <- loadExamples("FunctionalEnrichment")
 
 # extract results
-res <- enrichmentResults(gse)
+res <- enrichmentResults(obj)
 
-# plot results as a ridgeplot
-gseaRidgeplot(gse)
+# plot results
+gseaRidgeplot(obj)
 
 }
 \author{

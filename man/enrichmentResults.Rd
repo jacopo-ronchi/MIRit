@@ -21,14 +21,11 @@ This function accesses the \code{data} slot of a
 a \code{data.frame} with enrichment results.
 }
 \examples{
-# load example MirnaExperiment object
-obj <- loadExamples()
-
-# perform GSEA with KEGG
-de_enr <- enrichGenes(obj, database = "KEGG")
+# load example FunctionalEnrichment object
+obj <- loadExamples("FunctionalEnrichment")
 
 # extract results
-de_df <- enrichmentResults(de_enr)
+de_df <- enrichmentResults(obj)
 
 }
 \author{

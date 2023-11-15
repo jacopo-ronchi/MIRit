@@ -74,20 +74,22 @@ obj <- loadExamples()
 # perform integration analysis with default settings
 obj <- mirnaIntegration(obj)
 
+\donttest{
 # retrieve pathways from KEGG and augment them with miRNA-gene interactions
 paths <- preparePathways(obj)
 
-# perform the integrative pathway analysis with default settings
-#ipa <- topologicalAnalysis(obj, paths)
+# perform the integrative pathway analysis with 1000 permutations
+ipa <- topologicalAnalysis(obj, paths, nPerm = 1000)
 
 # access the results of pathway analysis
-#integratedPathways(ipa)
+integratedPathways(ipa)
 
 # create a dotplot of integrated pathways
-#integrationDotplot(ipa)
+integrationDotplot(ipa)
 
 # explore a specific biological network
-#visualizeNetwork(ipa, "Thyroid hormone synthesis")
+visualizeNetwork(ipa, "Thyroid hormone synthesis")
+}
 
 }
 \references{

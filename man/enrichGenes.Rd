@@ -234,7 +234,7 @@ To download gene sets from the above mentioned databases, MIRit uses the
 obj <- loadExamples()
 
 # perform GSEA with KEGG
-de_enr <- enrichGenes(obj, database = "KEGG")
+de_enr <- enrichGenes(obj, method = "GSEA", database = "KEGG")
 
 # extract results
 de_df <- enrichmentResults(de_enr)

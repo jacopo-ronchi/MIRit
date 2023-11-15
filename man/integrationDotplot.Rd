@@ -45,20 +45,14 @@ Finally, the color scale of dots is relative to the adjusted p-values of
 each pathway.
 }
 \examples{
-# load example MirnaExperiment object
-obj <- loadExamples()
-
-# perform integration analysis with default settings
-obj <- mirnaIntegration(obj)
-
-# perform the integrative pathway analysis with default settings
-#ipa <- topologicalAnalysis(obj)
+# load example IntegrativePathwayAnalysis object
+obj <- loadExamples("IntegrativePathwayAnalysis")
 
 # access the results of pathway analysis
-#integratedPathways(ipa)
+integratedPathways(obj)
 
 # create a dotplot of integrated pathways
-#integrationDotplot(ipa)
+integrationDotplot(obj)
 
 }
 \author{

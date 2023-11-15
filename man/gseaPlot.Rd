@@ -57,18 +57,14 @@ running enrichment score (ES) for a given pathway is shown on the y-axis,
 whereas gene positions in the ranked list are reported on the x-axis.
 }
 \examples{
-# load example MirnaExperiment object
-obj <- loadExamples()
-
-# perform GSEA with KEGG database
-gse <- enrichGenes(obj, method = "GSEA",
-database = "KEGG", organism = "Homo sapiens")
+# load example FunctionalEnrichment object
+obj <- loadExamples("FunctionalEnrichment")
 
 # extract results
-res <- enrichmentResults(gse)
+res <- enrichmentResults(obj)
 
 # plot results
-gseaPlot(gse, pathway = "Thyroid hormone synthesis")
+gseaPlot(obj, pathway = "Thyroid hormone synthesis")
 
 }
 \author{

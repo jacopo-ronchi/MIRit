@@ -80,8 +80,13 @@ function directly use mirDIP API through R.
 # load example MirnaExperiment object
 obj <- loadExamples()
 
-# retrieve targets 
-# obj <- getTargets(mirnaObj = obj)
+\donttest{
+# retrieve targets
+obj <- getTargets(mirnaObj = obj)
+}
+
+# access targets
+tg <- mirnaTargets(obj)
 
 }
 \references{

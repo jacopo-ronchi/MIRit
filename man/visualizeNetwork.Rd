@@ -191,20 +191,13 @@ include a network title with the desired look.
 This function uses the \code{Rgraphviz} package to render the network object.
 }
 \examples{
-# load example MirnaExperiment object
-obj <- loadExamples()
+# load example IntegrativePathwayAnalysis object
+obj <- loadExamples("IntegrativePathwayAnalysis")
 
-# perform integration analysis with default settings
-obj <- mirnaIntegration(obj)
-
-# perform the integrative pathway analysis with default settings
-#ipa <- topologicalAnalysis(obj)
-
-# access the results of pathway analysis
-#integratedPathways(ipa)
-
+\donttest{
 # explore a specific biological network
-#visualizeNetwork(ipa, "Thyroid hormone synthesis")
+visualizeNetwork(obj, "Thyroid hormone synthesis")
+}
 
 }
 \author{

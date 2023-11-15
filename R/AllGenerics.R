@@ -257,14 +257,11 @@ setGeneric("integration<-", function(object, value)
 #' analyses, as returned by the [enrichGenes()] function.
 #'
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
+#' # load example FunctionalEnrichment object
+#' obj <- loadExamples("FunctionalEnrichment")
 #' 
-#' # perform GSEA with KEGG
-#' de_enr <- enrichGenes(obj, database = "KEGG")
-#'
 #' # extract results
-#' de_df <- enrichmentResults(de_enr)
+#' de_df <- enrichmentResults(obj)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -290,14 +287,11 @@ setGeneric("enrichmentResults", function(object)
 #' A `character` containing the name of the database, such as `KEGG`.
 #'
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
-#' 
-#' # perform GSEA with KEGG
-#' de_enr <- enrichGenes(obj, database = "KEGG")
+#' # load example FunctionalEnrichment object
+#' obj <- loadExamples("FunctionalEnrichment")
 #'
 #' # see the database
-#' enrichmentDatabase(de_enr)
+#' enrichmentDatabase(obj)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -323,14 +317,11 @@ setGeneric("enrichmentDatabase", function(object)
 #' A `character` containing the enrichment method, such as `GSEA`.
 #'
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
-#' 
-#' # perform GSEA with KEGG
-#' de_enr <- enrichGenes(obj, database = "KEGG")
+#' # load example FunctionalEnrichment object
+#' obj <- loadExamples("FunctionalEnrichment")
 #'
 #' # see the method
-#' enrichmentMethod(de_enr)
+#' enrichmentMethod(obj)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -355,14 +346,11 @@ setGeneric("enrichmentMethod", function(object)
 #' A `list` containing the gene-sets.
 #'
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
-#' 
-#' # perform GSEA with KEGG
-#' de_enr <- enrichGenes(obj, database = "KEGG")
+#' # load example FunctionalEnrichment object
+#' obj <- loadExamples("FunctionalEnrichment")
 #'
 #' # extract the gene-sets
-#' gs <- geneSet(de_enr)
+#' gs <- geneSet(obj)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -387,14 +375,11 @@ setGeneric("geneSet", function(object)
 #' A `numeric` vector containing the ranking metric.
 #'
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
-#' 
-#' # perform GSEA with KEGG
-#' de_enr <- enrichGenes(obj, database = "KEGG")
+#' # load example FunctionalEnrichment object
+#' obj <- loadExamples("FunctionalEnrichment")
 #'
 #' # extract the ranking metric
-#' rmet <- enrichmentMetric(de_enr)
+#' rmet <- enrichmentMetric(obj)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
@@ -421,17 +406,14 @@ setGeneric("enrichmentMetric", function(object)
 #' ranking metric.
 #'
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
-#' 
-#' # perform GSEA with KEGG
-#' de_enr <- enrichGenes(obj, database = "KEGG")
+#' # load example FunctionalEnrichment object
+#' obj <- loadExamples("FunctionalEnrichment")
 #'
 #' # extract the ranking metric
-#' rmet <- enrichmentMetric(de_enr)
+#' rmet <- enrichmentMetric(obj)
 #' 
 #' ## extract the corresponding names
-#' rnames <- enrichedFeatures(de_enr)
+#' rnames <- enrichedFeatures(obj)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
