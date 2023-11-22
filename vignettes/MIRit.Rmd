@@ -20,8 +20,12 @@ editor_options:
     wrap: 80
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>",
+    crop = NULL
+)
 ```
 
 
@@ -35,11 +39,7 @@ knitr::include_graphics("mirit_logo.png")
 
 MIRit (miRNA integration tool) is an open-source R package that aims to facilitate the comprehension of microRNA (miRNA) biology through the integrative analysis of gene and miRNA expression data deriving from different platforms, including microarrays, RNA-Seq, miRNA-Seq, proteomics and single-cell transcriptomics.
 
-MicroRNAs are small non-coding transcripts with an average length of 22 nucleotides that have a pivotal role in gene expression regulation. These non-coding RNAs take part in several biological processes and are dysregulated in a large proportion of human diseases. Generally, miRNAs act by binding some partially complementary regions in the 3' UTR of their target mRNAs, hence preventing translation and causing transcript degradation. Therefore, miRNAs are usually considered as master negative regulators of gene expression. The fine gene regulation put in place by miRNAs is critical for the normal functioning of cells, especially considering that these small transcripts regulate over 60% of human genes.
-
-Given the above, a complete characterization of miRNA regulatory networks results crucial to explore the molecular networks that may lead to the insurgence of complex diseases. Unfortunately, different obstacles need to be faced before linking miRNA dysregulations to their biological outcomes. Firstly, the identification of miRNA targets through computational prediction is still affected by several false positives, thus undermining the validity of downstream analyses. In this regard, if both miRNA and mRNA expression are available, one option is to only consider miRNA-mRNA pairs that appear negatively correlated, hence retaining just the interactions that influence the expression values of target genes. However, few tools allow to systematically link expression changes of miRNAs with those of their targets through correlation analyses, and this even worse when exploring miRNA-target associations for unpaired data, with no existing software able to combine miRNA profiling with gene expression measurements obtained from different individuals. Furthermore, there are no currently available options for thoroughly interpreting the biological consequences of miRNA dysregulations, thus limiting the ability to identify the affected pathways and to reconstruct the compromised molecular networks. Lastly, the lack of a unified framework for integrative miRNA-mRNA analyses lessens the reproducibility of these analyses, and hinders the understanding of pathogenic mechanisms involving miRNAs.
-
-To tackle these limitations, we developed MIRit, an all-in-one framework that provides flexible and powerful methods for performing integrative miRNA-mRNA multi-omic analyses from start to finish. In particular, MIRit includes multiple modules that allow to perform:
+Given their regulatory importance, a complete characterization of miRNA dysregulations results crucial to explore the molecular networks that may lead to the insurgence of complex diseases. Unfortunately, there are no currently available options for thoroughly interpreting the biological consequences of miRNA dysregulations, thus limiting the ability to identify the affected pathways and reconstruct the compromised molecular networks. To tackle this limitation, we developed MIRit, an all-in-one framework that provides flexible and powerful methods for performing integrative miRNA-mRNA multi-omic analyses from start to finish. In particular, MIRit includes multiple modules that allow to perform:
 
 1. **Differential expression analysis**, which identifies miRNAs and genes that vary across biological conditions for both RNA-Seq and microarray experiments (even though other technologies can also be used);
 2. **Functional enrichment analysis**, which allows to understand the consequences of gene dysregulations through different strategies, including over-representation analysis (ORA), gene-set enrichment analysis (GSEA) and Correlation Adjusted MEan RAnk gene set test (CAMERA);
@@ -84,18 +84,6 @@ When MIRit is installed, we can load it through:
 library(MIRit)
 ```
 
-## The typical pipeline
-
-As anticipated above, the standard MIRit workflow involves multiple steps, namely:
-
-1. Data preparation and differential expression;
-2. Functional enrichment analysis of genes;
-3. Definition of miRNA targets;
-4. Integrative analysis of miRNA and gene expression values;
-5. Topological analysis of compromised regulatory networks;
-6. Visualization of network dysregulations.
-
-Each step of this workflow is covered in detail in the next chapters.
 
 # Data preparation
 
@@ -139,7 +127,7 @@ knitr::kable(mirnaCounts[seq(5), seq(5)], digits = 2, caption = "MiRNA expressio
 
 ## Define sample metadata {#meta}
 
-Once we have expression matrices in the proper format, we need to inform MIRit about the samples in study and the biological conditions of interest. To do so, we need to create a `data.frame` that will hold metadata of patients in analysis, such as disease condition and subject ID. Specifically, this `data.frame` must contain:
+Once we have expression matrices in the proper format, we need to inform MIRit about the samples in study and the biological conditions of interest. To do so, we need to create a `data.frame` that must contain:
 
 - a column named `primary`, specifying a unique identifier for each different subject;
 - a column named `mirnaCol`, matching the column name used for each sample in the miRNA expression matrix;
@@ -173,16 +161,9 @@ meta <- data.frame(primary = colnames(mirnaCounts),
                    patient = c(rep(paste("Sample_", seq(8), sep = ""), 2)))
 ```
 
-In the end, this object should look like that reported in Table \@ref(tab:metaDf).
-
-```{r metaDf, echo=FALSE}
-## display the data.frame object that stores sample metadata
-knitr::kable(meta, digits = 2, caption = "Sample metadata. A data.frame object that maps each column in expression matrices to the relative individual specified in 'primary' column.")
-```
-
 ## Create a `MirnaExperiment` object
 
-At this point, after setting up expression matrices, and after defining sample metadata, we need to create an object of class `MirnaExperiment`, which is the main class used in MIRit to store all the data that are necessary for the integrative miRNA-mRNA analysis. In particular, this class extends the `MultiAssayExperiment` class from the homonym package [@ramos_software_2017] to store expression levels of both microRNAs and genes, differential expression results, miRNA-target pairs and integrative miRNA-gene analysis.
+At this point, after setting up expression matrices, and after defining sample metadata, we need to create an object of class `MirnaExperiment`, which is the main class used in MIRit to store all the data that are necessary for the integrative miRNA-mRNA analysis. In particular, this class extends the `MultiAssayExperiment` class from the homonym package [@ramos_software_2017] to store expression levels of both miRNAs and genes, differential expression results, miRNA-target pairs and integrative miRNA-gene analysis.
 
 The easiest way to create a valid `MirnaExperiment` object is to use the `MirnaExperiment()` function, which automatically handles the formatting of input data and the creation of the object.
 
@@ -196,7 +177,7 @@ experiment <- MirnaExperiment(mirnaExpr = mirnaCounts,
 
 # Differential expression analysis
 
-Now that the `MirnaExperiment` object has been created, we can go on with the differential expression analysis, which aims to define differentially expressed features across biological conditions.
+Now that the `MirnaExperiment` object has been created, we can move to differential expression analysis, which aims to define differentially expressed features across biological conditions.
 
 ## Visualize expression variability
 
@@ -217,7 +198,7 @@ ggpubr::ggarrange(geneMDS, mirnaMDS, nrow = 1, labels = "AUTO",
                   common.legend = TRUE)
 ```
 
-As we can see from Figures \@ref(fig:mds)A and \@ref(fig:mds)B, the samples are very well separated on the basis of disease condition, thus suggesting that this is the major factor that influences expression variability. This is exactly what we want, since we want to evaluate the differences between cancer and normal tissue. If this wasn't the case, we should identify the confounding variables, and include them in the model used for differential expression analysis (see Section \@ref(model)).
+As we can see from Figures \@ref(fig:mds)A and \@ref(fig:mds)B, the samples are very well separated on the basis of disease condition, thus suggesting that this is the major factor that influences expression variability. This is exactly what we want, since we aim to evaluate the differences between cancer and normal tissue. If this wasn't the case, we should identify the confounding variables, and include them in the model used for differential expression analysis (see Section \@ref(model)).
 
 ## Perform miRNA and gene differential expression
 
@@ -248,7 +229,7 @@ If other variables affecting miRNA and gene expression are observed, they should
 
 Once the linear model has been defined, we can perform the differential expression analysis through the `performMirnaDE()` and `performGeneDE()` functions. Indeed, these two functions take as input a `MirnaExperiment` object, and compute differential expression for miRNAs and genes.
 
-Additionally, when we run these functions, there are different parameters that we need to provide, including:
+Additionally, when we run these functions, we must define different arguments, namely:
 
 - `group`, which corresponds to the name of the variable of interest as specified in Section \@ref(meta). In our case, we are interested in studying the differences between cancer tissue and normal tissue, and therefore our variable of interest is "*disease*". 
 - `contrast`, which indicates the levels of the variable of interest to be compared. In particular, this parameter takes as input a string where the levels are separated by a dash, and where the second level corresponds to the reference group. In our example, we want to compare samples from papillary thyroid cancer (PTC) against normal thyroid tissue (NTH), thus we set `contrast` to "*PTC-NTH*".
@@ -265,9 +246,7 @@ experiment <- performGeneDE(experiment, group = "disease", contrast = "PTC-NTH",
 experiment <- performMirnaDE(experiment, group = "disease", contrast = "PTC-NTH", design = model)
 ```
 
-In the end, the analysis reported 265 differentially expressed genes, and 40 differentially expressed miRNAs.
-
-If not specified, the `performMirnaDE()` and `performGeneDE()` functions will define differentially expressed genes/miRNAs as those having an adjusted p-value lower than 0.05, and an absolute log2 fold change higher than 1 (FC > 2). However, this behavior can be changed by tweaking the `pCutoff` parameter, that specifies the statistical significance threshold; the `logFC` parameter, which indicates the minimum log2 fold change that features must display for being considered as differentially expressed; and the `pAdjustment` parameter, which specifies the approach used for multiple testing correction (default is `fdr` to use the Benjamini-Hochberg method).
+In the end, the analysis reported 265 differentially expressed genes, and 40 differentially expressed miRNAs. If not specified, the `performMirnaDE()` and `performGeneDE()` functions will define differentially expressed genes/miRNAs as those having an adjusted p-value lower than 0.05, and an absolute log2 fold change higher than 1 (FC > 2). However, this behavior can be changed by tweaking the `pCutoff` parameter, that specifies the statistical significance threshold; the `logFC` parameter, which indicates the minimum log2 fold change that features must display for being considered as differentially expressed; and the `pAdjustment` parameter, which specifies the approach used for multiple testing correction (default is `fdr` to use the Benjamini-Hochberg method).
 
 ### Advanced parameters {#param}
 
@@ -317,9 +296,7 @@ Further, we must specify the cutoff levels used to consider miRNAs/genes as sign
 
 ### Access differential expression tables
 
-Once differential expression analysis has been performed, we can use the `mirnaDE()` and `geneDE()` functions to access a table with differentially expressed features.
-
-Therefore, let's access the results of differential expression analysis in thyroid cancer for both miRNAs and genes.
+Once differential expression analysis has been performed, we can use the `mirnaDE()` and `geneDE()` functions to access a table with differentially expressed features. Therefore, let's access the results of differential expression analysis in thyroid cancer for both miRNAs and genes.
 
 ```{r accessDe}
 ## access DE results for genes
@@ -327,13 +304,6 @@ deGenes <- geneDE(experiment)
 
 ## access DE results for miRNAs
 deMirnas <- mirnaDE(experiment)
-```
-
-To have an idea of the information included in these tables, differential expression results for genes are reported in Table \@ref(tab:geneDeTab).
-
-```{r geneDeTab, echo=FALSE}
-## display differential expression results for genes
-knitr::kable(head(deGenes), digits = 2, caption = "Gene differential expression. A table listing the first 5 differentially expressed genes between thyroid cancer and normal thyroid.")
 ```
 
 ### Create a volcano plot for miRNAs and genes
@@ -356,25 +326,9 @@ ggpubr::ggarrange(geneVolcano, mirnaVolcano, nrow = 1, labels = "AUTO",
                   common.legend = TRUE)
 ```
 
-As evidenced in Figures \@ref(fig:volcano)A and \@ref(fig:volcano)B, upregulated and downregulated features are balanced for genes, while for miRNAs there are some species that show a consistently higher log2 fold change. Notably, the `plotVolcano()` function has also a `label` parameter that can highlight specific features or the most significant elements.
-
 ### Produce differential expression bar plots
 
-Finally, if we are interested in specific genes/miRNAs, MIRit implements the `plotDE()` function that allows to represent expression changes of specific features as box plots, bar plots, or violin plots. In our example, we can use this function to visualize the two most significant miRNAs through boxplots.
-
-```{r mirBox, fig.wide=FALSE, fig.cap="Differential expression box plots for the two most significant miRNAs."}
-## craete a box plot for the most significant miRNA
-topMir <- plotDE(experiment, features = deMirnas$ID[1], nameAsTitle = TRUE)
-
-## create a boxplot for the second most significant miRNA
-secondMir <- plotDE(experiment, features = deMirnas$ID[2], nameAsTitle = TRUE)
-
-## plot graphs side by side
-ggpubr::ggarrange(topMir, secondMir, nrow = 1, labels = "AUTO",
-                  common.legend = TRUE, legend = "bottom")
-```
-
-Moreover, we can visualize expression changes of different genes involved in the normal functioning of thyroid gland, including thyreoglobulin (TG), which is the thyroid hormone; thyroid peroxidase (TPO), which is an enzyme needed for TG production; iodothyronine deiodinase 2 (DIO2), which is involved in the activation of TG; and PAX8, which is a transcription factor needed for TG transcription. Note that we use the `linear = FALSE` option to plot data in log scale.
+Finally, if we are interested in specific genes/miRNAs, MIRit implements the `plotDE()` function that allows to represent expression changes of specific features as box plots, bar plots, or violin plots. In our example, we can use this function to visualize expression changes of different genes involved in the normal functioning of thyroid gland. Note that we use the `linear = FALSE` option to plot data in log scale (useful when multiple genes have very different expression levels).
 
 ```{r thyroidBars, fig.wide=FALSE, fig.cap="Differential expression bar plots for different thyroid genes. Differential expression analysis demonstrated how TG, TPO, DIO2 and PAX8 result downregulated in thyroid cancer."}
 ## create a bar plot for all thyroid features
@@ -384,8 +338,6 @@ thyrBar <- plotDE(experiment, features = c("TG", "TPO", "DIO2", "PAX8"),
 ## show the resulting plot
 thyrBar
 ```
-
-In thyroid cancer, as evidenced in Figure \@ref(fig:thyroidBars), we assist to a heavy downregulation of genes involved in the synthesis and activation of thyroid hormone. Notably, this phenomenon could be clinically relevant, as it may determine the insurgence of iodine-resistance.
 
 # Functional enrichment analysis
 
@@ -403,68 +355,19 @@ Among these methods, the first one that has been developed is named **over-repre
   (\#eq:hyper)
 \end{equation}
 
-Here, $N$ is the total number of genes tested, $M$ is the number of genes that are annotated to a particular gene set, $n$ is the number of differentially expressed genes, and $k$ is the number of differentially expressed genes that are annotated to the gene set. After calculating p-values for each gene set, and after multiple testing correction, significant categories represent the biological processes that vary across the tested conditions.
+Here, $N$ is the total number of genes tested, $M$ is the number of genes that are annotated to a particular gene set, $n$ is the number of differentially expressed genes, and $k$ is the number of differentially expressed genes that are annotated to the gene set.
 
-Additionally, another available approach is the **gene set enrichment analysis** [@subramanian_gene_2005], often refereed to with the acronym **GSEA**. The main limitation of ORA is that small differences in gene expression are never significant. On the contrary, GSEA is suitable to find categories whose genes change in a small but coordinated way. The GSEA algorithm takes as input a list of genes ranked with a particular criterion, and then walks down the list to evaluate whether members of a given gene set are normally distributed or are mainly present at the top or at the bottom of the list. To check this out, the algorithm uses a running-sum that increases when finding a gene belonging to a given category, and decreases when a gene not contained in that specific set is found. The maximum distance from zero occurred in the running score is defined as the enrichment score (ES). To estimate the statistical significance of enrichment scores, a permutation test is performed by swapping gene labels annotated to a gene set. Then, the enrichment score is calculated for the permuted data and the p-value is then defined based on this permutation analysis. Finally, p-values are computed for all the available gene sets and then corrected for multiple testing.
+Additionally, another available approach is the **gene set enrichment analysis** [@subramanian_gene_2005], often refereed to with the acronym **GSEA**, which is suitable to find categories whose genes change in a small but coordinated way. The GSEA algorithm takes as input a list of genes ranked with a particular criterion, and then walks down the list to evaluate whether members of a given gene set are normally distributed or are mainly present at the top or at the bottom of the list. To check this out, the algorithm uses a running-sum that increases when finding a gene belonging to a given category, and decreases when a gene not contained in that specific set is found. The maximum distance from zero occurred in the running score is defined as the enrichment score (ES). To estimate the statistical significance of enrichment scores, a permutation test is performed by swapping gene labels annotated to a gene set.
 
 Even though GSEA is arguably the most commonly used approach for functional enrichment, @wu_camera_2012 demonstrated that inter-gene correlations might affect the reliability of functional enrichment analyses. To overcome this issue, they developed **Correlation Adjusted MEan RAnk gene set test (CAMERA)**, which is another competitive test used for functional enrichment analysis of genes. The main advantage of this method is that it adjusts the gene set test statistic according to inter-gene correlations.
 
 ## Available databases and categories {#categories}
 
-As described above, functional enrichment analysis relies on gene sets, which consist in collections of genes that are annotated to specific functions or terms. Independently from the strategy used for the analysis, functional enrichment methods need access to these properly curated collections of genes.
-
-In this regard, in the effort of providing access to a vast number of these resources, MIRit uses the `r Biocpkg("geneset")` package to support multiple databases, including Gene Ontology (GO), Kyoto Encyclopedia of Genes and Genomes (KEGG), MsigDB, WikiPathways, Reactome, Enrichr, Disease Ontology (DO), Network of Cancer Genes (NCG), DisGeNET, and COVID-19.
-
-However, the majority of these databases contain multiple categories. For each database, the available categories are:
-
-- Gene Ontology (GO):
-	+ `bp`, for GO - Biological Processes;
-	+ `mf`, for GO - Molecular Function;
-	+ `cc`, for GO - Cellular Component; 
-- Kyoto Encyclopedia of Genes and Genomes (KEGG):
-	+  `pathway`, for KEGG biological pathways;
-	+  `module`, for KEGG reaction modules;
-	+  `enzyme`, for KEGG enzyme nomenclature;
-	+  `disease`, for KEGG diseases (only Homo sapiens supported);
-	+  `drug`, for KEGG drug targets (only Homo sapiens supported);
-	+  `network`, for KEGG disease/drug perturbation netowrks (only Homo sapiens supported);
-- MsigDB:
-	+ `H`, for MsigDB hallmark genes of specific biological states/processes;
-	+ `C1`, for gene sets of human chromosome cytogenetic bands;
-	+ `C2-CGP`, for expression signatures of genetic and chemical perturbations;
-	+ `C2-CP-BIOCARTA`, for canonical pathways gene sets derived from the BioCarta pathway database;
-	+ `C2-CP-KEGG`, for canonical pathways gene sets derived from the KEGG pathway database;
-	+ `C2-CP-PID`, for canonical pathways gene sets derived from the PID pathway database;
-	+ `C2-CP-REACTOME`, for canonical pathways gene sets derived from the Reactome pathway database;
-	+ `C2-CP-WIKIPATHWAYS`, for canonical pathways gene sets derived from the WikiPathways database;
-	+ `C3-MIR-MIRDB`, for gene sets containing high-confidence gene-level predictions of human miRNA targets as catalogued by miRDB v6.0 algorithm;
-	+ `C3-MIR-MIR_Legacy`, for older gene sets that contain genes sharing putative target sites of human mature miRNA in their 3'-UTRs;
-	+ `C3-TFT-GTRD`, for genes that share GTRD predicted transcription factor binding sites in the region -1000,+100 bp around the TSS for the indicated transcription factor;
-	+ `C3-TFT-TFT_Legacy`, for older gene sets that share upstream cis-regulatory motifs which can function as potential transcription factor binding sites;
-	+ `C4-CGN`, for gene sets defined by expression neighborhoods centered on 380 cancer-associated genes;
-	+ `C4-CM`, for cancer modules as defined by Segal et al. 2004;
-	+ `C5-GO-BP`, for GO - biological process ontology;
-	+ `C5-GO-CC`, for GO - cellular component ontology;
-	+ `C5-GO-MF`, for GO - molecular function ontology;
-	+ `C5-HPO`, for Human Phenotype ontology (HPO);
-	+ `C6`, for gene sets that represent signatures of cellular pathways which are often dis-regulated in cancer;
-	+ `C7-IMMUNESIGDB`, for manually curated gene sets representing chemical and genetic perturbations of the immune system;
-	+ `C7-VAX`, for gene sets deriving from the Human Immunology Project Consortium (HIPC) describing human transcriptomic immune responses to vaccinations;
-	+ `C8`, for gene sets that contain curated cluster markers for cell types;
-- WikiPathways;
-- Reactome;
-- Enrichr:
-	+ All avaliable gene sets can be listed through `geneset::enrichr_metadata`
-- Disease Ontology (DO);
-- Network of Cancer Genes (NCG):
-	+ `v6`, for the sixth version;
-	+ `v7`, for the seventh version;
-- DisGeNET;
-- COVID-19.
+As described above, functional enrichment analysis relies on gene sets, which consist in collections of genes that are annotated to specific functions or terms. Independently from the strategy used for the analysis, functional enrichment methods need access to these properly curated collections of genes. In the effort of providing access to a vast number of these resources, MIRit uses the `r Biocpkg("geneset")` package to support multiple databases, including Gene Ontology (GO), Kyoto Encyclopedia of Genes and Genomes (KEGG), MsigDB, WikiPathways, Reactome, Enrichr, Disease Ontology (DO), Network of Cancer Genes (NCG), DisGeNET, and COVID-19. However, the majority of these databases contain multiple categories. To see the complete list of available gene sets for each database refer to the documentation of the `enrichGenes()` function.
 
 ## Supported species
 
-The above-mentioned gene set collections are specific for different species, and each database has its own list of supported species. To check this list for a given database, MIRit provides a practical helper function named `supportedOrganisms()`. For example, to retrieve the species supported by Reactome database, we can simply run the following piece of code.
+The above-mentioned collections have their own lists of supported species. To check the available species for a given database, MIRit provides a practical helper function named `supportedOrganisms()`. For example, to retrieve the species supported by Reactome database, we can simply run the following piece of code.
 
 ```{r species}
 ## list available species for Reactome database
@@ -473,7 +376,7 @@ supportedOrganisms("Reactome")
 
 ## Perform functional enrichment with the `enrichGenes()` function {#enrichment}
 
-Now that we have introduced functional enrichment techniques and available gene sets, we are finally ready to perform the analysis. The main function used for this purpose is `enrichGenes()`, which requires as input several parameters, including:
+The main function in MIRit for the functional enrichment analysis of genes is `enrichGenes()`, which requires as input:
 
 - the `MirnaExperiment` object that we get after running differential expression analysis;
 - `method`, which specifies the desired approach among `ORA`, `GSEA`, and `CAMERA`;
@@ -488,7 +391,7 @@ In our example, we are going to perform the enrichment analysis by using ORA wit
 ora <- enrichGenes(experiment, method = "ORA", database = "GO", organism = "Homo sapiens")
 ```
 
-As we can see from the output, the analysis reported 11 significant terms for the enrichment of downregulated genes. MIRit performs ORA separately for upregulated and downregulated genes, as it has been shown that this is more powerful compared to enriching all DE genes [@hong_separate_2014-1]. Therefore, when we use ORA, `enrichGenes()` returns a `list` containing two objects of class `FunctionalEnrichment`, one storing enrichment results for upregulated genes, and one for downregulated genes.
+MIRit performs ORA separately for upregulated and downregulated genes, as it has been shown that this is more powerful compared to enriching all DE genes [@hong_separate_2014-1]. Therefore, when we use ORA, `enrichGenes()` returns a `list` containing two objects of class `FunctionalEnrichment`, one storing enrichment results for upregulated genes, and one for downregulated genes.
 
 Before exploring the results of the analysis, we will also demonstrate the capabilities of MIRit by performing GSEA with the gene sets provided by the KEGG pathway database.
 
@@ -503,16 +406,12 @@ In this case, the `enrichGenes()` function returns a single object of class `Fun
 
 ### Access results table
 
-After running the `enrichGenes()` function, we get `FunctionalEnrichment` objects holding the results of enrichment analyses. To access the full table containing significantly affected biological functions, we can use the `enrichmentResults()` function.
-
-In our case, we can check the results of our GSEA analysis to investigate the human pathways that result affected in thyroid cancer. In Table \@ref(tab:gseaTab) we can see the output of `enrichmentResults(gse)`.
+After running the `enrichGenes()` function, we get `FunctionalEnrichment` objects holding the results of enrichment analyses. To access the full table containing significantly affected biological functions, we can use the `enrichmentResults()` function. In our case, we can check the results of our GSEA analysis to investigate the human pathways that result affected in thyroid cancer. In Table \@ref(tab:gseaTab) we can see the output of `enrichmentResults(gse)`.
 
 ```{r gseaTab, echo=FALSE}
 ## display the results of GSEA
 knitr::kable(enrichmentResults(gse), digits = 2, caption = "GSEA results. A table listing the affected KEGG pathways in thyroid cancer.")
 ```
-
-Notably, we observe a strong depletion of the "Thyroid hormone synthesis" pathway, which is fundamental for the proper functioning of human thyroid. Moreover, this result is concordant with the previously described downregulation of multiple factors involved in the production and activation of thyroid hormone (Figure \@ref(fig:thyroidBars)).
 
 ### Enrichment dot plots and bar plots
 
@@ -520,12 +419,10 @@ Further, in addition to exploring results table, MIRit offers several options fo
 
 Following our example, we can visualize the results of the ORA that we performed in Section \@ref(enrichment) through a simple dot plot.
 
-```{r oraDot, fig.wide=TRUE, fig.cap="ORA results for downregulated genes. The enrichment of downregulated genes through the gene sets provided by GO database."}
+```{r oraDot, fig.wide=FALSE, fig.cap="ORA results for downregulated genes. The enrichment of downregulated genes through the gene sets provided by GO database."}
 ## create a dot plot for ORA
 enrichmentDotplot(ora$downregulated, title = "Depleted functions")
 ```
-
-Also in this case, in concordance with GSEA results, we appreciate the depletion of genes responsible for the metabolism and generation of thyroid hormone, further highlighting the impairment of this pathway in thyroid cancer (Figure \@ref(fig:oraDot)).
 
 ### Other plots for GSEA
 
@@ -544,7 +441,7 @@ In our case, there are no SNPs associated with thyroid cancer that occur witin D
 
 ## Search disease-related SNPs
 
-First, we need to identify the Experimental Factor Ontology (EFO) identifier of a given disease of interest. To do so, MIRit provides the `searchDisease()` function. For example, let's identify the relevant EFO ID for Alzheimer disease.
+First, we need to identify the Experimental Factor Ontology (EFO) identifier of a given disease of interest. To do so, MIRit provides the `searchDisease()` function. For example, to identify the relevant EFO ID for Alzheimer disease we can use the following code chunk.
 
 ```{r seach_disease, eval=FALSE}
 ## identify the EFO ID corresponding to Alzheimer's disease
@@ -561,8 +458,6 @@ Now, we can use the `findMirnaSNPs()` function to identify the disease-related S
 ## detect disease-SNPs occuring at DE-miRNAs loci
 association <- findMirnaSNPs(experiment, "Alzheimer disease")
 ```
-
-As reported in the MIRit paper, we detected the presence of the rs2632516 polymorphism within the miR-142 host gene on the negative strand. In this regard, this variant has been previously associated to the downregulation of miR-142, as we observed in our analysis.
 
 ## Build a track plot to display miRNA-SNP associations
 
@@ -588,15 +483,11 @@ The choice of which type of resources to use for identifying miRNA targets drast
 
 ## The mirDIP approach
 
-The downside of miRNA target prediction algorithms is also the scarce extend of overlap existing between different tools. To address this issue, several ensemble methods have been developed, trying to aggregate the predictions obtained by different algorithms. Initially, several researchers determined as significant miRNA-target pairs those predicted by more than one tool (intersection method). However, this method is not able to capture an important number of meaningful interactions. Alternatively, other strategies used to merge predictions from several algorithms (union method). Despite identifying more true relationships, the union method leads to a higher proportion of false discoveries. Therefore, other ensemble methods started using other statistics to rank miRNA-target predictions obtained by multiple algorithms.
-
-Among these newly developed ensemble methods, one of the best performing one is the **microRNA Data Integration Portal (mirDIP)** database, which aggregates miRNA target predictions from 24 different resources by using an integrated score inferred from different prediction metrics. In this way, mirDIP reports more accurate predictions compared to those of individual tools. For additional information on mirDIP database and its ranking metric refer to @tokar_mirdip_2018 and @hauschild_mirdip_2023.
+The downside of miRNA target prediction algorithms is also the scarce extend of overlap existing between different tools. To address this issue, several ensemble methods have been developed, trying to aggregate the predictions obtained by different algorithms. Initially, several researchers determined as significant miRNA-target pairs those predicted by more than one tool (intersection method). However, this method is not able to capture an important number of meaningful interactions. Alternatively, other strategies used to merge predictions from several algorithms (union method). Despite identifying more true relationships, the union method leads to a higher proportion of false discoveries. Therefore, other ensemble methods started using other statistics to rank miRNA-target predictions obtained by multiple algorithms. Among these newly developed ensemble methods, one of the best performing one is the **microRNA Data Integration Portal (mirDIP)** database, which aggregates miRNA target predictions from 24 different resources by using an integrated score inferred from different prediction metrics. In this way, mirDIP reports more accurate predictions compared to those of individual tools. For additional information on mirDIP database and its ranking metric refer to @tokar_mirdip_2018 and @hauschild_mirdip_2023.
 
 ## Download predicted and validated interactions with `getTargets()`
 
-Given the above, MIRit allows the prediction of miRNA-target interactions via the **mirDIP** database (version 5.2). In addition, in order to raise the number of true interactions, MIRit combines the miRNA-target pairs returned by mirDIP with the experimentally validated interactions contained in the **miRTarBase** database (version 9) [@huang_mirtarbase_2022].
-
-In practice, to identify miRNA targets MIRit implements the `getTargets()` function, which allows to download both type of interactions. Specifically, this function also includes a parameter called `score` that determines the degree of confidence required for the targets predicted by mirDIP. The value of this parameter must be one of `Very High`, `High` (default), `Medium`, and `Low`, which correspond to ranks among top 1%, top 5% (excluding top 1%), top 1/3 (excluding top 5%) and remaining predictions, respectively. Moreover, the `includeValidated` parameter tells MIRit whether to include experimentally validate interactions deriving from miRTarBase (default is TRUE). Please note that mirDIP database is only available for human miRNAs; thus, for species other than Homo sapiens, only validated interactions contained in miRTarBase are used. In this regard, supported species in miRTarBase are Homo sapiens (default), Mus musculus, Rattus norvegicus, Arabidopsis thaliana, Bos taurus, Caenorhabditis elegans, Danio rerio, Drosophila melanogaster, Gallus gallus, and Sus scrofa.
+Given the above, MIRit allows the prediction of miRNA-target interactions via the **mirDIP** database (version 5.2). In addition, in order to raise the number of true interactions, MIRit combines the miRNA-target pairs returned by mirDIP with the experimentally validated interactions contained in the **miRTarBase** database (version 9) [@huang_mirtarbase_2022]. In practice, to identify miRNA targets MIRit implements the `getTargets()` function, which allows to download both type of interactions. Specifically, this function also includes a parameter called `score` that determines the degree of confidence required for the targets predicted by mirDIP. The value of this parameter must be one of `Very High`, `High` (default), `Medium`, and `Low`, which correspond to ranks among top 1%, top 5% (excluding top 1%), top 1/3 (excluding top 5%) and remaining predictions, respectively. Moreover, the `includeValidated` parameter tells MIRit whether to include experimentally validate interactions deriving from miRTarBase (default is TRUE). Please note that mirDIP database is only available for human miRNAs; thus, for species other than Homo sapiens, only validated interactions contained in miRTarBase are used.
 
 In our example, we are going to retrieve both predicted and validated interactions by using default settings.
 
@@ -622,17 +513,13 @@ Now that we have defined the targets of differentially expressed miRNAs, we can 
 
 For unpaired data, only association tests and rotation gene-set tests are available, whereas correlation analysis is the best performing strategy for paired data. The integrative analysis, either performed through correlation, association tests, or rotation gene-set tests, is implemented in the `mirnaIntegration()` function. When using the default option `test = "auto"`, MIRit automatically performs the appropriate test for paired and unpaired samples. If only some samples of the data set have paired measurements, a correlation analysis will be carried out only for those subjects.
 
-Now we are going to discuss the supported integration strategies separately, with a brief explanation of the different methodologies.
-
 ## Correlation analysis for paired data
 
 When both miRNA and gene expression measurements are available for the same samples, a correlation analysis is the recommended procedure. In statistics, correlation is a measure that expresses the extent to which two random variables are dependent. In our case, we want to assess whether a statistical relationship is present between the expression of a miRNA and the expression of its targets.
 
 ### Statistical correlation coefficients
 
-Several statistical coefficients can be used to weigh the degree of a correlation. Among them, the most commonly used are *Pearson's correlation coefficient* $r$, *Spearman's correlation coefficient* $\rho$, and *Kendall's Tau-b correlation coefficient* $\tau_b$. Pearson's $r$ is probably the most diffused for determining the association between miRNA and gene expression. However, it assumes that the relationships between miRNA and gene expression values is linear. This is typically not true for miRNAs, whose interactions with their targets are characterized by imperfect complementarity. Additionally, miRNAs can target multiple genes with different binding sites, and this implies that a simple linear relationship may not be sufficient to properly describe the complexity of these interactions. In contrast, Spearman's and Kendall's Tau-b correlation coefficients result more suitable for representing the interplay between miRNAs and target genes, because they are robust to non-linear relationships and outliers. However, Kendall's correlation just relies on the number of concordant and discordant pairs, and is less sensitive then Spearman's correlation; so, when many ties are present or when the sample size is small, it may have a lower detection power.
-
-This is the reason why **Spearman's correlation coefficient** is the default coefficient used in the `mirnaIntegration()` function to measure the correlation between miRNA and gene expression. Moreover, since miRNAs mainly act as negative regulators, only negatively correlated miRNA-target pairs are considered, and statistical significance is estimated through a one-tailed t-test.
+Several statistical coefficients can be used to weigh the degree of a correlation. Among them, the most commonly used are *Pearson's correlation coefficient* $r$, *Spearman's correlation coefficient* $\rho$, and *Kendall's Tau-b correlation coefficient* $\tau_b$. Pearson's $r$ is probably the most diffused for determining the association between miRNA and gene expression. However, it assumes that the relationships between miRNA and gene expression values is linear. This is typically not true for miRNAs, whose interactions with their targets are characterized by imperfect complementarity. Additionally, miRNAs can target multiple genes with different binding sites, and this implies that a simple linear relationship may not be sufficient to properly describe the complexity of these interactions. In contrast, Spearman's and Kendall's Tau-b correlation coefficients result more suitable for representing the interplay between miRNAs and target genes, because they are robust to non-linear relationships and outliers. However, Kendall's correlation just relies on the number of concordant and discordant pairs, and is less sensitive then Spearman's correlation; so, when many ties are present or when the sample size is small, it may have a lower detection power. This is the reason why **Spearman's correlation coefficient** is the default coefficient used in the `mirnaIntegration()` function to measure the correlation between miRNA and gene expression. Moreover, since miRNAs mainly act as negative regulators, only negatively correlated miRNA-target pairs are considered, and statistical significance is estimated through a one-tailed t-test.
 
 ### Perform a correlation analysis in MIRit {#correlation}
 
@@ -650,15 +537,11 @@ In our thyroid cancer example, we want to find the miRNA-target pairs that exhib
 experiment <- mirnaIntegration(experiment, test = "correlation")
 ```
 
-As we can see from the output, a statistically significant correlation between 215 miRNA-target pairs has been found.
-
 Please note that all the parameters used for the correlation analysis are customizable. For instance, the user can change the significance threshold and the multiple testing correction method by setting the `pCutoff` and `pAdjustment` parameters, respectively. Further, it is also possible to change the correlation coefficient used, by editing the `corMethod` option, and the minimum required value of the correlation coefficient, by changing the `corCutoff` setting.
-
 
 ### Account for batch effects prior to correlation analysis
 
 Sometimes, when exploring expression variability through MDS plots, as we do with the `plotDimensions()` function, we notice the presence of batch effects that prevent a clear separation of our biological groups. Indeed, batch effects consist in unwanted sources of technical variation that confound expression variability and limit downstream analyses. Since the reliability of biological conclusions of integrative miRNA-mRNA analyses depends on the correlation between miRNA and gene expression levels, it is pivotal to ensure that expression measurements are not affected by technical variation. In this regard, if batch effects are noticed in the data, MIRit provides the `batchCorrection()` function, which removes batch effects from expression data before moving to correlation analysis. Please note that this procedure can only be used prior to correlation analysis, because for differential expression analysis it is more appropriate to include batch variables in the linear model, as specified in Section \@ref(model). For additional information, please refer to the manual of the `batchCorrection()` function.
-
 
 ### Explore the succesfully integrated miRNA-target pairs
 
@@ -709,14 +592,14 @@ Both these tests consist in a statistical procedure that estimates the associati
 
 ### Fisher's exact test
 
-After that the contingency table has been defined, a Fisher's exact test p-value can be calculated through Equation \@ref(eq:fisher).
+After that the contingency table has been defined, Fisher's exact test p-value can be calculated through Equation \@ref(eq:fisher).
 
 \begin{equation}
   p = \frac{(a + b)!\ (c + d)!\ (a + c)!\ (b + d)!}{a!\ b!\ c!\ d!\ n!}
   (\#eq:fisher)
 \end{equation}
 
-The `mirnaIntegration()` function takes care of the whole process and computes p-values for each differentially expressed miRNA. Lastly, Fisher's p-values are adjusted for multiple testing and significant results are reported. Additionally, it is also possible to compute Fisher's p-values with **Lancaster's mid-p adjustment**, since it has been proven that it increases statistical power while retaining Type I error rates.
+Additionally, it is also possible to compute Fisher's p-values with **Lancaster's mid-p adjustment**, since it has been proven that it increases statistical power while retaining Type I error rates.
 
 ### Boschloo's exact test
 
@@ -730,7 +613,7 @@ In MIRit, the `mirnaIntegration()` function automatically performs association t
 - `fisher-midp`, to perform a one-sided Fisher's exact test with Lancaster's mid-p correction;
 - `boschloo`, to perform a one-sided Boschloo's exact test (*default option*).
 
-For example, we could use the Boschloo's exact to evaluate the inverse association between miRNA and gene expression values through a simple call to `mirnaIntegration()` function. However, note that in our example we are dealing with paired data, and therefore the approach of choice is the correlation analysis.
+For example, we could use the Boschloo's exact to evaluate the inverse association between miRNA and gene expression values through a simple call to `mirnaIntegration()` function.
 
 ```{r association, eval=FALSE}
 ## perform a one-sided inverse association
@@ -740,7 +623,7 @@ exp.association <- mirnaIntegration(experiment,
                                     pAdjustment = "none")
 ```
 
-Finally, after performing the association analysis, results can be accessed through the `integration()` function in the same way as we can do for correlation analysis.
+Finally, after performing the association analysis, results can be accessed through the `integration()` function in the same way as we can do for correlation analyses.
 
 ## Rotation gene-set tests for unpaired data
 
@@ -848,9 +731,7 @@ taipa <- topologicalAnalysis(experiment,
                              nPerm = 10000)
 ```
 
-As a result of the analysis, an object of class `IntegrativePathwayAnalysis` storing the results of TAIPA is returned.
-
-Notably, the user can change the behavior of the `topologicalAnalysis()` in several ways. For example, the `pCutoff` and `pAdjustment` parameters can be used to change the significance threshold and the multiple testing correction method, respectively. Moreover, the `nPerm` parameter can be tweaked to change the number of permutations to use for evaluating statistical significance. In this regard, we recommend using at least 10000 permutations, with no less than 1000.
+As a result of the analysis, an object of class `IntegrativePathwayAnalysis` storing the results of TAIPA is returned. Notably, the user can change the behavior of the `topologicalAnalysis()` in several ways. For example, the `pCutoff` and `pAdjustment` parameters can be used to change the significance threshold and the multiple testing correction method, respectively. Moreover, the `nPerm` parameter can be tweaked to change the number of permutations to use for evaluating statistical significance. In this regard, we recommend using at least 10000 permutations, with no less than 1000.
 
 ```{r, echo=FALSE}
 ## perform TAIPA
@@ -870,13 +751,6 @@ After running the `topologicalAnalysis()` function, we can inspect the significa
 perturbedNetworks <- integratedPathways(taipa)
 ```
 
-Eventually, the resulting `data.frame` will appear as shown in Table \@ref(tab:taipaRes).
-
-```{r taipaRes, echo=FALSE}
-## display the results of TAIPA
-knitr::kable(head(perturbedNetworks), digits = 4, caption = "TAIPA results. A table listing the most impaired miRNA-mRNA networks in thyroid cancer.")
-```
-
 ## Visualize the impaired networks within biological pathways
 
 As with functional enrichment analyses, we can plot perturbed miRNA-mRNA networks as dot plots. To do so, the `integrationDotplot()` function can be used. In particular, we will graphically represent the most perturbed pathways in thyroid cancer.
@@ -893,8 +767,6 @@ Finally, after identifying the impaired molecular networks, MIRit provides the p
 ## plot the impaired network responsible for reduced TG synthesis
 visualizeNetwork(taipa, "Thyroid hormone synthesis")
 ```
-
-From Figure \@ref(fig:thyroidNetwork) we appreciate how the strong overexpression of miR-146b-5p and miR-146b-3p causes the reduced expression of PAX8, which then determines a diminished transcription of thyroid hormone.
 
 # Session info {.unnumbered}
 

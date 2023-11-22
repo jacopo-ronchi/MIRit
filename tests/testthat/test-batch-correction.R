@@ -23,7 +23,7 @@ test_that("batch effect can't be used before differential expression", {
   ##  expect warning before running differential expression
   expect_warning(
     obj <- performMirnaDE(obj, "disease", "PTC-NTH",
-                          ~ 0 + disease, method = "edgeR"),
+                          ~ 0 + disease, method = "limma"),
     "Batch effect-corrected matrices"
   )
   

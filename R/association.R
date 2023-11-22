@@ -37,6 +37,15 @@ searchDisease <- function(diseaseName) {
                "containing the name of the disease"), call. = FALSE)
   }
   
+  ## check that gwasrapidd is installed
+  if (!requireNamespace("gwasrapidd", quietly = TRUE)) {
+    stop(paste("The gwasrapidd package is needed to use",
+               "this function. Install it through:",
+               paste("`install.packages('gwasrapidd')`.",
+                     sep = "")),
+         call. = FALSE)
+  }
+  
   ## load cache
   bfc <- .get_cache()
   
@@ -177,6 +186,24 @@ findMirnaSNPs <- function(mirnaObj,
                "disease identifier with 'searchDisease()'"), call. = FALSE)
   }
   
+  ## check that gwasrapidd is installed
+  if (!requireNamespace("gwasrapidd", quietly = TRUE)) {
+    stop(paste("The gwasrapidd package is needed to use",
+               "this function. Install it through:",
+               paste("`install.packages('gwasrapidd')`.",
+                     sep = "")),
+         call. = FALSE)
+  }
+  
+  ## check that biomaRt is installed
+  if (!requireNamespace("biomaRt", quietly = TRUE)) {
+    stop(paste("The biomaRt package is needed to use",
+               "this function. Install it through:",
+               paste("`BiocManager::install('biomaRt')`.",
+                     sep = "")),
+         call. = FALSE)
+  }
+  
   ## inform the user about database querying
   message("Querying GWAS Catalog, this may take some time...")
   
@@ -306,6 +333,15 @@ getEvidence <- function(variant,
     stop(paste("'diseaseEFO' must be a string of length 1",
                "containing the EFO trait of the disease. You can obtain the",
                "disease identifier with 'searchDisease()'"), call. = FALSE)
+  }
+  
+  ## check that gwasrapidd is installed
+  if (!requireNamespace("gwasrapidd", quietly = TRUE)) {
+    stop(paste("The gwasrapidd package is needed to use",
+               "this function. Install it through:",
+               paste("`install.packages('gwasrapidd')`.",
+                     sep = "")),
+         call. = FALSE)
   }
   
   ## retrieve biomedical evidence for a disease-SNP association

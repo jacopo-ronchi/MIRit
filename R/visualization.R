@@ -950,6 +950,15 @@ gseaRidgeplot <- function(enrichment,
          call. = FALSE)
   }
   
+  ## check that ggridges is installed
+  if (!requireNamespace("ggridges", quietly = TRUE)) {
+    stop(paste("The ggridges package is needed to use",
+               "this function. Install it through:",
+               paste("`install.packages('ggridges')`.",
+                     sep = "")),
+         call. = FALSE)
+  }
+  
   ## extract results from enrichment object
   res <- enrichmentResults(enrichment)
   
@@ -1461,6 +1470,24 @@ mirVariantPlot <- function(variantId,
     }
   }
   
+  ## check that GenomicRanges is installed
+  if (!requireNamespace("GenomicRanges", quietly = TRUE)) {
+    stop(paste("The GenomicRanges package is needed to use",
+               "this function. Install it through:",
+               paste("`BiocManager::install('GenomicRanges')`.",
+                     sep = "")),
+         call. = FALSE)
+  }
+  
+  ## check that Gviz is installed
+  if (!requireNamespace("Gviz", quietly = TRUE)) {
+    stop(paste("The Gviz package is needed to use",
+               "this function. Install it through:",
+               paste("`BiocManager::install('Gviz')`.",
+                     sep = "")),
+         call. = FALSE)
+  }
+  
   ## select the specified variant
   snpAssociation <- snpAssociation[snpAssociation$variant == variantId, ]
   
@@ -1510,6 +1537,13 @@ mirVariantPlot <- function(variantId,
   
   ## create sequence track
   if (showSequence == TRUE) {
+    if (!requireNamespace("BSgenome.Hsapiens.UCSC.hg38", quietly = TRUE)) {
+      stop(paste("The BSgenome.Hsapiens.UCSC.hg38 package is needed to use",
+                 "this function. Install it through:",
+                 paste("`BiocManager::install('BSgenome.Hsapiens.UCSC.hg38')`.",
+                       sep = "")),
+           call. = FALSE)
+    }
     sTrack <- Gviz::SequenceTrack(
       BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38,
       chromosome = chr)
@@ -1517,6 +1551,13 @@ mirVariantPlot <- function(variantId,
   
   ## create genomic context track
   if (showContext == TRUE) {
+    if (!requireNamespace("biomaRt", quietly = TRUE)) {
+      stop(paste("The biomaRt package is needed to use this function",
+                 "with 'showContext = TRUE'. Install it through:",
+                 paste("`BiocManager::install('biomaRt')`.",
+                       sep = "")),
+           call. = FALSE)
+    }
     message("Retrieving genomic context from Ensembl...")
     mart <- biomaRt::useMart("ensembl")
     mart <- biomaRt::useDataset("hsapiens_gene_ensembl", mart)
@@ -1948,6 +1989,15 @@ plotCorrelation <- function(mirnaObj,
                              linewidth = lineWidth, linetype = lineType)
       
     } else {
+      
+      ## check that MonoPoly is installed
+      if (!requireNamespace("MonoPoly", quietly = TRUE)) {
+        stop(paste("The MonoPoly package is needed to plot correlations",
+                   "with monotonic regression curves. Install it through:",
+                   paste("`install.packages('MonoPoly')`.",
+                         sep = "")),
+             call. = FALSE)
+      }
       
       ## compute a monotonic regression curve
       x = mirnaExpr
@@ -2728,6 +2778,13 @@ plotVolcano <- function(mirnaObj,
   
   ## add desired labels through ggrepel
   if (!is.null(labels)) {
+    if (!requireNamespace("ggrepel", quietly = TRUE)) {
+      stop(paste("The ggrepel package is needed to show labels in",
+                 "this function. Install it through:",
+                 paste("`install.packages('ggrepel')`.",
+                       sep = "")),
+           call. = FALSE)
+    }
     if (boxedLabel == TRUE) {
       pVol <- pVol +
         ggrepel::geom_label_repel(show.legend = FALSE)
@@ -3057,6 +3114,13 @@ plotDimensions <- function(mirnaObj,
   
   ## add labels
   if (labels == TRUE) {
+    if (!requireNamespace("ggrepel", quietly = TRUE)) {
+      stop(paste("The ggrepel package is needed to show labels in",
+                 "this function. Install it through:",
+                 paste("`install.packages('ggrepel')`.",
+                       sep = "")),
+           call. = FALSE)
+    }
     if (boxedLabel == TRUE) {
       mdsPlot <- mdsPlot +
         ggrepel::geom_label_repel(show.legend = FALSE)

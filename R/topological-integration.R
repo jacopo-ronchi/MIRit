@@ -561,7 +561,7 @@ preparePathways.internal <- function(database, org, targ, features,
     db <- suppressPackageStartupMessages(
       AnnotationDbi::loadDb(AnnotationDbi::dbfile(db))
     )
-    on.exit(RSQLite::dbDisconnect(BiocGenerics::dbconn(db)))
+    on.exit(AnnotationDbi::dbFileDisconnect(AnnotationDbi::dbconn(db)))
     suppressMessages(
       convertNodes(path, db = db)
     )
