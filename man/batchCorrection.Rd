@@ -11,7 +11,7 @@ batchCorrection(
   batch2 = NULL,
   covariates = NULL,
   includeWsva = FALSE,
-  n.sv = 1,
+  n.sv = 1L,
   weight.by.sd = TRUE
 )
 }

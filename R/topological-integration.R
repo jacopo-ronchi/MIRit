@@ -41,7 +41,7 @@
 #' @param minPc The minimum percentage of measured features that a pathway must
 #' have for being considered in the analysis. Default is 10. See the *details*
 #' section for additional information
-#' @param BPPARAM The desired parallel computing behavior. This paramete
+#' @param BPPARAM The desired parallel computing behavior. This parameter
 #' defaults to `BiocParallel::bpparam()`, but this can be edited. See
 #' [BiocParallel::bpparam()] for information on parallel computing in R
 #' 
@@ -257,7 +257,17 @@ preparePathways <- function(mirnaObj,
 #' computationally intensive, parallel computing has been employed to reduce
 #' running time. The user can modify the parallel computing behavior by
 #' specifying the `BPPARAM` parameter. See [BiocParallel::bpparam()] for
-#' further details.
+#' further details. Further, a progress bar can also be included to show the
+#' completion percentage by setting `progress = TRUE`. Moreover, the user can
+#' define how frequently the progress bar gets updated by tweaking the `tasks`
+#' parameter. When using `progress = TRUE`, setting `tasks` to 100 tells the
+#' function to update the progress bar 100 times, so that the user can see
+#' increases of 1%. Instead, setting `tasks` to 50, means that the progress bar
+#' gets updated every 2% of completion. However, keep in mind that `tasks`
+#' values from 50 to 100 lead to 15-30% slower p-value calculation due to
+#' increased data transfer to the workers. Instead, lower `tasks` values like
+#' 20 determine less frequent progress updates but are only slightly less
+#' efficient than not including a progress bar.
 #'
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
 #' containing miRNA and gene data
@@ -271,7 +281,16 @@ preparePathways <- function(mirnaObj,
 #' @param nPerm The number of permutation used for assessing the statistical
 #' significance of each pathway. Default is 10000. See the *details* section 
 #' for additional information
-#' @param BPPARAM The desired parallel computing behavior. This paramete
+#' @param progress Logical, whether to show a progress bar during p-value
+#' calculation or not. Default is FALSE, not to include a progress bar. Please
+#' note that setting `progress = TRUE` with high values of `tasks` leads to
+#' less efficient parallelization. See the *details* section for additional
+#' information
+#' @param tasks An integer between 0 and 100 that specifies how frequently the
+#' progress bar must be updated. Default is 0 to simply split the computation
+#' among the workers. High values of `tasks` can lead to 15-30% slower p-value
+#' calculation. See the *details* section for additional information
+#' @param BPPARAM The desired parallel computing behavior. This parameter
 #' defaults to `BiocParallel::bpparam()`, but this can be edited. See
 #' [BiocParallel::bpparam()] for information on parallel computing in R
 #'
@@ -318,6 +337,8 @@ topologicalAnalysis <- function(mirnaObj,
                                 pCutoff = 0.05,
                                 pAdjustment = "max-T",
                                 nPerm = 10000,
+                                progress = FALSE,
+                                tasks = 0,
                                 BPPARAM = bpparam()) {
   
   ## input checks
@@ -363,6 +384,19 @@ topologicalAnalysis <- function(mirnaObj,
     stop("'nPerm' must be a positive integer! (default is 10000)",
          call. = FALSE)
   }
+  if (!is.logical(progress) |
+      length(progress) != 1) {
+    stop("'progress' must be logical (TRUE/FALSE)! See ?topologicalAnalysis",
+         call. = FALSE)
+  }
+  if (!is.numeric(tasks) |
+      length(tasks) != 1 |
+      tasks < 0 |
+      tasks > 100 |
+      !tasks %% 1 == 0) {
+    stop("'tasks' must be an integer between 0 and 100!",
+         call. = FALSE)
+  }
   
   ## get differential expression results
   deg <- geneDE(mirnaObj, onlySignificant = FALSE)
@@ -395,6 +429,20 @@ topologicalAnalysis <- function(mirnaObj,
   paths <- rep(pathways, times = nPerm)
   permVec <- rep(randomVec, each = length(pathways))
   
+  ## add a functional progress bar for parallel computation
+  bpOps <- list()
+  if (progress == TRUE) {
+    if (hasMethod("bpprogressbar<-",
+                  signature = c(class(BPPARAM), "logical")) &
+        hasMethod("bptasks<-",
+                  signature = c(class(BPPARAM), "integer"))) {
+      bpOps <- bpoptions(tasks = tasks, progressbar = TRUE)
+    } else {
+      warning(paste("Unable to show a progress bar for a BiocParallel backend",
+                    "of type", class(BPPARAM)[1]), call. = FALSE)
+    }
+  }
+  
   ## use parallel mapply to compute permutation scores for each pathway
   message(paste("Calculating p-values with", nPerm, "permutations..."))
   permScores <- bpmapply(function(pathway, permExpr) {
@@ -402,8 +450,7 @@ topologicalAnalysis <- function(mirnaObj,
                         bfs = pathway@graphData$topoSort,
                         edges = pathway@graphData$interactions,
                         weights = pathway@graphData$eW)
-  }, paths, permVec, BPPARAM = BPPARAM,
-  BPOPTIONS = bpoptions(tasks = 500, progressbar = TRUE))
+  }, paths, permVec, BPPARAM = BPPARAM, BPOPTIONS = bpOps)
   
   ## split permuted scores according to pathways
   permList <- split(permScores, names(paths))

@@ -28,7 +28,7 @@ Default specie is \verb{Homo sapiens}}
 have for being considered in the analysis. Default is 10. See the \emph{details}
 section for additional information}
 
-\item{BPPARAM}{The desired parallel computing behavior. This paramete
+\item{BPPARAM}{The desired parallel computing behavior. This parameter
 defaults to \code{BiocParallel::bpparam()}, but this can be edited. See
 \code{\link[BiocParallel:register]{BiocParallel::bpparam()}} for information on parallel computing in R}
 }

@@ -10,6 +10,8 @@ topologicalAnalysis(
   pCutoff = 0.05,
   pAdjustment = "max-T",
   nPerm = 10000,
+  progress = FALSE,
+  tasks = 0,
   BPPARAM = bpparam()
 )
 }
@@ -31,7 +33,18 @@ must be one of: \code{max-T} (default), \code{fdr}, \code{BH}, \code{none}, \cod
 significance of each pathway. Default is 10000. See the \emph{details} section
 for additional information}
 
-\item{BPPARAM}{The desired parallel computing behavior. This paramete
+\item{progress}{Logical, whether to show a progress bar during p-value
+calculation or not. Default is FALSE, not to include a progress bar. Please
+note that setting \code{progress = TRUE} with high values of \code{tasks} leads to
+less efficient parallelization. See the \emph{details} section for additional
+information}
+
+\item{tasks}{An integer between 0 and 100 that specifies how frequently the
+progress bar must be updated. Default is 0 to simply split the computation
+among the workers. High values of \code{tasks} can lead to 15-30\% slower p-value
+calculation. See the \emph{details} section for additional information}
+
+\item{BPPARAM}{The desired parallel computing behavior. This parameter
 defaults to \code{BiocParallel::bpparam()}, but this can be edited. See
 \code{\link[BiocParallel:register]{BiocParallel::bpparam()}} for information on parallel computing in R}
 }
@@ -128,7 +141,17 @@ computing pathway score for 10000 networks for each pathway is
 computationally intensive, parallel computing has been employed to reduce
 running time. The user can modify the parallel computing behavior by
 specifying the \code{BPPARAM} parameter. See \code{\link[BiocParallel:register]{BiocParallel::bpparam()}} for
-further details.
+further details. Further, a progress bar can also be included to show the
+completion percentage by setting \code{progress = TRUE}. Moreover, the user can
+define how frequently the progress bar gets updated by tweaking the \code{tasks}
+parameter. When using \code{progress = TRUE}, setting \code{tasks} to 100 tells the
+function to update the progress bar 100 times, so that the user can see
+increases of 1\%. Instead, setting \code{tasks} to 50, means that the progress bar
+gets updated every 2\% of completion. However, keep in mind that \code{tasks}
+values from 50 to 100 lead to 15-30\% slower p-value calculation due to
+increased data transfer to the workers. Instead, lower \code{tasks} values like
+20 determine less frequent progress updates but are only slightly less
+efficient than not including a progress bar.
 }
 }
 \examples{

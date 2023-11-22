@@ -399,8 +399,8 @@ enrichGenes <- function(mirnaObj,
                         organism = "Homo sapiens",
                         pCutoff = 0.05,
                         pAdjustment = "fdr",
-                        minSize = 10,
-                        maxSize = 500,
+                        minSize = 10L,
+                        maxSize = 500L,
                         rankMetric = "signed.pval",
                         eps = 1e-50) {
   
@@ -961,8 +961,8 @@ enrichTargets <- function(mirnaObj,
                           organism = "Homo sapiens",
                           pCutoff = 0.05,
                           pAdjustment = "fdr",
-                          minSize = 10,
-                          maxSize = 500) {
+                          minSize = 10L,
+                          maxSize = 500L) {
 
   ## check inputs
   if (!is(mirnaObj, "MirnaExperiment")) {

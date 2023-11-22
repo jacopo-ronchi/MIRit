@@ -11,8 +11,8 @@ enrichTargets(
   organism = "Homo sapiens",
   pCutoff = 0.05,
   pAdjustment = "fdr",
-  minSize = 10,
-  maxSize = 500
+  minSize = 10L,
+  maxSize = 500L
 )
 }
 \arguments{

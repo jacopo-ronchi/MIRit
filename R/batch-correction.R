@@ -110,7 +110,7 @@ batchCorrection <- function(mirnaObj,
                             batch2 = NULL,
                             covariates = NULL,
                             includeWsva = FALSE,
-                            n.sv = 1,
+                            n.sv = 1L,
                             weight.by.sd = TRUE) {
   
   ## check inputs
@@ -223,7 +223,8 @@ batchCorrection <- function(mirnaObj,
   }
   if (!is.numeric(n.sv) |
       length(n.sv) != 1 |
-      n.sv < 0) {
+      n.sv < 0 |
+      !n.sv %% 1 == 0) {
     stop("'n.sv' must be a non-neagtive number! (default is 1)",
          call. = FALSE)
   }
