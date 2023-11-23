@@ -1,15 +1,15 @@
 test_that("miRNA augmented pathways are created properly", {
   
+  ## set random seed
+  set.seed(1234)
+  
   ## load example objects
   obj <- loadExamples()
-  pt <- loadExamples(class = "IntegrativePathwayAnalysis")
-  
-  ## extract the augmented pathways
-  paths <- augmentedPathways(pt)
   
   ## prepare augmented pathways
-  expect_no_error(
-    computedPaths <- preparePathways(obj)
+  expect_warning(
+    computedPaths <- preparePathways(obj),
+    "pathways have been ignored because they"
   )
   
   ## check the validity and reproducibility of results

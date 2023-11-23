@@ -17,8 +17,11 @@ test_that("basic differential expression works for DESeq2", {
   obj <- createDummyData()
   
   ## test differential expression analysis with DESeq2
-  de_DESeq2 <- performMirnaDE(obj, "disease", "PTC-NTH",
-                              ~ 0 + disease, method = "DESeq2")
+  expect_warning(
+    de_DESeq2 <- performMirnaDE(obj, "disease", "PTC-NTH",
+                                ~ 0 + disease, method = "DESeq2"),
+    "some variables in design formula are characters"
+  )
   expect_snapshot(mirnaDE(de_DESeq2))
   
 })
