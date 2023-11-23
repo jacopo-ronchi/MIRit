@@ -1,9 +1,159 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# MIRit <a href="http://jacopo-ronchi.github.io/MIRit"><img src="vignettes/mirit_logo.png" align="right" height="138" /></a>
+
 <!-- badges: start -->
-  [![BioC status](http://www.bioconductor.org/shields/build/release/bioc/MIRit.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/MIRit)
+
+[![GitHub
+issues](https://img.shields.io/github/issues/jacopo-ronchi/MIRit)](https://github.com/jacopo-ronchi/MIRit/issues)
+[![GitHub
+pulls](https://img.shields.io/github/issues-pr/jacopo-ronchi/MIRit)](https://github.com/jacopo-ronchi/MIRit/pulls)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Bioc release
+status](http://www.bioconductor.org/shields/build/release/bioc/MIRit.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/MIRit)
+[![Bioc devel
+status](http://www.bioconductor.org/shields/build/devel/bioc/MIRit.svg)](https://bioconductor.org/checkResults/devel/bioc-LATEST/MIRit)
+[![Bioc downloads
+rank](https://bioconductor.org/shields/downloads/release/MIRit.svg)](http://bioconductor.org/packages/stats/bioc/MIRit/)
+[![Bioc
+support](https://bioconductor.org/shields/posts/MIRit.svg)](https://support.bioconductor.org/tag/MIRit)
+[![Bioc
+history](https://bioconductor.org/shields/years-in-bioc/MIRit.svg)](https://bioconductor.org/packages/release/bioc/html/MIRit.html#since)
+[![Bioc last
+commit](https://bioconductor.org/shields/lastcommit/devel/bioc/MIRit.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/MIRit/)
+[![Bioc
+dependencies](https://bioconductor.org/shields/dependencies/release/MIRit.svg)](https://bioconductor.org/packages/release/bioc/html/MIRit.html#since)
+[![R-CMD-check-bioc](https://github.com/jacopo-ronchi/MIRit/actions/workflows/R-CMD-check-bioc.yaml/badge.svg)](https://github.com/jacopo-ronchi/MIRit/actions/workflows/R-CMD-check-bioc.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/jacopo-ronchi/MIRit/branch/main/graph/badge.svg)](https://app.codecov.io/gh/jacopo-ronchi/MIRit?branch=main)
 <!-- badges: end -->
 
-# MIRit
+## Overview
 
-## miRNA Integration Tool (MIRit)
+`MIRit` (miRNA integration tool) is an open-source R package that aims
+to facilitate the comprehension of microRNA (miRNA) biology through the
+integrative analysis of gene and miRNA expression data deriving from
+different platforms, including microarrays, RNA-Seq, miRNA-Seq,
+proteomics and single-cell transcriptomics. Given their regulatory
+importance, a complete characterization of miRNA dysregulations results
+crucial to explore the molecular networks that may lead to the
+insurgence of complex diseases. To this purpose, we developed MIRit, an
+all-in-one framework that provides flexible and powerful methods for
+performing integrative miRNA-mRNA multi-omic analyses from start to
+finish.
 
-An opensource R package to analyze microRNA data and to integrate differentially expressed miRNAs with transcriptomic data. 
+## Author
+
+**Dr. Jacopo Ronchi**
+<a itemprop="sameAs" content="https://orcid.org/0000-0001-5520-4631" href="https://orcid.org/0000-0001-5520-4631" target="orcid.widget" rel="noopener noreferrer" style="vertical-align:top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon"></a><sup>1</sup>
+
+<sup>1</sup>School of Medicine and Surgery, University of
+Milano-Bicocca, Italy
+
+## Installation
+
+Get the latest stable `R` release from
+[CRAN](http://cran.r-project.org/). Then install `MIRit` from
+[Bioconductor](http://bioconductor.org/) using the following code:
+
+``` r
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+
+BiocManager::install("MIRit")
+```
+
+Alternatively, the development version of `MIRit` can be installed from
+[GitHub](https://github.com/jacopo-ronchi/MIRit) with:
+
+``` r
+BiocManager::install("jacopo-ronchi/MIRit")
+```
+
+## Usage
+
+For detailed instructions on how to use `MIRit` for integrative
+miRNA-mRNA analysis, please refer to the package vignette on
+[Bioconductor](). Alternatively, you can refer to the [documentation
+website](http://jacopo-ronchi.github.io/MIRit).
+
+## Citation
+
+If you use `MIRit` in published research, please cite the corresponding
+paper:
+
+``` r
+print(citation('MIRit'), bibtex = TRUE)
+#> Per citare il pacchetto 'MIRit' nelle pubblicazioni utilizza:
+#> 
+#>   jacopo-ronchi (2023). _MIRit_. doi:10.18129/B9.bioc.MIRit
+#>   <https://doi.org/10.18129/B9.bioc.MIRit>,
+#>   https://github.com/jacopo-ronchi/MIRit/MIRit - R package version
+#>   0.99.0, <http://www.bioconductor.org/packages/MIRit>.
+#> 
+#> Una voce BibTeX per gli utenti LaTeX è
+#> 
+#>   @Manual{,
+#>     title = {MIRit},
+#>     author = {{jacopo-ronchi}},
+#>     year = {2023},
+#>     url = {http://www.bioconductor.org/packages/MIRit},
+#>     note = {https://github.com/jacopo-ronchi/MIRit/MIRit - R package version 0.99.0},
+#>     doi = {10.18129/B9.bioc.MIRit},
+#>   }
+#> 
+#>   jacopo-ronchi (2023). "MIRit." _bioRxiv_. doi:10.1101/TODO
+#>   <https://doi.org/10.1101/TODO>,
+#>   <https://www.biorxiv.org/content/10.1101/TODO>.
+#> 
+#> Una voce BibTeX per gli utenti LaTeX è
+#> 
+#>   @Article{,
+#>     title = {MIRit},
+#>     author = {{jacopo-ronchi}},
+#>     year = {2023},
+#>     journal = {bioRxiv},
+#>     doi = {10.1101/TODO},
+#>     url = {https://www.biorxiv.org/content/10.1101/TODO},
+#>   }
+```
+
+Please note that the `MIRit` package was made possible thanks to many
+other R and bioinformatics software authors, which are cited either in
+the vignettes and/or the paper(s) describing this package.
+
+## Code of Conduct
+
+Please note that the `MIRit` project is released with a [Contributor
+Code of Conduct](http://bioconductor.org/about/code-of-conduct/). By
+contributing to this project, you agree to abide by its terms.
+
+## Development tools
+
+- Continuous code testing is possible thanks to [GitHub
+  actions](https://www.tidyverse.org/blog/2020/04/usethis-1-6-0/)
+  through *[usethis](https://CRAN.R-project.org/package=usethis)*,
+  *[remotes](https://CRAN.R-project.org/package=remotes)*, and
+  *[rcmdcheck](https://CRAN.R-project.org/package=rcmdcheck)* customized
+  to use [Bioconductor’s docker
+  containers](https://www.bioconductor.org/help/docker/) and
+  *[BiocCheck](https://bioconductor.org/packages/3.17/BiocCheck)*.
+- Code coverage assessment is possible thanks to
+  [codecov](https://codecov.io/gh) and
+  *[covr](https://CRAN.R-project.org/package=covr)*.
+- The [documentation website](http://jacopo-ronchi.github.io/MIRit) is
+  automatically updated thanks to
+  *[pkgdown](https://CRAN.R-project.org/package=pkgdown)*.
+- The code is styled automatically thanks to
+  *[styler](https://CRAN.R-project.org/package=styler)*.
+- The documentation is formatted thanks to
+  *[devtools](https://CRAN.R-project.org/package=devtools)* and
+  *[roxygen2](https://CRAN.R-project.org/package=roxygen2)*.
+
+For more details, check the `dev` directory.
+
+This package was developed using
+*[biocthis](https://bioconductor.org/packages/3.17/biocthis)*.

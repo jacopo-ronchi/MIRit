@@ -72,9 +72,9 @@ If needed, you could also install the development version of MIRit directly from
 
 ```{r getPackageDevel, eval=FALSE}
 ## install the development version from GitHub
-if (!requireNamespace("devtools", quietly = TRUE))
-  install.packages("devtools")
-devtools::install_github('jacopo-ronchi/MIRit')
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install("jacopo-ronchi/MIRit")
 ```
 
 When MIRit is installed, we can load it through:

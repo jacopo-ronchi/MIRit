@@ -5,3 +5,8 @@
 inst/doc
 /doc/
 /Meta/
+*.Rproj
+.Rdata
+.httr-oauth
+.DS_Store
+.quarto
