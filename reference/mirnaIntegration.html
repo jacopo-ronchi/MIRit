@@ -233,8 +233,10 @@ Statistica Neerlandica. 24: 1–35.
 <span class="r-msg co"><span class="r-pr">#&gt;</span> A statistically significant correlation between 215 miRNA-target pairs was found!</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># perform Kendall's correlation analysis with tau &gt; 0.8 and p &lt; 0.05</span></span></span>
-<span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu">mirnaIntegration</span><span class="op">(</span><span class="va">obj</span>, test <span class="op">=</span> <span class="st">"correlation"</span>,</span></span>
-<span class="r-in"><span>corMethod <span class="op">=</span> <span class="st">"kendall"</span>, corCutoff <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu">mirnaIntegration</span><span class="op">(</span><span class="va">obj</span>,</span></span>
+<span class="r-in"><span>    test <span class="op">=</span> <span class="st">"correlation"</span>,</span></span>
+<span class="r-in"><span>    corMethod <span class="op">=</span> <span class="st">"kendall"</span>, corCutoff <span class="op">=</span> <span class="fl">0.8</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> As specified by the user, a correlation will be used.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Performing Kendall's correlation analysis...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> A statistically significant correlation between 1 miRNA-target pairs was found!</span>
@@ -253,7 +255,7 @@ Statistica Neerlandica. 24: 1–35.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
 </div>
 
       </footer></div>
