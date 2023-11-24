@@ -1,7 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# MIRit <a href="http://jacopo-ronchi.github.io/MIRit"><img src="vignettes/mirit_logo.png" align="right" height="138" /></a>
+# MIRit
+
+<img src="man/figures/logo.png" align="right" width="330" style="float:right; width:330px;">
 
 <!-- badges: start -->
 
@@ -27,7 +29,7 @@ commit](https://bioconductor.org/shields/lastcommit/devel/bioc/MIRit.svg)](http:
 dependencies](https://bioconductor.org/shields/dependencies/release/MIRit.svg)](https://bioconductor.org/packages/release/bioc/html/MIRit.html#since)
 [![R-CMD-check-bioc](https://github.com/jacopo-ronchi/MIRit/actions/workflows/R-CMD-check-bioc.yaml/badge.svg)](https://github.com/jacopo-ronchi/MIRit/actions/workflows/R-CMD-check-bioc.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/jacopo-ronchi/MIRit/branch/main/graph/badge.svg)](https://app.codecov.io/gh/jacopo-ronchi/MIRit?branch=main)
+coverage](https://codecov.io/gh/jacopo-ronchi/MIRit/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/jacopo-ronchi/MIRit?branch=devel)
 <!-- badges: end -->
 
 ## Overview

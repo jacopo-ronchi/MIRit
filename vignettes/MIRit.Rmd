@@ -34,7 +34,7 @@ knitr::opts_chunk$set(
 ## What is MIRit
 
 ```{r logo, echo=FALSE, fig.align='center', out.width="60%"}
-knitr::include_graphics("mirit_logo.png")
+knitr::include_graphics("../man/figures/logo.png")
 ```
 
 MIRit (miRNA integration tool) is an open-source R package that aims to facilitate the comprehension of microRNA (miRNA) biology through the integrative analysis of gene and miRNA expression data deriving from different platforms, including microarrays, RNA-Seq, miRNA-Seq, proteomics and single-cell transcriptomics.
