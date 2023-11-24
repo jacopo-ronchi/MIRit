@@ -88,7 +88,7 @@ If you use `MIRit` in published research, please cite the corresponding
 paper:
 
 ``` r
-print(citation('MIRit'), bibtex = TRUE)
+print(citation("MIRit"), bibtex = TRUE)
 #> Per citare il pacchetto 'MIRit' nelle pubblicazioni utilizza:
 #> 
 #>   jacopo-ronchi (2023). _MIRit_. doi:10.18129/B9.bioc.MIRit

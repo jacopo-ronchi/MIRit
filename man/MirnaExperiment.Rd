@@ -87,14 +87,18 @@ data(geneCounts, package = "MIRit")
 data(mirnaCounts, package = "MIRit")
 
 # create samples metadata
-meta <- data.frame("primary" = colnames(geneCounts),
-"mirnaCol" = colnames(mirnaCounts), "geneCol" = colnames(geneCounts),
-"disease" = c(rep("PTC", 8), rep("NTH", 8)), 
-"patient" = c(rep(paste("Sample_", seq(8), sep = ""), 2)))
+meta <- data.frame(
+    "primary" = colnames(geneCounts),
+    "mirnaCol" = colnames(mirnaCounts), "geneCol" = colnames(geneCounts),
+    "disease" = c(rep("PTC", 8), rep("NTH", 8)),
+    "patient" = c(rep(paste("Sample_", seq(8), sep = ""), 2))
+)
 
 # create a 'MirnaExperiment' object
-obj <- MirnaExperiment(mirnaExpr = mirnaCounts, geneExpr = geneCounts,
-samplesMetadata = meta, pairedSamples = TRUE)
+obj <- MirnaExperiment(
+    mirnaExpr = mirnaCounts, geneExpr = geneCounts,
+    samplesMetadata = meta, pairedSamples = TRUE
+)
 
 }
 \author{

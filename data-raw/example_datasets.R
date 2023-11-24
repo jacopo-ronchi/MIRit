@@ -16,14 +16,14 @@ rf_m <- rf_m[1:16]
 
 ## read counts to form count matrices for RNA and miRNAs
 g <- sapply(rf_g, function(x) {
-  a <- read.csv(x, sep = "\t", header = FALSE)
-  a$V2
+    a <- read.csv(x, sep = "\t", header = FALSE)
+    a$V2
 })
 rownames(g) <- read.csv(rf_g[1], sep = "\t", header = FALSE)$V1
 
 m <- sapply(rf_m, function(x) {
-  a <- read.csv(x, sep = "\t", header = FALSE)
-  a$V2
+    a <- read.csv(x, sep = "\t", header = FALSE)
+    a$V2
 })
 rownames(m) <- read.csv(rf_m[1], sep = "\t", header = FALSE)$V1
 

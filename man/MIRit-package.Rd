@@ -6,6 +6,8 @@
 \alias{MIRit-package}
 \title{MIRit: Integrate microRNA and gene expression to decipher pathway complexity}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 MIRit is an R package that provides several methods for investigating the relationships between miRNAs and genes in different biological conditions. In particular, MIRit allows to explore the functions of dysregulated miRNAs, and makes it possible to identify miRNA-gene regulatory axes that control biological pathways, thus enabling the users to unveil the complexity of miRNA biology. MIRit is an all-in-one framework that aims to help researchers in all the central aspects of an integrative miRNA-mRNA analyses, from differential expression analysis to network characterization.
 }
 \seealso{

@@ -113,28 +113,36 @@ data(geneCounts, package = "MIRit")
 data(mirnaCounts, package = "MIRit")
 
 # create samples metadata
-meta <- data.frame("primary" = colnames(geneCounts),
-"mirnaCol" = colnames(mirnaCounts), "geneCol" = colnames(geneCounts),
-"disease" = c(rep("PTC", 8), rep("NTH", 8)), 
-"patient" = c(rep(paste("Sample_", seq(8), sep = ""), 2)))
+meta <- data.frame(
+    "primary" = colnames(geneCounts),
+    "mirnaCol" = colnames(mirnaCounts), "geneCol" = colnames(geneCounts),
+    "disease" = c(rep("PTC", 8), rep("NTH", 8)),
+    "patient" = c(rep(paste("Sample_", seq(8), sep = ""), 2))
+)
 
 # create a 'MirnaExperiment' object
-obj <- MirnaExperiment(mirnaExpr = mirnaCounts, geneExpr = geneCounts,
-samplesMetadata = meta, pairedSamples = TRUE)
+obj <- MirnaExperiment(
+    mirnaExpr = mirnaCounts, geneExpr = geneCounts,
+    samplesMetadata = meta, pairedSamples = TRUE
+)
 
 # perform miRNA DE with DESeq2 separately
 dds_m <- DESeq2::DESeqDataSetFromMatrix(
-countData = mirnaCounts, colData = meta, design = ~ 0 + disease + patient)
+    countData = mirnaCounts, colData = meta, design = ~ 0 + disease + patient
+)
 dds_m <- DESeq2::DESeq(dds_m)
 de_m <- as.data.frame(DESeq2::results(dds_m,
-contrast = c("disease", "PTC", "NTH"), pAdjustMethod = "fdr"))
+    contrast = c("disease", "PTC", "NTH"), pAdjustMethod = "fdr"
+))
 
 # perform gene DE with DESeq2 separately
 dds_g <- DESeq2::DESeqDataSetFromMatrix(
-countData = geneCounts, colData = meta, design = ~ 0 + disease + patient)
+    countData = geneCounts, colData = meta, design = ~ 0 + disease + patient
+)
 dds_g <- DESeq2::DESeq(dds_g)
 de_g <- as.data.frame(DESeq2::results(dds_g,
-contrast = c("disease", "PTC", "NTH"), pAdjustMethod = "fdr"))
+    contrast = c("disease", "PTC", "NTH"), pAdjustMethod = "fdr"
+))
 
 # prepare DE tables
 de_m$ID <- rownames(de_m)
@@ -144,8 +152,9 @@ de_g <- na.omit(de_g)
 
 # add DE results to MirnaExperiment object
 obj <- addDifferentialExpression(obj, de_m, de_g,
-mirna.logFC = 1, mirna.pCutoff = 0.05,
-gene.logFC = 1, gene.pCutoff = 0.05)
+    mirna.logFC = 1, mirna.pCutoff = 0.05,
+    gene.logFC = 1, gene.pCutoff = 0.05
+)
 
 }
 \author{

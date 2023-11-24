@@ -66,8 +66,9 @@ Before starting, MIRit must be installed on your system. You can do this through
 
 ```{r getPackage, eval=FALSE}
 ## install MIRit from Bioconductor
-if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
 BiocManager::install("MIRit")
 ```
 
@@ -75,8 +76,9 @@ If needed, you could also install the development version of MIRit directly from
 
 ```{r getPackageDevel, eval=FALSE}
 ## install the development version from GitHub
-if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
 BiocManager::install("jacopo-ronchi/MIRit")
 ```
 
@@ -157,11 +159,13 @@ That said, we can proceed to create the `data.frame` with sample metadata as fol
 
 ```{r metadata}
 ## create a data.frame containing sample metadata
-meta <- data.frame(primary = colnames(mirnaCounts),
-                   mirnaCol = colnames(mirnaCounts),
-                   geneCol = colnames(geneCounts),
-                   disease = c(rep("PTC", 8), rep("NTH", 8)),
-                   patient = c(rep(paste("Sample_", seq(8), sep = ""), 2)))
+meta <- data.frame(
+    primary = colnames(mirnaCounts),
+    mirnaCol = colnames(mirnaCounts),
+    geneCol = colnames(geneCounts),
+    disease = c(rep("PTC", 8), rep("NTH", 8)),
+    patient = c(rep(paste("Sample_", seq(8), sep = ""), 2))
+)
 ```
 
 ## Create a `MirnaExperiment` object
@@ -172,10 +176,12 @@ The easiest way to create a valid `MirnaExperiment` object is to use the `MirnaE
 
 ```{r mirnaObj}
 ## create the MirnaExperiment object
-experiment <- MirnaExperiment(mirnaExpr = mirnaCounts,
-                              geneExpr = geneCounts,
-                              samplesMetadata = meta,
-                              pairedSamples = TRUE)
+experiment <- MirnaExperiment(
+    mirnaExpr = mirnaCounts,
+    geneExpr = geneCounts,
+    samplesMetadata = meta,
+    pairedSamples = TRUE
+)
 ```
 
 # Differential expression analysis
@@ -189,16 +195,21 @@ Firstly, before doing anything else, it is useful to explore miRNA and gene expr
 In our example, let's examine expression variability for both miRNAs and genes, and let's color the samples based on "disease", a variable included in the previously defined metadata.
 
 ```{r mds, fig.wide=TRUE, fig.cap="MDS plots for miRNAs and genes. Both plots show that the main source of variability is given by the disease condition."}
+geneMDS <- plotDimensions(experiment,
+    assay = "genes",
+    condition = "disease",
+    title = "MDS plot for genes"
+)
+mirnaMDS <- plotDimensions(experiment,
+    assay = "microRNA",
+    condition = "disease",
+    title = "MDS plot for miRNAs"
+)
 
-geneMDS <- plotDimensions(experiment, assay = "genes",
-                          condition = "disease",
-                          title = "MDS plot for genes")
-mirnaMDS <- plotDimensions(experiment, assay = "microRNA",
-                           condition = "disease",
-                           title = "MDS plot for miRNAs")
-
-ggpubr::ggarrange(geneMDS, mirnaMDS, nrow = 1, labels = "AUTO",
-                  common.legend = TRUE)
+ggpubr::ggarrange(geneMDS, mirnaMDS,
+    nrow = 1, labels = "AUTO",
+    common.legend = TRUE
+)
 ```
 
 As we can see from Figures \@ref(fig:mds)A and \@ref(fig:mds)B, the samples are very well separated on the basis of disease condition, thus suggesting that this is the major factor that influences expression variability. This is exactly what we want, since we aim to evaluate the differences between cancer and normal tissue. If this wasn't the case, we should identify the confounding variables, and include them in the model used for differential expression analysis (see Section \@ref(model)).
@@ -317,16 +328,22 @@ In our example, let's create volcano plots for both miRNA and gene differential 
 
 ```{r volcano, fig.wide=TRUE, fig.cap="Volcano plots of gene and miRNA differential expression."}
 ## create a volcano plot for genes
-geneVolcano <- plotVolcano(experiment, assay = "genes",
-                           title = "Gene differential expression")
+geneVolcano <- plotVolcano(experiment,
+    assay = "genes",
+    title = "Gene differential expression"
+)
 
 ## create a volcano plot for miRNAs
-mirnaVolcano <- plotVolcano(experiment, assay = "microRNA",
-                            title = "miRNA differential expression")
+mirnaVolcano <- plotVolcano(experiment,
+    assay = "microRNA",
+    title = "miRNA differential expression"
+)
 
 ## plot graphs side by side
-ggpubr::ggarrange(geneVolcano, mirnaVolcano, nrow = 1, labels = "AUTO",
-                  common.legend = TRUE)
+ggpubr::ggarrange(geneVolcano, mirnaVolcano,
+    nrow = 1, labels = "AUTO",
+    common.legend = TRUE
+)
 ```
 
 ### Produce differential expression bar plots
@@ -335,8 +352,10 @@ Finally, if we are interested in specific genes/miRNAs, MIRit implements the `pl
 
 ```{r thyroidBars, fig.wide=FALSE, fig.cap="Differential expression bar plots for different thyroid genes. Differential expression analysis demonstrated how TG, TPO, DIO2 and PAX8 result downregulated in thyroid cancer."}
 ## create a bar plot for all thyroid features
-thyrBar <- plotDE(experiment, features = c("TG", "TPO", "DIO2", "PAX8"),
-                  graph = "barplot", linear = FALSE)
+thyrBar <- plotDE(experiment,
+    features = c("TG", "TPO", "DIO2", "PAX8"),
+    graph = "barplot", linear = FALSE
+)
 
 ## show the resulting plot
 thyrBar
@@ -564,16 +583,22 @@ Additionally, for correlation analyses, MIRit allows to graphically represent in
 
 ```{r corPlot, fig.wide=TRUE, fig.cap="Correlation between miRNAs and key thyroid genes. These plots suggest that the upregulation of miR-146b-5p and miR-146b-3p may be responsible for the downregulation of DIO2 and PAX8, respectively."}
 ## plot the correlation between miR-146b-5p and DIO2
-cor1 <- plotCorrelation(experiment, mirna = "hsa-miR-146b-5p",
-                        gene = "DIO2", condition = "disease")
+cor1 <- plotCorrelation(experiment,
+    mirna = "hsa-miR-146b-5p",
+    gene = "DIO2", condition = "disease"
+)
 
 ## plot the correlation between miR-146b-3p and PAX8
-cor2 <- plotCorrelation(experiment, mirna = "hsa-miR-146b-3p",
-                        gene = "PAX8", condition = "disease")
+cor2 <- plotCorrelation(experiment,
+    mirna = "hsa-miR-146b-3p",
+    gene = "PAX8", condition = "disease"
+)
 
 ## plot graphs side by side
-ggpubr::ggarrange(cor1, cor2, nrow = 1, labels = "AUTO",
-                  common.legend = TRUE)
+ggpubr::ggarrange(cor1, cor2,
+    nrow = 1, labels = "AUTO",
+    common.legend = TRUE
+)
 ```
 
 ## Association tests for unpaired data
@@ -621,9 +646,10 @@ For example, we could use the Boschloo's exact to evaluate the inverse associati
 ```{r association, eval=FALSE}
 ## perform a one-sided inverse association
 exp.association <- mirnaIntegration(experiment,
-                                    test = "association",
-                                    associationMethod = "boschloo",
-                                    pAdjustment = "none")
+    test = "association",
+    associationMethod = "boschloo",
+    pAdjustment = "none"
+)
 ```
 
 Finally, after performing the association analysis, results can be accessed through the `integration()` function in the same way as we can do for correlation analyses.
@@ -637,8 +663,9 @@ To perform the integrative analysis through rotation gene-set tests, we must sim
 ```{r fry, eval=FALSE}
 ## perform the integrative analysis through 'fry' method
 exp.fry <- mirnaIntegration(experiment,
-                            test = "fry",
-                            pCutoff = 0.1)
+    test = "fry",
+    pCutoff = 0.1
+)
 ```
 
 ## Functional enrichment of integrated target genes
@@ -652,8 +679,10 @@ In our example, we are going to enrich the significantly anti-correlated targets
 oraTarg <- enrichTargets(experiment, database = "DO")
 
 ## show a dot plot for the enrichment of downregulated genes
-enrichmentDotplot(oraTarg$downregulated, showTerms = 7,
-                  showTermsParam = "padj", title = "Depleted diseases")
+enrichmentDotplot(oraTarg$downregulated,
+    showTerms = 7,
+    showTermsParam = "padj", title = "Depleted diseases"
+)
 ```
 
 In Figure \@ref(fig:intTargEnr), we appreciate the depletion of diseases where thyroid gland is overly active, such as goiter and hyperthyroidism, therefore suggesting the involvement of miRNAs in thyroid malfunctioning.
@@ -716,8 +745,9 @@ In our example, we want to use the significant miRNA-target pairs that we identi
 ```{r augmented_networks, eval=FALSE}
 ## create miRNA-augmented networks using KEGG pathways
 networks <- preparePathways(experiment,
-                            database = "KEGG",
-                            organism = "Homo sapiens")
+    database = "KEGG",
+    organism = "Homo sapiens"
+)
 ```
 
 After running this function, pathways with less than 10% of nodes with expression measurements are removed. This option can be changed by specifying the `minPc` parameter.
@@ -730,8 +760,9 @@ set.seed(1234)
 
 ## perform TAIPA
 taipa <- topologicalAnalysis(experiment,
-                             pathways = networks,
-                             nPerm = 10000)
+    pathways = networks,
+    nPerm = 10000
+)
 ```
 
 As a result of the analysis, an object of class `IntegrativePathwayAnalysis` storing the results of TAIPA is returned. Notably, the user can change the behavior of the `topologicalAnalysis()` in several ways. For example, the `pCutoff` and `pAdjustment` parameters can be used to change the significance threshold and the multiple testing correction method, respectively. Moreover, the `nPerm` parameter can be tweaked to change the number of permutations to use for evaluating statistical significance. In this regard, we recommend using at least 10000 permutations, with no less than 1000.

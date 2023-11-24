@@ -70,7 +70,7 @@ For detailed instructions on how to use `MIRit` for integrative miRNA-mRNA analy
 If you use `MIRit` in published research, please cite the corresponding paper:
 
 ```{r 'citation', eval = requireNamespace('MIRit')}
-print(citation('MIRit'), bibtex = TRUE)
+print(citation("MIRit"), bibtex = TRUE)
 ```
 
 Please note that the `MIRit` package was made possible thanks to many other R and bioinformatics software authors, which are cited either in the vignettes and/or the paper(s) describing this package.

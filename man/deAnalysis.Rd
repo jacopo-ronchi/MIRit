@@ -229,16 +229,22 @@ without quality weights (by specifying \code{useVoomWithQualityWeights = TRUE}).
 obj <- loadExamples()
 
 # perform miRNA DE with edgeR
-obj <- performMirnaDE(obj, group = "disease", contrast = "PTC-NTH",
-design = ~ 0 + disease + patient, method = "edgeR")
+obj <- performMirnaDE(obj,
+    group = "disease", contrast = "PTC-NTH",
+    design = ~ 0 + disease + patient, method = "edgeR"
+)
 
 # perform miRNA DE with DESeq2
-obj <- performMirnaDE(obj, group = "disease", contrast = "PTC-NTH",
-design = ~ 0 + disease + patient, method = "DESeq2")
+obj <- performMirnaDE(obj,
+    group = "disease", contrast = "PTC-NTH",
+    design = ~ 0 + disease + patient, method = "DESeq2"
+)
 
 # perform gene DE with limma-voom
-obj <- performGeneDE(obj, group = "disease", contrast = "PTC-NTH",
-design = ~ 0 + disease + patient, method = "voom")
+obj <- performGeneDE(obj,
+    group = "disease", contrast = "PTC-NTH",
+    design = ~ 0 + disease + patient, method = "voom"
+)
 
 }
 \references{

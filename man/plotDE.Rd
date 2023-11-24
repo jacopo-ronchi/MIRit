@@ -111,8 +111,10 @@ obj <- loadExamples()
 plotDE(obj, features = c("hsa-miR-34a-5p", "PAX8"))
 
 # produce a barplot for PAX8 and miR-34a-5p without significance
-plotDE(obj, features = c("hsa-miR-34a-5p", "PAX8"),
-graph = "barplot", showSignificance = FALSE)
+plotDE(obj,
+    features = c("hsa-miR-34a-5p", "PAX8"),
+    graph = "barplot", showSignificance = FALSE
+)
 
 # produce a violinplot for BCL2
 plotDE(obj, features = "BCL2", graph = "violinplot")

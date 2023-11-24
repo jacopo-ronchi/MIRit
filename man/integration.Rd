@@ -30,8 +30,10 @@ this function.
 obj <- loadExamples()
 
 # perform Kendall's correlation analysis with tau > 0.8 and p < 0.05
-obj <- mirnaIntegration(obj, test = "correlation",
-corMethod = "kendall", corCutoff = 0.8)
+obj <- mirnaIntegration(obj,
+    test = "correlation",
+    corMethod = "kendall", corCutoff = 0.8
+)
 
 # visualize the results of correlation analysis
 res <- integration(obj)

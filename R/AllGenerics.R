@@ -29,18 +29,18 @@
 #' @examples
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
-#' 
+#'
 #' # access miRNA differential expression of a MirnaExperiment object
 #' sig <- mirnaDE(obj)
 #' all <- mirnaDE(obj, onlySignificant = FALSE)
-#' 
+#'
 #' # access gene differential expression of a MirnaExperiment object
 #' sig <- geneDE(obj)
 #' all <- geneDE(obj, onlySignificant = FALSE)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
-#' 
+#'
 #' @name deAccessors
 NULL
 
@@ -49,20 +49,22 @@ NULL
 #' @describeIn deAccessors Extract miRNA differential expression results
 #' @export
 setGeneric("mirnaDE", function(object,
-                               onlySignificant = TRUE,
-                               param = FALSE,
-                               returnObject = FALSE)
-  standardGeneric("mirnaDE"))
+    onlySignificant = TRUE,
+    param = FALSE,
+    returnObject = FALSE) {
+    standardGeneric("mirnaDE")
+})
 
 
 
 #' @describeIn deAccessors Extract gene differential expression results
 #' @export
 setGeneric("geneDE", function(object,
-                              onlySignificant = TRUE,
-                              param = FALSE,
-                              returnObject = FALSE)
-  standardGeneric("geneDE"))
+    onlySignificant = TRUE,
+    param = FALSE,
+    returnObject = FALSE) {
+    standardGeneric("geneDE")
+})
 
 
 
@@ -84,16 +86,16 @@ setGeneric("geneDE", function(object,
 #' @examples
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
-#' 
+#'
 #' # extract significant DE-miRNAs
 #' sigMirnas <- significantMirnas(obj)
-#' 
+#'
 #' # extract significant DEGs
 #' sigGenes <- significantGenes(obj)
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
-#' 
+#'
 #' @name significantAccessors
 NULL
 
@@ -102,16 +104,18 @@ NULL
 #' @describeIn significantAccessors Get the IDs of differentially expressed
 #' miRNAs
 #' @export
-setGeneric("significantMirnas", function(object)
-  standardGeneric("significantMirnas"))
+setGeneric("significantMirnas", function(object) {
+    standardGeneric("significantMirnas")
+})
 
 
 
 #' @describeIn significantAccessors Get the IDs of differentially expressed
 #' genes
 #' @export
-setGeneric("significantGenes", function(object)
-  standardGeneric("significantGenes"))
+setGeneric("significantGenes", function(object) {
+    standardGeneric("significantGenes")
+})
 
 
 
@@ -133,7 +137,7 @@ setGeneric("significantGenes", function(object)
 #' @examples
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
-#' 
+#'
 #' # check if an existing MirnaExperiment object derive from paired samples
 #' pairedSamples(obj)
 #'
@@ -171,8 +175,10 @@ setGeneric("pairedSamples", function(object) standardGeneric("pairedSamples"))
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-setGeneric("mirnaTargets",
-           function(object) standardGeneric("mirnaTargets"))
+setGeneric(
+    "mirnaTargets",
+    function(object) standardGeneric("mirnaTargets")
+)
 
 
 
@@ -197,10 +203,12 @@ setGeneric("mirnaTargets",
 #' @examples
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
-#' 
+#'
 #' # perform Kendall's correlation analysis with tau > 0.8 and p < 0.05
-#' obj <- mirnaIntegration(obj, test = "correlation",
-#' corMethod = "kendall", corCutoff = 0.8)
+#' obj <- mirnaIntegration(obj,
+#'     test = "correlation",
+#'     corMethod = "kendall", corCutoff = 0.8
+#' )
 #'
 #' # visualize the results of correlation analysis
 #' res <- integration(obj)
@@ -210,31 +218,35 @@ setGeneric("mirnaTargets",
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-setGeneric("integration",
-           function(object,
-                    param = FALSE) standardGeneric("integration"))
-
-
-
-setGeneric("mirnaDE<-", function(object, value)
-  standardGeneric("mirnaDE<-")
+setGeneric(
+    "integration",
+    function(object,
+    param = FALSE) {
+        standardGeneric("integration")
+    }
 )
 
-setGeneric("geneDE<-", function(object, value)
-  standardGeneric("geneDE<-")
-)
 
-setGeneric("pairedSamples<-", function(object, value)
-  standardGeneric("pairedSamples<-")
-)
 
-setGeneric("mirnaTargets<-", function(object, value)
-  standardGeneric("mirnaTargets<-")
-)
+setGeneric("mirnaDE<-", function(object, value) {
+    standardGeneric("mirnaDE<-")
+})
 
-setGeneric("integration<-", function(object, value)
-  standardGeneric("integration<-")
-)
+setGeneric("geneDE<-", function(object, value) {
+    standardGeneric("geneDE<-")
+})
+
+setGeneric("pairedSamples<-", function(object, value) {
+    standardGeneric("pairedSamples<-")
+})
+
+setGeneric("mirnaTargets<-", function(object, value) {
+    standardGeneric("mirnaTargets<-")
+})
+
+setGeneric("integration<-", function(object, value) {
+    standardGeneric("integration<-")
+})
 
 
 
@@ -259,7 +271,7 @@ setGeneric("integration<-", function(object, value)
 #' @examples
 #' # load example FunctionalEnrichment object
 #' obj <- loadExamples("FunctionalEnrichment")
-#' 
+#'
 #' # extract results
 #' de_df <- enrichmentResults(obj)
 #'
@@ -267,8 +279,9 @@ setGeneric("integration<-", function(object, value)
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-setGeneric("enrichmentResults", function(object)
-  standardGeneric("enrichmentResults"))
+setGeneric("enrichmentResults", function(object) {
+    standardGeneric("enrichmentResults")
+})
 
 
 
@@ -297,8 +310,9 @@ setGeneric("enrichmentResults", function(object)
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-setGeneric("enrichmentDatabase", function(object)
-  standardGeneric("enrichmentDatabase"))
+setGeneric("enrichmentDatabase", function(object) {
+    standardGeneric("enrichmentDatabase")
+})
 
 
 
@@ -327,8 +341,9 @@ setGeneric("enrichmentDatabase", function(object)
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-setGeneric("enrichmentMethod", function(object)
-  standardGeneric("enrichmentMethod"))
+setGeneric("enrichmentMethod", function(object) {
+    standardGeneric("enrichmentMethod")
+})
 
 
 
@@ -356,8 +371,9 @@ setGeneric("enrichmentMethod", function(object)
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-setGeneric("geneSet", function(object)
-  standardGeneric("geneSet"))
+setGeneric("geneSet", function(object) {
+    standardGeneric("geneSet")
+})
 
 
 
@@ -385,8 +401,9 @@ setGeneric("geneSet", function(object)
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-setGeneric("enrichmentMetric", function(object)
-  standardGeneric("enrichmentMetric"))
+setGeneric("enrichmentMetric", function(object) {
+    standardGeneric("enrichmentMetric")
+})
 
 
 
@@ -411,7 +428,7 @@ setGeneric("enrichmentMetric", function(object)
 #'
 #' # extract the ranking metric
 #' rmet <- enrichmentMetric(obj)
-#' 
+#'
 #' ## extract the corresponding names
 #' rnames <- enrichedFeatures(obj)
 #'
@@ -419,18 +436,19 @@ setGeneric("enrichmentMetric", function(object)
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-setGeneric("enrichedFeatures", function(object)
-  standardGeneric("enrichedFeatures"))
+setGeneric("enrichedFeatures", function(object) {
+    standardGeneric("enrichedFeatures")
+})
 
 
 
-setGeneric("enrichmentResults<-", function(object, value)
-  standardGeneric("enrichmentResults<-")
-)
+setGeneric("enrichmentResults<-", function(object, value) {
+    standardGeneric("enrichmentResults<-")
+})
 
-setGeneric("enrichmentDatabase<-", function(object, value)
-  standardGeneric("enrichmentDatabase<-")
-)
+setGeneric("enrichmentDatabase<-", function(object, value) {
+    standardGeneric("enrichmentDatabase<-")
+})
 
 
 
@@ -456,7 +474,7 @@ setGeneric("enrichmentDatabase<-", function(object, value)
 #' @examples
 #' # load the example IntegrativePathwayAnalysis object
 #' obj <- loadExamples("IntegrativePathwayAnalysis")
-#' 
+#'
 #' # extract results
 #' taipaRes <- integratedPathways(obj)
 #'
@@ -464,8 +482,9 @@ setGeneric("enrichmentDatabase<-", function(object, value)
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-setGeneric("integratedPathways", function(object)
-  standardGeneric("integratedPathways"))
+setGeneric("integratedPathways", function(object) {
+    standardGeneric("integratedPathways")
+})
 
 
 
@@ -487,7 +506,7 @@ setGeneric("integratedPathways", function(object)
 #' @examples
 #' # load the example IntegrativePathwayAnalysis object
 #' obj <- loadExamples("IntegrativePathwayAnalysis")
-#' 
+#'
 #' # see the database
 #' integrationDatabase(obj)
 #'
@@ -495,8 +514,9 @@ setGeneric("integratedPathways", function(object)
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-setGeneric("integrationDatabase", function(object)
-  standardGeneric("integrationDatabase"))
+setGeneric("integrationDatabase", function(object) {
+    standardGeneric("integrationDatabase")
+})
 
 
 
@@ -517,7 +537,7 @@ setGeneric("integrationDatabase", function(object)
 #' @examples
 #' # load the example IntegrativePathwayAnalysis object
 #' obj <- loadExamples("IntegrativePathwayAnalysis")
-#' 
+#'
 #' # extract the pathways
 #' ps <- augmentedPathways(obj)
 #'
@@ -525,12 +545,12 @@ setGeneric("integrationDatabase", function(object)
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-setGeneric("augmentedPathways", function(object)
-  standardGeneric("augmentedPathways"))
+setGeneric("augmentedPathways", function(object) {
+    standardGeneric("augmentedPathways")
+})
 
 
 
-setGeneric("integratedPathways<-", function(object, value)
-  standardGeneric("integratedPathways<-")
-)
-
+setGeneric("integratedPathways<-", function(object, value) {
+    standardGeneric("integratedPathways<-")
+})
