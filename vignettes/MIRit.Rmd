@@ -8,6 +8,9 @@ package: MIRit
 output:
   BiocStyle::html_document:
     toc_float: true
+pkgdown:
+  as_is: true
+link-citations: true
 bibliography: references.bib
 abstract: |
   In this vignette, we are going to see how to use MIRit for investigating the compromised miRNA-gene regulatory networks in thyroid cancer. In particular, an RNA-Seq experiment will be used as an example to demonstrate how to perform an integrative analysis with MIRit, including differential expression analysis, functional enrichment and characterization, correlation analysis and, lastly, the construction and visualization of the impaired miRNAs regulatory axes within biological pathways.
