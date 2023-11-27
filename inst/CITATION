@@ -1,29 +1,10 @@
-pkgVer <- function(pkg) {
-    if (!exists("meta") || is.null(meta)) meta <- packageDescription(pkg)
-    ver <- meta$Version
-    paste0('https://github.com/jacopo-ronchi/MIRit/', pkg, ' - R package version ', ver)
-}
-
-c(
-
-    bibentry(bibtype="manual",
-        title = "MIRit",
-        author = personList(
-            as.person("jacopo-ronchi")
-        ),
-        year = format(Sys.Date(), "%Y"),
-        url = "http://www.bioconductor.org/packages/MIRit",
-        note = pkgVer('MIRit'),
-        doi = '10.18129/B9.bioc.MIRit'
-    ),
-    bibentry(bibtype="article",
-        title = "MIRit",
-        author = personList(
-            as.person("jacopo-ronchi")
-        ),
-        year = format(Sys.Date(), "%Y"),
-        journal = "bioRxiv",
-        doi = "10.1101/TODO",
-        url = "https://www.biorxiv.org/content/10.1101/TODO"
-    )
-)
+bibentry(bibtype = "article",
+         title = "MIRit: an integrative R framework for the identification of impaired miRNA-mRNA regulatory networks in complex diseases",
+         author = personList( as.person("Jacopo Ronchi"),
+                              as.person("Maria Foti")),
+         year = 2023,
+         journal = "bioRxiv",
+         doi = "10.1101/2023.11.24.568528",
+         url = "https://doi.org/10.1101/2023.11.24.568528",
+         textVersion = 
+         "Ronchi J and Foti M. 'MIRit: an integrative R framework for the identification of impaired miRNA-mRNA regulatory networks in complex diseases'. bioRxiv (2023). doi:10.1101/2023.11.24.568528")

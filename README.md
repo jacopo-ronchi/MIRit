@@ -89,37 +89,21 @@ paper:
 
 ``` r
 print(citation("MIRit"), bibtex = TRUE)
-#> Per citare il pacchetto 'MIRit' nelle pubblicazioni utilizza:
+#> To cite package 'MIRit' in publications use:
 #> 
-#>   jacopo-ronchi (2023). _MIRit_. doi:10.18129/B9.bioc.MIRit
-#>   <https://doi.org/10.18129/B9.bioc.MIRit>,
-#>   https://github.com/jacopo-ronchi/MIRit/MIRit - R package version
-#>   0.99.0, <http://www.bioconductor.org/packages/MIRit>.
+#>   Ronchi J and Foti M. 'MIRit: an integrative R framework for the
+#>   identification of impaired miRNA-mRNA regulatory networks in complex
+#>   diseases'. bioRxiv (2023). doi:10.1101/2023.11.24.568528
 #> 
-#> Una voce BibTeX per gli utenti LaTeX è
-#> 
-#>   @Manual{,
-#>     title = {MIRit},
-#>     author = {{jacopo-ronchi}},
-#>     year = {2023},
-#>     url = {http://www.bioconductor.org/packages/MIRit},
-#>     note = {https://github.com/jacopo-ronchi/MIRit/MIRit - R package version 0.99.0},
-#>     doi = {10.18129/B9.bioc.MIRit},
-#>   }
-#> 
-#>   jacopo-ronchi (2023). "MIRit." _bioRxiv_. doi:10.1101/TODO
-#>   <https://doi.org/10.1101/TODO>,
-#>   <https://www.biorxiv.org/content/10.1101/TODO>.
-#> 
-#> Una voce BibTeX per gli utenti LaTeX è
+#> A BibTeX entry for LaTeX users is
 #> 
 #>   @Article{,
-#>     title = {MIRit},
-#>     author = {{jacopo-ronchi}},
+#>     title = {MIRit: an integrative R framework for the identification of impaired miRNA-mRNA regulatory networks in complex diseases},
+#>     author = {Jacopo Ronchi and Maria Foti},
 #>     year = {2023},
 #>     journal = {bioRxiv},
-#>     doi = {10.1101/TODO},
-#>     url = {https://www.biorxiv.org/content/10.1101/TODO},
+#>     doi = {10.1101/2023.11.24.568528},
+#>     url = {https://doi.org/10.1101/2023.11.24.568528},
 #>   }
 ```
 
