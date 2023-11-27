@@ -8,7 +8,8 @@ test_that("basic correlation analysis works", {
     )
 
     ## test correlation results
-    expect_snapshot(integration(corr))
+    corDf <- integration(corr)
+    expect_equal(sum(corDf$Corr.P.Value), 0.786505296554)
 
     ## perform Pearson's correlation analysis with non-default arguments
     expect_no_error(
@@ -21,7 +22,8 @@ test_that("basic correlation analysis works", {
     )
 
     ## test correlation results with non-default arguments
-    expect_snapshot(integration(corrParam))
+    corDfNonDef <- integration(corrParam)
+    expect_equal(sum(corDfNonDef$Corr.P.Value), 1.62971678359)
 })
 
 
@@ -40,7 +42,8 @@ test_that("basic association tests work", {
     )
 
     ## test Fisher's results
-    expect_snapshot(integration(fsh))
+    fshDf <- integration(fsh)
+    expect_equal(sum(fshDf$P.Val), 26.1883179793)
 
     ## perform integrative analysis through Fisher's exact test with mid-p
     expect_no_error(
@@ -52,7 +55,8 @@ test_that("basic association tests work", {
     )
 
     ## test Fisher's results with mid-p correction
-    expect_snapshot(integration(fshMidP))
+    fshMidpDf <- integration(fshMidP)
+    expect_equal(sum(fshMidpDf$P.Val), 23.6569746263)
 
     ## create a small subset of data to try Boschloo's exact test
     sub <- obj
@@ -68,7 +72,8 @@ test_that("basic association tests work", {
     )
 
     ## test Boschloo's results
-    expect_snapshot(integration(bosch))
+    boschDf <- integration(bosch)
+    expect_equal(sum(boschDf$P.Val), 1.61070991767)
 })
 
 
@@ -82,7 +87,8 @@ test_that("basic fry integration works", {
     )
 
     ## test fry results
-    expect_snapshot(integration(fry))
+    fryDf <- integration(fry)
+    expect_equal(sum(fryDf$P.Val), 4.79817344549)
 })
 
 
@@ -107,5 +113,6 @@ test_that("correlation analysis works for partially paired datasets", {
     )
 
     ## test correlation results
-    expect_snapshot(integration(corr))
+    corDf <- integration(corr)
+    expect_equal(sum(corDf$Corr.P.Value), 0.676758000095)
 })

@@ -477,11 +477,12 @@ correlateMirnaTargets <- function(mirnaObj,
 
 
 ## one-sided association tests for integrative analysis
-associateMirnaTargets <- function(mirnaObj,
-    pCutoff,
-    pAdjustment,
-    associationMethod,
-    nuisanceParam) {
+associateMirnaTargets <- function(
+        mirnaObj,
+        pCutoff,
+        pAdjustment,
+        associationMethod,
+        nuisanceParam) {
     ## obtain differentially expressed miRNAs and genes
     dem <- mirnaDE(mirnaObj)
     deg <- geneDE(mirnaObj)
@@ -578,6 +579,11 @@ associateMirnaTargets <- function(mirnaObj,
         "P.Val",
         "DE.targets"
     )
+
+    ## convert numeric columns
+    association$P.Val <- as.numeric(association$P.Val)
+    association$DE <- as.numeric(association$DE)
+    association$targets <- as.numeric(association$targets)
 
     ## correct p-values
     pAdj <- p.adjust(association$P.Val, method = pAdjustment)

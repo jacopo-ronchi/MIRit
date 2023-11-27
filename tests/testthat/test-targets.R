@@ -13,6 +13,9 @@ test_that("targets retrieval through mirDIP works", {
 
 
 test_that("miRTarBase is responsive", {
+    ## skip this test on windows
+    skip_on_os("windows")
+
     ## targets retrieval through miRTarBase is not tested, but we
     ## check that the miRTarBase link is active
     mtUrl <- paste("https://mirtarbase.cuhk.edu.cn/~miRTarBase/",

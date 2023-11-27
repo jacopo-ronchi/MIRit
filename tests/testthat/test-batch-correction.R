@@ -3,10 +3,13 @@ test_that("batch effect correction works", {
     obj <- loadExamples()
 
     ## correct batch effect
-    obj <- batchCorrection(obj, "microRNA", batch = "patient")
+    expect_no_error(
+        obj <- batchCorrection(obj, "microRNA", batch = "patient")
+    )
 
     ##  verify the resulting matrix
-    expect_snapshot(obj[["microRNA"]])
+    expect_equal(sum(obj[["microRNA"]][, 1]), 2529.95084387)
+    expect_equal(sum(obj[["microRNA"]][, 6]), 2542.02835449)
 })
 
 

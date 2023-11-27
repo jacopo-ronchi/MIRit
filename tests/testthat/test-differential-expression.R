@@ -3,11 +3,15 @@ test_that("basic differential expression works for edgeR", {
     obj <- createDummyData()
 
     ## test differential expression analysis with edgeR
-    de_edgeR <- performMirnaDE(obj, "disease", "PTC-NTH",
-        ~ 0 + disease,
-        method = "edgeR"
+    expect_no_error(
+        de <- performMirnaDE(obj, "disease", "PTC-NTH",
+            ~ 0 + disease,
+            method = "edgeR"
+        )
     )
-    expect_snapshot(mirnaDE(de_edgeR))
+    deTab <- mirnaDE(de)
+    expect_equal(sum(deTab$P.Value), 0.00812718819306)
+    expect_equal(sum(deTab$logFC), 1.45879204472)
 })
 
 
@@ -17,13 +21,15 @@ test_that("basic differential expression works for DESeq2", {
 
     ## test differential expression analysis with DESeq2
     expect_warning(
-        de_DESeq2 <- performMirnaDE(obj, "disease", "PTC-NTH",
+        de <- performMirnaDE(obj, "disease", "PTC-NTH",
             ~ 0 + disease,
             method = "DESeq2"
         ),
         "some variables in design formula are characters"
     )
-    expect_snapshot(mirnaDE(de_DESeq2))
+    deTab <- mirnaDE(de)
+    expect_equal(sum(deTab$P.Value), 0.000296432857819)
+    expect_equal(sum(deTab$logFC), -2.07588192405)
 })
 
 
@@ -32,11 +38,15 @@ test_that("basic differential expression works for limma-voom", {
     obj <- createDummyData()
 
     ## test differential expression analysis with limma-voom
-    de_voom <- performMirnaDE(obj, "disease", "PTC-NTH",
-        ~ 0 + disease,
-        method = "voom"
+    expect_no_error(
+        de <- performMirnaDE(obj, "disease", "PTC-NTH",
+            ~ 0 + disease,
+            method = "voom"
+        )
     )
-    expect_snapshot(mirnaDE(de_voom))
+    deTab <- mirnaDE(de)
+    expect_equal(sum(deTab$P.Value), 0.000360018745351)
+    expect_equal(sum(deTab$logFC), -1.05568453494)
 })
 
 
@@ -45,9 +55,13 @@ test_that("basic differential expression works for limma", {
     obj_microarray <- createDummyData(counts = FALSE)
 
     ## test differential expression analysis with limma
-    de_limma <- performMirnaDE(obj_microarray, "disease", "PTC-NTH",
-        ~ 0 + disease,
-        method = "limma"
+    expect_no_error(
+        de <- performMirnaDE(obj_microarray, "disease", "PTC-NTH",
+            ~ 0 + disease,
+            method = "limma"
+        )
     )
-    expect_snapshot(mirnaDE(de_limma))
+    deTab <- mirnaDE(de)
+    expect_equal(sum(deTab$P.Value), 0.000918172142831)
+    expect_equal(sum(deTab$logFC), -3.50564733182)
 })

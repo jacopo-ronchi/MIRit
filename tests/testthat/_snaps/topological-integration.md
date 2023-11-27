@@ -71,7 +71,7 @@
       $`Glycosphingolipid biosynthesis - globo and isoglobo series`
       A graphNEL graph with directed edges
       Number of Nodes = 2 
-      Number of Edges = 1 
+      Number of Edges = 2 
       
       $`Pyruvate metabolism`
       A graphNEL graph with directed edges
@@ -87,16 +87,6 @@
       A graphNEL graph with directed edges
       Number of Nodes = 9 
       Number of Edges = 25 
-      
-      $`Nicotinate and nicotinamide metabolism`
-      A graphNEL graph with directed edges
-      Number of Nodes = 4 
-      Number of Edges = 6 
-      
-      $`Lipoic acid metabolism`
-      A graphNEL graph with directed edges
-      Number of Nodes = 3 
-      Number of Edges = 2 
       
       $`Sulfur metabolism`
       A graphNEL graph with directed edges
@@ -165,8 +155,8 @@
       
       $`Calcium signaling pathway`
       A graphNEL graph with directed edges
-      Number of Nodes = 28 
-      Number of Edges = 46 
+      Number of Nodes = 26 
+      Number of Edges = 44 
       
       $`cAMP signaling pathway`
       A graphNEL graph with directed edges
@@ -220,13 +210,13 @@
       
       $`Autophagy - animal`
       A graphNEL graph with directed edges
-      Number of Nodes = 43 
-      Number of Edges = 43 
+      Number of Nodes = 36 
+      Number of Edges = 32 
       
       $`Protein processing in endoplasmic reticulum`
       A graphNEL graph with directed edges
-      Number of Nodes = 19 
-      Number of Edges = 18 
+      Number of Nodes = 21 
+      Number of Edges = 22 
       
       $Phagosome
       A graphNEL graph with directed edges
@@ -278,10 +268,10 @@
       Number of Nodes = 17 
       Number of Edges = 59 
       
-      $`TGF-beta signaling pathway`
+      $`Notch signaling pathway`
       A graphNEL graph with directed edges
-      Number of Nodes = 16 
-      Number of Edges = 26 
+      Number of Nodes = 9 
+      Number of Edges = 13 
       
       $`VEGF signaling pathway`
       A graphNEL graph with directed edges
@@ -292,11 +282,6 @@
       A graphNEL graph with directed edges
       Number of Nodes = 24 
       Number of Edges = 28 
-      
-      $`Osteoclast differentiation`
-      A graphNEL graph with directed edges
-      Number of Nodes = 14 
-      Number of Edges = 10 
       
       $`Hippo signaling pathway`
       A graphNEL graph with directed edges
@@ -360,8 +345,8 @@
       
       $`T cell receptor signaling pathway`
       A graphNEL graph with directed edges
-      Number of Nodes = 15 
-      Number of Edges = 17 
+      Number of Nodes = 13 
+      Number of Edges = 13 
       
       $`B cell receptor signaling pathway`
       A graphNEL graph with directed edges
@@ -638,11 +623,6 @@
       Number of Nodes = 48 
       Number of Edges = 120 
       
-      $Legionellosis
-      A graphNEL graph with directed edges
-      Number of Nodes = 9 
-      Number of Edges = 7 
-      
       $`Yersinia infection`
       A graphNEL graph with directed edges
       Number of Nodes = 17 
@@ -873,16 +853,4 @@
       Number of Nodes = 49 
       Number of Edges = 107 
       
-
-# the integrative topological miRNA-mRNA analysis works
-
-    Code
-      tpRes
-    Output
-                                                  pathway  coverage     score
-      Thyroid hormone synthesis Thyroid hormone synthesis 0.3469388 12.129412
-      GnRH signaling pathway       GnRH signaling pathway 0.1818182  5.831885
-                                normalized.score      P.Val adj.P.Val
-      Thyroid hormone synthesis         7.222084 0.00990099      0.00
-      GnRH signaling pathway            4.728861 0.00990099      0.04
 

@@ -3,8 +3,6 @@
 
 # MIRit
 
-<img src="man/figures/logo.png" align="right" width="330" style="float:right; width:330px;">
-
 <!-- badges: start -->
 
 [![GitHub
@@ -33,6 +31,8 @@ coverage](https://codecov.io/gh/jacopo-ronchi/MIRit/branch/devel/graph/badge.svg
 <!-- badges: end -->
 
 ## Overview
+
+<img src="man/figures/logo.png" align="right" width="330" style="float:right; width:330px;">
 
 `MIRit` (miRNA integration tool) is an open-source R package that aims
 to facilitate the comprehension of microRNA (miRNA) biology through the

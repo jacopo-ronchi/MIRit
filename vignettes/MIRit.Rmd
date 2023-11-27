@@ -8,8 +8,6 @@ package: MIRit
 output:
   BiocStyle::html_document:
     toc_float: true
-pkgdown:
-  as_is: true
 link-citations: true
 bibliography: references.bib
 abstract: |

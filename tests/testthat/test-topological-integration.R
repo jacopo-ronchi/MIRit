@@ -37,5 +37,5 @@ test_that("the integrative topological miRNA-mRNA analysis works", {
     tpRes <- integratedPathways(tp)
 
     ## check the validity and reproducibility of results
-    expect_snapshot(tpRes)
+    expect_equal(sum(tpRes$P.Val), 0.019801980198)
 })

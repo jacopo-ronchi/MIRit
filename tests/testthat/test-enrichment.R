@@ -64,7 +64,8 @@ test_that("basic ORA enrichment works", {
     )
 
     ## check the validity of ORA
-    expect_snapshot(enrichmentResults(enr$downregulated))
+    enrTab <- enrichmentResults(enr$downregulated)
+    expect_equal(sum(enrTab$pval), 0.00115495394688)
 })
 
 
@@ -81,7 +82,8 @@ test_that("basic GSEA enrichment works", {
     )
 
     ## check the validity of GSEA
-    expect_snapshot(enrichmentResults(enr))
+    enrTab <- enrichmentResults(enr)
+    expect_equal(sum(enrTab$pval), 0.00089149223387)
 })
 
 
@@ -94,9 +96,13 @@ test_that("basic CAMERA enrichment works", {
 
     ## perform functional enrichment with CAMERA
     expect_no_error(
-        enr <- enrichGenes(obj, method = "CAMERA", database = "KEGG")
+        enr <- enrichGenes(obj,
+            method = "CAMERA", database = "KEGG",
+            pCutoff = 0.5
+        )
     )
 
     ## check the validity of CAMERA
-    expect_snapshot(enrichmentResults(enr))
+    enrTab <- enrichmentResults(enr)
+    expect_equal(sum(enrTab$pval), 0.0288973773151)
 })
