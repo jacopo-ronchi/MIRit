@@ -79,12 +79,12 @@
 <div class="section level1">
 <div class="page-header"><h1 id="mirit">MIRit<a class="anchor" aria-label="anchor" href="#mirit"></a>
 </h1></div>
-<p><img src="reference/figures/logo.png" align="right" width="330" style="float:right; width:330px;"></p>
 <!-- badges: start -->
 
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
+<p><img src="reference/figures/logo.png" align="right" width="330" style="float:right; width:330px;"></p>
 <p><code>MIRit</code> (miRNA integration tool) is an open-source R package that aims to facilitate the comprehension of microRNA (miRNA) biology through the integrative analysis of gene and miRNA expression data deriving from different platforms, including microarrays, RNA-Seq, miRNA-Seq, proteomics and single-cell transcriptomics. Given their regulatory importance, a complete characterization of miRNA dysregulations results crucial to explore the molecular networks that may lead to the insurgence of complex diseases. To this purpose, we developed MIRit, an all-in-one framework that provides flexible and powerful methods for performing integrative miRNA-mRNA multi-omic analyses from start to finish.</p>
 </div>
 <div class="section level2">
@@ -118,37 +118,21 @@
 <p>If you use <code>MIRit</code> in published research, please cite the corresponding paper:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"MIRit"</span><span class="op">)</span>, bibtex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Per citare il pacchetto 'MIRit' nelle pubblicazioni utilizza:</span></span>
+<span><span class="co">#&gt; To cite package 'MIRit' in publications use:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   jacopo-ronchi (2023). _MIRit_. doi:10.18129/B9.bioc.MIRit</span></span>
-<span><span class="co">#&gt;   &lt;https://doi.org/10.18129/B9.bioc.MIRit&gt;,</span></span>
-<span><span class="co">#&gt;   https://github.com/jacopo-ronchi/MIRit/MIRit - R package version</span></span>
-<span><span class="co">#&gt;   0.99.0, &lt;http://www.bioconductor.org/packages/MIRit&gt;.</span></span>
+<span><span class="co">#&gt;   Ronchi J and Foti M. 'MIRit: an integrative R framework for the</span></span>
+<span><span class="co">#&gt;   identification of impaired miRNA-mRNA regulatory networks in complex</span></span>
+<span><span class="co">#&gt;   diseases'. bioRxiv (2023). doi:10.1101/2023.11.24.568528</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Una voce BibTeX per gli utenti LaTeX è</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   @Manual{,</span></span>
-<span><span class="co">#&gt;     title = {MIRit},</span></span>
-<span><span class="co">#&gt;     author = {{jacopo-ronchi}},</span></span>
-<span><span class="co">#&gt;     year = {2023},</span></span>
-<span><span class="co">#&gt;     url = {http://www.bioconductor.org/packages/MIRit},</span></span>
-<span><span class="co">#&gt;     note = {https://github.com/jacopo-ronchi/MIRit/MIRit - R package version 0.99.0},</span></span>
-<span><span class="co">#&gt;     doi = {10.18129/B9.bioc.MIRit},</span></span>
-<span><span class="co">#&gt;   }</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   jacopo-ronchi (2023). "MIRit." _bioRxiv_. doi:10.1101/TODO</span></span>
-<span><span class="co">#&gt;   &lt;https://doi.org/10.1101/TODO&gt;,</span></span>
-<span><span class="co">#&gt;   &lt;https://www.biorxiv.org/content/10.1101/TODO&gt;.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Una voce BibTeX per gli utenti LaTeX è</span></span>
+<span><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   @Article{,</span></span>
-<span><span class="co">#&gt;     title = {MIRit},</span></span>
-<span><span class="co">#&gt;     author = {{jacopo-ronchi}},</span></span>
+<span><span class="co">#&gt;     title = {MIRit: an integrative R framework for the identification of impaired miRNA-mRNA regulatory networks in complex diseases},</span></span>
+<span><span class="co">#&gt;     author = {Jacopo Ronchi and Maria Foti},</span></span>
 <span><span class="co">#&gt;     year = {2023},</span></span>
 <span><span class="co">#&gt;     journal = {bioRxiv},</span></span>
-<span><span class="co">#&gt;     doi = {10.1101/TODO},</span></span>
-<span><span class="co">#&gt;     url = {https://www.biorxiv.org/content/10.1101/TODO},</span></span>
+<span><span class="co">#&gt;     doi = {10.1101/2023.11.24.568528},</span></span>
+<span><span class="co">#&gt;     url = {https://doi.org/10.1101/2023.11.24.568528},</span></span>
 <span><span class="co">#&gt;   }</span></span></code></pre></div>
 <p>Please note that the <code>MIRit</code> package was made possible thanks to many other R and bioinformatics software authors, which are cited either in the vignettes and/or the paper(s) describing this package.</p>
 </div>
@@ -226,7 +210,7 @@
 <li><a href="https://bioconductor.org/packages/release/bioc/html/MIRit.html#since" class="external-link"><img src="https://bioconductor.org/shields/years-in-bioc/MIRit.svg" alt="Bioc history"></a></li>
 <li><a href="http://bioconductor.org/checkResults/devel/bioc-LATEST/MIRit/" class="external-link"><img src="https://bioconductor.org/shields/lastcommit/devel/bioc/MIRit.svg" alt="Bioc last commit"></a></li>
 <li><a href="https://bioconductor.org/packages/release/bioc/html/MIRit.html#since" class="external-link"><img src="https://bioconductor.org/shields/dependencies/release/MIRit.svg" alt="Bioc dependencies"></a></li>
-<li><a href="https://github.com/jacopo-ronchi/MIRit/actions/workflows/R-CMD-check-bioc.yaml" class="external-link"><img src="https://github.com/jacopo-ronchi/MIRit/actions/workflows/R-CMD-check-bioc.yaml/badge.svg" alt="R-CMD-check-bioc"></a></li>
+<li><a href="https://github.com/jacopo-ronchi/MIRit/actions/workflows/check-bioc.yml" class="external-link"><img src="https://github.com/jacopo-ronchi/MIRit/actions/workflows/check-bioc.yml/badge.svg" alt="R-CMD-check-bioc"></a></li>
 <li><a href="https://app.codecov.io/gh/jacopo-ronchi/MIRit?branch=devel" class="external-link"><img src="https://codecov.io/gh/jacopo-ronchi/MIRit/branch/devel/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
