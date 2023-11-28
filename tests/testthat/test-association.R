@@ -8,6 +8,9 @@ test_that("NCBI GWAS catalog is reachable through gwasrapidd", {
 
 
 test_that("Ensembl is reachable through biomaRt", {
+    ## skip on windows
+    skip_on_os("windows")
+
     ## try to reach Ensembl
     ensembl <- biomaRt::useEnsembl(
         biomart = "ensembl",
