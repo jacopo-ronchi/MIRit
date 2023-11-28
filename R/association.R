@@ -164,8 +164,9 @@ searchDisease <- function(diseaseName) {
 #'
 #' @importFrom rlang .data
 #' @export
-findMirnaSNPs <- function(mirnaObj,
-    diseaseEFO) {
+findMirnaSNPs <- function(
+        mirnaObj,
+        diseaseEFO) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
@@ -244,8 +245,7 @@ findMirnaSNPs <- function(mirnaObj,
     message("Finding genomic information of differentially expressed miRNAs...")
     ensembl <- biomaRt::useEnsembl(
         biomart = "ensembl",
-        dataset = "hsapiens_gene_ensembl",
-        mirror = "useast"
+        dataset = "hsapiens_gene_ensembl"
     )
     dem <- mirnaDE(mirnaObj)$ID
     deMirnas <- gsub("-5p|-3p", "", dem)

@@ -13,8 +13,9 @@ test_that("targets retrieval through mirDIP works", {
 
 
 test_that("miRTarBase is responsive", {
-    ## skip on windows
-    skip_on_os("windows")
+    ## skip on Github Actions and on Bioconductor
+    skip_on_ci()
+    skip_on_bioc()
 
     ## targets retrieval through miRTarBase is not tested, but we
     ## check that the miRTarBase link is active
