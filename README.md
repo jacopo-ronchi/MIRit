@@ -25,7 +25,7 @@ history](https://bioconductor.org/shields/years-in-bioc/MIRit.svg)](https://bioc
 commit](https://bioconductor.org/shields/lastcommit/devel/bioc/MIRit.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/MIRit/)
 [![Bioc
 dependencies](https://bioconductor.org/shields/dependencies/release/MIRit.svg)](https://bioconductor.org/packages/release/bioc/html/MIRit.html#since)
-[![R-CMD-check-bioc](https://github.com/jacopo-ronchi/MIRit/actions/workflows/R-CMD-check-bioc.yaml/badge.svg)](https://github.com/jacopo-ronchi/MIRit/actions/workflows/R-CMD-check-bioc.yaml)
+[![R-CMD-check-bioc](https://github.com/jacopo-ronchi/MIRit/actions/workflows/check-bioc.yml/badge.svg)](https://github.com/jacopo-ronchi/MIRit/actions/workflows/check-bioc.yml)
 [![Codecov test
 coverage](https://codecov.io/gh/jacopo-ronchi/MIRit/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/jacopo-ronchi/MIRit?branch=devel)
 <!-- badges: end -->
@@ -89,13 +89,13 @@ paper:
 
 ``` r
 print(citation("MIRit"), bibtex = TRUE)
-#> To cite package 'MIRit' in publications use:
+#> Per citare il pacchetto 'MIRit' nelle pubblicazioni utilizza:
 #> 
 #>   Ronchi J and Foti M. 'MIRit: an integrative R framework for the
 #>   identification of impaired miRNA-mRNA regulatory networks in complex
 #>   diseases'. bioRxiv (2023). doi:10.1101/2023.11.24.568528
 #> 
-#> A BibTeX entry for LaTeX users is
+#> Una voce BibTeX per gli utenti LaTeX è
 #> 
 #>   @Article{,
 #>     title = {MIRit: an integrative R framework for the identification of impaired miRNA-mRNA regulatory networks in complex diseases},

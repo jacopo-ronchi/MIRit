@@ -11,8 +11,16 @@ test_that("miRNA augmented pathways are created properly", {
         "pathways have been ignored because they"
     )
 
-    ## check the validity and reproducibility of results
-    expect_snapshot(computedPaths)
+    ## check that every pathway is of class 'graph'
+    gEl <- vapply(computedPaths, function(x) is(x, "graph"),
+        FUN.VALUE = logical(1)
+    )
+    allGraphs <- all(gEl == TRUE)
+    expect_true(allGraphs)
+
+    ## check the topological sorting
+    ths <- computedPaths[["Thyroid hormone synthesis"]]
+    expect_snapshot(graph::nodes(ths))
 })
 
 

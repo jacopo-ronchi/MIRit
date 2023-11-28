@@ -13,16 +13,13 @@ test_that("targets retrieval through mirDIP works", {
 
 
 test_that("miRTarBase is responsive", {
-    ## skip this test on windows
-    skip_on_os("windows")
-
     ## targets retrieval through miRTarBase is not tested, but we
     ## check that the miRTarBase link is active
     mtUrl <- paste("https://mirtarbase.cuhk.edu.cn/~miRTarBase/",
         "miRTarBase_2022/cache/download/9.0/miRTarBase_MTI.xlsx",
         sep = ""
     )
-    hd <- httr::HEAD(mtUrl)
-    status <- hd$all_headers[[1]]$status
+    hd <- httr::HEAD(mtUrl, httr::timeout(4))
+    status <- httr::status_code(hd)
     expect_identical(status, as.integer(200))
 })

@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 [![Bioc history](https://bioconductor.org/shields/years-in-bioc/MIRit.svg)](https://bioconductor.org/packages/release/bioc/html/MIRit.html#since)
 [![Bioc last commit](https://bioconductor.org/shields/lastcommit/devel/bioc/MIRit.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/MIRit/)
 [![Bioc dependencies](https://bioconductor.org/shields/dependencies/release/MIRit.svg)](https://bioconductor.org/packages/release/bioc/html/MIRit.html#since)
-[![R-CMD-check-bioc](https://github.com/jacopo-ronchi/MIRit/actions/workflows/R-CMD-check-bioc.yaml/badge.svg)](https://github.com/jacopo-ronchi/MIRit/actions/workflows/R-CMD-check-bioc.yaml)
+[![R-CMD-check-bioc](https://github.com/jacopo-ronchi/MIRit/actions/workflows/check-bioc.yml/badge.svg)](https://github.com/jacopo-ronchi/MIRit/actions/workflows/check-bioc.yml)
 [![Codecov test coverage](https://codecov.io/gh/jacopo-ronchi/MIRit/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/jacopo-ronchi/MIRit?branch=devel)
 <!-- badges: end -->
 
