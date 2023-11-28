@@ -87,25 +87,9 @@ website](http://jacopo-ronchi.github.io/MIRit).
 If you use `MIRit` in published research, please cite the corresponding
 paper:
 
-``` r
-print(citation("MIRit"), bibtex = TRUE)
-#> To cite package 'MIRit' in publications use:
-#> 
-#>   Ronchi J and Foti M. 'MIRit: an integrative R framework for the
-#>   identification of impaired miRNA-mRNA regulatory networks in complex
-#>   diseases'. bioRxiv (2023). doi:10.1101/2023.11.24.568528
-#> 
-#> A BibTeX entry for LaTeX users is
-#> 
-#>   @Article{,
-#>     title = {MIRit: an integrative R framework for the identification of impaired miRNA-mRNA regulatory networks in complex diseases},
-#>     author = {Jacopo Ronchi and Maria Foti},
-#>     year = {2023},
-#>     journal = {bioRxiv},
-#>     doi = {10.1101/2023.11.24.568528},
-#>     url = {https://doi.org/10.1101/2023.11.24.568528},
-#>   }
-```
+> Ronchi J and Foti M. ‘MIRit: an integrative R framework for the
+> identification of impaired miRNA-mRNA regulatory networks in complex
+> diseases’. bioRxiv (2023). <doi:10.1101/2023.11.24.568528>
 
 Please note that the `MIRit` package was made possible thanks to many
 other R and bioinformatics software authors, which are cited either in

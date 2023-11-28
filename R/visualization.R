@@ -522,7 +522,7 @@ visualizeNetwork <- function(object,
         image(
             x = 1,
             y = legMat,
-            z = matrix(1:300, nrow = 1),
+            z = matrix(seq(300), nrow = 1),
             col = setColorScale(
                 seq(min(exprNodes$logFC),
                     max(exprNodes$logFC),

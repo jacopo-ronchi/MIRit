@@ -69,9 +69,7 @@ For detailed instructions on how to use `MIRit` for integrative miRNA-mRNA analy
 
 If you use `MIRit` in published research, please cite the corresponding paper:
 
-```{r 'citation', eval = requireNamespace('MIRit')}
-print(citation("MIRit"), bibtex = TRUE)
-```
+> Ronchi J and Foti M. 'MIRit: an integrative R framework for the identification of impaired miRNA-mRNA regulatory networks in complex diseases'. bioRxiv (2023). doi:10.1101/2023.11.24.568528
 
 Please note that the `MIRit` package was made possible thanks to many other R and bioinformatics software authors, which are cited either in the vignettes and/or the paper(s) describing this package.
 

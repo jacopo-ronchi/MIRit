@@ -266,14 +266,15 @@ findMirnaSNPs <- function(
     mirGenes$chromosome_name <- NULL
 
     ## intersect differentially expressed miRNAs with genes mapped with SNPs
-    mirMatches <- paste(mirGenes$hgnc_symbol, collapse = "|")
-    resDf <- varDf[grepl(mirMatches, varDf$gene_name), ]
+    hostNames <- paste(mirGenes$hgnc_symbol, "HG", sep = "")
+    mirMatches <- c(mirGenes$hgnc_symbol, hostNames)
+    resDf <- varDf[which(varDf$gene_name %in% mirMatches), ]
     if (nrow(resDf) == 0) {
         message("No disease-related SNPs are present within DE-miRNA loci.")
         return(NULL)
     }
-    idx2 <- sapply(mirGenes$hgnc_symbol, grep, resDf$gene_name)
-    idx1 <- sapply(seq_along(idx2), function(i) rep(i, length(idx2[[i]])))
+    idx2 <- lapply(mirGenes$hgnc_symbol, grep, resDf$gene_name)
+    idx1 <- lapply(seq_along(idx2), function(i) rep(i, length(idx2[[i]])))
     resDf <- cbind(
         mirGenes[unlist(idx1), , drop = FALSE],
         resDf[unlist(idx2), , drop = FALSE]

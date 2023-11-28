@@ -53,8 +53,7 @@ Given their regulatory importance, a complete characterization of miRNA dysregul
 
 If you use MIRit in published research, please cite:
 
-> Prova prova prova Prova prova, prova Journal of prova prova (2023) doi:
-> provaprovaprova...
+> Ronchi J and Foti M. 'MIRit: an integrative R framework for the identification of impaired miRNA-mRNA regulatory networks in complex diseases'. bioRxiv (2023). doi:10.1101/2023.11.24.568528
 
 This package internally uses different R/Bioconductor packages, remember to cite the appropriate publication.
 
