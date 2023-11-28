@@ -89,13 +89,13 @@ paper:
 
 ``` r
 print(citation("MIRit"), bibtex = TRUE)
-#> Per citare il pacchetto 'MIRit' nelle pubblicazioni utilizza:
+#> To cite package 'MIRit' in publications use:
 #> 
 #>   Ronchi J and Foti M. 'MIRit: an integrative R framework for the
 #>   identification of impaired miRNA-mRNA regulatory networks in complex
 #>   diseases'. bioRxiv (2023). doi:10.1101/2023.11.24.568528
 #> 
-#> Una voce BibTeX per gli utenti LaTeX è
+#> A BibTeX entry for LaTeX users is
 #> 
 #>   @Article{,
 #>     title = {MIRit: an integrative R framework for the identification of impaired miRNA-mRNA regulatory networks in complex diseases},
