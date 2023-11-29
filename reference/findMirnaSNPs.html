@@ -3,7 +3,7 @@
 affecting differentially expressed miRNA genes or their host genes.
 To do so, this function uses gwasrapidd to retrieve SNPs-disease
 associations, and then retains only SNPs that affect DE-miRNA genes or their
-relative host genes (for intronic miRNAs)."><meta property="og:image" content="/logo.png"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
+relative host genes (for intronic miRNAs)."><meta property="og:image" content="/logo.svg"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
@@ -150,7 +150,7 @@ and wrangle GWAS catalog data, Bioinformatics, Volume 36, Issue 2, January
 <span class="r-in"><span><span class="va">association</span> <span class="op">&lt;-</span> <span class="fu">findMirnaSNPs</span><span class="op">(</span><span class="va">obj</span>, <span class="va">disId</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Querying GWAS Catalog, this may take some time...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding genomic information of differentially expressed miRNAs...</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in textConnection(text, encoding = "UTF-8"):</span> invalid 'text' argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No disease-related SNPs are present within DE-miRNA loci.</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
