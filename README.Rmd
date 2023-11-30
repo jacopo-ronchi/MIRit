@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# MIRit <img src="man/figures/logo.png" align="right" height="139" alt="" />
+# MIRit <img src="man/figures/logo.svg" align="right" height="139" alt="" />
 
 <!-- badges: start -->
 [![GitHub issues](https://img.shields.io/github/issues/jacopo-ronchi/MIRit)](https://github.com/jacopo-ronchi/MIRit/issues)

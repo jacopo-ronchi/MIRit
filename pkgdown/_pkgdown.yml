@@ -1,11 +1,104 @@
 template:
   bootstrap: 5
+  bootswatch: lumen
 
 home:
   title: "Integrative miRNA-mRNA analysis with MIRit"
   sidebar:
-    structure: [links, license, community, citation, authors]
+    structure: [citation, links, license, community, authors]
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [search, github]
+
+footer:
+  structure: 
+    left: authors
+    right: [legal, pkgdown]
+  components:
+    legal: MIRit is provided without **any warranty**.
 
 authors:
   footer:
-    roles: [cre, fnd]
+    roles: [cre]
+
+reference:
+- title: The `MirnaExperiment` class
+  desc:  >
+    Methods and accessors for objects of class `MirnaExperiment`, the main
+    class in MIRit to work with miRNA and gene expression data.
+- contents:
+  - MirnaExperiment-class
+  - MirnaExperiment
+  - pairedSamples
+- title: Create example objects
+  desc:  >
+    Example datasets provided by MIRit for exploring the capabilities of the
+    software.
+- contents:
+  - mirnaCounts
+  - geneCounts
+  - loadExamples
+- title: Differential expression analysis
+  desc:  >
+    The functions used to perform miRNA and gene differential expression
+    analyses from start to finish.
+- contents:
+  - plotDimensions
+  - deAnalysis
+  - addDifferentialExpression
+  - deAccessors
+  - significantAccessors
+  - plotDE
+  - plotVolcano
+- title: Functional enrichment
+  desc:  >
+    Methods and functions used to perform functional enrichment analysis of
+    genes.
+- contents:
+  - FunctionalEnrichment-class
+  - starts_with("enrich")
+  - geneSet
+  - gseaPlot
+  - gseaRidgeplot
+  - supportedOrganisms
+- title: Retrieval of miRNA targets
+  desc:  >
+    The functions for obtaining and visualizing the target genes of
+    differentially expressed miRNAs.
+- contents:
+  - getTargets
+  - mirnaTargets
+- title: Disease-SNPs association
+  desc:  >
+    The functions used to associate differentially expressed miRNAs with
+    disease-related SNPs.
+- contents:
+  - searchDisease
+  - findMirnaSNPs
+  - mirVariantPlot
+  - getEvidence
+- title: Integrate miRNA and gene expression
+  desc:  >
+    The functions for integrating miRNA and gene expression levels for both
+    paired and unpaired samples.
+- contents:
+  - batchCorrection
+  - mirnaIntegration
+  - integration
+  - plotCorrelation
+- title: Topological pathway analysis
+  desc:  >
+    The functions needed to perform a comprehensive topology-aware integrative
+    pathway analysis (TAIPA) with MIRit.
+- contents:
+  - IntegrativePathwayAnalysis-class
+  - listPathways
+  - preparePathways
+  - topologicalAnalysis
+  - integratedPathways
+  - visualizeNetwork
+  - integrationDotplot
+  - augmentedPathways
+  - integrationDatabase

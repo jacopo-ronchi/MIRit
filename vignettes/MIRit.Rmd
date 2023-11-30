@@ -12,6 +12,8 @@ output:
     toc_float: true
     toc_depth: 2
     code_folding: show
+pkgdown:
+  as_is: true
 date: "`r doc_date()`"
 package: "`r pkg_ver('MIRit')`"
 link-citations: true
@@ -38,7 +40,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-<img src="../man/figures/logo.png" style="float:right; padding:20px" height="192" alt=""/>
+<img src="../man/figures/logo.svg" style="float:right; padding:20px" height="192" alt=""/>
 
 ## What is MIRit
 
