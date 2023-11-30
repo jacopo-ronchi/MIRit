@@ -4,7 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="MIRit">
 <title>Integrate miRNA and gene expression data with MIRit • MIRit</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -12,12 +13,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Integrate miRNA and gene expression data with MIRit">
 <meta property="og:description" content="MIRit">
 <meta property="og:image" content="/logo.svg">
@@ -26,59 +26,57 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">MIRit</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.0</span>
-      </span>
-    </div>
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    
+    <a class="navbar-brand me-2" href="../index.html">MIRit</a>
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../articles/MIRit.html">Get started</a>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="active nav-item">
+  <a class="nav-link" href="../articles/MIRit.html">Get started</a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/jacopo-ronchi/MIRit/" class="external-link">
-    <span class="fab fa-github fa-lg"></span>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/jacopo-ronchi/MIRit/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
 </div>
-<!--/.nav-collapse -->
+
+    
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+</nav><div class="container template-article">
 
-      
 
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Integrate miRNA and gene expression data with
-MIRit</h1>
+
+
+<div class="row">
+  <main id="main" class="col-md-9"><div class="page-header">
+      <img src="../logo.svg" class="logo" alt=""><h1>Integrate miRNA and gene expression data with MIRit</h1>
                         <h4 data-toc-skip class="author">Jacopo
 Ronchi</h4>
             <address class="author_afil">
@@ -86,11 +84,10 @@ Ronchi</h4>
 Italy<br><a class="author_email" href="mailto:#"></a><a href="mailto:jacopo.ronchi@unimib.it" class="email">jacopo.ronchi@unimib.it</a>
       </address>
                   
-            <h4 data-toc-skip class="date">29 November 2023</h4>
+            <h4 data-toc-skip class="date">30 novembre 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jacopo-ronchi/MIRit/blob/HEAD/vignettes/MIRit.Rmd" class="external-link"><code>vignettes/MIRit.Rmd</code></a></small>
-      <div class="hidden name"><code>MIRit.Rmd</code></div>
-
+      <div class="d-none name"><code>MIRit.Rmd</code></div>
     </div>
 
     
@@ -248,7 +245,7 @@ according to HGNC (e.g. TYK2, BDNF, NTRK2).</p>
 multiple technologies, including microarrays, RNA-Seq and proteomics.
 The only requirement is that, for microarray studies, expression
 matrices must be normalized and log2 transformed. This can be achieved
-by applying the RMA algorithm implemented in the <em><a href="https://bioconductor.org/packages/3.19/oligo" class="external-link">oligo</a></em> <span class="citation">(<a href="#ref-carvalho_framework_2010">Carvalho and
+by applying the RMA algorithm implemented in the <em><a href="https://bioconductor.org/packages/3.17/oligo" class="external-link">oligo</a></em> <span class="citation">(<a href="#ref-carvalho_framework_2010">Carvalho and
 Irizarry 2010</a>)</span> package, or by applying other quantile
 normalization strategies. On the contrary, for RNA-Seq and miRNA-Seq
 experiments, the simple count matrix must be supplied.</p>
@@ -508,16 +505,16 @@ model used for differential expression analysis (see Section
 this concern, MIRit provides different options based on the technology
 used for generating expression data. Indeed, when expression
 measurements derive from microarrays, MIRit calculates differentially
-expressed features through the pipeline implemented in the <em><a href="https://bioconductor.org/packages/3.19/limma" class="external-link">limma</a></em>
+expressed features through the pipeline implemented in the <em><a href="https://bioconductor.org/packages/3.17/limma" class="external-link">limma</a></em>
 package. On the other hand, when expression values derive from RNA-Seq
 experiments, MIRit allows to choose between different approaches,
 including:</p>
 <ul>
-<li>the approach defined in the <em><a href="https://bioconductor.org/packages/3.19/edgeR" class="external-link">edgeR</a></em>
+<li>the approach defined in the <em><a href="https://bioconductor.org/packages/3.17/edgeR" class="external-link">edgeR</a></em>
 package;</li>
-<li>the approach defined in the <em><a href="https://bioconductor.org/packages/3.19/DESeq2" class="external-link">DESeq2</a></em>
+<li>the approach defined in the <em><a href="https://bioconductor.org/packages/3.17/DESeq2" class="external-link">DESeq2</a></em>
 package;</li>
-<li>the <code>limma-voom</code> approach defined in the <em><a href="https://bioconductor.org/packages/3.19/limma" class="external-link">limma</a></em>
+<li>the <code>limma-voom</code> approach defined in the <em><a href="https://bioconductor.org/packages/3.17/limma" class="external-link">limma</a></em>
 package.</li>
 </ul>
 <p>Moreover, MIRit gives the possibility of fully customizing the
@@ -585,7 +582,7 @@ for computing differentially expressed features. As stated in Section
 <code>limma</code>, while for RNA-Seq experiments, the user can choose
 between <code>edgeR</code>, <code>DESeq2</code>, and <code>voom</code>
 (for limma-voom). In our case we are going to perform differential
-expression analysis through the pipeline implemented in the <em><a href="https://bioconductor.org/packages/3.19/edgeR" class="external-link">edgeR</a></em>
+expression analysis through the pipeline implemented in the <em><a href="https://bioconductor.org/packages/3.17/edgeR" class="external-link">edgeR</a></em>
 package.</li>
 </ul>
 <p>Following our example, let’s calculate differentially expressed genes
@@ -887,7 +884,7 @@ sets, which consist in collections of genes that are annotated to
 specific functions or terms. Independently from the strategy used for
 the analysis, functional enrichment methods need access to these
 properly curated collections of genes. In the effort of providing access
-to a vast number of these resources, MIRit uses the <em><a href="https://bioconductor.org/packages/3.19/geneset" class="external-link">geneset</a></em>
+to a vast number of these resources, MIRit uses the <em><a href="https://bioconductor.org/packages/3.17/geneset" class="external-link">geneset</a></em>
 package to support multiple databases, including Gene Ontology (GO),
 Kyoto Encyclopedia of Genes and Genomes (KEGG), MsigDB, WikiPathways,
 Reactome, Enrichr, Disease Ontology (DO), Network of Cancer Genes (NCG),
@@ -966,6 +963,36 @@ sets provided by the KEGG pathway database.</p>
 <span><span class="co">#&gt; Since not specified, 'category' for KEGG database is set to pathway (default).</span></span>
 <span><span class="co">#&gt; Preparing the appropriate gene set...</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Registered S3 methods overwritten by 'treeio':</span></span>
+<span><span class="co">#&gt;   method              from    </span></span>
+<span><span class="co">#&gt;   MRCA.phylo          tidytree</span></span>
+<span><span class="co">#&gt;   MRCA.treedata       tidytree</span></span>
+<span><span class="co">#&gt;   Nnode.treedata      tidytree</span></span>
+<span><span class="co">#&gt;   Ntip.treedata       tidytree</span></span>
+<span><span class="co">#&gt;   ancestor.phylo      tidytree</span></span>
+<span><span class="co">#&gt;   ancestor.treedata   tidytree</span></span>
+<span><span class="co">#&gt;   child.phylo         tidytree</span></span>
+<span><span class="co">#&gt;   child.treedata      tidytree</span></span>
+<span><span class="co">#&gt;   full_join.phylo     tidytree</span></span>
+<span><span class="co">#&gt;   full_join.treedata  tidytree</span></span>
+<span><span class="co">#&gt;   groupClade.phylo    tidytree</span></span>
+<span><span class="co">#&gt;   groupClade.treedata tidytree</span></span>
+<span><span class="co">#&gt;   groupOTU.phylo      tidytree</span></span>
+<span><span class="co">#&gt;   groupOTU.treedata   tidytree</span></span>
+<span><span class="co">#&gt;   inner_join.phylo    tidytree</span></span>
+<span><span class="co">#&gt;   inner_join.treedata tidytree</span></span>
+<span><span class="co">#&gt;   is.rooted.treedata  tidytree</span></span>
+<span><span class="co">#&gt;   nodeid.phylo        tidytree</span></span>
+<span><span class="co">#&gt;   nodeid.treedata     tidytree</span></span>
+<span><span class="co">#&gt;   nodelab.phylo       tidytree</span></span>
+<span><span class="co">#&gt;   nodelab.treedata    tidytree</span></span>
+<span><span class="co">#&gt;   offspring.phylo     tidytree</span></span>
+<span><span class="co">#&gt;   offspring.treedata  tidytree</span></span>
+<span><span class="co">#&gt;   parent.phylo        tidytree</span></span>
+<span><span class="co">#&gt;   parent.treedata     tidytree</span></span>
+<span><span class="co">#&gt;   root.treedata       tidytree</span></span>
+<span><span class="co">#&gt;   rootnode.phylo      tidytree</span></span>
+<span><span class="co">#&gt;   sibling.phylo       tidytree</span></span>
 <span><span class="co">#&gt; Some ID occurs one-to-many match, like "79154, 7920, 79143"...</span></span>
 <span><span class="co">#&gt; 99.96% genes are mapped to symbol</span></span>
 <span><span class="co">#&gt; Ranking genes based on signed.pval...</span></span>
@@ -1014,24 +1041,24 @@ thyroid cancer.</caption>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">Thyroid hormone synthesis</td>
-<td align="right">0</td>
-<td align="right">0.03</td>
-<td align="right">0.52</td>
-<td align="right">-0.67</td>
-<td align="right">-2.00</td>
-<td align="right">27</td>
-<td align="left">SLC26A4,….</td>
-</tr>
-<tr class="even">
 <td align="left">Protein processing in endoplasmic reticulum</td>
 <td align="right">0</td>
-<td align="right">0.03</td>
-<td align="right">0.50</td>
+<td align="right">0.02</td>
+<td align="right">0.52</td>
 <td align="right">-0.54</td>
 <td align="right">-1.85</td>
 <td align="right">55</td>
 <td align="left">BCL2, HY….</td>
+</tr>
+<tr class="even">
+<td align="left">Thyroid hormone synthesis</td>
+<td align="right">0</td>
+<td align="right">0.02</td>
+<td align="right">0.52</td>
+<td align="right">-0.67</td>
+<td align="right">-1.95</td>
+<td align="right">27</td>
+<td align="left">SLC26A4,….</td>
 </tr>
 </tbody>
 </table>
@@ -1234,7 +1261,7 @@ method when samples are paired;</li>
 Boschloo’s exact test;</li>
 <li>
 <strong>Rotation gene-set tests</strong>, as implemented in the
-<code>fry</code> function from <em><a href="https://bioconductor.org/packages/3.19/limma" class="external-link">limma</a></em>
+<code>fry</code> function from <em><a href="https://bioconductor.org/packages/3.17/limma" class="external-link">limma</a></em>
 package.</li>
 </ul>
 <p>For unpaired data, only association tests and rotation gene-set tests
@@ -1549,7 +1576,7 @@ of target genes can be estimated through rotation gene-set tests. In
 this approach, we want to evaluate for each miRNA whether its target
 genes tend to be differentially expressed in the opposite direction. In
 particular, a fast approximation to rotation gene-set testing called
-<code>fry</code>, implemented in the <em><a href="https://bioconductor.org/packages/3.19/limma" class="external-link">limma</a></em>
+<code>fry</code>, implemented in the <em><a href="https://bioconductor.org/packages/3.17/limma" class="external-link">limma</a></em>
 package, can be used to statistically quantify the influence of miRNAs
 on expression changes of their target genes.</p>
 <p>To perform the integrative analysis through rotation gene-set tests,
@@ -1690,7 +1717,7 @@ approaches.</p>
 </h3>
 <p>Before performing TAIPA, we need to create miRNA-augmented networks.
 To do so, MIRit implements the <code><a href="../reference/preparePathways.html">preparePathways()</a></code> function,
-which automatically uses the <em><a href="https://bioconductor.org/packages/3.19/graphite" class="external-link">graphite</a></em>
+which automatically uses the <em><a href="https://bioconductor.org/packages/3.17/graphite" class="external-link">graphite</a></em>
 R package to download biological networks from multiple pathway
 databases, namely <code>KEGG</code>, <code>WikiPathways</code> and
 <code>Reactome</code>. Then, each pathway is converted to a
@@ -1743,7 +1770,7 @@ implemented in C++ language. Furthermore, since computing pathway score
 for 10000 networks for each pathway is computationally intensive,
 parallel computing has been employed to reduce running time. The user
 can modify the parallel computing behavior by specifying the
-<code>BPPARAM</code> parameter. See the help page of the <em><a href="https://bioconductor.org/packages/3.19/BiocParallel" class="external-link">BiocParallel</a></em>
+<code>BPPARAM</code> parameter. See the help page of the <em><a href="https://bioconductor.org/packages/3.17/BiocParallel" class="external-link">BiocParallel</a></em>
 package for further details. Both the <code><a href="../reference/preparePathways.html">preparePathways()</a></code> and
 the <code><a href="../reference/topologicalAnalysis.html">topologicalAnalysis()</a></code> functions accept the
 <code>BPPARAM</code> option.</p>
@@ -1805,128 +1832,124 @@ transcription of thyroid hormone.
 <div class="section level2">
 <h2 class="unnumbered" id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<pre><code><span><span class="co">#&gt; R Under development (unstable) (2023-11-22 r85609)</span></span>
-<span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
-<span><span class="co">#&gt; Running under: Ubuntu 22.04.3 LTS</span></span>
+<pre><code><span><span class="co">#&gt; R version 4.3.2 (2023-10-31)</span></span>
+<span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
+<span><span class="co">#&gt; Running under: Ubuntu 20.04.6 LTS</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
-<span><span class="co">#&gt; BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
-<span><span class="co">#&gt; LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0</span></span>
+<span><span class="co">#&gt; BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0 </span></span>
+<span><span class="co">#&gt; LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; locale:</span></span>
-<span><span class="co">#&gt;  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span></span>
-<span><span class="co">#&gt;  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    </span></span>
-<span><span class="co">#&gt;  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   </span></span>
-<span><span class="co">#&gt;  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 </span></span>
+<span><span class="co">#&gt;  [1] LC_CTYPE=it_IT.UTF-8       LC_NUMERIC=C              </span></span>
+<span><span class="co">#&gt;  [3] LC_TIME=it_IT.UTF-8        LC_COLLATE=it_IT.UTF-8    </span></span>
+<span><span class="co">#&gt;  [5] LC_MONETARY=it_IT.UTF-8    LC_MESSAGES=it_IT.UTF-8   </span></span>
+<span><span class="co">#&gt;  [7] LC_PAPER=it_IT.UTF-8       LC_NAME=C                 </span></span>
 <span><span class="co">#&gt;  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span></span>
-<span><span class="co">#&gt; [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span></span>
+<span><span class="co">#&gt; [11] LC_MEASUREMENT=it_IT.UTF-8 LC_IDENTIFICATION=C       </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; time zone: UTC</span></span>
+<span><span class="co">#&gt; time zone: Europe/Rome</span></span>
 <span><span class="co">#&gt; tzcode source: system (glibc)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; attached base packages:</span></span>
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] fstcore_0.9.14   MIRit_0.99.0     BiocStyle_2.31.0</span></span>
+<span><span class="co">#&gt; [1] fstcore_0.9.14   MIRit_0.99.0     BiocStyle_2.28.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;   [1] fs_1.6.3                      matrixStats_1.1.0            </span></span>
-<span><span class="co">#&gt;   [3] bitops_1.0-7                  enrichplot_1.23.0            </span></span>
-<span><span class="co">#&gt;   [5] devtools_2.4.5                HDO.db_0.99.1                </span></span>
-<span><span class="co">#&gt;   [7] httr_1.4.7                    RColorBrewer_1.1-3           </span></span>
-<span><span class="co">#&gt;   [9] Rgraphviz_2.47.0              profvis_0.3.8                </span></span>
-<span><span class="co">#&gt;  [11] tools_4.4.0                   backports_1.4.1              </span></span>
-<span><span class="co">#&gt;  [13] utf8_1.2.4                    R6_2.5.1                     </span></span>
-<span><span class="co">#&gt;  [15] lazyeval_0.2.2                urlchecker_1.0.1             </span></span>
-<span><span class="co">#&gt;  [17] withr_2.5.2                   prettyunits_1.2.0            </span></span>
-<span><span class="co">#&gt;  [19] gridExtra_2.3                 cli_3.6.1                    </span></span>
-<span><span class="co">#&gt;  [21] Biobase_2.63.0                textshaping_0.3.7            </span></span>
-<span><span class="co">#&gt;  [23] scatterpie_0.2.1              MonoPoly_0.3-10              </span></span>
-<span><span class="co">#&gt;  [25] labeling_0.4.3                sass_0.4.7                   </span></span>
-<span><span class="co">#&gt;  [27] geneset_0.2.7                 pkgdown_2.0.7.9000           </span></span>
-<span><span class="co">#&gt;  [29] systemfonts_1.0.5             yulab.utils_0.1.0            </span></span>
-<span><span class="co">#&gt;  [31] gson_0.1.0                    DOSE_3.29.0                  </span></span>
-<span><span class="co">#&gt;  [33] sessioninfo_1.2.2             limma_3.59.1                 </span></span>
-<span><span class="co">#&gt;  [35] RSQLite_2.3.3                 generics_0.1.3               </span></span>
-<span><span class="co">#&gt;  [37] gridGraphics_0.5-1            car_3.1-2                    </span></span>
-<span><span class="co">#&gt;  [39] dplyr_1.1.4                   zip_2.3.0                    </span></span>
-<span><span class="co">#&gt;  [41] GO.db_3.18.0                  Matrix_1.6-3                 </span></span>
-<span><span class="co">#&gt;  [43] fansi_1.0.5                   S4Vectors_0.41.2             </span></span>
-<span><span class="co">#&gt;  [45] abind_1.4-5                   lifecycle_1.0.4              </span></span>
-<span><span class="co">#&gt;  [47] yaml_2.3.7                    edgeR_4.1.2                  </span></span>
-<span><span class="co">#&gt;  [49] carData_3.0-5                 SummarizedExperiment_1.33.0  </span></span>
-<span><span class="co">#&gt;  [51] qvalue_2.35.0                 SparseArray_1.3.1            </span></span>
-<span><span class="co">#&gt;  [53] BiocFileCache_2.11.1          grid_4.4.0                   </span></span>
-<span><span class="co">#&gt;  [55] blob_1.2.4                    promises_1.2.1               </span></span>
-<span><span class="co">#&gt;  [57] crayon_1.5.2                  miniUI_0.1.1.1               </span></span>
-<span><span class="co">#&gt;  [59] lattice_0.22-5                cowplot_1.1.1                </span></span>
-<span><span class="co">#&gt;  [61] KEGGREST_1.43.0               pillar_1.9.0                 </span></span>
-<span><span class="co">#&gt;  [63] knitr_1.45                    fgsea_1.29.0                 </span></span>
-<span><span class="co">#&gt;  [65] GenomicRanges_1.55.1          codetools_0.2-19             </span></span>
-<span><span class="co">#&gt;  [67] fastmatch_1.1-4               glue_1.6.2                   </span></span>
-<span><span class="co">#&gt;  [69] ggvenn_0.1.10                 ggfun_0.1.3                  </span></span>
-<span><span class="co">#&gt;  [71] data.table_1.14.8             remotes_2.4.2.1              </span></span>
-<span><span class="co">#&gt;  [73] MultiAssayExperiment_1.29.0   vctrs_0.6.4                  </span></span>
-<span><span class="co">#&gt;  [75] png_0.1-8                     treeio_1.27.0                </span></span>
-<span><span class="co">#&gt;  [77] urltools_1.7.3                gtable_0.3.4                 </span></span>
-<span><span class="co">#&gt;  [79] cachem_1.0.8                  xfun_0.41                    </span></span>
-<span><span class="co">#&gt;  [81] openxlsx_4.2.5.2              europepmc_0.4.3              </span></span>
-<span><span class="co">#&gt;  [83] S4Arrays_1.3.1                mime_0.12                    </span></span>
-<span><span class="co">#&gt;  [85] tidygraph_1.2.3               statmod_1.5.0                </span></span>
-<span><span class="co">#&gt;  [87] genekitr_1.2.5                interactiveDisplayBase_1.41.0</span></span>
-<span><span class="co">#&gt;  [89] ellipsis_0.3.2                nlme_3.1-164                 </span></span>
-<span><span class="co">#&gt;  [91] usethis_2.2.2                 ggtree_3.11.0                </span></span>
-<span><span class="co">#&gt;  [93] bit64_4.0.5                   progress_1.2.2               </span></span>
-<span><span class="co">#&gt;  [95] filelock_1.0.2                GenomeInfoDb_1.39.1          </span></span>
-<span><span class="co">#&gt;  [97] rprojroot_2.0.4               bslib_0.6.1                  </span></span>
-<span><span class="co">#&gt;  [99] colorspace_2.1-0              BiocGenerics_0.49.1          </span></span>
-<span><span class="co">#&gt; [101] DBI_1.1.3                     tidyselect_1.2.0             </span></span>
-<span><span class="co">#&gt; [103] processx_3.8.2                bit_4.0.5                    </span></span>
-<span><span class="co">#&gt; [105] compiler_4.4.0                curl_5.1.0                   </span></span>
-<span><span class="co">#&gt; [107] graph_1.81.0                  xml2_1.3.5                   </span></span>
-<span><span class="co">#&gt; [109] desc_1.4.2                    DelayedArray_0.29.0          </span></span>
-<span><span class="co">#&gt; [111] bookdown_0.36                 shadowtext_0.1.2             </span></span>
-<span><span class="co">#&gt; [113] triebeard_0.4.1               scales_1.3.0                 </span></span>
-<span><span class="co">#&gt; [115] quadprog_1.5-8                callr_3.7.3                  </span></span>
-<span><span class="co">#&gt; [117] rappdirs_0.3.3                stringr_1.5.1                </span></span>
-<span><span class="co">#&gt; [119] digest_0.6.33                 rmarkdown_2.25               </span></span>
-<span><span class="co">#&gt; [121] XVector_0.43.0                htmltools_0.5.7              </span></span>
-<span><span class="co">#&gt; [123] pkgconfig_2.0.3               fst_0.9.8                    </span></span>
-<span><span class="co">#&gt; [125] MatrixGenerics_1.15.0         highr_0.10                   </span></span>
-<span><span class="co">#&gt; [127] dbplyr_2.4.0                  fastmap_1.1.1                </span></span>
-<span><span class="co">#&gt; [129] rlang_1.1.2                   htmlwidgets_1.6.3            </span></span>
-<span><span class="co">#&gt; [131] shiny_1.8.0                   farver_2.1.1                 </span></span>
-<span><span class="co">#&gt; [133] jquerylib_0.1.4               jsonlite_1.8.7               </span></span>
-<span><span class="co">#&gt; [135] BiocParallel_1.37.0           GOSemSim_2.29.0              </span></span>
-<span><span class="co">#&gt; [137] RCurl_1.98-1.13               magrittr_2.0.3               </span></span>
-<span><span class="co">#&gt; [139] GenomeInfoDbData_1.2.11       ggplotify_0.1.2              </span></span>
-<span><span class="co">#&gt; [141] patchwork_1.1.3               munsell_0.5.0                </span></span>
-<span><span class="co">#&gt; [143] Rcpp_1.0.11                   ape_5.7-1                    </span></span>
-<span><span class="co">#&gt; [145] viridis_0.6.4                 stringi_1.8.2                </span></span>
-<span><span class="co">#&gt; [147] ggraph_2.1.0                  zlibbioc_1.49.0              </span></span>
-<span><span class="co">#&gt; [149] MASS_7.3-60.1                 AnnotationHub_3.11.0         </span></span>
-<span><span class="co">#&gt; [151] plyr_1.8.9                    pkgbuild_1.4.2               </span></span>
-<span><span class="co">#&gt; [153] parallel_4.4.0                HPO.db_0.99.2                </span></span>
-<span><span class="co">#&gt; [155] ggrepel_0.9.4                 Biostrings_2.71.1            </span></span>
-<span><span class="co">#&gt; [157] graphlayouts_1.0.2            splines_4.4.0                </span></span>
-<span><span class="co">#&gt; [159] hms_1.1.3                     locfit_1.5-9.8               </span></span>
-<span><span class="co">#&gt; [161] ps_1.7.5                      igraph_1.5.1                 </span></span>
-<span><span class="co">#&gt; [163] ggpubr_0.6.0                  ggsignif_0.6.4               </span></span>
-<span><span class="co">#&gt; [165] reshape2_1.4.4                stats4_4.4.0                 </span></span>
-<span><span class="co">#&gt; [167] pkgload_1.3.3                 BiocVersion_3.19.1           </span></span>
-<span><span class="co">#&gt; [169] evaluate_0.23                 BiocManager_1.30.22          </span></span>
-<span><span class="co">#&gt; [171] tweenr_2.0.2                  httpuv_1.6.12                </span></span>
-<span><span class="co">#&gt; [173] tidyr_1.3.0                   purrr_1.0.2                  </span></span>
-<span><span class="co">#&gt; [175] polyclip_1.10-6               ggplot2_3.4.4                </span></span>
-<span><span class="co">#&gt; [177] BiocBaseUtils_1.5.0           ggforce_0.4.1                </span></span>
-<span><span class="co">#&gt; [179] broom_1.0.5                   xtable_1.8-4                 </span></span>
-<span><span class="co">#&gt; [181] tidytree_0.4.5                MPO.db_0.99.7                </span></span>
-<span><span class="co">#&gt; [183] rstatix_0.7.2                 later_1.3.1                  </span></span>
-<span><span class="co">#&gt; [185] viridisLite_0.4.2             ragg_1.2.6                   </span></span>
-<span><span class="co">#&gt; [187] tibble_3.2.1                  clusterProfiler_4.11.0       </span></span>
-<span><span class="co">#&gt; [189] aplot_0.2.2                   memoise_2.0.1                </span></span>
-<span><span class="co">#&gt; [191] AnnotationDbi_1.65.2          IRanges_2.37.0</span></span></code></pre>
+<span><span class="co">#&gt;   [1] later_1.3.1                 splines_4.3.2              </span></span>
+<span><span class="co">#&gt;   [3] genekitr_1.2.5              urltools_1.7.3             </span></span>
+<span><span class="co">#&gt;   [5] bitops_1.0-7                ggplotify_0.1.2            </span></span>
+<span><span class="co">#&gt;   [7] tibble_3.2.1                triebeard_0.4.1            </span></span>
+<span><span class="co">#&gt;   [9] polyclip_1.10-4             graph_1.78.0               </span></span>
+<span><span class="co">#&gt;  [11] lifecycle_1.0.3             rstatix_0.7.2              </span></span>
+<span><span class="co">#&gt;  [13] edgeR_3.42.4                rprojroot_2.0.3            </span></span>
+<span><span class="co">#&gt;  [15] processx_3.8.2              lattice_0.22-5             </span></span>
+<span><span class="co">#&gt;  [17] MASS_7.3-60                 MultiAssayExperiment_1.26.0</span></span>
+<span><span class="co">#&gt;  [19] backports_1.4.1             magrittr_2.0.3             </span></span>
+<span><span class="co">#&gt;  [21] openxlsx_4.2.5.2            limma_3.56.2               </span></span>
+<span><span class="co">#&gt;  [23] sass_0.4.7                  rmarkdown_2.25             </span></span>
+<span><span class="co">#&gt;  [25] remotes_2.4.2.1             jquerylib_0.1.4            </span></span>
+<span><span class="co">#&gt;  [27] yaml_2.3.7                  httpuv_1.6.11              </span></span>
+<span><span class="co">#&gt;  [29] zip_2.3.0                   sessioninfo_1.2.2          </span></span>
+<span><span class="co">#&gt;  [31] pkgbuild_1.4.2              ggvenn_0.1.10              </span></span>
+<span><span class="co">#&gt;  [33] cowplot_1.1.1               DBI_1.1.3                  </span></span>
+<span><span class="co">#&gt;  [35] RColorBrewer_1.1-3          pkgload_1.3.3              </span></span>
+<span><span class="co">#&gt;  [37] abind_1.4-5                 zlibbioc_1.46.0            </span></span>
+<span><span class="co">#&gt;  [39] quadprog_1.5-8              GenomicRanges_1.52.0       </span></span>
+<span><span class="co">#&gt;  [41] purrr_1.0.2                 ggraph_2.1.0               </span></span>
+<span><span class="co">#&gt;  [43] BiocGenerics_0.46.0         RCurl_1.98-1.12            </span></span>
+<span><span class="co">#&gt;  [45] yulab.utils_0.1.0           tweenr_2.0.2               </span></span>
+<span><span class="co">#&gt;  [47] GenomeInfoDbData_1.2.10     IRanges_2.34.1             </span></span>
+<span><span class="co">#&gt;  [49] S4Vectors_0.38.1            enrichplot_1.20.3          </span></span>
+<span><span class="co">#&gt;  [51] ggrepel_0.9.3               tidytree_0.4.5             </span></span>
+<span><span class="co">#&gt;  [53] pkgdown_2.0.7               codetools_0.2-19           </span></span>
+<span><span class="co">#&gt;  [55] DelayedArray_0.26.7         xml2_1.3.5                 </span></span>
+<span><span class="co">#&gt;  [57] DOSE_3.26.1                 ggforce_0.4.1              </span></span>
+<span><span class="co">#&gt;  [59] tidyselect_1.2.0            aplot_0.2.1                </span></span>
+<span><span class="co">#&gt;  [61] farver_2.1.1                viridis_0.6.4              </span></span>
+<span><span class="co">#&gt;  [63] matrixStats_1.0.0           stats4_4.3.2               </span></span>
+<span><span class="co">#&gt;  [65] jsonlite_1.8.7              fst_0.9.8                  </span></span>
+<span><span class="co">#&gt;  [67] ellipsis_0.3.2              tidygraph_1.2.3            </span></span>
+<span><span class="co">#&gt;  [69] systemfonts_1.0.4           progress_1.2.2             </span></span>
+<span><span class="co">#&gt;  [71] tools_4.3.2                 treeio_1.24.3              </span></span>
+<span><span class="co">#&gt;  [73] ragg_1.2.5                  Rcpp_1.0.11                </span></span>
+<span><span class="co">#&gt;  [75] glue_1.6.2                  gridExtra_2.3              </span></span>
+<span><span class="co">#&gt;  [77] BiocBaseUtils_1.2.0         xfun_0.40                  </span></span>
+<span><span class="co">#&gt;  [79] usethis_2.2.2               qvalue_2.32.0              </span></span>
+<span><span class="co">#&gt;  [81] MatrixGenerics_1.12.3       GenomeInfoDb_1.36.3        </span></span>
+<span><span class="co">#&gt;  [83] dplyr_1.1.3                 withr_2.5.0                </span></span>
+<span><span class="co">#&gt;  [85] BiocManager_1.30.22         fastmap_1.1.1              </span></span>
+<span><span class="co">#&gt;  [87] fansi_1.0.4                 callr_3.7.3                </span></span>
+<span><span class="co">#&gt;  [89] digest_0.6.33               mime_0.12                  </span></span>
+<span><span class="co">#&gt;  [91] R6_2.5.1                    gridGraphics_0.5-1         </span></span>
+<span><span class="co">#&gt;  [93] textshaping_0.3.6           colorspace_2.1-0           </span></span>
+<span><span class="co">#&gt;  [95] GO.db_3.17.0                RSQLite_2.3.1              </span></span>
+<span><span class="co">#&gt;  [97] utf8_1.2.3                  tidyr_1.3.0                </span></span>
+<span><span class="co">#&gt;  [99] generics_0.1.3              data.table_1.14.8          </span></span>
+<span><span class="co">#&gt; [101] htmlwidgets_1.6.2           prettyunits_1.1.1          </span></span>
+<span><span class="co">#&gt; [103] graphlayouts_1.0.1          httr_1.4.7                 </span></span>
+<span><span class="co">#&gt; [105] S4Arrays_1.2.0              scatterpie_0.2.1           </span></span>
+<span><span class="co">#&gt; [107] pkgconfig_2.0.3             gtable_0.3.4               </span></span>
+<span><span class="co">#&gt; [109] blob_1.2.4                  XVector_0.40.0             </span></span>
+<span><span class="co">#&gt; [111] clusterProfiler_4.8.3       shadowtext_0.1.2           </span></span>
+<span><span class="co">#&gt; [113] htmltools_0.5.6             carData_3.0-5              </span></span>
+<span><span class="co">#&gt; [115] geneset_0.2.7               profvis_0.3.8              </span></span>
+<span><span class="co">#&gt; [117] bookdown_0.35               fgsea_1.26.0               </span></span>
+<span><span class="co">#&gt; [119] scales_1.2.1                Biobase_2.60.0             </span></span>
+<span><span class="co">#&gt; [121] png_0.1-8                   ggfun_0.1.3                </span></span>
+<span><span class="co">#&gt; [123] knitr_1.45                  rstudioapi_0.15.0          </span></span>
+<span><span class="co">#&gt; [125] reshape2_1.4.4              nlme_3.1-163               </span></span>
+<span><span class="co">#&gt; [127] cachem_1.0.8                stringr_1.5.0              </span></span>
+<span><span class="co">#&gt; [129] miniUI_0.1.1.1              parallel_4.3.2             </span></span>
+<span><span class="co">#&gt; [131] HDO.db_0.99.1               AnnotationDbi_1.62.2       </span></span>
+<span><span class="co">#&gt; [133] desc_1.4.2                  pillar_1.9.0               </span></span>
+<span><span class="co">#&gt; [135] grid_4.3.2                  vctrs_0.6.3                </span></span>
+<span><span class="co">#&gt; [137] urlchecker_1.0.1            promises_1.2.1             </span></span>
+<span><span class="co">#&gt; [139] ggpubr_0.6.0                car_3.1-2                  </span></span>
+<span><span class="co">#&gt; [141] xtable_1.8-4                Rgraphviz_2.44.0           </span></span>
+<span><span class="co">#&gt; [143] evaluate_0.21               cli_3.6.1                  </span></span>
+<span><span class="co">#&gt; [145] locfit_1.5-9.8              compiler_4.3.2             </span></span>
+<span><span class="co">#&gt; [147] rlang_1.1.1                 crayon_1.5.2               </span></span>
+<span><span class="co">#&gt; [149] ggsignif_0.6.4              labeling_0.4.3             </span></span>
+<span><span class="co">#&gt; [151] ps_1.7.5                    plyr_1.8.8                 </span></span>
+<span><span class="co">#&gt; [153] fs_1.6.3                    stringi_1.7.12             </span></span>
+<span><span class="co">#&gt; [155] viridisLite_0.4.2           BiocParallel_1.34.2        </span></span>
+<span><span class="co">#&gt; [157] munsell_0.5.0               Biostrings_2.68.1          </span></span>
+<span><span class="co">#&gt; [159] lazyeval_0.2.2              devtools_2.4.5             </span></span>
+<span><span class="co">#&gt; [161] GOSemSim_2.26.1             Matrix_1.6-3               </span></span>
+<span><span class="co">#&gt; [163] europepmc_0.4.3             hms_1.1.3                  </span></span>
+<span><span class="co">#&gt; [165] patchwork_1.1.3             bit64_4.0.5                </span></span>
+<span><span class="co">#&gt; [167] ggplot2_3.4.3               shiny_1.7.5                </span></span>
+<span><span class="co">#&gt; [169] KEGGREST_1.40.0             statmod_1.5.0              </span></span>
+<span><span class="co">#&gt; [171] SummarizedExperiment_1.30.2 highr_0.10                 </span></span>
+<span><span class="co">#&gt; [173] igraph_1.5.1                broom_1.0.5                </span></span>
+<span><span class="co">#&gt; [175] memoise_2.0.1               bslib_0.5.1                </span></span>
+<span><span class="co">#&gt; [177] ggtree_3.8.2                fastmatch_1.1-4            </span></span>
+<span><span class="co">#&gt; [179] bit_4.0.5                   MonoPoly_0.3-10            </span></span>
+<span><span class="co">#&gt; [181] downloader_0.4              ape_5.7-1                  </span></span>
+<span><span class="co">#&gt; [183] gson_0.1.0</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -2000,33 +2023,26 @@ Research</em> 40 (17): e133. <a href="https://doi.org/10.1093/nar/gks461" class=
 </div>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
-
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
+    <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Jacopo Ronchi.</p>
+<p>Developed by Jacopo Ronchi, Maria Foti.</p>
 </div>
 
-<div class="pkgdown">
+<div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
-
 
   
 
