@@ -1,6 +1,5 @@
 template:
   bootstrap: 5
-  bootswatch: lumen
 
 home:
   title: "Integrative miRNA-mRNA analysis with MIRit"
@@ -14,8 +13,8 @@ navbar:
 
 footer:
   structure: 
-    left: authors
-    right: [legal, pkgdown]
+    left: developed_by
+    right: [legal, built_with]
   components:
     legal: MIRit is provided without **any warranty**.
 
