@@ -1,0 +1,11 @@
+template:
+  bootstrap: 5
+
+home:
+  title: "Integrative miRNA-mRNA analysis with MIRit"
+  sidebar:
+    structure: [links, license, community, citation, authors]
+
+authors:
+  footer:
+    roles: [cre, fnd]

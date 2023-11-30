@@ -30,8 +30,6 @@ dependencies](https://bioconductor.org/shields/dependencies/release/MIRit.svg)](
 coverage](https://codecov.io/gh/jacopo-ronchi/MIRit/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/jacopo-ronchi/MIRit?branch=devel)
 <!-- badges: end -->
 
-## Overview
-
 `MIRit` (miRNA integration tool) is an open-source R package that aims
 to facilitate the comprehension of microRNA (miRNA) biology through the
 integrative analysis of gene and miRNA expression data deriving from
@@ -44,10 +42,14 @@ all-in-one framework that provides flexible and powerful methods for
 performing integrative miRNA-mRNA multi-omic analyses from start to
 finish.
 
-## Author
+## Authors
 
 **Dr. Jacopo Ronchi**
 <a itemprop="sameAs" content="https://orcid.org/0000-0001-5520-4631" href="https://orcid.org/0000-0001-5520-4631" target="orcid.widget" rel="noopener noreferrer" style="vertical-align:top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon"></a><sup>1</sup>
+(author and maintainer)
+
+**Dr. Maria Foti**
+<a itemprop="sameAs" content="https://orcid.org/0000-0002-4481-1900" href="https://orcid.org/0000-0002-4481-1900" target="orcid.widget" rel="noopener noreferrer" style="vertical-align:top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon"></a><sup>1</sup>
 
 <sup>1</sup>School of Medicine and Surgery, University of
 Milano-Bicocca, Italy
