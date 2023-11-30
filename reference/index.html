@@ -47,9 +47,110 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="the-mirnaexperiment-class">The <code>MirnaExperiment</code> class<a class="anchor" aria-label="anchor" href="#the-mirnaexperiment-class"></a></h2>
+      
+      <p class="section-desc"></p><p>Methods and accessors for objects of class <code>MirnaExperiment</code>, the main class in MIRit to work with miRNA and gene expression data.</p>
+
+      
+    </div><div id="" class="section level2">
       
       
+      
+
+      <dl><dt>
+          
+          <code><a href="MirnaExperiment-class.html">mirnaDE(<i>&lt;MirnaExperiment&gt;</i>)</a></code> <code><a href="MirnaExperiment-class.html">geneDE(<i>&lt;MirnaExperiment&gt;</i>)</a></code> <code><a href="MirnaExperiment-class.html">significantMirnas(<i>&lt;MirnaExperiment&gt;</i>)</a></code> <code><a href="MirnaExperiment-class.html">significantGenes(<i>&lt;MirnaExperiment&gt;</i>)</a></code> <code><a href="MirnaExperiment-class.html">pairedSamples(<i>&lt;MirnaExperiment&gt;</i>)</a></code> <code><a href="MirnaExperiment-class.html">mirnaTargets(<i>&lt;MirnaExperiment&gt;</i>)</a></code> <code><a href="MirnaExperiment-class.html">integration(<i>&lt;MirnaExperiment&gt;</i>)</a></code> <code><a href="MirnaExperiment-class.html">show(<i>&lt;MirnaExperiment&gt;</i>)</a></code> 
+        </dt>
+        <dd>The 'MirnaExperiment' class</dd>
+      </dl><dl><dt>
+          
+          <code><a href="MirnaExperiment.html">MirnaExperiment()</a></code> 
+        </dt>
+        <dd>The constructor function for <a href="https://rdrr.io/pkg/MIRit/man/MirnaExperiment-class.html" class="external-link">MirnaExperiment</a></dd>
+      </dl><dl><dt>
+          
+          <code><a href="pairedSamples.html">pairedSamples()</a></code> 
+        </dt>
+        <dd>View the relationship between miRNA and gene samples</dd>
+      </dl></div><div class="section level2">
+      <h2 id="create-example-objects">Create example objects<a class="anchor" aria-label="anchor" href="#create-example-objects"></a></h2>
+      
+      <p class="section-desc"></p><p>Example datasets provided by MIRit for exploring the capabilities of the software.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="mirnaCounts.html">mirnaCounts</a></code> 
+        </dt>
+        <dd>Count matrix for microRNA expression in thyroid cancer</dd>
+      </dl><dl><dt>
+          
+          <code><a href="geneCounts.html">geneCounts</a></code> 
+        </dt>
+        <dd>Count matrix for gene expression in thyroid cancer</dd>
+      </dl><dl><dt>
+          
+          <code><a href="loadExamples.html">loadExamples()</a></code> 
+        </dt>
+        <dd>Load example MIRit objects</dd>
+      </dl></div><div class="section level2">
+      <h2 id="differential-expression-analysis">Differential expression analysis<a class="anchor" aria-label="anchor" href="#differential-expression-analysis"></a></h2>
+      
+      <p class="section-desc"></p><p>The functions used to perform miRNA and gene differential expression analyses from start to finish.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="plotDimensions.html">plotDimensions()</a></code> 
+        </dt>
+        <dd>Generate multidimensional scaling (MDS) plots to explore miRNA/gene
+expression distances</dd>
+      </dl><dl><dt>
+          
+          <code><a href="deAnalysis.html">performMirnaDE()</a></code> <code><a href="deAnalysis.html">performGeneDE()</a></code> 
+        </dt>
+        <dd>Perform differential expression analysis</dd>
+      </dl><dl><dt>
+          
+          <code><a href="addDifferentialExpression.html">addDifferentialExpression()</a></code> 
+        </dt>
+        <dd>Manually add differential expression results to a MirnaExperiment object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="deAccessors.html">mirnaDE()</a></code> <code><a href="deAccessors.html">geneDE()</a></code> 
+        </dt>
+        <dd>Extract differentially expressed miRNAs and genes from a
+<code><a href="https://rdrr.io/pkg/MIRit/man/MirnaExperiment-class.html" class="external-link">MirnaExperiment</a></code> object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="significantAccessors.html">significantMirnas()</a></code> <code><a href="significantAccessors.html">significantGenes()</a></code> 
+        </dt>
+        <dd>Get the IDs of statistically differentially expressed miRNAs/genes</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plotDE.html">plotDE()</a></code> 
+        </dt>
+        <dd>Represent differentially expressed miRNAs/genes as boxplots, barplots or
+violinplots</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plotVolcano.html">plotVolcano()</a></code> 
+        </dt>
+        <dd>Produce volcano plots to display miRNA/gene differential expression</dd>
+      </dl></div><div class="section level2">
+      <h2 id="functional-enrichment">Functional enrichment<a class="anchor" aria-label="anchor" href="#functional-enrichment"></a></h2>
+      
+      <p class="section-desc"></p><p>Methods and functions used to perform functional enrichment analysis of genes.</p>
 
       
     </div><div id="" class="section level2">
@@ -62,47 +163,6 @@
           <code><a href="FunctionalEnrichment-class.html">enrichmentResults(<i>&lt;FunctionalEnrichment&gt;</i>)</a></code> <code><a href="FunctionalEnrichment-class.html">enrichmentDatabase(<i>&lt;FunctionalEnrichment&gt;</i>)</a></code> <code><a href="FunctionalEnrichment-class.html">enrichmentMethod(<i>&lt;FunctionalEnrichment&gt;</i>)</a></code> <code><a href="FunctionalEnrichment-class.html">geneSet(<i>&lt;FunctionalEnrichment&gt;</i>)</a></code> <code><a href="FunctionalEnrichment-class.html">enrichmentMetric(<i>&lt;FunctionalEnrichment&gt;</i>)</a></code> <code><a href="FunctionalEnrichment-class.html">enrichedFeatures(<i>&lt;FunctionalEnrichment&gt;</i>)</a></code> <code><a href="FunctionalEnrichment-class.html">show(<i>&lt;FunctionalEnrichment&gt;</i>)</a></code> 
         </dt>
         <dd>The <code>FunctionalEnrichment</code> class</dd>
-      </dl><dl><dt>
-          
-          <code><a href="IntegrativePathwayAnalysis-class.html">integratedPathways(<i>&lt;IntegrativePathwayAnalysis&gt;</i>)</a></code> <code><a href="IntegrativePathwayAnalysis-class.html">integrationDatabase(<i>&lt;IntegrativePathwayAnalysis&gt;</i>)</a></code> <code><a href="IntegrativePathwayAnalysis-class.html">augmentedPathways(<i>&lt;IntegrativePathwayAnalysis&gt;</i>)</a></code> <code><a href="IntegrativePathwayAnalysis-class.html">show(<i>&lt;IntegrativePathwayAnalysis&gt;</i>)</a></code> 
-        </dt>
-        <dd>The <code>IntegrativePathwayAnalysis</code> class</dd>
-      </dl><dl><dt>
-          
-          <code><a href="MirnaExperiment-class.html">mirnaDE(<i>&lt;MirnaExperiment&gt;</i>)</a></code> <code><a href="MirnaExperiment-class.html">geneDE(<i>&lt;MirnaExperiment&gt;</i>)</a></code> <code><a href="MirnaExperiment-class.html">significantMirnas(<i>&lt;MirnaExperiment&gt;</i>)</a></code> <code><a href="MirnaExperiment-class.html">significantGenes(<i>&lt;MirnaExperiment&gt;</i>)</a></code> <code><a href="MirnaExperiment-class.html">pairedSamples(<i>&lt;MirnaExperiment&gt;</i>)</a></code> <code><a href="MirnaExperiment-class.html">mirnaTargets(<i>&lt;MirnaExperiment&gt;</i>)</a></code> <code><a href="MirnaExperiment-class.html">integration(<i>&lt;MirnaExperiment&gt;</i>)</a></code> <code><a href="MirnaExperiment-class.html">show(<i>&lt;MirnaExperiment&gt;</i>)</a></code> 
-        </dt>
-        <dd>The 'MirnaExperiment' class</dd>
-      </dl><dl><dt>
-          
-          <code><a href="MirnaExperiment.html">MirnaExperiment()</a></code> 
-        </dt>
-        <dd>The constructor function for MirnaExperiment</dd>
-      </dl><dl><dt>
-          
-          <code><a href="addDifferentialExpression.html">addDifferentialExpression()</a></code> 
-        </dt>
-        <dd>Manually add differential expression results to a MirnaExperiment object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="augmentedPathways.html">augmentedPathways()</a></code> 
-        </dt>
-        <dd>Access the miRNA-augmented pathways that were used during TAIPA</dd>
-      </dl><dl><dt>
-          
-          <code><a href="batchCorrection.html">batchCorrection()</a></code> 
-        </dt>
-        <dd>Correct for batch effects in miRNA and gene expression measurements</dd>
-      </dl><dl><dt>
-          
-          <code><a href="deAccessors.html">mirnaDE()</a></code> <code><a href="deAccessors.html">geneDE()</a></code> 
-        </dt>
-        <dd>Extract differentially expressed miRNAs and genes from a
-<code>MirnaExperiment</code> object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="deAnalysis.html">performMirnaDE()</a></code> <code><a href="deAnalysis.html">performGeneDE()</a></code> 
-        </dt>
-        <dd>Perform differential expression analysis</dd>
       </dl><dl><dt>
           
           <code><a href="enrichGenes.html">enrichGenes()</a></code> 
@@ -150,29 +210,9 @@
         <dd>Access the results of functional enrichment analyses</dd>
       </dl><dl><dt>
           
-          <code><a href="findMirnaSNPs.html">findMirnaSNPs()</a></code> 
-        </dt>
-        <dd>Find disease-associated SNPs occurring at DE-miRNA loci</dd>
-      </dl><dl><dt>
-          
-          <code><a href="geneCounts.html">geneCounts</a></code> 
-        </dt>
-        <dd>Count matrix for gene expression in thyroid cancer</dd>
-      </dl><dl><dt>
-          
           <code><a href="geneSet.html">geneSet()</a></code> 
         </dt>
         <dd>Extract the gene-sets used for functional enrichment analyses</dd>
-      </dl><dl><dt>
-          
-          <code><a href="getEvidence.html">getEvidence()</a></code> 
-        </dt>
-        <dd>Get the scientific evidence for a particular disease-SNP association</dd>
-      </dl><dl><dt>
-          
-          <code><a href="getTargets.html">getTargets()</a></code> 
-        </dt>
-        <dd>Get microRNA targets</dd>
       </dl><dl><dt>
           
           <code><a href="gseaPlot.html">gseaPlot()</a></code> 
@@ -186,9 +226,82 @@ given pathway</dd>
         <dd>Create a ridgeplot to display the results of GSEA analysis</dd>
       </dl><dl><dt>
           
-          <code><a href="integratedPathways.html">integratedPathways()</a></code> 
+          <code><a href="supportedOrganisms.html">supportedOrganisms()</a></code> 
         </dt>
-        <dd>Access the results of integrative miRNA-mRNA pathway analyses</dd>
+        <dd>Get the list of supported organisms for a given database</dd>
+      </dl></div><div class="section level2">
+      <h2 id="retrieval-of-mirna-targets">Retrieval of miRNA targets<a class="anchor" aria-label="anchor" href="#retrieval-of-mirna-targets"></a></h2>
+      
+      <p class="section-desc"></p><p>The functions for obtaining and visualizing the target genes of differentially expressed miRNAs.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="getTargets.html">getTargets()</a></code> 
+        </dt>
+        <dd>Get microRNA targets</dd>
+      </dl><dl><dt>
+          
+          <code><a href="mirnaTargets.html">mirnaTargets()</a></code> 
+        </dt>
+        <dd>Explore miRNA-target pairs</dd>
+      </dl></div><div class="section level2">
+      <h2 id="disease-snps-association">Disease-SNPs association<a class="anchor" aria-label="anchor" href="#disease-snps-association"></a></h2>
+      
+      <p class="section-desc"></p><p>The functions used to associate differentially expressed miRNAs with disease-related SNPs.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="searchDisease.html">searchDisease()</a></code> 
+        </dt>
+        <dd>Search for disease EFO identifiers</dd>
+      </dl><dl><dt>
+          
+          <code><a href="findMirnaSNPs.html">findMirnaSNPs()</a></code> 
+        </dt>
+        <dd>Find disease-associated SNPs occurring at DE-miRNA loci</dd>
+      </dl><dl><dt>
+          
+          <code><a href="mirVariantPlot.html">mirVariantPlot()</a></code> 
+        </dt>
+        <dd>Create a trackplot to show the association between miRNAs and disease-SNPs</dd>
+      </dl><dl><dt>
+          
+          <code><a href="getEvidence.html">getEvidence()</a></code> 
+        </dt>
+        <dd>Get the scientific evidence for a particular disease-SNP association</dd>
+      </dl></div><div class="section level2">
+      <h2 id="integrate-mirna-and-gene-expression">Integrate miRNA and gene expression<a class="anchor" aria-label="anchor" href="#integrate-mirna-and-gene-expression"></a></h2>
+      
+      <p class="section-desc"></p><p>The functions for integrating miRNA and gene expression levels for both paired and unpaired samples.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="batchCorrection.html">batchCorrection()</a></code> 
+        </dt>
+        <dd>Correct for batch effects in miRNA and gene expression measurements</dd>
+      </dl><dl><dt>
+          
+          <code><a href="mirnaIntegration.html">mirnaIntegration()</a></code> 
+        </dt>
+        <dd>Integrate microRNA and gene expression</dd>
       </dl><dl><dt>
           
           <code><a href="integration.html">integration()</a></code> 
@@ -196,14 +309,25 @@ given pathway</dd>
         <dd>Explore the results of the integration analysis between miRNAs and genes</dd>
       </dl><dl><dt>
           
-          <code><a href="integrationDatabase.html">integrationDatabase()</a></code> 
+          <code><a href="plotCorrelation.html">plotCorrelation()</a></code> 
         </dt>
-        <dd>Extract the database used for integrative miRNA-mRNA pathway analyses</dd>
-      </dl><dl><dt>
+        <dd>Plot correlation between miRNAs and genes within biological groups</dd>
+      </dl></div><div class="section level2">
+      <h2 id="topological-pathway-analysis">Topological pathway analysis<a class="anchor" aria-label="anchor" href="#topological-pathway-analysis"></a></h2>
+      
+      <p class="section-desc"></p><p>The functions needed to perform a comprehensive topology-aware integrative pathway analysis (TAIPA) with MIRit.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
-          <code><a href="integrationDotplot.html">integrationDotplot()</a></code> 
+          <code><a href="IntegrativePathwayAnalysis-class.html">integratedPathways(<i>&lt;IntegrativePathwayAnalysis&gt;</i>)</a></code> <code><a href="IntegrativePathwayAnalysis-class.html">integrationDatabase(<i>&lt;IntegrativePathwayAnalysis&gt;</i>)</a></code> <code><a href="IntegrativePathwayAnalysis-class.html">augmentedPathways(<i>&lt;IntegrativePathwayAnalysis&gt;</i>)</a></code> <code><a href="IntegrativePathwayAnalysis-class.html">show(<i>&lt;IntegrativePathwayAnalysis&gt;</i>)</a></code> 
         </dt>
-        <dd>Display integrated miRNA-mRNA augmented pathways in a dotplot</dd>
+        <dd>The <code>IntegrativePathwayAnalysis</code> class</dd>
       </dl><dl><dt>
           
           <code><a href="listPathways.html">listPathways()</a></code> 
@@ -212,76 +336,9 @@ given pathway</dd>
 WikiPathways</dd>
       </dl><dl><dt>
           
-          <code><a href="loadExamples.html">loadExamples()</a></code> 
-        </dt>
-        <dd>Load example MIRit objects</dd>
-      </dl><dl><dt>
-          
-          <code><a href="mirVariantPlot.html">mirVariantPlot()</a></code> 
-        </dt>
-        <dd>Create a trackplot to show the association between miRNAs and disease-SNPs</dd>
-      </dl><dl><dt>
-          
-          <code><a href="mirnaCounts.html">mirnaCounts</a></code> 
-        </dt>
-        <dd>Count matrix for microRNA expression in thyroid cancer</dd>
-      </dl><dl><dt>
-          
-          <code><a href="mirnaIntegration.html">mirnaIntegration()</a></code> 
-        </dt>
-        <dd>Integrate microRNA and gene expression</dd>
-      </dl><dl><dt>
-          
-          <code><a href="mirnaTargets.html">mirnaTargets()</a></code> 
-        </dt>
-        <dd>Explore miRNA-target pairs</dd>
-      </dl><dl><dt>
-          
-          <code><a href="pairedSamples.html">pairedSamples()</a></code> 
-        </dt>
-        <dd>View the relationship between miRNA and gene samples</dd>
-      </dl><dl><dt>
-          
-          <code><a href="plotCorrelation.html">plotCorrelation()</a></code> 
-        </dt>
-        <dd>Plot correlation between miRNAs and genes within biological groups</dd>
-      </dl><dl><dt>
-          
-          <code><a href="plotDE.html">plotDE()</a></code> 
-        </dt>
-        <dd>Represent differentially expressed miRNAs/genes as boxplots, barplots or
-violinplots</dd>
-      </dl><dl><dt>
-          
-          <code><a href="plotDimensions.html">plotDimensions()</a></code> 
-        </dt>
-        <dd>Generate multidimensional scaling (MDS) plots to explore miRNA/gene
-expression distances</dd>
-      </dl><dl><dt>
-          
-          <code><a href="plotVolcano.html">plotVolcano()</a></code> 
-        </dt>
-        <dd>Produce volcano plots to display miRNA/gene differential expression</dd>
-      </dl><dl><dt>
-          
           <code><a href="preparePathways.html">preparePathways()</a></code> 
         </dt>
         <dd>Prepare miRNA-augmented pathways for integrative miRNA-mRNA pathway analyses</dd>
-      </dl><dl><dt>
-          
-          <code><a href="searchDisease.html">searchDisease()</a></code> 
-        </dt>
-        <dd>Search for disease EFO identifiers</dd>
-      </dl><dl><dt>
-          
-          <code><a href="significantAccessors.html">significantMirnas()</a></code> <code><a href="significantAccessors.html">significantGenes()</a></code> 
-        </dt>
-        <dd>Get the IDs of statistically differentially expressed miRNAs/genes</dd>
-      </dl><dl><dt>
-          
-          <code><a href="supportedOrganisms.html">supportedOrganisms()</a></code> 
-        </dt>
-        <dd>Get the list of supported organisms for a given database</dd>
       </dl><dl><dt>
           
           <code><a href="topologicalAnalysis.html">topologicalAnalysis()</a></code> 
@@ -289,15 +346,36 @@ expression distances</dd>
         <dd>Perform a topologically-aware integrative pathway analysis (TAIPA)</dd>
       </dl><dl><dt>
           
+          <code><a href="integratedPathways.html">integratedPathways()</a></code> 
+        </dt>
+        <dd>Access the results of integrative miRNA-mRNA pathway analyses</dd>
+      </dl><dl><dt>
+          
           <code><a href="visualizeNetwork.html">visualizeNetwork()</a></code> 
         </dt>
         <dd>Visualize the relationships between miRNAs and genes in a biological pathway</dd>
+      </dl><dl><dt>
+          
+          <code><a href="integrationDotplot.html">integrationDotplot()</a></code> 
+        </dt>
+        <dd>Display integrated miRNA-mRNA augmented pathways in a dotplot</dd>
+      </dl><dl><dt>
+          
+          <code><a href="augmentedPathways.html">augmentedPathways()</a></code> 
+        </dt>
+        <dd>Access the miRNA-augmented pathways that were used during TAIPA</dd>
+      </dl><dl><dt>
+          
+          <code><a href="integrationDatabase.html">integrationDatabase()</a></code> 
+        </dt>
+        <dd>Extract the database used for integrative miRNA-mRNA pathway analyses</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Jacopo Ronchi, Maria Foti.</p>
+  <p></p><p>Developed by Jacopo Ronchi.</p>
 </div>
 
 <div class="pkgdown-footer-right">
