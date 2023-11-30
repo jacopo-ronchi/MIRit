@@ -8,7 +8,7 @@ enrichment can be carried out using different databases, namely Gene Ontology
 (GO), Kyoto Encyclopedia of Genes and Genomes (KEGG), MsigDB, WikiPathways,
 Reactome, Enrichr, Disease Ontology (DO), Network of Cancer Genes (NCG),
 DisGeNET, and COVID19. For exhaustive information on how to use this
-function, please refer to the details section."><title>Perform functional enrichment analysis of genes — enrichGenes • MIRit</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet"><meta property="og:title" content="Perform functional enrichment analysis of genes — enrichGenes"><meta property="og:description" content="This function allows to investigate the biological functions and pathways
+function, please refer to the details section."><title>Perform functional enrichment analysis of genes — enrichGenes • MIRit</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Perform functional enrichment analysis of genes — enrichGenes"><meta property="og:description" content="This function allows to investigate the biological functions and pathways
 that result dysregulated across biological conditions. In particular,
 different enrichment approaches can be used, including over-representation
 analysis (ORA), gene-set enrichment analysis (GSEA), and Correlation Adjusted
@@ -352,6 +352,39 @@ PMC3458527.</p>
 <span class="r-in"><span><span class="va">de_enr</span> <span class="op">&lt;-</span> <span class="fu">enrichGenes</span><span class="op">(</span><span class="va">obj</span>, method <span class="op">=</span> <span class="st">"GSEA"</span>, database <span class="op">=</span> <span class="st">"KEGG"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Since not specified, 'category' for KEGG database is set to pathway (default).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Preparing the appropriate gene set...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> fstcore package v0.9.14</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (OpenMP detected, using 48 threads)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Registered S3 methods overwritten by 'treeio':</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   method              from    </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   MRCA.phylo          tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   MRCA.treedata       tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   Nnode.treedata      tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   Ntip.treedata       tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   ancestor.phylo      tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   ancestor.treedata   tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   child.phylo         tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   child.treedata      tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   full_join.phylo     tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   full_join.treedata  tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   groupClade.phylo    tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   groupClade.treedata tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   groupOTU.phylo      tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   groupOTU.treedata   tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   inner_join.phylo    tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   inner_join.treedata tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   is.rooted.treedata  tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   nodeid.phylo        tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   nodeid.treedata     tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   nodelab.phylo       tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   nodelab.treedata    tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   offspring.phylo     tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   offspring.treedata  tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   parent.phylo        tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   parent.treedata     tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   root.treedata       tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   rootnode.phylo      tidytree</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   sibling.phylo       tidytree</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some ID occurs one-to-many match, like "79154, 7920, 79143"...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 99.96% genes are mapped to symbol</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Ranking genes based on signed.pval...</span>
@@ -372,11 +405,11 @@ PMC3458527.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Jacopo Ronchi.</p>
+  <p></p><p>NULL</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>MIRit is provided without <strong>any warranty</strong>. NULL</p>
 </div>
 
     </footer></div>
