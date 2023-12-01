@@ -1,6 +1,8 @@
 template:
   bootstrap: 5
-  bootswatch: flatly
+  bootswatch: litera
+  bslib:
+    pkgdown-nav-height: 100px
 
 home:
   title: "Integrative miRNA-mRNA analysis with MIRit"
