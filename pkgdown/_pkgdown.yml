@@ -1,5 +1,6 @@
 template:
   bootstrap: 5
+  bootswatch: flatly
 
 home:
   title: "Integrative miRNA-mRNA analysis with MIRit"
