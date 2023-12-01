@@ -8,7 +8,7 @@ between a particular SNP and a phenotypic trait."><meta property="og:image" cont
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">MIRit</a>
 
@@ -101,10 +101,7 @@ and wrangle GWAS catalog data, Bioinformatics, Volume 36, Issue 2, January
 <span class="r-in"><span><span class="co"># searchDisease("Alzheimer disease")</span></span></span>
 <span class="r-in"><span><span class="va">evidence</span> <span class="op">&lt;-</span> <span class="fu">getEvidence</span><span class="op">(</span><span class="st">"rs2075650"</span>, diseaseEFO <span class="op">=</span> <span class="st">"Alzheimer disease"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Retrieving biomedical evidence for the association between Alzheimer disease and rs2075650 variant...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The request for https://www.ebi.ac.uk/gwas/rest/api/studies/search/findByEfoTrait?efoTrait=Alzheimer%20disease&amp;page=3&amp;size=20 failed: response code was 500.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in purrr::map(resource_urls, gc_get, verbose = verbose, warnings = warnings,     page_size = page_size):</span> <span style="color: #00BBBB;">ℹ</span> In index: 1.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error in `gc_request_all()`:</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Failed to get all pages of /studies/search/findByEfoTrait?efoTrait=Alzheimer%20disease!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 109 studies reporting this association were found!</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
