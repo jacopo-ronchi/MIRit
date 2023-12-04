@@ -30,6 +30,8 @@ dependencies](https://bioconductor.org/shields/dependencies/release/MIRit.svg)](
 coverage](https://codecov.io/gh/jacopo-ronchi/MIRit/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/jacopo-ronchi/MIRit?branch=devel)
 <!-- badges: end -->
 
+## Overview
+
 `MIRit` (miRNA integration tool) is an open-source R package that aims
 to facilitate the comprehension of microRNA (miRNA) biology through the
 integrative analysis of gene and miRNA expression data deriving from
