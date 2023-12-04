@@ -1,0 +1,12 @@
+.page-header{
+    border:none;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    align-items: center;
+}
+.page-header img{
+    margin-left:none;
+}
+.page-header h1{
+    margin-left:2vw;
+}
