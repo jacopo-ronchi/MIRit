@@ -1,14 +1,13 @@
-{% if template.name == "index" %}
-.page-header{
-    border:none;
+.template-home .page-header{
     display: grid;
-    grid-template-columns: repeat(4, 1fr); 
+    grid-template-columns: repeat(4, minmax(170px, 1fr)); 
     align-items: center;
+    margin-bottom:3vw;
 }
-.page-header img{
+.template-home .page-header img{
     margin-left:none;
+    margin-bottom:2vw;
 }
-.page-header h1{
-    margin-left:2vw;
+.template-home .page-header h1{
+    margin-bottom:2vw;
 }
-{% endif %}
