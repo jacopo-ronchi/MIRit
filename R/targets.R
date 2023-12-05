@@ -311,7 +311,7 @@ getURL <- function(URL, FUN, ..., N.TRIES = 3L) {
         stop(
             "\n'getURL()' failed:",
             "\n  URL: ", URL,
-            "\n  error: ", conditionMessage(result)
+            "\n  code: ", conditionMessage(result)
         )
     }
     

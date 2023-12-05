@@ -32,6 +32,37 @@
 \code{\link[=FunctionalEnrichment-class]{FunctionalEnrichment}} containing
 enrichment results}
 }
+\value{
+\itemize{
+\item the \code{enrichmentResults()} function returns a \code{data.frame} object
+with the results of the functional enrichment analysis.
+}
+
+\itemize{
+\item the \code{enrichmentDatabase()} function returns a \code{character} that
+specifies the database that provided the gene-set collection.
+}
+
+\itemize{
+\item the \code{enrichmentMethod()} function returns a \code{character} with the
+enrichment method used for the analysis.
+}
+
+\itemize{
+\item the \code{geneSet()} function returns a \code{list} with the
+gene-set collections retrieved.
+}
+
+\itemize{
+\item the \code{enrichmentMetric()} function returns a \code{numeric} object with
+ranked gene statistic used for GSEA.
+}
+
+\itemize{
+\item the \code{enrichmentMetric()} function returns a \code{character} object with
+the names of the ranked features used for GSEA.
+}
+}
 \description{
 This class introduces the possibility to store the results of functional
 enrichment analyses such as over-representation analysis (ORA), gene set

@@ -602,6 +602,9 @@ MirnaExperiment <- function(mirnaExpr,
 #' @describeIn MirnaExperiment-class Access the results of miRNA differential
 #' expression
 #' @inheritParams deAccessors
+#' @returns
+#' * the `mirnaDE()` function returns a `data.frame` object with the results
+#' of miRNA differential expression analysis.
 #' @export
 setMethod(
     "mirnaDE",
@@ -628,6 +631,9 @@ setMethod(
 #' @describeIn MirnaExperiment-class Access the results of gene differential
 #' expression
 #' @inheritParams deAccessors
+#' @returns
+#' * the `geneDE()` function returns a `data.frame` object with the results
+#' of gene differential expression analysis.
 #' @export
 setMethod(
     "geneDE",
@@ -654,6 +660,9 @@ setMethod(
 #' @describeIn MirnaExperiment-class Access the names of differentially
 #' expressed miRNAs
 #' @inheritParams significantAccessors
+#' @returns
+#' * the `significantMirnas()` function gives back a `character` vector with the
+#' names of differentially expressed miRNAs.
 #' @export
 setMethod("significantMirnas", "MirnaExperiment", function(object) {
     object@mirnaDE$significant
@@ -662,6 +671,9 @@ setMethod("significantMirnas", "MirnaExperiment", function(object) {
 #' @describeIn MirnaExperiment-class Access the names of differentially
 #' expressed genes
 #' @inheritParams significantAccessors
+#' @returns
+#' * the `significantGenes()` function gives back a `character` vector with the
+#' names of differentially expressed genes.
 #' @export
 setMethod("significantGenes", "MirnaExperiment", function(object) {
     object@geneDE$significant
@@ -670,6 +682,9 @@ setMethod("significantGenes", "MirnaExperiment", function(object) {
 #' @describeIn MirnaExperiment-class Check if the object derives from
 #' sample-matched data
 #' @inheritParams pairedSamples
+#' @returns
+#' * the `pairedSamples()` function returns a `logical` object that specifies
+#' if the MirnaExperiment object has paired measurements or not.
 #' @export
 setMethod("pairedSamples", "MirnaExperiment", function(object) {
     object@pairedSamples
@@ -678,6 +693,9 @@ setMethod("pairedSamples", "MirnaExperiment", function(object) {
 #' @describeIn MirnaExperiment-class Extract the miRNA-targets interactions
 #' retrieved for the differentially expressed miRNAs
 #' @inheritParams mirnaTargets
+#' @returns
+#' * the `mirnaTargets()` function provides a `data.frame` object with the
+#' list of target genes for the differentially expressed miRNAs.
 #' @export
 setMethod("mirnaTargets", "MirnaExperiment", function(object) {
     object@targets
@@ -686,6 +704,9 @@ setMethod("mirnaTargets", "MirnaExperiment", function(object) {
 #' @describeIn MirnaExperiment-class Access the results of the integrative
 #' miRNA-mRNA analysis
 #' @inheritParams integration
+#' @returns
+#' * the `integration()` function gives back a `data.frame` object with the
+#' results of the integrative miRNA-mRNA analysis.
 #' @export
 setMethod(
     "integration", "MirnaExperiment",
@@ -877,6 +898,9 @@ setValidity("FunctionalEnrichment", function(object) {
 #' @describeIn FunctionalEnrichment-class Access the `data` slot to take a
 #' closer look at all the enriched terms of an enrichment analysis
 #' @inheritParams enrichmentResults
+#' @returns
+#' * the `enrichmentResults()` function returns a `data.frame` object
+#' with the results of the functional enrichment analysis.
 #' @export
 setMethod("enrichmentResults", "FunctionalEnrichment", function(object) {
     object@data
@@ -885,6 +909,9 @@ setMethod("enrichmentResults", "FunctionalEnrichment", function(object) {
 #' @describeIn FunctionalEnrichment-class See the database used for the
 #' functional enrichment
 #' @inheritParams enrichmentDatabase
+#' @returns
+#' * the `enrichmentDatabase()` function returns a `character` that
+#' specifies the database that provided the gene-set collection.
 #' @export
 setMethod("enrichmentDatabase", "FunctionalEnrichment", function(object) {
     object@database
@@ -893,6 +920,9 @@ setMethod("enrichmentDatabase", "FunctionalEnrichment", function(object) {
 #' @describeIn FunctionalEnrichment-class Visualize the approach used for the
 #' functional enrichment analysis
 #' @inheritParams enrichmentMethod
+#' @returns
+#' * the `enrichmentMethod()` function returns a `character` with the
+#' enrichment method used for the analysis.
 #' @export
 setMethod("enrichmentMethod", "FunctionalEnrichment", function(object) {
     object@method
@@ -901,6 +931,9 @@ setMethod("enrichmentMethod", "FunctionalEnrichment", function(object) {
 #' @describeIn FunctionalEnrichment-class Access the `geneSet` slot to see
 #' the collection of gene sets used for GSEA
 #' @inheritParams geneSet
+#' @returns
+#' * the `geneSet()` function returns a `list` with the
+#' gene-set collections retrieved.
 #' @export
 setMethod("geneSet", "FunctionalEnrichment", function(object) {
     object@geneSet
@@ -908,6 +941,9 @@ setMethod("geneSet", "FunctionalEnrichment", function(object) {
 
 #' @describeIn FunctionalEnrichment-class View the ranking metric used for GSEA
 #' @inheritParams enrichmentMetric
+#' @returns
+#' * the `enrichmentMetric()` function returns a `numeric` object with
+#' ranked gene statistic used for GSEA.
 #' @export
 setMethod("enrichmentMetric", "FunctionalEnrichment", function(object) {
     object@statistic
@@ -916,6 +952,9 @@ setMethod("enrichmentMetric", "FunctionalEnrichment", function(object) {
 #' @describeIn FunctionalEnrichment-class View the names of the pre-ranked
 #' features used for GSEA
 #' @inheritParams enrichedFeatures
+#' @returns
+#' * the `enrichmentMetric()` function returns a `character` object with
+#' the names of the ranked features used for GSEA.
 #' @export
 setMethod("enrichedFeatures", "FunctionalEnrichment", function(object) {
     object@features
@@ -1148,6 +1187,9 @@ setValidity("IntegrativePathwayAnalysis", function(object) {
 #' @describeIn IntegrativePathwayAnalysis-class Access the results of
 #' integrative miRNA-mRNA pathway analysis
 #' @inheritParams integratedPathways
+#' @returns
+#' * the `integratedPathways()` function returns a `data.frame` with the
+#' results of the integrative pathway analysis.
 #' @export
 setMethod(
     "integratedPathways",
@@ -1160,6 +1202,9 @@ setMethod(
 #' @describeIn IntegrativePathwayAnalysis-class View the database used for
 #' the integrative pathway analysis
 #' @inheritParams integrationDatabase
+#' @returns
+#' * the `integrationDatabase()` function returns a `character` object
+#' with the database used for the analysis.
 #' @export
 setMethod(
     "integrationDatabase",
@@ -1172,6 +1217,9 @@ setMethod(
 #' @describeIn IntegrativePathwayAnalysis-class Extract the list of biological
 #' networks augmented with miRNA-mRNA interactions
 #' @inheritParams augmentedPathways
+#' @returns
+#' * the `augmentedPathways()` function returns a `list` object
+#' containing the miRNA-augmented pathways considered for TAIPA.
 #' @export
 setMethod(
     "augmentedPathways",

@@ -43,6 +43,42 @@ the parameters used, or just the results stored in \code{data}. Default is FALSE
 \item{returnObject}{Logical, if \code{TRUE} this function will return the
 limma/edgeR/DESeq2 object used for differential expression analysis}
 }
+\value{
+\itemize{
+\item the \code{mirnaDE()} function returns a \code{data.frame} object with the results
+of miRNA differential expression analysis.
+}
+
+\itemize{
+\item the \code{geneDE()} function returns a \code{data.frame} object with the results
+of gene differential expression analysis.
+}
+
+\itemize{
+\item the \code{significantMirnas()} function gives back a \code{character} vector with the
+names of differentially expressed miRNAs.
+}
+
+\itemize{
+\item the \code{significantGenes()} function gives back a \code{character} vector with the
+names of differentially expressed genes.
+}
+
+\itemize{
+\item the \code{pairedSamples()} function returns a \code{logical} object that specifies
+if the MirnaExperiment object has paired measurements or not.
+}
+
+\itemize{
+\item the \code{mirnaTargets()} function provides a \code{data.frame} object with the
+list of target genes for the differentially expressed miRNAs.
+}
+
+\itemize{
+\item the \code{integration()} function gives back a \code{data.frame} object with the
+results of the integrative miRNA-mRNA analysis.
+}
+}
 \description{
 This class extends the
 \code{\link[MultiAssayExperiment:MultiAssayExperiment-class]{MultiAssayExperiment}}

@@ -23,6 +23,22 @@
 \code{\link[=IntegrativePathwayAnalysis-class]{IntegrativePathwayAnalysis}} containing
 the results of a miRNA-mRNA pathway analysis}
 }
+\value{
+\itemize{
+\item the \code{integratedPathways()} function returns a \code{data.frame} with the
+results of the integrative pathway analysis.
+}
+
+\itemize{
+\item the \code{integrationDatabase()} function returns a \code{character} object
+with the database used for the analysis.
+}
+
+\itemize{
+\item the \code{augmentedPathways()} function returns a \code{list} object
+containing the miRNA-augmented pathways considered for TAIPA.
+}
+}
 \description{
 This class stores the output of integrative multi-omic pathway analyses.
 In particular, the slots of this class are suitable to represent the results
