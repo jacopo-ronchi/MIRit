@@ -191,14 +191,14 @@ NULL
 #' @import methods
 #' @import MultiAssayExperiment
 setClass("MirnaExperiment",
-    contains = "MultiAssayExperiment",
-    slots = representation(
-        mirnaDE = "list",
-        geneDE = "list",
-        pairedSamples = "logical",
-        targets = "data.frame",
-        integration = "list"
-    )
+         contains = "MultiAssayExperiment",
+         slots = representation(
+             mirnaDE = "list",
+             geneDE = "list",
+             pairedSamples = "logical",
+             targets = "data.frame",
+             integration = "list"
+         )
 )
 
 
@@ -223,19 +223,19 @@ setMethod(
             logFC = numeric(),
             deObject = NULL
         )
-
+        
         intList <- list(
             data = data.frame(),
             method = character(),
             pCutoff = numeric(),
             pAdjustment = character()
         )
-
+        
         .Object <- callNextMethod(.Object,
-            ...,
-            mirnaDE = deList,
-            geneDE = deList,
-            integration = intList
+                                  ...,
+                                  mirnaDE = deList,
+                                  geneDE = deList,
+                                  integration = intList
         )
         .Object
     }
@@ -267,14 +267,14 @@ setValidity("MirnaExperiment", function(object) {
             "pAdjustment", "logFC", "deObject"
         ))
     ) |
-        !identical(
-            sort(names(object@geneDE)),
-            sort(c(
-                "data", "significant", "method", "group",
-                "contrast", "design", "pCutoff",
-                "pAdjustment", "logFC", "deObject"
-            ))
-        )) {
+    !identical(
+        sort(names(object@geneDE)),
+        sort(c(
+            "data", "significant", "method", "group",
+            "contrast", "design", "pCutoff",
+            "pAdjustment", "logFC", "deObject"
+        ))
+    )) {
         return(paste(
             "'mirnaDE' and 'geneDE' slots must be list objects",
             "containing: 'data', 'significant', 'method', 'group',",
@@ -294,16 +294,16 @@ setValidity("MirnaExperiment", function(object) {
             "?MirnaExperiment-class"
         ))
     } else if (!is.character(significantMirnas(object)) |
-        !all(significantMirnas(object) %in%
-            mirnaDE(object, onlySignificant = FALSE)$ID)) {
+               !all(significantMirnas(object) %in%
+                    mirnaDE(object, onlySignificant = FALSE)$ID)) {
         return(paste(
             "'significant' object within 'mirnaDE' slot must be a",
             "character with IDs of statiscally significantly",
             "differentially expressed miRNAs."
         ))
     } else if (!is.character(significantGenes(object)) |
-        !all(significantGenes(object)
-        %in% geneDE(object, onlySignificant = FALSE)$ID)) {
+               !all(significantGenes(object)
+                    %in% geneDE(object, onlySignificant = FALSE)$ID)) {
         return(paste(
             "'significant' object within 'geneDE' slot must be a",
             "character with IDs of statiscally significantly",
@@ -439,27 +439,26 @@ setValidity("MirnaExperiment", function(object) {
 #'
 #' @export
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
-MirnaExperiment <- function(
-        mirnaExpr,
-        geneExpr,
-        samplesMetadata,
-        pairedSamples = TRUE) {
+MirnaExperiment <- function(mirnaExpr,
+                            geneExpr,
+                            samplesMetadata,
+                            pairedSamples = TRUE) {
     ## check expression matrices validity
     if (!is.matrix(mirnaExpr) &
         canCoerce(mirnaExpr, "matrix") == FALSE) {
-        stop(paste(
-            "'mirnaExpr' must be a matrix object or an object coercible",
-            "to one. See ?MirnaExperiment for further details on",
-            "this object"
-        ), call. = FALSE)
+        stop("'mirnaExpr' must be a matrix object or an object coercible ",
+             "to one. See ?MirnaExperiment for further details on ",
+             "this object",
+             call. = FALSE
+        )
     }
     if (!is.matrix(geneExpr) &
         canCoerce(geneExpr, "matrix") == FALSE) {
-        stop(paste(
-            "'geneExpr' must be a matrix object or an object coercible",
-            "to one. See ?MirnaExperiment for further details on",
-            "this object"
-        ), call. = FALSE)
+        stop("'geneExpr' must be a matrix object or an object coercible ",
+             "to one. See ?MirnaExperiment for further details on ",
+             "this object",
+             call. = FALSE
+        )
     }
     if (!is.matrix(mirnaExpr)) {
         mirnaExpr <- as.matrix(mirnaExpr) ## coerce to matrix if needed
@@ -469,27 +468,21 @@ MirnaExperiment <- function(
     }
     if (ncol(mirnaExpr) < 2 |
         nrow(mirnaExpr) < 10) {
-        stop(
-            paste(
-                "'mirnaExpr' must contain expression values deriving from",
-                "high-throughput experiments, with samples as columns and",
-                "miRNAs as rows. See ?MirnaExperiment for additional details"
-            ),
-            call. = FALSE
+        stop("'mirnaExpr' must contain expression values deriving from ",
+             "high-throughput experiments, with samples as columns and ",
+             "miRNAs as rows. See ?MirnaExperiment for additional details",
+             call. = FALSE
         )
     }
     if (ncol(geneExpr) < 2 |
         nrow(geneExpr) < 10) {
-        stop(
-            paste(
-                "'geneExpr' must contain expression values deriving from",
-                "high-throughput experiments, with samples as columns and",
-                "genes as rows. See ?MirnaExperiment for additional details"
-            ),
-            call. = FALSE
+        stop("'geneExpr' must contain expression values deriving from ",
+             "high-throughput experiments, with samples as columns and ",
+             "genes as rows. See ?MirnaExperiment for additional details",
+             call. = FALSE
         )
     }
-
+    
     ## check metadata provided
     if (!is.data.frame(samplesMetadata) |
         is.null(samplesMetadata$primary) |
@@ -503,76 +496,70 @@ MirnaExperiment <- function(
             sort(na.omit(samplesMetadata$geneCol)),
             sort(colnames(geneExpr))
         )) {
-        stop(paste(
-            "'samplesMetadata' must be a data.frame object with:\n",
-            "\t- one column named 'primary', which contains sample IDs\n",
-            "\t- one column named 'mirnaCol', which contains the column",
-            "name corresponding to this sample in the expression",
-            "table 'mirnaExpr'\n",
-            "\t- one column named 'geneCol', which contains the column",
-            "name corresponding to this sample in the expression",
-            "table 'geneExpr'\n",
-            "\t- other columns specifying other information abut samples,",
-            "such as age, sex, ecc.\n",
-            "For unpaired data, NAs must be used for missing entries",
-            "in 'mirnaCol'/'geneCol'"
-        ), call. = FALSE)
+        stop("'samplesMetadata' must be a data.frame object with:\n",
+             "\t- one column named 'primary', which contains sample IDs\n",
+             "\t- one column named 'mirnaCol', which contains the column ",
+             "name corresponding to this sample in the expression ",
+             "table 'mirnaExpr'\n",
+             "\t- one column named 'geneCol', which contains the column ",
+             "name corresponding to this sample in the expression ",
+             "table 'geneExpr'\n",
+             "\t- other columns specifying other information abut samples, ",
+             "such as age, sex, ecc.\n",
+             "For unpaired data, NAs must be used for missing entries ",
+             "in 'mirnaCol'/'geneCol'",
+             call. = FALSE
+        )
     }
-
+    
     ## check for valid names in samplesMetadata
     if (any(!colnames(samplesMetadata) %in%
-        make.names(colnames(samplesMetadata)))) {
+            make.names(colnames(samplesMetadata)))) {
         wrongNames <- which(!colnames(samplesMetadata) %in%
-            make.names(colnames(samplesMetadata)))
-        warning(paste(
-            "Some variables in the column names of 'samplesMetadata'",
-            "don't have valid R names!", "Therefore,",
-            paste(colnames(samplesMetadata)[wrongNames],
-                collapse = ", "
-            ), "will be renamed to:",
-            paste(make.names(colnames(samplesMetadata)[wrongNames]),
-                collapse = ", "
-            )
-        ), call. = FALSE)
+                                make.names(colnames(samplesMetadata)))
+        warning("Some variables in the column names of 'samplesMetadata' ",
+                "don't have valid R names! ", "Therefore, ",
+                paste(colnames(samplesMetadata)[wrongNames],
+                      collapse = ", "
+                ), " will be renamed to: ",
+                paste(make.names(colnames(samplesMetadata)[wrongNames]),
+                      collapse = ", "
+                ),
+                call. = FALSE
+        )
         colnames(samplesMetadata) <- make.names(colnames(samplesMetadata))
     }
-
+    
     ## check if samples are paired
     if (!is.logical(pairedSamples) |
         length(pairedSamples) != 1) {
-        stop(paste(
-            "'pairedSamples' must be logical. It should be TRUE if",
-            "miRNA and gene expression data derive from the same samples",
-            "('paired samples') while it should be FALSE if data derive",
-            "from different cohorts of samples"
-        ), call. = FALSE)
+        stop("'pairedSamples' must be logical. It should be TRUE if ",
+             "miRNA and gene expression data derive from the same samples ",
+             "('paired samples') while it should be FALSE if data derive ",
+             "from different cohorts of samples",
+             call. = FALSE
+        )
     }
     if (pairedSamples == TRUE &
         sum(!is.na(samplesMetadata$mirnaCol) &
             !is.na(samplesMetadata$geneCol)) < 3) {
-        warning(
-            paste(
-                "There are few or no common sample names in",
-                "'samplesMetadata'. Thus, 'pairedSamples' will be set",
-                "to FALSE..."
-            ),
-            call. = FALSE
+        warning("There are few or no common sample names in ",
+                "'samplesMetadata'. Thus, 'pairedSamples' will be set ",
+                "to FALSE...",
+                call. = FALSE
         )
         pairedSamples <- FALSE
     }
-
-    ## check that primary column doesn't have repeated elements for unpaired data
+    
+    ## check that primary column doesn't have repeated elements (unpaired data)
     if (pairedSamples == FALSE &
         any(duplicated(samplesMetadata$primary)) == TRUE) {
-        stop(
-            paste(
-                "For unpaired data, 'primary' column in 'samplesMetadata'",
-                "can't contain duplicated elements. See ?MirnaExperiment"
-            ),
-            call. = FALSE
+        stop("For unpaired data, 'primary' column in 'samplesMetadata' ",
+             "can't contain duplicated elements. See ?MirnaExperiment",
+             call. = FALSE
         )
     }
-
+    
     ## create a sample map for the MultiAssayExperiment object
     mirnaMap <- samplesMetadata[!is.na(samplesMetadata$mirnaCol), ]
     mirnaMap$geneCol <- NULL
@@ -583,26 +570,26 @@ MirnaExperiment <- function(
     geneMap <- geneMap[, colnames(mirnaMap)]
     mapList <- list("microRNA" = mirnaMap, "genes" = geneMap)
     sMap <- listToMap(mapList)
-
+    
     ## add rownames to metadata table
     rownames(samplesMetadata) <- samplesMetadata$primary
-
+    
     ## create a list with experimental assays
     expList <- list("microRNA" = mirnaExpr, "genes" = geneExpr)
-
+    
     ## create a MultiAssayExperiment object based on user's input
     objMulti <- MultiAssayExperiment(
         experiments = expList,
         colData = samplesMetadata,
         sampleMap = sMap
     )
-
+    
     ## create MirnaExperiment object
     object <- new("MirnaExperiment",
-        objMulti,
-        pairedSamples = pairedSamples
+                  objMulti,
+                  pairedSamples = pairedSamples
     )
-
+    
     ## return the created object
     return(object)
 }
@@ -624,13 +611,13 @@ setMethod(
             returnObject == FALSE &
             param == FALSE) {
             object@mirnaDE$data[object@mirnaDE$data$ID %in%
-                object@mirnaDE$significant, ]
+                                    object@mirnaDE$significant, ]
         } else if (onlySignificant == FALSE &
-            returnObject == FALSE &
-            param == FALSE) {
+                   returnObject == FALSE &
+                   param == FALSE) {
             object@mirnaDE$data
         } else if (param == TRUE &
-            returnObject == FALSE) {
+                   returnObject == FALSE) {
             object@mirnaDE
         } else {
             object@mirnaDE$deObject
@@ -650,13 +637,13 @@ setMethod(
             returnObject == FALSE &
             param == FALSE) {
             object@geneDE$data[object@geneDE$data$ID %in%
-                object@geneDE$significant, ]
+                                   object@geneDE$significant, ]
         } else if (onlySignificant == FALSE &
-            returnObject == FALSE &
-            param == FALSE) {
+                   returnObject == FALSE &
+                   param == FALSE) {
             object@geneDE$data
         } else if (param == TRUE &
-            returnObject == FALSE) {
+                   returnObject == FALSE) {
             object@geneDE
         } else {
             object@geneDE$deObject
@@ -853,7 +840,7 @@ setValidity("FunctionalEnrichment", function(object) {
             "?FunctionalEnrichment-class"
         ))
     } else if (!is.character(object@pAdjustment) |
-        !object@pAdjustment %in% p.adjust.methods) {
+               !object@pAdjustment %in% p.adjust.methods) {
         return(paste(
             "'pAdjustment' slot must be a character object that specifies",
             "the p-value correction method used. Please see",
@@ -1118,7 +1105,7 @@ setValidity("IntegrativePathwayAnalysis", function(object) {
             "?IntegrativePathwayAnalysis-class"
         ))
     } else if (!is.character(object@pAdjustment) |
-        !object@pAdjustment %in% c(p.adjust.methods, "max-T")) {
+               !object@pAdjustment %in% c(p.adjust.methods, "max-T")) {
         return(paste(
             "'pAdjustment' slot must be a character object that specifies",
             "the p-value correction method used. Please see",

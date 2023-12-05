@@ -16,6 +16,9 @@ A \code{matrix} object containing samples as columns and genes as rows.
 \usage{
 data(geneCounts)
 }
+\value{
+A \code{matrix} object with 23710 rows and 16 columns.
+}
 \description{
 This dataset contains a gene expression matrix resulting from an RNA-Seq
 analysis of thyroid cancer. Specifically, these data originate from

@@ -71,12 +71,12 @@ the trackplot.
 # load example MirnaExperiment object
 obj <- loadExamples()
 
-\dontrun{
+\donttest{
 # retrieve associated SNPs
-association <- findMirnaSNPs(obj, disId)
+association <- findMirnaSNPs(obj, "response to antidepressant")
 
 # visualize association as a trackplot
-mirVariantPlot(variantId = varId, snpAssociation = association)
+mirVariantPlot(variantId = "rs2402960", snpAssociation = association)
 }
 
 }

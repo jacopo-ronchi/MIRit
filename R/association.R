@@ -32,29 +32,26 @@
 searchDisease <- function(diseaseName) {
     ## check input
     if (!is.character(diseaseName) | length(diseaseName) != 1) {
-        stop(paste(
-            "'diseaseName' must be a string of length 1",
-            "containing the name of the disease"
-        ), call. = FALSE)
-    }
-
-    ## check that gwasrapidd is installed
-    if (!requireNamespace("gwasrapidd", quietly = TRUE)) {
-        stop(
-            paste(
-                "The gwasrapidd package is needed to use",
-                "this function. Install it through:",
-                paste("`install.packages('gwasrapidd')`.",
-                    sep = ""
-                )
-            ),
-            call. = FALSE
+        stop("'diseaseName' must be a string of length 1 ",
+             "containing the name of the disease",
+             call. = FALSE
         )
     }
-
+    
+    ## check that gwasrapidd is installed
+    if (!requireNamespace("gwasrapidd", quietly = TRUE)) {
+        stop("The gwasrapidd package is needed to use ",
+             "this function. Install it through: ",
+             paste("`install.packages('gwasrapidd')`.",
+                   sep = ""
+             ),
+             call. = FALSE
+        )
+    }
+    
     ## load cache
     bfc <- .get_cache()
-
+    
     ## check if EFO traits are cached
     message("Checking for cached EFO traits...")
     cache <- BiocFileCache::bfcquery(bfc, "EFO_ids")
@@ -65,26 +62,26 @@ searchDisease <- function(diseaseName) {
     } else {
         ## inform the user about retrieving IDs
         message("Downloading EFO traits, this may take some minutes...")
-
+        
         ## retrieve disease EFO traits
         ids <- gwasrapidd::get_traits()
         ids <- ids@traits$trait
-
+        
         ## save EFO traits to cache
         savepath <- BiocFileCache::bfcnew(bfc, rname = "EFO_ids", ext = ".RDS")
         saveRDS(ids, file = savepath)
     }
-
+    
     ## return results
-    message(paste("Searching for disease:", diseaseName))
-
+    message("Searching for disease: ", diseaseName)
+    
     ## search for the disease specified by the user
     disList <- ids[agrep(diseaseName,
-        ids,
-        ignore.case = TRUE,
-        max.distance = 0.2
+                         ids,
+                         ignore.case = TRUE,
+                         max.distance = 0.2
     )]
-
+    
     ## return disease list
     return(disList)
 }
@@ -164,71 +161,66 @@ searchDisease <- function(diseaseName) {
 #'
 #' @importFrom rlang .data
 #' @export
-findMirnaSNPs <- function(
-        mirnaObj,
-        diseaseEFO) {
+findMirnaSNPs <- function(mirnaObj,
+                          diseaseEFO) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
-        stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
-            call. = FALSE
+        stop("'mirnaObj' should be of class MirnaExperiment! ",
+             "See ?MirnaExperiment",
+             call. = FALSE
         )
     }
     if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0) {
-        stop(paste(
-            "MiRNA differential expression results are not present in",
-            "'mirnaObj'. Please, use 'performMirnaDE()' before using",
-            "this function. See ?performMirnaDE"
-        ), call. = FALSE)
+        stop("MiRNA differential expression results are not present in ",
+             "'mirnaObj'. Please, use 'performMirnaDE()' before using ",
+             "this function. See ?performMirnaDE",
+             call. = FALSE
+        )
     }
     if (nrow(mirnaDE(mirnaObj)) == 0) {
-        stop(paste(
-            "No miRNAs in this object are defined as differentially",
-            "expressed. Consider using 'performMirnaDE()' with lower",
-            "thresholds. See ?performMirnaDE"
-        ), call. = FALSE)
+        stop("No miRNAs in this object are defined as differentially ",
+             "expressed. Consider using 'performMirnaDE()' with lower ",
+             "thresholds. See ?performMirnaDE",
+             call. = FALSE
+        )
     }
     if (!is.character(diseaseEFO) | length(diseaseEFO) != 1) {
-        stop(paste(
-            "'diseaseEFO' must be a string of length 1",
-            "containing the EFO ID of the disease. You can obtain the",
-            "disease identifier with 'searchDisease()'"
-        ), call. = FALSE)
+        stop("'diseaseEFO' must be a string of length 1 ",
+             "containing the EFO ID of the disease. You can obtain the ",
+             "disease identifier with 'searchDisease()'",
+             call. = FALSE
+        )
     }
-
+    
     ## check that gwasrapidd is installed
     if (!requireNamespace("gwasrapidd", quietly = TRUE)) {
         stop(
-            paste(
-                "The gwasrapidd package is needed to use",
-                "this function. Install it through:",
-                paste("`install.packages('gwasrapidd')`.",
-                    sep = ""
-                )
+            "The gwasrapidd package is needed to use ",
+            "this function. Install it through: ",
+            paste("`install.packages('gwasrapidd')`.",
+                  sep = ""
             ),
             call. = FALSE
         )
     }
-
+    
     ## check that biomaRt is installed
     if (!requireNamespace("biomaRt", quietly = TRUE)) {
-        stop(
-            paste(
-                "The biomaRt package is needed to use",
-                "this function. Install it through:",
-                paste("`BiocManager::install('biomaRt')`.",
-                    sep = ""
-                )
-            ),
-            call. = FALSE
+        stop("The biomaRt package is needed to use ",
+             "this function. Install it through: ",
+             paste("`BiocManager::install('biomaRt')`.",
+                   sep = ""
+             ),
+             call. = FALSE
         )
     }
-
+    
     ## inform the user about database querying
     message("Querying GWAS Catalog, this may take some time...")
-
+    
     ## retrieve all SNPs related to the disease
     varDf <- gwasrapidd::get_variants(efo_trait = diseaseEFO)
-
+    
     ## extract genomic context
     varDf <- varDf@genomic_contexts
     if (nrow(varDf) == 0) {
@@ -237,10 +229,10 @@ findMirnaSNPs <- function(
     varDf <- as.data.frame(varDf)
     varDf <- varDf[varDf$chromosome_name %in% c(seq(22), "X", "Y"), seq(10)]
     varDf <- unique(varDf)
-
+    
     ## only retain mapped genes
     varDf <- varDf[varDf$is_mapped_gene == "TRUE", ]
-
+    
     ## find genomic details of differentially expressed miRNAs
     message("Finding genomic information of differentially expressed miRNAs...")
     ensembl <- biomaRt::useEnsembl(
@@ -250,21 +242,21 @@ findMirnaSNPs <- function(
     dem <- mirnaDE(mirnaObj)$ID
     deMirnas <- gsub("-5p|-3p", "", dem)
     mirGenes <- biomaRt::select(ensembl,
-        keys = deMirnas,
-        keytype = "mirbase_id",
-        columns = c(
-            "hgnc_symbol",
-            "mirbase_id",
-            "gene_biotype",
-            "chromosome_name",
-            "strand",
-            "start_position",
-            "end_position"
-        )
+                                keys = deMirnas,
+                                keytype = "mirbase_id",
+                                columns = c(
+                                    "hgnc_symbol",
+                                    "mirbase_id",
+                                    "gene_biotype",
+                                    "chromosome_name",
+                                    "strand",
+                                    "start_position",
+                                    "end_position"
+                                )
     )
     mirGenes <- mirGenes[mirGenes$chromosome_name %in% c(seq(22), "X", "Y"), ]
     mirGenes$chromosome_name <- NULL
-
+    
     ## intersect differentially expressed miRNAs with genes mapped with SNPs
     hostNames <- paste(mirGenes$hgnc_symbol, "HG", sep = "")
     mirMatches <- c(mirGenes$hgnc_symbol, hostNames)
@@ -279,20 +271,20 @@ findMirnaSNPs <- function(
         mirGenes[unlist(idx1), , drop = FALSE],
         resDf[unlist(idx2), , drop = FALSE]
     )
-
+    
     ## add allele information
     snpData <- biomaRt::useEnsembl(biomart = "snps", dataset = "hsapiens_snp")
     snpInfo <- AnnotationDbi::select(snpData,
-        keys = resDf$variant,
-        keytype = "snp_filter",
-        columns = c(
-            "refsnp_id",
-            "allele"
-        )
+                                     keys = resDf$variant,
+                                     keytype = "snp_filter",
+                                     columns = c(
+                                         "refsnp_id",
+                                         "allele"
+                                     )
     )
     colnames(snpInfo)[1] <- "variant_id"
     resDf <- merge(resDf, snpInfo, by = "variant_id")
-
+    
     ## prepare resulting data.frame
     resDf <- resDf[, c(
         "variant_id", "gene_name", "hgnc_symbol", "mirbase_id",
@@ -306,14 +298,14 @@ findMirnaSNPs <- function(
         "is_downstream", "mirnaStrand", "mirnaStartPosition",
         "mirnaEndPosition"
     )
-
+    
     ## display a message with miRNA-SNPs association results
-    message(paste(
-        "After the analysis,", nrow(resDf), "variants associated with",
-        diseaseEFO, "were found within differentially",
+    message(
+        "After the analysis, ", nrow(resDf), " variants associated with ",
+        diseaseEFO, " were found within differentially ",
         "expressed miRNA genes"
-    ))
-
+    )
+    
     ## return SNPs association data.frame
     return(resDf)
 }
@@ -356,48 +348,46 @@ findMirnaSNPs <- function(
 #'
 #' @export
 getEvidence <- function(variant,
-    diseaseEFO) {
+                        diseaseEFO) {
     ## check inputs
     if (!is.character(variant) | length(variant) != 1) {
-        stop("'variant' should be a character with the ID of a SNP.", call. = FALSE)
+        stop("'variant' should be a character with the ID of a SNP.",
+             call. = FALSE)
     }
     if (!is.character(diseaseEFO) | length(diseaseEFO) != 1) {
-        stop(paste(
-            "'diseaseEFO' must be a string of length 1",
-            "containing the EFO trait of the disease. You can obtain the",
-            "disease identifier with 'searchDisease()'"
-        ), call. = FALSE)
-    }
-
-    ## check that gwasrapidd is installed
-    if (!requireNamespace("gwasrapidd", quietly = TRUE)) {
-        stop(
-            paste(
-                "The gwasrapidd package is needed to use",
-                "this function. Install it through:",
-                paste("`install.packages('gwasrapidd')`.",
-                    sep = ""
-                )
-            ),
-            call. = FALSE
+        stop("'diseaseEFO' must be a string of length 1 ",
+             "containing the EFO trait of the disease. You can obtain the ",
+             "disease identifier with 'searchDisease()'",
+             call. = FALSE
         )
     }
-
+    
+    ## check that gwasrapidd is installed
+    if (!requireNamespace("gwasrapidd", quietly = TRUE)) {
+        stop("The gwasrapidd package is needed to use ",
+             "this function. Install it through: ",
+             paste("`install.packages('gwasrapidd')`.",
+                   sep = ""
+             ),
+             call. = FALSE
+        )
+    }
+    
     ## retrieve biomedical evidence for a disease-SNP association
-    message(paste(
-        "Retrieving biomedical evidence for the association between",
-        diseaseEFO, "and", variant, "variant..."
-    ))
+    message(
+        "Retrieving biomedical evidence for the association between ",
+        diseaseEFO, " and ", variant, " variant..."
+    )
     ev <- gwasrapidd::get_studies(
         variant_id = variant,
         efo_trait = diseaseEFO
     )
     ev <- ev@publications
-
+    
     ## returning results
-    message(paste(
-        length(unique(ev$title)), "studies reporting this association",
+    message(
+        length(unique(ev$title)), " studies reporting this association ",
         "were found!"
-    ))
+    )
     return(ev)
 }

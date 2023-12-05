@@ -8,8 +8,8 @@
 #' @export
 #' @importMethodsFrom MultiAssayExperiment show
 setMethod("show", "MirnaExperiment", function(object) {
-    cat("An object of class MirnaExperiment, which extends MultiAssayExperiment",
-        "class and contains:\n\n",
+    cat("An object of class MirnaExperiment, which extends",
+        "MultiAssayExperiment class and contains:\n\n",
         "\t- microRNA expression values: ",
         class(experiments(object)[["microRNA"]]), " with ",
         nrow(experiments(object)[["microRNA"]]),
@@ -27,8 +27,8 @@ setMethod("show", "MirnaExperiment", function(object) {
         " with ", nrow(mirnaDE(object, onlySignificant = FALSE)),
         " rows and ", ncol(mirnaDE(object, onlySignificant = FALSE)),
         " columns\n",
-        "\t- significant DE-miRNAs: ", class(significantMirnas(object)), " with ",
-        length(significantMirnas(object)), " miRNA IDs\n",
+        "\t- significant DE-miRNAs: ", class(significantMirnas(object)),
+        " with ", length(significantMirnas(object)), " miRNA IDs\n",
         "\t- gene differential expression: ",
         class(geneDE(object, onlySignificant = FALSE)), " with ",
         nrow(geneDE(object, onlySignificant = FALSE)), " rows and ",

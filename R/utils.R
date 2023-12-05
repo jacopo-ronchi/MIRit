@@ -10,7 +10,7 @@ identifyColNames <- function(tabOutput, tabID = "") {
         idAccepted, fcAccepted, exprAccepted,
         pvalAccepted, fdrAccepted
     )
-
+    
     ## try to identify column names
     dfNames <- colnames(tabOutput)
     idCol <- grep(idAccepted, dfNames)
@@ -20,37 +20,37 @@ identifyColNames <- function(tabOutput, tabID = "") {
     fdrCol <- grep(fdrAccepted, dfNames)
     tableCols <- list(idCol, fcCol, exprCol, pvalCol, fdrCol)
     tableNames <- c("ID", "logFC", "AveExpr", "P.Value", "adj.P.Val")
-
+    
     ## check if columns are correctly identified
     if (any(lengths(tableCols) == 0)) {
-        stop(paste(
-            "The software is unable to automatically find columns",
-            "relative to",
-            paste(tableNames[which(lengths(tableCols) == 0)],
-                collapse = ", "
-            ),
-            "in the", tabID, "differential expression data.frame!",
-            "Please change the name of these columns to one of:",
-            paste(acceptedNames[which(lengths(tableCols) == 0)],
-                collapse = ", "
-            )
-        ), call. = FALSE)
+        stop("MIRit is unable to automatically find columns ",
+             "relative to ",
+             paste(tableNames[which(lengths(tableCols) == 0)],
+                   collapse = ", "
+             ),
+             " in the ", tabID, " differential expression data.frame! ",
+             "Please change the name of these columns to one of: ",
+             paste(acceptedNames[which(lengths(tableCols) == 0)],
+                   collapse = ", "
+             ),
+             call. = FALSE
+        )
     } else if (any(lengths(tableCols) > 1)) {
-        stop(paste(
-            "More than one column can be interpreted as",
-            paste(tableNames[which(lengths(tableCols) > 1)],
-                collapse = ", "
-            ),
-            "in the", tabID, "differential expression data.frame!",
-            "Please rename these columns to have unambiguous column names!",
-            "See ?MirnaExperiment for further details"
-        ), call. = FALSE)
+        stop("More than one column can be interpreted as ",
+             paste(tableNames[which(lengths(tableCols) > 1)],
+                   collapse = ", "
+             ),
+             " in the ", tabID, " differential expression data.frame! ",
+             "Please rename these columns to have unambiguous column names! ",
+             "See ?MirnaExperiment for further details",
+             call. = FALSE
+        )
     }
-
+    
     ## create a data.frame with desired columns
     tabOutput <- tabOutput[, as.numeric(tableCols)]
     colnames(tabOutput) <- tableNames
-
+    
     ## return data.frame
     return(tabOutput)
 }
@@ -63,10 +63,10 @@ identifyColNames <- function(tabOutput, tabID = "") {
 selectTargets <- function(mirnaObj, miRNA.Direction = NULL, pairs = FALSE) {
     ## extract integration results
     intRes <- integration(mirnaObj)
-
+    
     ## determine the integration method
     method <- integration(mirnaObj, param = TRUE)$method
-
+    
     ## extract integrated miRNA-target pairs
     if (grepl("correlation", method) == TRUE) {
         intPairs <- intRes[, c(1, 2, 3)]
@@ -85,23 +85,25 @@ selectTargets <- function(mirnaObj, miRNA.Direction = NULL, pairs = FALSE) {
         )
         colnames(intPairs)[2] <- "Target"
     }
-
+    
     ## select miRNA-target pairs that vary in a specific direction
     if (!is.null(miRNA.Direction)) {
         if (miRNA.Direction == "downregulated") {
-            intPairs <- intPairs[intPairs$microRNA.Direction == "Down" |
-                intPairs$microRNA.Direction == "downregulated", ]
+            intPairs <- intPairs[
+                intPairs$microRNA.Direction == "Down" |
+                    intPairs$microRNA.Direction == "downregulated", ]
         } else {
-            intPairs <- intPairs[intPairs$microRNA.Direction == "Up" |
-                intPairs$microRNA.Direction == "upregulated", ]
+            intPairs <- intPairs[
+                intPairs$microRNA.Direction == "Up" |
+                    intPairs$microRNA.Direction == "upregulated", ]
         }
     }
-
+    
     ## retain just target names
     if (pairs == FALSE) {
         intPairs <- unique(intPairs$Target)
     }
-
+    
     ## return integrated pairs
     return(intPairs)
 }
@@ -135,7 +137,7 @@ quiet <- function(x) {
 areColors <- function(x) {
     vapply(x, function(X) {
         tryCatch(is.matrix(col2rgb(X)),
-            error = function(e) FALSE
+                 error = function(e) FALSE
         )
     }, FUN.VALUE = logical(1))
 }
@@ -186,20 +188,17 @@ supportedOrganisms <- function(database) {
             "GO", "KEGG", "MsigDB", "WikiPathways", "Reactome",
             "Enrichr", "DO", "NCG", "DisGeNET", "COVID19"
         )) {
-        stop(
-            paste(
-                "'database' must be one of 'GO', 'KEGG', 'MsigDB',",
-                "'WikiPathways', 'Reactome', 'Enrichr', 'DO', 'NCG',",
-                "'DisGeNET', 'COVID19'. For additional details,",
-                "see ?supportedOrganisms"
-            ),
-            call. = FALSE
+        stop("'database' must be one of 'GO', 'KEGG', 'MsigDB', ",
+             "'WikiPathways', 'Reactome', 'Enrichr', 'DO', 'NCG', ",
+             "'DisGeNET', 'COVID19'. For additional details, ",
+             "see ?supportedOrganisms",
+             call. = FALSE
         )
     }
-
+    
     ## extract supported organisms from species data.frame
     supp <- species[!is.na(species[, database]), "specie"]
-
+    
     ## return supported organisms
     return(supp)
 }
@@ -248,34 +247,34 @@ listPathways <- function(organism, database) {
         length(database) != 1 |
         !database %in% c("KEGG", "Reactome", "WikiPathways")) {
         stop("Supported databases are: 'KEGG', 'Reactome' and 'WikiPathways'",
-            call. = FALSE
+             call. = FALSE
         )
     }
-
+    
     ## check if database is supported for the given specie
     supp <- species[
         !is.na(species[, paste("graph", database, sep = "_")]),
         "specie"
     ]
     if (!organism %in% supp) {
-        stop(paste(
-            "For", database, "database, 'organism' must be one of:",
-            paste(supp, collapse = ", ")
-        ))
+        stop("For ", database, " database, 'organism' must be one of: ",
+             paste(supp, collapse = ", "),
+             call. = FALSE
+        )
     }
-
+    
     ## set organism name
     organism <- species[
         species$specie == organism,
         paste("graph", database, sep = "_")
     ]
-
+    
     ## download pathways from specified database
     pathDb <- graphite::pathways(
         species = organism,
         database = tolower(database)
     )
-
+    
     ## return the names of the pathways present in the specified database
     return(names(pathDb))
 }
@@ -290,19 +289,19 @@ listPathways <- function(organism, database) {
 convertNodes <- function(x, db) {
     ## define conversion mapping
     mapping <- list(to = "SYMBOL", db = db)
-
+    
     ## convert node identifiers
     x@protEdges <- graphite:::convertEdges(x@protEdges, mapping)
     x@protPropEdges <- graphite:::convertEdges(x@protPropEdges, mapping)
     x@metabolEdges <- graphite:::convertEdges(x@metabolEdges, mapping)
     x@metabolPropEdges <- graphite:::convertEdges(x@metabolPropEdges, mapping)
     x@mixedEdges <- graphite:::convertEdges(x@mixedEdges, mapping)
-
+    
     if (nrow(x@protEdges) + nrow(x@protPropEdges) + nrow(x@metabolEdges) +
         nrow(x@metabolPropEdges) + nrow(x@mixedEdges) == 0) {
         warning("the conversion lost all edges of pathway \"", x@title, "\"")
     }
-
+    
     ## return the pathway with converted nodes
     return(x)
 }
@@ -352,15 +351,12 @@ loadExamples <- function(class = "MirnaExperiment") {
         "MirnaExperiment", "IntegrativePathwayAnalysis",
         "FunctionalEnrichment"
     )) {
-        stop(
-            paste(
-                "'class' must be one of 'MirnaExperiment',",
-                "'IntegrativePathwayAnalysis', and 'FunctionalEnrichment'"
-            ),
-            call. = FALSE
+        stop("'class' must be one of 'MirnaExperiment', ",
+             "'IntegrativePathwayAnalysis', and 'FunctionalEnrichment'",
+             call. = FALSE
         )
     }
-
+    
     ## return the example object
     if (class == "MirnaExperiment") {
         return(exampleObject)

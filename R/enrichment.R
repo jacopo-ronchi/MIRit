@@ -2,10 +2,10 @@
 prepareGeneSet <- function(organism, database, category) {
     ## determine organism name accepted by database
     org <- species[species$specie == organism, database]
-
+    
     ## determine organism name for ID conversion
     convOrg <- species[species$specie == organism, "Conversion"]
-
+    
     ## download and prepare the appropriate gene set
     if (database == "GO") {
         gs <- geneset::getGO(
@@ -21,8 +21,8 @@ prepareGeneSet <- function(organism, database, category) {
         )
         gs <- merge(gs$geneset, gs$geneset_name, by = "id")
         symb <- genekitr::transId(gs$gene,
-            transTo = "symbol",
-            org = convOrg
+                                  transTo = "symbol",
+                                  org = convOrg
         )
         gs$symbol <- symb$symbol[match(gs$gene, symb$input_id)]
     } else if (database == "MsigDB") {
@@ -32,8 +32,8 @@ prepareGeneSet <- function(organism, database, category) {
         )
         gs <- gs$geneset
         symb <- genekitr::transId(gs$entrez_gene,
-            transTo = "symbol",
-            org = convOrg
+                                  transTo = "symbol",
+                                  org = convOrg
         )
         gs$symbol <- symb$symbol[match(gs$entrez_gene, symb$input_id)]
         colnames(gs)[1] <- "name"
@@ -41,16 +41,16 @@ prepareGeneSet <- function(organism, database, category) {
         gs <- geneset::getWiki(org = org)
         gs <- merge(gs$geneset, gs$geneset_name, by = "id")
         symb <- genekitr::transId(gs$gene,
-            transTo = "symbol",
-            org = convOrg
+                                  transTo = "symbol",
+                                  org = convOrg
         )
         gs$symbol <- symb$symbol[match(gs$gene, symb$input_id)]
     } else if (database == "Reactome") {
         gs <- geneset::getReactome(org = org)
         gs <- merge(gs$geneset, gs$geneset_name, by = "id")
         symb <- genekitr::transId(gs$gene,
-            transTo = "symbol",
-            org = convOrg
+                                  transTo = "symbol",
+                                  org = convOrg
         )
         gs$symbol <- symb$symbol[match(gs$gene, symb$input_id)]
     } else if (database == "Enrichr") {
@@ -64,8 +64,8 @@ prepareGeneSet <- function(organism, database, category) {
         gs <- geneset::getHgDisease(source = "do")
         gs <- merge(gs$geneset, gs$geneset_name, by = "id")
         symb <- genekitr::transId(gs$gene,
-            transTo = "symbol",
-            org = convOrg
+                                  transTo = "symbol",
+                                  org = convOrg
         )
         gs$symbol <- symb$symbol[match(gs$gene, symb$input_id)]
         dupDO <- duplicated(data.frame(
@@ -78,8 +78,8 @@ prepareGeneSet <- function(organism, database, category) {
             gs <- geneset::getHgDisease(source = "ncg_v6")
             gs <- gs$geneset
             symb <- genekitr::transId(gs$gene,
-                transTo = "symbol",
-                org = convOrg
+                                      transTo = "symbol",
+                                      org = convOrg
             )
             gs$symbol <- symb$symbol[match(gs$gene, symb$input_id)]
             colnames(gs)[1] <- "name"
@@ -87,8 +87,8 @@ prepareGeneSet <- function(organism, database, category) {
             gs <- geneset::getHgDisease(source = "ncg_v7")
             gs <- gs$geneset
             symb <- genekitr::transId(gs$gene,
-                transTo = "symbol",
-                org = convOrg
+                                      transTo = "symbol",
+                                      org = convOrg
             )
             gs$symbol <- symb$symbol[match(gs$gene, symb$input_id)]
             colnames(gs)[1] <- "name"
@@ -97,8 +97,8 @@ prepareGeneSet <- function(organism, database, category) {
         gs <- geneset::getHgDisease(source = "disgenet")
         gs <- merge(gs$geneset, gs$geneset_name, by = "id")
         symb <- genekitr::transId(gs$gene,
-            transTo = "symbol",
-            org = convOrg
+                                  transTo = "symbol",
+                                  org = convOrg
         )
         gs$symbol <- symb$symbol[match(gs$gene, symb$input_id)]
     } else if (database == "COVID19") {
@@ -106,10 +106,10 @@ prepareGeneSet <- function(organism, database, category) {
         gs <- gs$geneset
         colnames(gs) <- c("name", "symbol")
     }
-
+    
     ## convert gene set to list
     gs <- split(gs$symbol, gs$name)
-
+    
     ## return gene set
     return(gs)
 }
@@ -123,64 +123,64 @@ validateCategories <- function(database, category, organism) {
     ## check if category is included in the specified database
     if (database == "GO" &
         !category %in% c("bp", "mf", "cc")) {
-        stop(paste(
-            "For GO database, 'category' must be one of 'bp', 'mf', 'cc'.",
+        stop(
+            "For GO database, 'category' must be one of 'bp', 'mf', 'cc'. ",
             "For additional details, see ?enrichGenes"
-        ))
+        )
     } else if (database == "KEGG" &
-        !category %in% c(
-            "pathway", "module", "enzyme",
-            "disease", "drug", "network"
-        )) {
-        stop(paste(
-            "For KEGG database, 'category' must be one of 'pathway',",
-            "'module', 'enzyme', 'disease', 'drug', 'network'.",
+               !category %in% c(
+                   "pathway", "module", "enzyme",
+                   "disease", "drug", "network"
+               )) {
+        stop(
+            "For KEGG database, 'category' must be one of 'pathway', ",
+            "'module', 'enzyme', 'disease', 'drug', 'network'. ",
             "For additional details, see ?enrichGenes"
-        ))
+        )
     } else if (database == "KEGG" &
-        category %in% c("disease", "drug", "network") &
-        organism != "Homo sapiens") {
-        stop(paste(
-            "For KEGG database, the categories 'disease', 'drug', and",
-            "'network' are available only for specie Homo sapiens.",
+               category %in% c("disease", "drug", "network") &
+               organism != "Homo sapiens") {
+        stop(
+            "For KEGG database, the categories 'disease', 'drug', and ",
+            "'network' are available only for specie Homo sapiens. ",
             "For additional details, see ?enrichGenes"
-        ))
+        )
     } else if (database == "MsigDB" &
-        !category %in% c(
-            "H", "C1", "C2-CGP", "C2-CP-BIOCARTA",
-            "C2-CP-KEGG", "C2-CP-PID", "C2-CP-REACTOME",
-            "C2-CP-WIKIPATHWAYS", "C3-MIR-MIRDB",
-            "C3-MIR-MIR_Legacy", "C3-TFT-GTRD",
-            "C3-TFT-TFT_Legacy", "C4-CGN", "C4-CM",
-            "C5-GO-BP", "C5-GO-CC", "C5-GO-MF", "C5-HPO",
-            "C6", "C7-IMMUNESIGDB", "C7-VAX", "C8"
-        )) {
-        stop(paste(
-            "For MsigDB database, 'category' must be one of 'H', 'C1',",
-            "'C2-CGP', 'C2-CP-BIOCARTA', 'C2-CP-KEGG', 'C2-CP-PID',",
-            "'C2-CP-REACTOME', 'C2-CP-WIKIPATHWAYS', 'C3-MIR-MIRDB'",
-            "'C3-MIR-MIR_Legacy', 'C3-TFT-GTRD', 'C3-TFT-TFT_Legacy',",
-            "'C4-CGN', 'C4-CM', 'C5-GO-BP', 'C5-GO-CC', 'C5-GO-MF',",
-            "'C5-HPO', 'C6', 'C7-IMMUNESIGDB', 'C7-VAX', 'C8'.",
+               !category %in% c(
+                   "H", "C1", "C2-CGP", "C2-CP-BIOCARTA",
+                   "C2-CP-KEGG", "C2-CP-PID", "C2-CP-REACTOME",
+                   "C2-CP-WIKIPATHWAYS", "C3-MIR-MIRDB",
+                   "C3-MIR-MIR_Legacy", "C3-TFT-GTRD",
+                   "C3-TFT-TFT_Legacy", "C4-CGN", "C4-CM",
+                   "C5-GO-BP", "C5-GO-CC", "C5-GO-MF", "C5-HPO",
+                   "C6", "C7-IMMUNESIGDB", "C7-VAX", "C8"
+               )) {
+        stop(
+            "For MsigDB database, 'category' must be one of 'H', 'C1', ",
+            "'C2-CGP', 'C2-CP-BIOCARTA', 'C2-CP-KEGG', 'C2-CP-PID', ",
+            "'C2-CP-REACTOME', 'C2-CP-WIKIPATHWAYS', 'C3-MIR-MIRDB' ",
+            "'C3-MIR-MIR_Legacy', 'C3-TFT-GTRD', 'C3-TFT-TFT_Legacy', ",
+            "'C4-CGN', 'C4-CM', 'C5-GO-BP', 'C5-GO-CC', 'C5-GO-MF', ",
+            "'C5-HPO', 'C6', 'C7-IMMUNESIGDB', 'C7-VAX', 'C8'. ",
             "For additional details, see ?enrichGenes"
-        ))
+        )
     } else if (database == "NCG" &
-        !category %in% c("v6", "v7")) {
-        stop(paste(
-            "For NCG database, 'category' must be one of 'v6', 'v7'.",
+               !category %in% c("v6", "v7")) {
+        stop(
+            "For NCG database, 'category' must be one of 'v6', 'v7'. ",
             "For additional details, see ?enrichGenes"
-        ))
+        )
     } else if (database == "Enrichr" &
-        !category %in% geneset::enrichr_metadata$library[
-            geneset::enrichr_metadata$organism == species$Enrichr[
-                species$specie == organism
-            ]
-        ]) {
-        stop(paste(
-            "Valid categories for Enrichr database are listed in",
-            "'geneset::enrichr_metadata'. For additional details,",
+               !category %in% geneset::enrichr_metadata$library[
+                   geneset::enrichr_metadata$organism == species$Enrichr[
+                       species$specie == organism
+                   ]
+               ]) {
+        stop(
+            "Valid categories for Enrichr database are listed in ",
+            "'geneset::enrichr_metadata'. For additional details, ",
             "see ?enrichGenes"
-        ))
+        )
     }
 }
 
@@ -425,28 +425,29 @@ validateCategories <- function(database, category, organism) {
 #'
 #' @export
 enrichGenes <- function(mirnaObj,
-    method = "GSEA",
-    database = "GO",
-    category = NULL,
-    organism = "Homo sapiens",
-    pCutoff = 0.05,
-    pAdjustment = "fdr",
-    minSize = 10L,
-    maxSize = 500L,
-    rankMetric = "signed.pval",
-    eps = 1e-50) {
+                        method = "GSEA",
+                        database = "GO",
+                        category = NULL,
+                        organism = "Homo sapiens",
+                        pCutoff = 0.05,
+                        pAdjustment = "fdr",
+                        minSize = 10L,
+                        maxSize = 500L,
+                        rankMetric = "signed.pval",
+                        eps = 1e-50) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
-        stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
-            call. = FALSE
+        stop("'mirnaObj' should be of class MirnaExperiment! ",
+             "See ?MirnaExperiment",
+             call. = FALSE
         )
     }
     if (nrow(geneDE(mirnaObj, onlySignificant = FALSE)) == 0) {
-        stop(paste(
-            "Gene differential expression results are not present in",
-            "'mirnaObj'. Please, use 'performGeneDE()' before using",
-            "this function. See ?performGeneDE"
-        ), call. = FALSE)
+        stop("Gene differential expression results are not present in ",
+             "'mirnaObj'. Please, use 'performGeneDE()' before using ",
+             "this function. See ?performGeneDE",
+             call. = FALSE
+        )
     }
     if (!is.character(database) |
         length(database) != 1 |
@@ -454,35 +455,26 @@ enrichGenes <- function(mirnaObj,
             "GO", "KEGG", "MsigDB", "WikiPathways", "Reactome",
             "Enrichr", "DO", "NCG", "DisGeNET", "COVID19"
         )) {
-        stop(
-            paste(
-                "'database' must be one of 'GO', 'KEGG', 'MsigDB',",
-                "'WikiPathways', 'Reactome', 'Enrichr', 'DO', 'NCG',",
-                "'DisGeNET', 'COVID19'. For additional details,",
-                "see ?enrichGenes"
-            ),
-            call. = FALSE
+        stop("'database' must be one of 'GO', 'KEGG', 'MsigDB', ",
+             "'WikiPathways', 'Reactome', 'Enrichr', 'DO', 'NCG', ",
+             "'DisGeNET', 'COVID19'. For additional details, ",
+             "see ?enrichGenes",
+             call. = FALSE
         )
     }
     if (!is.character(method) |
         length(method) != 1 |
         !method %in% c("ORA", "GSEA", "CAMERA")) {
-        stop(
-            paste(
-                "'method' must be one of 'ORA', 'GSEA', 'CAMERA'.",
-                "For additional details, see ?enrichGenes"
-            ),
-            call. = FALSE
+        stop("'method' must be one of 'ORA', 'GSEA', 'CAMERA'. ",
+             "For additional details, see ?enrichGenes",
+             call. = FALSE
         )
     }
     if (geneDE(mirnaObj, param = TRUE)$method == "Manually added" &
         method == "CAMERA") {
-        stop(
-            paste(
-                "Functional enrichment analysis with CAMERA is not available",
-                "for user-supplied differential expression results..."
-            ),
-            call. = FALSE
+        stop("Functional enrichment analysis with CAMERA is not available ",
+             "for user-supplied differential expression results...",
+             call. = FALSE
         )
     }
     if (!is.numeric(pCutoff) |
@@ -490,7 +482,7 @@ enrichGenes <- function(mirnaObj,
         pCutoff > 1 |
         pCutoff < 0) {
         stop("'pCutoff' must be a number between 0 and 1! (default is 0.05)",
-            call. = FALSE
+             call. = FALSE
         )
     }
     if (!is.character(pAdjustment) |
@@ -499,13 +491,10 @@ enrichGenes <- function(mirnaObj,
             "none", "fdr", "bonferroni", "BY", "hochberg",
             "holm", "hommel", "BH"
         )) {
-        stop(
-            paste(
-                "'pAdjustment' must be  one of: 'none', 'fdr' (default),",
-                "'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg',",
-                "'holm', 'hommel'"
-            ),
-            call. = FALSE
+        stop("'pAdjustment' must be  one of: 'none', 'fdr' (default), ",
+             "'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg', ",
+             "'holm', 'hommel'",
+             call. = FALSE
         )
     }
     if (!is.numeric(minSize) |
@@ -515,24 +504,18 @@ enrichGenes <- function(mirnaObj,
         length(maxSize) != 1 |
         maxSize < 0 |
         minSize > maxSize) {
-        stop(
-            paste(
-                "'minSize' and 'maxSize' must be two positive numbers!",
-                "Additionally, maxSize should be bigger than minSize.",
-                "For additional details, see ?enrichGenes"
-            ),
-            call. = FALSE
+        stop("'minSize' and 'maxSize' must be two positive numbers! ",
+             "Additionally, maxSize should be bigger than minSize. ",
+             "For additional details, see ?enrichGenes",
+             call. = FALSE
         )
     }
     if (!is.character(rankMetric) |
         length(rankMetric) != 1 |
         !rankMetric %in% c("signed.pval", "logFC", "log.pval")) {
-        stop(
-            paste(
-                "'rankMetric' must be one of 'signed.pval', 'logFC',",
-                "'log.pval'. For additional details, see ?enrichGenes"
-            ),
-            call. = FALSE
+        stop("'rankMetric' must be one of 'signed.pval', 'logFC', ",
+             "'log.pval'. For additional details, see ?enrichGenes",
+             call. = FALSE
         )
     }
     if (!is.numeric(eps) |
@@ -540,19 +523,19 @@ enrichGenes <- function(mirnaObj,
         eps > 1 |
         eps < 0) {
         stop("'eps' must be a number between 0 and 1! (default is 1e-50)",
-            call. = FALSE
+             call. = FALSE
         )
     }
-
+    
     ## check if database is supported for the given specie
     supp <- species[!is.na(species[, database]), "specie"]
     if (!organism %in% supp) {
-        stop(paste(
-            "For", database, "database, 'organism' must be one of:",
+        stop(
+            "For ", database, " database, 'organism' must be one of: ",
             paste(supp, collapse = ", ")
-        ))
+        )
     }
-
+    
     ## if NULL, set default categories
     if (is.null(category)) {
         if (!database %in% c(
@@ -568,18 +551,18 @@ enrichGenes <- function(mirnaObj,
             } else if (database == "NCG") {
                 category <- "v7"
             }
-            message(paste(
-                "Since not specified, 'category' for", database,
-                "database is set to", category, "(default)."
-            ))
+            message(
+                "Since not specified, 'category' for ", database,
+                " database is set to ", category, " (default)."
+            )
         } else {
             category <- ""
         }
     }
-
+    
     ## check if category is included in the specified database
     validateCategories(database, category, organism)
-
+    
     ## download the appropriate gene set
     message("Preparing the appropriate gene set...")
     gs <- prepareGeneSet(
@@ -587,7 +570,7 @@ enrichGenes <- function(mirnaObj,
         database = database,
         category = category
     )
-
+    
     ## set a describer for the database used
     if (database %in% c(
         "Reactome", "WikiPathways", "DO",
@@ -597,7 +580,7 @@ enrichGenes <- function(mirnaObj,
     } else {
         dataInfo <- paste(database, " (category: ", category, ")", sep = "")
     }
-
+    
     ## perform the desired functional enrichment analysis
     if (method == "ORA") {
         res <- oraInternal(
@@ -635,7 +618,7 @@ enrichGenes <- function(mirnaObj,
             organism = organism
         )
     }
-
+    
     ## return the results of functional enrichment
     return(res)
 }
@@ -646,14 +629,14 @@ enrichGenes <- function(mirnaObj,
 
 ## perform a simple over-representation analysis (ORA)
 oraInternal <- function(mirnaObj,
-    geneSet,
-    pCutoff,
-    pAdjustment,
-    minSize,
-    maxSize,
-    dataInfo,
-    organism,
-    integrated = FALSE) {
+                        geneSet,
+                        pCutoff,
+                        pAdjustment,
+                        minSize,
+                        maxSize,
+                        dataInfo,
+                        organism,
+                        integrated = FALSE) {
     ## retrieve upregulated and downregulated genes/integrated targets
     if (integrated == TRUE) {
         up <- selectTargets(mirnaObj, miRNA.Direction = "downregulated")
@@ -663,10 +646,10 @@ oraInternal <- function(mirnaObj,
         up <- de$ID[de$logFC > 0]
         down <- de$ID[de$logFC < 0]
     }
-
+    
     ## set the universe
     universe <- rownames(mirnaObj)[["genes"]]
-
+    
     ## perform over-representation analysis for upregulated genes
     message("Performing the enrichment of upregulated genes...")
     oraUp <- fgsea::fora(
@@ -676,7 +659,7 @@ oraInternal <- function(mirnaObj,
         minSize = minSize,
         maxSize = maxSize
     )
-
+    
     ## perform over-representation analysis for downregulated genes
     message("Performing the enrichment of downregulated genes...")
     oraDown <- fgsea::fora(
@@ -686,52 +669,52 @@ oraInternal <- function(mirnaObj,
         minSize = minSize,
         maxSize = maxSize
     )
-
+    
     ## adjust p-values through the desired approach
     oraUp$padj <- p.adjust(oraUp$pval, method = pAdjustment)
     oraDown$padj <- p.adjust(oraDown$pval, method = pAdjustment)
-
+    
     ## restrict the results to significant terms
     oraUp <- oraUp[oraUp$padj < pCutoff, ]
     oraDown <- oraDown[oraDown$padj < pCutoff, ]
-
+    
     ## order results based on padj
     oraUp <- oraUp[order(oraUp$padj), ]
     oraDown <- oraDown[order(oraDown$padj), ]
-
+    
     ## inform the user about ORA results
-    message(paste(
-        "The enrichment of genes reported", nrow(oraDown),
-        "significantly enriched terms for downregulated genes",
-        "and", nrow(oraUp), "for upregulated genes."
-    ))
-
+    message(
+        "The enrichment of genes reported ", nrow(oraDown),
+        " significantly enriched terms for downregulated genes ",
+        "and ", nrow(oraUp), " for upregulated genes."
+    )
+    
     ## store results as FunctionalEnrichment objects
     upEnr <- new("FunctionalEnrichment",
-        data = oraUp,
-        method = "Over-Representation Analysis (ORA)",
-        organism = organism,
-        database = dataInfo,
-        pCutoff = pCutoff,
-        pAdjustment = pAdjustment,
-        features = up,
-        statistic = numeric(),
-        universe = universe,
-        geneSet = geneSet
+                 data = oraUp,
+                 method = "Over-Representation Analysis (ORA)",
+                 organism = organism,
+                 database = dataInfo,
+                 pCutoff = pCutoff,
+                 pAdjustment = pAdjustment,
+                 features = up,
+                 statistic = numeric(),
+                 universe = universe,
+                 geneSet = geneSet
     )
     downEnr <- new("FunctionalEnrichment",
-        data = oraDown,
-        method = "Over-Representation Analysis (ORA)",
-        organism = organism,
-        database = dataInfo,
-        pCutoff = pCutoff,
-        pAdjustment = pAdjustment,
-        features = down,
-        statistic = numeric(),
-        universe = universe,
-        geneSet = geneSet
+                   data = oraDown,
+                   method = "Over-Representation Analysis (ORA)",
+                   organism = organism,
+                   database = dataInfo,
+                   pCutoff = pCutoff,
+                   pAdjustment = pAdjustment,
+                   features = down,
+                   statistic = numeric(),
+                   universe = universe,
+                   geneSet = geneSet
     )
-
+    
     ## return a list object with both objects
     res <- list(
         upregulated = upEnr,
@@ -746,20 +729,20 @@ oraInternal <- function(mirnaObj,
 
 ## perform a gene-set enrichment analysis (GSEA)
 gseaInternal <- function(mirnaObj,
-    geneSet,
-    pCutoff,
-    pAdjustment,
-    minSize,
-    maxSize,
-    dataInfo,
-    organism,
-    rankMetric,
-    eps) {
+                         geneSet,
+                         pCutoff,
+                         pAdjustment,
+                         minSize,
+                         maxSize,
+                         dataInfo,
+                         organism,
+                         rankMetric,
+                         eps) {
     ## retrieve gene differential expression
     de <- geneDE(mirnaObj, onlySignificant = FALSE)
-
+    
     ## create GSEA ranked list according to the chosen metric
-    message(paste("Ranking genes based on ", rankMetric, "...", sep = ""))
+    message("Ranking genes based on ", rankMetric, "...")
     if (rankMetric == "signed.pval") {
         de$stat <- sign(de$logFC) * (-log10(de$P.Value))
         de <- de[order(de$stat, decreasing = TRUE), ]
@@ -775,7 +758,7 @@ gseaInternal <- function(mirnaObj,
         stat <- de$stat
         names(stat) <- de$ID
     }
-
+    
     ## perform GSEA
     message("Performing gene-set enrichment analysis (GSEA)...")
     gse <- fgsea::fgsea(
@@ -785,33 +768,33 @@ gseaInternal <- function(mirnaObj,
         maxSize = maxSize,
         eps = eps
     )
-
+    
     ## adjust p-values through the desired approach
     gse$padj <- p.adjust(gse$pval, method = pAdjustment)
-
+    
     ## restrict the results to significant terms
     gse <- gse[gse$padj < pCutoff, ]
-
+    
     ## order results based on padj
     gse <- gse[order(gse$padj), ]
-
+    
     ## inform the user about GSEA results
-    message(paste("GSEA reported", nrow(gse), "significantly enriched terms."))
-
+    message("GSEA reported ", nrow(gse), " significantly enriched terms.")
+    
     ## store results as a FunctionalEnrichment object
     gseObj <- new("FunctionalEnrichment",
-        data = gse,
-        method = "Gene-Set Enrichment Analysis (GSEA)",
-        organism = organism,
-        database = dataInfo,
-        pCutoff = pCutoff,
-        pAdjustment = pAdjustment,
-        features = names(stat),
-        statistic = stat,
-        universe = character(),
-        geneSet = geneSet
+                  data = gse,
+                  method = "Gene-Set Enrichment Analysis (GSEA)",
+                  organism = organism,
+                  database = dataInfo,
+                  pCutoff = pCutoff,
+                  pAdjustment = pAdjustment,
+                  features = names(stat),
+                  statistic = stat,
+                  universe = character(),
+                  geneSet = geneSet
     )
-
+    
     ## return the object
     return(gseObj)
 }
@@ -823,36 +806,36 @@ gseaInternal <- function(mirnaObj,
 ## perform a competitive gene set test accounting for inter-gene
 ## correlation (CAMERA)
 cameraInternal <- function(mirnaObj,
-    geneSet,
-    pCutoff,
-    pAdjustment,
-    minSize,
-    maxSize,
-    dataInfo,
-    organism) {
+                           geneSet,
+                           pCutoff,
+                           pAdjustment,
+                           minSize,
+                           maxSize,
+                           dataInfo,
+                           organism) {
     ## determine gene set sizes
     sizes <- unlist(lapply(geneSet, length))
-
+    
     ## remove categories that are lowly or overly represented
     geneSet <- geneSet[sizes > minSize &
-        sizes < maxSize]
-
+                           sizes < maxSize]
+    
     ## extract gene differential expression results
     de <- geneDE(mirnaObj, param = TRUE)
-
+    
     ## access sample metadata
     meta <- colData(mirnaObj)
     meta <- meta[!is.na(meta$geneCol), ]
-
+    
     ## reorder metadata based on expression matrix
     meta <- meta[order(match(meta$geneCol, colnames(mirnaObj[["genes"]]))), ]
-
+    
     ## determine the appropriate expression matrix and the experimental design
     if (de$method == "limma") {
         expr <- mirnaObj[["genes"]]
         des <- model.matrix(de$design, data = meta)
     } else if (de$method == "edgeR" |
-        de$method == "limma-voom") {
+               de$method == "limma-voom") {
         expr <- geneDE(mirnaObj, returnObject = TRUE)
         des <- expr$design
     } else if (de$method == "DESeq2") {
@@ -869,19 +852,19 @@ cameraInternal <- function(mirnaObj,
         des <- model.matrix(de$design, data = meta)
         expr <- limma::voom(features, design = des)
     }
-
+    
     ## set up the contrast
     contrast <- strsplit(de$contrast, "-")[[1]]
-
+    
     ## determine if the model has intercept
     intercept <- attributes(terms(de$design))["intercept"] == 1
-
+    
     ## identify the comparison for DE analysis
     if (intercept == FALSE) {
         ## build the contrast of interest
         contrast <- paste(de$group, contrast, sep = "")
         contrast <- paste(contrast, collapse = "-")
-
+        
         ## create contrast matrix
         con <- limma::makeContrasts(
             contrasts = contrast,
@@ -892,9 +875,10 @@ cameraInternal <- function(mirnaObj,
         con <- contrast[1]
         con <- paste(de$group, con, sep = "")
     }
-
+    
     ## perform integration through rotation gene set enrichment analysis
-    message("Performing Correlation Adjusted MEan RAnk gene set test (CAMERA)...")
+    message("Performing Correlation Adjusted MEan RAnk gene set test ",
+            "(CAMERA)...")
     if (de$method == "edgeR") {
         ## perform miRNA-target integration through 'CAMERA'
         rs <- edgeR::camera.DGEList(
@@ -912,40 +896,41 @@ cameraInternal <- function(mirnaObj,
             contrast = con
         )
     }
-
+    
     ## adjust p-values according to the specified method
     rs$FDR <- p.adjust(rs$PValue, method = pAdjustment)
-
+    
     ## reshape the resulting data.frame
     rs$pathway <- rownames(rs)
     rs$size <- sizes[match(rs$pathway, names(sizes))]
     rs <- rs[, c(5, 2, 1, 6, 3, 4)]
     colnames(rs) <- c("pathway", "direction", "overlap", "size", "pval", "padj")
-
+    
     ## restrict the results to significant terms
     rs <- na.omit(rs)
     rs <- rs[rs$padj < pCutoff, ]
-
+    
     ## order results based on padj
     rs <- rs[order(rs$padj), ]
-
+    
     ## inform the user about GSEA results
-    message(paste("CAMERA reported", nrow(rs), "significantly enriched terms."))
-
+    message("CAMERA reported ", nrow(rs), " significantly enriched terms.")
+    
     ## store results as a FunctionalEnrichment object
     rsObj <- new("FunctionalEnrichment",
-        data = rs,
-        method = "Correlation Adjusted MEan RAnk gene set test (CAMERA)",
-        organism = organism,
-        database = dataInfo,
-        pCutoff = pCutoff,
-        pAdjustment = pAdjustment,
-        features = character(),
-        statistic = numeric(),
-        universe = character(),
-        geneSet = geneSet
+                 data = rs,
+                 method = paste("Correlation Adjusted MEan RAnk",
+                                "gene set test (CAMERA)"),
+                 organism = organism,
+                 database = dataInfo,
+                 pCutoff = pCutoff,
+                 pAdjustment = pAdjustment,
+                 features = character(),
+                 statistic = numeric(),
+                 universe = character(),
+                 geneSet = geneSet
     )
-
+    
     ## return the object
     return(rsObj)
 }
@@ -1043,42 +1028,40 @@ cameraInternal <- function(mirnaObj,
 #'
 #' @export
 enrichTargets <- function(mirnaObj,
-    database = "GO",
-    category = NULL,
-    organism = "Homo sapiens",
-    pCutoff = 0.05,
-    pAdjustment = "fdr",
-    minSize = 10L,
-    maxSize = 500L) {
+                          database = "GO",
+                          category = NULL,
+                          organism = "Homo sapiens",
+                          pCutoff = 0.05,
+                          pAdjustment = "fdr",
+                          minSize = 10L,
+                          maxSize = 500L) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
-        stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
-            call. = FALSE
+        stop("'mirnaObj' should be of class MirnaExperiment! ",
+             "See ?MirnaExperiment",
+             call. = FALSE
         )
     }
     if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0) {
-        stop(paste(
-            "MiRNA differential expression results are not present in",
-            "'mirnaObj'. Please, use 'performMirnaDE()' before using",
-            "this function. See ?performMirnaDE"
-        ), call. = FALSE)
+        stop("MiRNA differential expression results are not present in ",
+             "'mirnaObj'. Please, use 'performMirnaDE()' before using ",
+             "this function. See ?performMirnaDE",
+             call. = FALSE
+        )
     }
     if (nrow(geneDE(mirnaObj, onlySignificant = FALSE)) == 0) {
-        stop(paste(
-            "Gene differential expression results are not present in",
-            "'mirnaObj'. Please, use 'performGeneDE()' before using",
-            "this function. See ?performGeneDE"
-        ), call. = FALSE)
+        stop("Gene differential expression results are not present in ",
+             "'mirnaObj'. Please, use 'performGeneDE()' before using ",
+             "this function. See ?performGeneDE",
+             call. = FALSE
+        )
     }
     if (max(dim(integration(mirnaObj))) == 0) {
-        stop(
-            paste(
-                "Integration analysis is not detected in 'mirnaObj'!",
-                "Before using this function, expression levels of miRNAs and",
-                "genes must be integrated with the 'mirnaIntegration()'",
-                "function. See '?mirnaIntegration' for the details."
-            ),
-            call. = FALSE
+        stop("Integration analysis is not detected in 'mirnaObj'! ",
+             "Before using this function, expression levels of miRNAs and ",
+             "genes must be integrated with the 'mirnaIntegration()' ",
+             "function. See '?mirnaIntegration' for the details.",
+             call. = FALSE
         )
     }
     if (!is.character(database) |
@@ -1087,14 +1070,11 @@ enrichTargets <- function(mirnaObj,
             "GO", "KEGG", "MsigDB", "WikiPathways", "Reactome",
             "Enrichr", "DO", "NCG", "DisGeNET", "COVID19"
         )) {
-        stop(
-            paste(
-                "'database' must be one of 'GO', 'KEGG', 'MsigDB',",
-                "'WikiPathways', 'Reactome', 'Enrichr', 'DO', 'NCG',",
-                "'DisGeNET', 'COVID19'. For additional details,",
-                "see ?enrichTargets"
-            ),
-            call. = FALSE
+        stop("'database' must be one of 'GO', 'KEGG', 'MsigDB', ",
+             "'WikiPathways', 'Reactome', 'Enrichr', 'DO', 'NCG', ",
+             "'DisGeNET', 'COVID19'. For additional details, ",
+             "see ?enrichTargets",
+             call. = FALSE
         )
     }
     if (!is.numeric(pCutoff) |
@@ -1102,7 +1082,7 @@ enrichTargets <- function(mirnaObj,
         pCutoff > 1 |
         pCutoff < 0) {
         stop("'pCutoff' must be a number between 0 and 1! (default is 0.05)",
-            call. = FALSE
+             call. = FALSE
         )
     }
     if (!is.character(pAdjustment) |
@@ -1111,13 +1091,10 @@ enrichTargets <- function(mirnaObj,
             "none", "fdr", "bonferroni", "BY", "hochberg",
             "holm", "hommel", "BH"
         )) {
-        stop(
-            paste(
-                "'pAdjustment' must be  one of: 'none', 'fdr' (default),",
-                "'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg',",
-                "'holm', 'hommel'"
-            ),
-            call. = FALSE
+        stop("'pAdjustment' must be  one of: 'none', 'fdr' (default), ",
+             "'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg', ",
+             "'holm', 'hommel'",
+             call. = FALSE
         )
     }
     if (!is.numeric(minSize) |
@@ -1127,25 +1104,22 @@ enrichTargets <- function(mirnaObj,
         length(maxSize) != 1 |
         maxSize < 0 |
         minSize > maxSize) {
-        stop(
-            paste(
-                "'minSize' and 'maxSize' must be two positive numbers!",
-                "Additionally, maxSize should be bigger than minSize.",
-                "For additional details, see ?enrichTargets"
-            ),
-            call. = FALSE
+        stop("'minSize' and 'maxSize' must be two positive numbers! ",
+             "Additionally, maxSize should be bigger than minSize. ",
+             "For additional details, see ?enrichTargets",
+             call. = FALSE
         )
     }
-
+    
     ## check if database is supported for the given specie
     supp <- species[!is.na(species[, database]), "specie"]
     if (!organism %in% supp) {
-        stop(paste(
-            "For", database, "database, 'organism' must be one of:",
+        stop(
+            "For ", database, " database, 'organism' must be one of: ",
             paste(supp, collapse = ", ")
-        ))
+        )
     }
-
+    
     ## if NULL, set default categories
     if (is.null(category)) {
         if (!database %in% c(
@@ -1161,18 +1135,18 @@ enrichTargets <- function(mirnaObj,
             } else if (database == "NCG") {
                 category <- "v7"
             }
-            message(paste(
-                "Since not specified, 'category' for", database,
-                "database is set to", category, "(default)."
-            ))
+            message(
+                "Since not specified, 'category' for ", database,
+                " database is set to ", category, " (default)."
+            )
         } else {
             category <- ""
         }
     }
-
+    
     ## check if category is included in the specified database
     validateCategories(database, category, organism)
-
+    
     ## download the appropriate gene set
     message("Preparing the appropriate gene set...")
     gs <- prepareGeneSet(
@@ -1180,7 +1154,7 @@ enrichTargets <- function(mirnaObj,
         database = database,
         category = category
     )
-
+    
     ## set a describer for the database used
     if (database %in% c(
         "Reactome", "WikiPathways", "DO",
@@ -1190,7 +1164,7 @@ enrichTargets <- function(mirnaObj,
     } else {
         dataInfo <- paste(database, " (category: ", category, ")", sep = "")
     }
-
+    
     ## perform over-representation analysis of integrated targets
     res <- oraInternal(
         mirnaObj = mirnaObj,
@@ -1203,7 +1177,7 @@ enrichTargets <- function(mirnaObj,
         organism = organism,
         integrated = TRUE
     )
-
+    
     ## return the results of functional enrichment
     return(res)
 }

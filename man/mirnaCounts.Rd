@@ -16,6 +16,9 @@ A \code{matrix} object containing samples as columns and microRNAs as rows.
 \usage{
 data(mirnaCounts)
 }
+\value{
+A \code{matrix} object with 2576 rows and 16 columns.
+}
 \description{
 This dataset contains a gene expression matrix resulting from a miRNA-Seq
 analysis of thyroid cancer. Specifically, these data originate from

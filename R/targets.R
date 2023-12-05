@@ -91,21 +91,22 @@
 #'
 #' @export
 getTargets <- function(mirnaObj,
-    organism = "Homo sapiens",
-    score = "High",
-    includeValidated = TRUE) {
+                       organism = "Homo sapiens",
+                       score = "High",
+                       includeValidated = TRUE) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
-        stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
-            call. = FALSE
+        stop("'mirnaObj' should be of class MirnaExperiment! ",
+             "See ?MirnaExperiment",
+             call. = FALSE
         )
     }
     if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0) {
-        stop(paste(
-            "MiRNA differential expression results are not present in",
-            "'mirnaObj'. Please, use 'performMirnaDE()' before using",
-            "this function. See ?performMirnaDE"
-        ), call. = FALSE)
+        stop("MiRNA differential expression results are not present in ",
+             "'mirnaObj'. Please, use 'performMirnaDE()' before using ",
+             "this function. See ?performMirnaDE",
+             call. = FALSE
+        )
     }
     if (!is.character(organism) |
         length(organism) != 1 |
@@ -116,75 +117,69 @@ getTargets <- function(mirnaObj,
             "Drosophila melanogaster", "Gallus gallus",
             "Sus scrofa"
         )) {
-        stop(
-            paste(
-                "'organism' must be  one of: 'Homo sapiens' (default),",
-                "'Mus musculus', 'Rattus norvegicus', 'Arabidopsis thaliana',",
-                "'Bos taurus', 'Caenorhabditis elegans', 'Danio rerio',",
-                "'Drosophila melanogaster', 'Gallus gallus',",
-                "and 'Sus scrofa'."
-            ),
-            call. = FALSE
+        stop("'organism' must be  one of: 'Homo sapiens' (default), ",
+             "'Mus musculus', 'Rattus norvegicus', 'Arabidopsis thaliana', ",
+             "'Bos taurus', 'Caenorhabditis elegans', 'Danio rerio', ",
+             "'Drosophila melanogaster', 'Gallus gallus', ",
+             "and 'Sus scrofa'.",
+             call. = FALSE
         )
     }
     if (!is.character(score) |
         length(score) != 1 |
         !score %in% c("Very High", "High", "Medium", "Low")) {
-        stop(
-            paste(
-                "'score' must be one of 'Very High', 'High', 'Medium', 'Low'.",
-                "For additional details, see ?getTargets"
-            ),
-            call. = FALSE
+        stop("'score' must be one of 'Very High', 'High', 'Medium', 'Low'. ",
+             "For additional details, see ?getTargets",
+             call. = FALSE
         )
     }
     if (!is.logical(includeValidated) |
         length(includeValidated) != 1) {
         stop("'includeValidated' must be logical (TRUE/FALSE)!", call. = FALSE)
     }
-
+    
     ## define miRNAs
     allMirnas <- mirnaDE(mirnaObj)$ID
-
+    
     ## use only miRTarBase for organisms other than Homo sapiens
     if (organism != "Homo sapiens") {
         use.mirDIP <- FALSE
         includeValidated <- TRUE
-        message(paste(
-            "For specie", organism, "only miRTarBase database is",
+        message(
+            "For specie ", organism, " only miRTarBase database is ",
             "available..."
-        ))
+        )
     } else {
         use.mirDIP <- TRUE
     }
-
+    
     ## use mirDIP for human target prediction
     if (use.mirDIP == TRUE) {
         ## collapse miRNA names
         microRNAs <- paste(allMirnas, collapse = ", ")
-
+        
         ## set mirDIP database url
         url <- "http://ophid.utoronto.ca/mirDIP/Http_U"
-
+        
         ## set mirDIP mapping score
         mapScore <- list("0", "1", "2", "3")
         names(mapScore) <- c("Very High", "High", "Medium", "Low")
-
+        
         ## set API required parameters
         parameters <- list(
             genesymbol = "",
             microrna = microRNAs,
             scoreClass = mapScore[score]
         )
-
+        
         ## send http POST throug 'getURL' and 'mirDIP.query' helper functions
         message("Retrieving targets from mirDIP (this may take a while)...")
         res <- getURL(url, mirDIP.query, body = parameters, encode = "form")
-
+        
         ## extract results from query
         response <- httr::content(res, "text", encoding = "UTF-8")
         arr <- unlist(strsplit(response, "\001", fixed = TRUE))
-
+        
         ## convert results to a list object
         listMap <- lapply(arr, function(str) {
             arrKeyValue <- unlist(strsplit(str, "\002", fixed = TRUE))
@@ -192,7 +187,7 @@ getTargets <- function(mirnaObj,
                 arrKeyValue[2]
             }
         })
-
+        
         ## define the names of the retrieved values
         names(listMap) <- vapply(arr, function(str) {
             arrKeyValue <- unlist(strsplit(str, "\002", fixed = TRUE))
@@ -203,13 +198,13 @@ getTargets <- function(mirnaObj,
                 item
             }
         }, FUN.VALUE = character(1), USE.NAMES = FALSE)
-
+        
         ## build a data.frame with miRNA-target pairs
         tg <- read.table(text = listMap$results, sep = "\t", header = TRUE)
-
+        
         ## maintain only targets that are present in gene expression matrix
         tg <- tg[tg$Gene.Symbol %in% rownames(mirnaObj[["genes"]]), ]
-
+        
         ## retain only interesting columns
         tg <- tg[, c(
             "Gene.Symbol", "MicroRNA", "Integrated.Score",
@@ -217,41 +212,42 @@ getTargets <- function(mirnaObj,
         )]
         tg$Type <- "Predicted"
     }
-
+    
     ## add validated interactions from miRTarBase
     if (includeValidated == TRUE) {
         ## define miRTarBase v9 link
         mtUrl <- paste("https://mirtarbase.cuhk.edu.cn/~miRTarBase/",
-            "miRTarBase_2022/cache/download/9.0/miRTarBase_MTI.xlsx",
-            sep = ""
+                       "miRTarBase_2022/cache/download/9.0/miRTarBase_MTI.xlsx",
+                       sep = ""
         )
-
+        
         ## load cache
         bfc <- .get_cache()
-
+        
         ## check if miRTarBase is cached
         rid <- BiocFileCache::bfcquery(bfc, "miRTarBase", "rname")$rid
         if (!length(rid)) {
             ## download miRTarBase and add it to the cache directory
-            message("\nDownloading validated interactions from miRTarBase v9.0...")
+            message("\nDownloading validated interactions ",
+                    "from miRTarBase v9.0...")
             rid <- names(BiocFileCache::bfcadd(bfc, "miRTarBase", mtUrl))
         } else {
             message("\nLoading miRTarBase from cache...")
         }
-
+        
         ## check if cached file needs to be updated
         if (!isFALSE(BiocFileCache::bfcneedsupdate(bfc, rid))) {
             BiocFileCache::bfcdownload(bfc, rid, ask = FALSE)
         }
-
+        
         ## load miRTarBase
         mt <- quiet(readxl::read_xlsx(BiocFileCache::bfcrpath(bfc, rids = rid)))
-
+        
         ## keep interactions involving measured miRNAs
         mt <- mt[mt$miRNA %in% allMirnas, c("miRNA", "Target Gene")]
         mt <- unique(mt)
         colnames(mt) <- c("MicroRNA", "Gene.Symbol")
-
+        
         ## create resulting data.frame
         if (use.mirDIP == TRUE) {
             ## merge mirDIP and miRTarBase results
@@ -265,16 +261,16 @@ getTargets <- function(mirnaObj,
             tg$Type <- "Validated"
         }
     }
-
+    
     ## add miRNA-target pairs to the MirnaExperiment object
     mirnaTargets(mirnaObj) <- tg
-
+    
     ## print the results of target retrieval
-    message(paste(
-        nrow(tg), "miRNA-target pairs have been identified for the",
-        length(allMirnas), "differentially expressed miRNAs."
-    ))
-
+    message(
+        nrow(tg), " miRNA-target pairs have been identified for the ",
+        length(allMirnas), " differentially expressed miRNAs."
+    )
+    
     ## return mirnaObj with targets
     return(mirnaObj)
 }
@@ -299,7 +295,7 @@ getURL <- function(URL, FUN, ..., N.TRIES = 3L) {
     ## check that attempts are correctly defined
     N.TRIES <- as.integer(N.TRIES)
     stopifnot(length(N.TRIES) == 1L, !is.na(N.TRIES))
-
+    
     ## attempt to download the resource
     while (N.TRIES > 0L) {
         result <- tryCatch(FUN(URL, ...), error = identity)
@@ -309,7 +305,7 @@ getURL <- function(URL, FUN, ..., N.TRIES = 3L) {
         N.TRIES <- N.TRIES - 1L
         message("\nAttempting again to reach the resource...")
     }
-
+    
     ## if attempts are finished, print error message
     if (N.TRIES == 0L) {
         stop(
@@ -318,7 +314,7 @@ getURL <- function(URL, FUN, ..., N.TRIES = 3L) {
             "\n  error: ", conditionMessage(result)
         )
     }
-
+    
     ## return results
     return(result)
 }

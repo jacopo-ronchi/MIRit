@@ -48,10 +48,11 @@ NULL
 
 #' @describeIn deAccessors Extract miRNA differential expression results
 #' @export
-setGeneric("mirnaDE", function(object,
-    onlySignificant = TRUE,
-    param = FALSE,
-    returnObject = FALSE) {
+setGeneric("mirnaDE", function(
+        object,
+        onlySignificant = TRUE,
+        param = FALSE,
+        returnObject = FALSE) {
     standardGeneric("mirnaDE")
 })
 
@@ -59,10 +60,11 @@ setGeneric("mirnaDE", function(object,
 
 #' @describeIn deAccessors Extract gene differential expression results
 #' @export
-setGeneric("geneDE", function(object,
-    onlySignificant = TRUE,
-    param = FALSE,
-    returnObject = FALSE) {
+setGeneric("geneDE", function(
+        object,
+        onlySignificant = TRUE,
+        param = FALSE,
+        returnObject = FALSE) {
     standardGeneric("geneDE")
 })
 
@@ -220,8 +222,9 @@ setGeneric(
 #' @export
 setGeneric(
     "integration",
-    function(object,
-    param = FALSE) {
+    function(
+        object,
+        param = FALSE) {
         standardGeneric("integration")
     }
 )

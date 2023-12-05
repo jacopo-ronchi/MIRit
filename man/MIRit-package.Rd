@@ -21,5 +21,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Jacopo Ronchi \email{jacopo.ronchi@unimib.it} (\href{https://orcid.org/0000-0001-5520-4631}{ORCID})
 
+Other contributors:
+\itemize{
+  \item Maria Foti \email{maria.foti@unimib.it} (\href{https://orcid.org/0000-0002-4481-1900}{ORCID}) [funder]
+}
+
 }
 \keyword{internal}

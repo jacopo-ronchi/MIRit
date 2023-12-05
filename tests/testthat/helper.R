@@ -1,9 +1,10 @@
 ## create dummy objects needed for running unit tests
-createDummyData <- function(nGenes = 100,
-    nMirnas = 50,
-    counts = TRUE,
-    paired = "all",
-    de = FALSE) {
+createDummyData <- function(
+        nGenes = 100,
+        nMirnas = 50,
+        counts = TRUE,
+        paired = "all",
+        de = FALSE) {
     ## load experiment
     obj <- loadExamples()
 

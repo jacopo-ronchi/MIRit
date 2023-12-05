@@ -14,6 +14,8 @@
 #' @format ## `geneCounts`
 #' A `matrix` object containing samples as columns and genes as rows.
 #'
+#' @returns A `matrix` object with 23710 rows and 16 columns.
+#'
 #' @source \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63511}
 #'
 #' @references
@@ -39,6 +41,8 @@
 #'
 #' @format ## `mirnaCounts`
 #' A `matrix` object containing samples as columns and microRNAs as rows.
+#'
+#' @returns A `matrix` object with 2576 rows and 16 columns.
 #'
 #' @source \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63511}
 #'

@@ -84,71 +84,70 @@
 #'
 #' @export
 preparePathways <- function(mirnaObj,
-    database = "KEGG",
-    organism = "Homo sapiens",
-    minPc = 10,
-    BPPARAM = bpparam()) {
+                            database = "KEGG",
+                            organism = "Homo sapiens",
+                            minPc = 10,
+                            BPPARAM = bpparam()) {
     ## input checks
     if (!is(mirnaObj, "MirnaExperiment")) {
-        stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
-            call. = FALSE
+        stop("'mirnaObj' should be of class MirnaExperiment! ",
+             "See ?MirnaExperiment",
+             call. = FALSE
         )
     }
     if (max(dim(integration(mirnaObj))) == 0) {
-        stop(
-            paste(
-                "Integration analysis is not detected in 'mirnaObj'!",
-                "Before using this function, expression levels of miRNAs and",
-                "genes must be integrated with the 'mirnaIntegration()'",
-                "function. See '?mirnaIntegration' for details."
-            ),
-            call. = FALSE
+        stop("Integration analysis is not detected in 'mirnaObj'! ",
+             "Before using this function, expression levels of miRNAs and ",
+             "genes must be integrated with the 'mirnaIntegration()' ",
+             "function. See '?mirnaIntegration' for details.",
+             call. = FALSE
         )
     }
     if (!is.character(database) |
         length(database) != 1 |
         !database %in% c("KEGG", "Reactome", "WikiPathways")) {
         stop("Supported databases are: 'KEGG', 'Reactome' and 'WikiPathways'",
-            call. = FALSE
+             call. = FALSE
         )
     }
     if (!is.numeric(minPc) |
         length(minPc) != 1 |
         minPc < 0 |
         minPc > 100) {
-        stop("'minPc' must be a positive number between 0 and 100! (default is 10)",
-            call. = FALSE
+        stop("'minPc' must be a positive number between 0 and 100! ",
+             "(default is 10)",
+             call. = FALSE
         )
     }
-
+    
     ## check if database is supported for the given specie
     supp <- species[
         !is.na(species[, paste("graph", database, sep = "_")]),
         "specie"
     ]
     if (!organism %in% supp) {
-        stop(paste(
-            "For", database, "database, 'organism' must be one of:",
+        stop(
+            "For ", database, " database, 'organism' must be one of: ",
             paste(supp, collapse = ", ")
-        ))
+        )
     }
-
+    
     ## convert organism name to graphite name
     org <- species[
         species$specie == organism,
         paste("graph", database, sep = "_")
     ]
-
+    
     ## get differential expression results
     deg <- geneDE(mirnaObj, onlySignificant = FALSE)
     dem <- mirnaDE(mirnaObj, onlySignificant = TRUE)
-
+    
     ## define genes and miRNAs with measurments
     features <- c(dem$ID, deg$ID)
-
+    
     ## extract integrated miRNA targets
     intTargets <- selectTargets(mirnaObj, pairs = TRUE)
-
+    
     ## prepare miRNA augmented pathways
     graphList <- preparePathways.internal(
         database = database,
@@ -158,14 +157,14 @@ preparePathways <- function(mirnaObj,
         minPc = minPc,
         BPPARAM = BPPARAM
     )
-
+    
     ## prepare graph objects for pathway score calculation
     message("Performing topological sorting of pathway nodes...")
     graphList <- BiocParallel::bplapply(graphList,
-        setUpPathways,
-        BPPARAM = BPPARAM
+                                        setUpPathways,
+                                        BPPARAM = BPPARAM
     )
-
+    
     ## add analysis parameters to each graph object
     graphList <- lapply(graphList, function(p) {
         p@graphData$organism <- organism
@@ -173,7 +172,7 @@ preparePathways <- function(mirnaObj,
         p@graphData$minPc <- minPc
         p
     })
-
+    
     ## returned miRNA-augmented pathways
     return(graphList)
 }
@@ -347,40 +346,37 @@ preparePathways <- function(mirnaObj,
 #'
 #' @export
 topologicalAnalysis <- function(mirnaObj,
-    pathways,
-    pCutoff = 0.05,
-    pAdjustment = "max-T",
-    nPerm = 10000,
-    progress = FALSE,
-    tasks = 0,
-    BPPARAM = bpparam()) {
+                                pathways,
+                                pCutoff = 0.05,
+                                pAdjustment = "max-T",
+                                nPerm = 10000,
+                                progress = FALSE,
+                                tasks = 0,
+                                BPPARAM = bpparam()) {
     ## input checks
     if (!is(mirnaObj, "MirnaExperiment")) {
-        stop("'mirnaObj' should be of class MirnaExperiment! See ?MirnaExperiment",
-            call. = FALSE
+        stop("'mirnaObj' should be of class MirnaExperiment! ",
+             "See ?MirnaExperiment",
+             call. = FALSE
         )
     }
     if (max(dim(integration(mirnaObj))) == 0) {
-        stop(
-            paste(
-                "Integration analysis is not detected in 'mirnaObj'!",
-                "Before using this function, expression levels of miRNAs and",
-                "genes must be integrated with the 'mirnaIntegration()'",
-                "function. See '?mirnaIntegration' for details."
-            ),
-            call. = FALSE
+        stop("Integration analysis is not detected in 'mirnaObj'! ",
+             "Before using this function, expression levels of miRNAs and ",
+             "genes must be integrated with the 'mirnaIntegration()' ",
+             "function. See '?mirnaIntegration' for details.",
+             call. = FALSE
         )
     }
     if (!is.list(pathways) |
         length(pathways) == 0 |
-        !any(class(pathways) != "graphNEL")) {
-        stop(
-            paste(
-                "'pathways' must be a list object with miRNA-augmented",
-                "pathways returned from the 'preparePathways()' function.",
-                "Please use the 'preparePathways()' function before this call."
-            ),
-            call. = FALSE
+        !all(vapply(pathways, function(x) is(x, "graph"),
+                    FUN.VALUE = logical(1)
+        ))) {
+        stop("'pathways' must be a list object with miRNA-augmented ",
+             "pathways returned from the 'preparePathways()' function. ",
+             "Please use the 'preparePathways()' function before this call.",
+             call. = FALSE
         )
     }
     if (!is.numeric(pCutoff) |
@@ -388,7 +384,7 @@ topologicalAnalysis <- function(mirnaObj,
         pCutoff > 1 |
         pCutoff < 0) {
         stop("'pCutoff' must be a number between 0 and 1! (default is 0.05)",
-            call. = FALSE
+             call. = FALSE
         )
     }
     if (!is.character(pAdjustment) |
@@ -397,13 +393,10 @@ topologicalAnalysis <- function(mirnaObj,
             "none", "max-T", "fdr", "bonferroni", "BY",
             "hochberg", "holm", "hommel", "BH"
         )) {
-        stop(
-            paste(
-                "'pAdjustment' must be  one of: 'none', 'max-T' (default),",
-                "'fdr', 'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg',",
-                "'holm', 'hommel'"
-            ),
-            call. = FALSE
+        stop("'pAdjustment' must be  one of: 'none', 'max-T' (default), ",
+             "'fdr', 'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg', ",
+             "'holm', 'hommel'",
+             call. = FALSE
         )
     }
     if (!is.numeric(nPerm) |
@@ -411,13 +404,14 @@ topologicalAnalysis <- function(mirnaObj,
         nPerm < 0 |
         !nPerm %% 1 == 0) {
         stop("'nPerm' must be a positive integer! (default is 10000)",
-            call. = FALSE
+             call. = FALSE
         )
     }
     if (!is.logical(progress) |
         length(progress) != 1) {
-        stop("'progress' must be logical (TRUE/FALSE)! See ?topologicalAnalysis",
-            call. = FALSE
+        stop("'progress' must be logical (TRUE/FALSE)! ",
+             "See ?topologicalAnalysis",
+             call. = FALSE
         )
     }
     if (!is.numeric(tasks) |
@@ -426,25 +420,25 @@ topologicalAnalysis <- function(mirnaObj,
         tasks > 100 |
         !tasks %% 1 == 0) {
         stop("'tasks' must be an integer between 0 and 100!",
-            call. = FALSE
+             call. = FALSE
         )
     }
-
+    
     ## get differential expression results
     deg <- geneDE(mirnaObj, onlySignificant = FALSE)
     dem <- mirnaDE(mirnaObj, onlySignificant = TRUE)
-
+    
     ## consider both logFCs and p-values in the definition of weights
     deg$weights <- 1
     sigDeg <- which(deg$ID %in% significantGenes(mirnaObj))
     dem$weights <- 2^abs(dem$logFC)
     deg$weights[sigDeg] <- 2^abs(deg$logFC[sigDeg])
-
+    
     ## merge miRNA and gene DE results
     dem$type <- "miRNA"
     deg$type <- "gene"
     featDE <- rbind(dem, deg)
-
+    
     ## calculate the observed score for each pathway
     message("Calculating pathway scores...")
     pS <- bplapply(pathways, function(pathway) {
@@ -456,33 +450,33 @@ topologicalAnalysis <- function(mirnaObj,
         )
     }, BPPARAM = BPPARAM)
     pS <- unlist(pS)
-
+    
     ## generate n random permutations
     message("Generating random permutations...")
     randomVec <- generatePermutations(deg, dem, nPerm)
     paths <- rep(pathways, times = nPerm)
     permVec <- rep(randomVec, each = length(pathways))
-
+    
     ## add a functional progress bar for parallel computation
     bpOps <- list()
     if (progress == TRUE) {
         if (hasMethod("bpprogressbar<-",
-            signature = c(class(BPPARAM), "logical")
+                      signature = c(class(BPPARAM), "logical")
         ) &
-            hasMethod("bptasks<-",
-                signature = c(class(BPPARAM), "integer")
-            )) {
+        hasMethod("bptasks<-",
+                  signature = c(class(BPPARAM), "integer")
+        )) {
             bpOps <- bpoptions(tasks = tasks, progressbar = TRUE)
         } else {
-            warning(paste(
-                "Unable to show a progress bar for a BiocParallel backend",
-                "of type", class(BPPARAM)[1]
-            ), call. = FALSE)
+            warning("Unable to show a progress bar for a BiocParallel backend ",
+                    "of type ", class(BPPARAM)[1],
+                    call. = FALSE
+            )
         }
     }
-
+    
     ## use parallel mapply to compute permutation scores for each pathway
-    message(paste("Calculating p-values with", nPerm, "permutations..."))
+    message("Calculating p-values with ", nPerm, " permutations...")
     permScores <- bpmapply(function(pathway, permExpr) {
         computePathwayScore(
             expr = permExpr,
@@ -491,39 +485,39 @@ topologicalAnalysis <- function(mirnaObj,
             weights = pathway@graphData$eW
         )
     }, paths, permVec, BPPARAM = BPPARAM, BPOPTIONS = bpOps)
-
+    
     ## split permuted scores according to pathways
     permList <- split(permScores, names(paths))
-
+    
     ## order permuted scores based on observed scores
     permList <- permList[names(pS)]
-
+    
     ## define mean and standard deviation of permuted scores for each pathway
     meanPerm <- lapply(permList, mean)
     stdPerm <- lapply(permList, sd)
-
+    
     ## normalize observed pathway scores
     normPS <- (as.numeric(pS) - as.numeric(meanPerm)) / as.numeric(stdPerm)
     names(normPS) <- names(pS)
-
+    
     ## normalize permuted scores as well
     normPerm <- mapply(function(permutedVal, m, sdP) {
         (permutedVal - m) / sdP
     }, permList, meanPerm, stdPerm, SIMPLIFY = FALSE)
-
+    
     ## define p-values as the fraction of more extreme random values
     pval <- lapply(names(permList), function(pa) {
         (sum(normPerm[[pa]] >= normPS[pa]) + 1) / (nPerm + 1)
     })
     names(pval) <- names(permList)
     pval <- unlist(pval)
-
+    
     ## extract pathway coverage
     pCov <- vapply(pathways, function(pa) {
         pa@graphData$pathway.coverage
     }, FUN.VALUE = numeric(1))
     names(pCov) <- names(pathways)
-
+    
     ## create result data.frame
     resDf <- data.frame(
         pathway = names(pS),
@@ -532,7 +526,7 @@ topologicalAnalysis <- function(mirnaObj,
         normalized.score = normPS,
         P.Val = pval
     )
-
+    
     ## correct p-values for multiple testing
     if (pAdjustment == "max-T") {
         message("Correcting p-values through the max-T procedure...")
@@ -540,36 +534,36 @@ topologicalAnalysis <- function(mirnaObj,
     } else {
         resDf$adj.P.Val <- p.adjust(resDf$P.Val, method = pAdjustment)
     }
-
+    
     ## order results by adjusted p-values
     resDf <- resDf[order(resDf$adj.P.Val), ]
-
+    
     ## maintain only significant results
     resDf <- resDf[resDf$adj.P.Val <= pCutoff, ]
-
+    
     ## print the results of the analysis
-    message(paste(
-        "The topologically-aware integrative pathway analysis",
-        "reported", nrow(resDf), "significantly altered pathways!"
-    ))
-
+    message(
+        "The topologically-aware integrative pathway analysis ",
+        "reported ", nrow(resDf), " significantly altered pathways!"
+    )
+    
     ## create an IntegrativePathwayAnalysis object
     res <- new("IntegrativePathwayAnalysis",
-        data = resDf,
-        method = paste(
-            "Topologically-Aware Integrative",
-            "Pathway Analysis (TAIPA)"
-        ),
-        organism = pathways[[1]]@graphData$organism,
-        database = pathways[[1]]@graphData$database,
-        pCutoff = pCutoff,
-        pAdjustment = pAdjustment,
-        pathways = pathways,
-        expression = featDE,
-        minPc = pathways[[1]]@graphData$minPc,
-        nPerm = nPerm
+               data = resDf,
+               method = paste(
+                   "Topologically-Aware Integrative",
+                   "Pathway Analysis (TAIPA)"
+               ),
+               organism = pathways[[1]]@graphData$organism,
+               database = pathways[[1]]@graphData$database,
+               pCutoff = pCutoff,
+               pAdjustment = pAdjustment,
+               pathways = pathways,
+               expression = featDE,
+               minPc = pathways[[1]]@graphData$minPc,
+               nPerm = nPerm
     )
-
+    
     ## return the results of the integrative analysis
     return(res)
 }
@@ -580,28 +574,25 @@ topologicalAnalysis <- function(mirnaObj,
 
 ## helper function for creating miRNA augmented pathways
 preparePathways.internal <- function(database, org, targ, features,
-    minPc, BPPARAM) {
+                                     minPc, BPPARAM) {
     ## download pathways from the specified database
-    message(paste("Downloading pathways from", database, "database..."))
+    message("Downloading pathways from ", database, " database...")
     pathDb <- graphite::pathways(species = org, database = tolower(database))
-
+    
     ## retrieve the appropriate organism database
     dbName <- graphite:::selectDb(org)
-
+    
     ## check if the user has installed the required database
     suppressMessages(
         if (!requireNamespace(dbName, quietly = TRUE)) {
-            stop(
-                paste(
-                    "The", dbName, "package is not installed. Install it before",
-                    "runnning this function through:",
-                    paste("`BiocManager::install(\"", dbName, "\")`.", sep = "")
-                ),
-                call. = FALSE
+            stop("The ", dbName, " package is not installed. Install it ",
+                 "before runnning this function through: ",
+                 paste("`BiocManager::install(\"", dbName, "\")`.", sep = ""),
+                 call. = FALSE
             )
         }
     )
-
+    
     ## convert pathway identifiers to gene symbols by accessing OrgDb through
     ## parallel workers
     message("Converting identifiers to gene symbols...")
@@ -615,15 +606,15 @@ preparePathways.internal <- function(database, org, targ, features,
             convertNodes(path, db = db)
         )
     }, BPPARAM = BPPARAM)
-
+    
     ## create a list of augmented pathways
     message("Adding miRNA-gene interactions to biological pathways...")
     realPaths <- bplapply(pathDb,
-        augmentPathway,
-        targets = targ,
-        BPPARAM = BPPARAM
+                          augmentPathway,
+                          targets = targ,
+                          BPPARAM = BPPARAM
     )
-
+    
     ## determine the number of nodes for each augmented pathway
     pNodes <- vapply(realPaths, function(g) {
         if (!is.null(g)) {
@@ -632,34 +623,31 @@ preparePathways.internal <- function(database, org, targ, features,
             NA
         }
     }, FUN.VALUE = integer(1))
-
+    
     ## normalize networks before computing pathway score
     graphList <- bplapply(realPaths,
-        normalizeGraph,
-        features = features,
-        minPc = minPc,
-        BPPARAM = BPPARAM
+                          normalizeGraph,
+                          features = features,
+                          minPc = minPc,
+                          BPPARAM = BPPARAM
     )
-
+    
     ## remove NULL pathways
     nullPath <- which(lengths(graphList) == 0)
     if (length(nullPath) > 0) {
-        warning(
-            paste(
-                length(nullPath), "pathways have been ignored because they",
-                "contain too few nodes with gene expression measurement."
-            ),
-            call. = FALSE
+        warning(length(nullPath), " pathways have been ignored because they ",
+                "contain too few nodes with gene expression measurement.",
+                call. = FALSE
         )
         graphList <- graphList[-nullPath]
     }
-
+    
     ## obtain the number of considered nodes for each pathway
     cNodes <- vapply(graphList, graph::numNodes, FUN.VALUE = numeric(1))
-
+    
     ## define pathway coverage as the fraction of considered nodes
     pathCov <- cNodes / pNodes[names(cNodes)]
-
+    
     ## set pathway coverage as a graph attribute of each pathway
     graphList <- lapply(names(graphList), function(pa) {
         net <- graphList[[pa]]
@@ -667,7 +655,7 @@ preparePathways.internal <- function(database, org, targ, features,
         net
     })
     names(graphList) <- names(pathCov)
-
+    
     ## return pathways
     return(graphList)
 }
@@ -678,26 +666,26 @@ preparePathways.internal <- function(database, org, targ, features,
 
 ## helper function for adding miRNA-target pairs to network objects
 augmentPathway <- function(pathway,
-    targets) {
+                           targets) {
     ## convert pathway to a graph network
     pathGraph <- graphite::pathwayGraph(pathway = pathway)
     graph::nodes(pathGraph) <- gsub("SYMBOL:", "", graph::nodes(pathGraph))
-
+    
     ## return NULL if graph does not have nodes
     if (graph::numNodes(pathGraph) == 0) {
         return(NULL)
     }
-
+    
     ## keep only targets involved in the specified pathway
     pathTargs <- targets[targets$Target %in% graph::nodes(pathGraph), ]
-
+    
     ## add miRNA-target pairs to the biological network
     pathGraph <- graph::addNode(unique(pathTargs$microRNA), pathGraph)
     pathGraph <- graph::addEdge(pathTargs$microRNA, pathTargs$Target,
-        pathGraph,
-        weights = -1
+                                pathGraph,
+                                weights = -1
     )
-
+    
     ## assign weights based on interaction type
     ind <- which(as.vector(as(pathGraph, "matrix")) != 0)
     nodeFrom <- (ind - 1) %% length(graph::nodes(pathGraph)) + 1
@@ -713,7 +701,7 @@ augmentPathway <- function(pathway,
         "edgeType"
     ))
     edgeTypes[edgeTypes == "undefined"] <- "inhibition"
-
+    
     w <- vapply(edgeTypes, function(type) {
         activation <- "activation|expression"
         inhibition <- "inhibition|repression"
@@ -727,11 +715,11 @@ augmentPathway <- function(pathway,
             assignedWeight <- 0
         }
     }, FUN.VALUE = numeric(1))
-
+    
     suppressWarnings(
         pathGraph <- graph::addEdge(gMat[, 1], gMat[, 2], pathGraph, w)
     )
-
+    
     ## return the graph network
     return(pathGraph)
 }
@@ -746,10 +734,10 @@ normalizeGraph <- function(net, features, minPc) {
     if (is.null(net)) {
         return(NULL)
     }
-
+    
     ## determine the number of genes in the graph
     n <- length(graph::nodes(net)[!grepl("miR", graph::nodes(net))])
-
+    
     ## remove nodes and edges without measurement
     net <- graph::subGraph(
         intersect(
@@ -758,19 +746,19 @@ normalizeGraph <- function(net, features, minPc) {
         ),
         net
     )
-
+    
     ## remove nodes that are not connected with any other nodes
     degree <- graph::degree(net)
     dgNode <- degree$inDegree + degree$outDegree
     net <- graph::subGraph(names(dgNode[dgNode != 0]), net)
-
+    
     ## return NULL if graph has less than X % of genes with measurement
     nN <- length(graph::nodes(net)[!grepl("miR", graph::nodes(net))])
     if (nN < (minPc / 100) * n |
         nN == 0) {
         return(NULL)
     }
-
+    
     ## return normalized graph
     return(net)
 }
@@ -783,16 +771,16 @@ normalizeGraph <- function(net, features, minPc) {
 topologicalSorting <- function(pathway) {
     ## extract node names
     nodes <- graph::nodes(pathway)
-
+    
     ## initialize levels to -1
     nodeLevels <- rep(-1, length(nodes))
     names(nodeLevels) <- nodes
-
+    
     ## identify nodes with no ingoing edges (level 0)
     ingEdges <- graph::degree(pathway)$inDegree
     noOut <- names(ingEdges)[ingEdges == 0]
     nodeLevels[noOut] <- 0
-
+    
     ## calculate levels iteratively
     changed <- TRUE
     currentLevel <- 1
@@ -802,7 +790,7 @@ topologicalSorting <- function(pathway) {
             if (nodeLevels[node] == -1) {
                 neighborNodes <- unlist(graph::inEdges(node, pathway))
                 if (all(nodeLevels[neighborNodes] < currentLevel &
-                    all(nodeLevels[neighborNodes] != -1))) {
+                        all(nodeLevels[neighborNodes] != -1))) {
                     nodeLevels[node] <- currentLevel
                     changed <- TRUE
                 }
@@ -810,13 +798,13 @@ topologicalSorting <- function(pathway) {
         }
         currentLevel <- currentLevel + 1
     }
-
+    
     ## set nodes belonging to cycles to level 0
     nodeLevels[nodeLevels == -1] <- 0
-
+    
     ## order node levels
     nodeLevels <- nodeLevels[order(nodeLevels)]
-
+    
     ## return the topological order
     return(nodeLevels)
 }
@@ -829,18 +817,18 @@ topologicalSorting <- function(pathway) {
 setUpPathways <- function(pathway) {
     ## perform topological sorting
     pathway@graphData$topoSort <- topologicalSorting(pathway)
-
+    
     ## create a list with upstream genes for each node
     interactions <- graph::inEdges(graph::nodes(pathway), pathway)
     pathway@graphData$interactions <- interactions
-
+    
     ## extract edge weights
     eW <- lapply(names(interactions), function(node) {
         nodeInt <- interactions[[node]]
         if (length(nodeInt) > 0) {
             wInt <- graph::edgeData(pathway,
-                from = nodeInt,
-                to = node, attr = "weight"
+                                    from = nodeInt,
+                                    to = node, attr = "weight"
             )
             wInt <- unlist(wInt)
             names(wInt) <- nodeInt
@@ -850,10 +838,10 @@ setUpPathways <- function(pathway) {
         }
     })
     names(eW) <- names(interactions)
-
+    
     ## store edge weights in the graph object
     pathway@graphData$eW <- eW
-
+    
     ## return pathway object
     return(pathway)
 }
@@ -870,17 +858,17 @@ generatePermutations <- function(deg, dem, nPerm) {
         mirPerm <- dem
         mirPerm$ID <- sample(mirPerm$ID)
         rownames(mirPerm) <- mirPerm$ID
-
+        
         ## permute genes
         genePerm <- deg
         genePerm$ID <- sample(genePerm$ID)
         rownames(genePerm) <- genePerm$ID
-
+        
         ## combine miRNAs and genes in a single data.frame
         permDf <- rbind(mirPerm, genePerm)
         permDf
     })
-
+    
     ## return the computed permutations
     return(randomDfList)
 }
@@ -898,15 +886,15 @@ maxT.correction <- function(normPerm, normPS, nPerm) {
         })
         unlist(paPerm)
     })
-
+    
     ## record the maximum score for each permutation step
     maxT <- vapply(npList, max, FUN.VALUE = numeric(1))
-
+    
     ## calculate p-values corrected with max-T procedure
     maxT.pval <- vapply(names(normPS), function(pa) {
         sum(maxT >= normPS[pa]) / nPerm
     }, FUN.VALUE = numeric(1))
-
+    
     ## return max-T corrected p-values
     return(maxT.pval)
 }
