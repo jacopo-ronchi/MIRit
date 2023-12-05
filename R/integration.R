@@ -134,66 +134,66 @@
 #'
 #' @export
 mirnaIntegration <- function(mirnaObj,
-                             test = "auto",
-                             pCutoff = 0.05,
-                             pAdjustment = "fdr",
-                             corMethod = "spearman",
-                             corCutoff = 0.5,
-                             associationMethod = "boschloo",
-                             nuisanceParam = 100) {
+    test = "auto",
+    pCutoff = 0.05,
+    pAdjustment = "fdr",
+    corMethod = "spearman",
+    corCutoff = 0.5,
+    associationMethod = "boschloo",
+    nuisanceParam = 100) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
-             "See ?MirnaExperiment",
-             call. = FALSE
+            "See ?MirnaExperiment",
+            call. = FALSE
         )
     }
     if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0) {
         stop("MiRNA differential expression results are not present in ",
-             "'mirnaObj'. Please, use 'performMirnaDE()' before using ",
-             "this function. See ?performMirnaDE",
-             call. = FALSE
+            "'mirnaObj'. Please, use 'performMirnaDE()' before using ",
+            "this function. See ?performMirnaDE",
+            call. = FALSE
         )
     }
     if (nrow(geneDE(mirnaObj, onlySignificant = FALSE)) == 0) {
         stop("Gene differential expression results are not present in ",
-             "'mirnaObj'. Please, use 'performGeneDE()' before using ",
-             "this function. See ?performGeneDE",
-             call. = FALSE
+            "'mirnaObj'. Please, use 'performGeneDE()' before using ",
+            "this function. See ?performGeneDE",
+            call. = FALSE
         )
     }
     if (max(dim(mirnaTargets(mirnaObj))) == 0) {
         stop("No targets are present within 'mirnaObj'! ",
-             "Before performing the integration analysis miRNA target ",
-             "genes must be retrieved with the 'getTargets()' function. ",
-             "See '?getTargets' for the details.",
-             call. = FALSE
+            "Before performing the integration analysis miRNA target ",
+            "genes must be retrieved with the 'getTargets()' function. ",
+            "See '?getTargets' for the details.",
+            call. = FALSE
         )
     }
     if (!is.character(test) |
         length(test) != 1 |
         !test %in% c("auto", "correlation", "association", "fry")) {
         stop("'test' must be one of:\n",
-             "\t- 'auto', (default) to automatically ",
-             "choose the appropriate test;\n",
-             "\t- 'correlation', to perform a correlation analysis;\n",
-             "\t- 'association', to apply a one-sided association test;\n",
-             "\t- 'fry', to apply rotation gene-set testing.",
-             call. = FALSE
+            "\t- 'auto', (default) to automatically ",
+            "choose the appropriate test;\n",
+            "\t- 'correlation', to perform a correlation analysis;\n",
+            "\t- 'association', to apply a one-sided association test;\n",
+            "\t- 'fry', to apply rotation gene-set testing.",
+            call. = FALSE
         )
     }
     if (geneDE(mirnaObj, param = TRUE)$method == "Manually added" &
         test == "fry") {
         stop("Integration through 'fry' method is not available ",
-             "for user-supplied differential expression results...",
-             call. = FALSE
+            "for user-supplied differential expression results...",
+            call. = FALSE
         )
     }
     if (test == "correlation" & pairedSamples(mirnaObj) == FALSE) {
         warning("You can't perform a 'correlation' analysis with ",
-                "unpaired samples! Setting 'test' to 'association' for ",
-                "performing a one-sided association test instead...",
-                call. = FALSE
+            "unpaired samples! Setting 'test' to 'association' for ",
+            "performing a one-sided association test instead...",
+            call. = FALSE
         )
         test <- "association"
     }
@@ -202,7 +202,7 @@ mirnaIntegration <- function(mirnaObj,
         pCutoff > 1 |
         pCutoff < 0) {
         stop("'pCutoff' must be a number between 0 and 1! (default is 0.05)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(pAdjustment) |
@@ -212,17 +212,17 @@ mirnaIntegration <- function(mirnaObj,
             "holm", "hommel", "BH"
         )) {
         stop("'pAdjustment' must be  one of: 'none', 'fdr' (default), ",
-             "'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg', ",
-             "'holm', 'hommel'",
-             call. = FALSE
+            "'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg', ",
+            "'holm', 'hommel'",
+            call. = FALSE
         )
     }
     if (!is.character(corMethod) |
         length(corMethod) != 1 |
         !corMethod %in% c("pearson", "kendall", "spearman")) {
         stop("'corMethod' must be one of: 'pearson', 'kendall' and ",
-             "'spearman' (default).",
-             call. = FALSE
+            "'spearman' (default).",
+            call. = FALSE
         )
     }
     if (!is.numeric(corCutoff) |
@@ -230,25 +230,25 @@ mirnaIntegration <- function(mirnaObj,
         corCutoff > 1 |
         corCutoff < 0) {
         stop("'corCutoff' must be a number between 0 and 1! (default is 0.5)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(associationMethod) |
         length(associationMethod) != 1 |
         !associationMethod %in% c("boschloo", "fisher-midp", "fisher")) {
         stop("'associationMethod' must be one of: 'boschloo' (default), ",
-             "'fisher-midp', and 'fisher'.",
-             call. = FALSE
+            "'fisher-midp', and 'fisher'.",
+            call. = FALSE
         )
     }
     if (!is.numeric(nuisanceParam) |
         length(nuisanceParam) != 1 |
         nuisanceParam < 0) {
         stop("'nuisanceParam' must be a non negative number! (default is 100)",
-             call. = FALSE
+            call. = FALSE
         )
     }
-    
+
     ## use the appropriate test
     if (test == "auto" & pairedSamples(mirnaObj) == TRUE) {
         intMethod <- "correlation"
@@ -269,7 +269,7 @@ mirnaIntegration <- function(mirnaObj,
             " will be used."
         )
     }
-    
+
     ## call the right function
     if (intMethod == "correlation") {
         mirnaObj <- correlateMirnaTargets(
@@ -294,7 +294,7 @@ mirnaIntegration <- function(mirnaObj,
             pAdjustment
         )
     }
-    
+
     ## return the object with integration slot
     return(mirnaObj)
 }
@@ -305,52 +305,52 @@ mirnaIntegration <- function(mirnaObj,
 
 ## correlation analysis
 correlateMirnaTargets <- function(mirnaObj,
-                                  corMethod,
-                                  corCutoff,
-                                  pCutoff,
-                                  pAdjustment) {
+    corMethod,
+    corCutoff,
+    pCutoff,
+    pAdjustment) {
     ## extract miRNA and gene expression values
     mirnaExpr <- mirnaObj[["microRNA"]]
     geneExpr <- mirnaObj[["genes"]]
-    
+
     ## check if samples are paired, otherwise exclude unpaired samples
     sMap <- sampleMap(mirnaObj)
     mirnaSamples <- sMap$primary[sMap$assay == "microRNA"]
     geneSamples <- sMap$primary[sMap$assay == "genes"]
-    
+
     if (!identical(mirnaSamples, geneSamples)) {
         ## determine common and uncommon samples
         common <- intersect(mirnaSamples, geneSamples)
         unpaired <- setdiff(c(mirnaSamples, geneSamples), common)
-        
+
         ## stop if common samples are less than 3
         if (length(common) < 3) {
             stop("To perform the correlation at least 3 paired samples ",
-                 "are needed.",
-                 call. = FALSE
+                "are needed.",
+                call. = FALSE
             )
         }
-        
+
         ## remove samples without measurments of both miRNAs and genes
         if (length(unpaired) > 0) {
             mirnaExpr <- mirnaExpr[, sMap$colname[sMap$assay == "microRNA" &
-                                                      sMap$primary %in% common]]
+                sMap$primary %in% common]]
             geneExpr <- geneExpr[, sMap$colname[sMap$assay == "genes" &
-                                                    sMap$primary %in% common]]
-            
+                sMap$primary %in% common]]
+
             warning("Some samples don't have expression values for both ",
-                    "miRNAs and genes, thus they have been excluded from the ",
-                    "correlation analysis. Removed samples are: ",
-                    paste(unpaired, collapse = ", "),
-                    call. = FALSE
+                "miRNAs and genes, thus they have been excluded from the ",
+                "correlation analysis. Removed samples are: ",
+                paste(unpaired, collapse = ", "),
+                call. = FALSE
             )
         }
-        
+
         ## order the columns of expression matrices in the same way
         mirnaMap <- sMap[sMap$assay == "microRNA" &
-                             sMap$primary %in% common, ]
+            sMap$primary %in% common, ]
         geneMap <- sMap[sMap$assay == "genes" &
-                            sMap$primary %in% common, ]
+            sMap$primary %in% common, ]
         mirnaOrder <- mirnaMap$primary[order(match(
             mirnaMap$colname,
             colnames(mirnaExpr)
@@ -360,24 +360,24 @@ correlateMirnaTargets <- function(mirnaObj,
             mirnaOrder
         ))]]
     }
-    
+
     ## retrieve differentially expressed genes and miRNAs
     dem <- mirnaDE(mirnaObj)
     deg <- geneDE(mirnaObj)
-    
+
     ## retrieve targets of DE-miRNAs from the object
     targetsTable <- mirnaTargets(mirnaObj)
-    
+
     ## select differentially expressed miRNA targets
     targetsTable <- targetsTable[targetsTable$Gene.Symbol %in% deg$ID, ]
-    
+
     ## restrict to target genes present in the assay
     targetsTable <- targetsTable[targetsTable$Gene.Symbol
-                                 %in% rownames(geneExpr), ]
-    
+        %in% rownames(geneExpr), ]
+
     ## extract the expression values of miRNA targets
     targetExpr <- geneExpr[rownames(geneExpr) %in% targetsTable$Gene.Symbol, ]
-    
+
     ## compute the correlation between each pair of DE-miRNA - target
     usedCoef <- gsub("(^)([[:alpha:]])", "\\1\\U\\2", corMethod, perl = TRUE)
     message("Performing ", usedCoef, "'s correlation analysis...")
@@ -385,21 +385,21 @@ correlateMirnaTargets <- function(mirnaObj,
         ## extract the expression values of the microRNA and the target
         mirnaInt <- as.numeric(mirnaExpr[mirna, ])
         geneInt <- as.numeric(targetExpr[gene, ])
-        
+
         ## perform the correlation analysis
         corPair <- cor.test(mirnaInt,
-                            geneInt,
-                            method = corMethod,
-                            alternative = "less",
-                            exact = FALSE
+            geneInt,
+            method = corMethod,
+            alternative = "less",
+            exact = FALSE
         )
-        
+
         ## report the results of the correlation analysis
         fold <- ifelse(dem$logFC[dem$ID == mirna] > 0,
-                       "upregulated",
-                       "downregulated"
+            "upregulated",
+            "downregulated"
         )
-        
+
         pair <- c(
             mirna,
             gene,
@@ -409,7 +409,7 @@ correlateMirnaTargets <- function(mirnaObj,
         )
         pair
     }, targetsTable$MicroRNA, targetsTable$Gene.Symbol)
-    
+
     ## convert correlation output to a data.frame object
     corRes <- as.data.frame(t(correlation))
     colnames(corRes) <- c(
@@ -418,15 +418,15 @@ correlateMirnaTargets <- function(mirnaObj,
     )
     corRes$Corr.Coefficient <- as.numeric(corRes$Corr.Coefficient)
     corRes$Corr.P.Value <- as.numeric(corRes$Corr.P.Value)
-    
+
     ## correct correlation p values for multiple testing
     pAdj <- p.adjust(corRes$Corr.P.Value, method = pAdjustment)
     corRes$Corr.Adjusted.P.Val <- pAdj
-    
+
     ## select statistically significant associations
     corRes <- corRes[corRes$Corr.Adjusted.P.Val <= pCutoff &
-                         abs(corRes$Corr.Coefficient) >= corCutoff, ]
-    
+        abs(corRes$Corr.Coefficient) >= corCutoff, ]
+
     ## report the results of the correlation analysis
     if (nrow(corRes) >= 1) {
         message(
@@ -439,7 +439,7 @@ correlateMirnaTargets <- function(mirnaObj,
             "DE-miRNAs and targets was found."
         )
     }
-    
+
     ## return the object with the results of the correlation analysis
     resList <- list(
         data = corRes,
@@ -457,25 +457,25 @@ correlateMirnaTargets <- function(mirnaObj,
 
 ## one-sided association tests for integrative analysis
 associateMirnaTargets <- function(mirnaObj,
-                                  pCutoff,
-                                  pAdjustment,
-                                  associationMethod,
-                                  nuisanceParam) {
+    pCutoff,
+    pAdjustment,
+    associationMethod,
+    nuisanceParam) {
     ## obtain differentially expressed miRNAs and genes
     dem <- mirnaDE(mirnaObj)
     deg <- geneDE(mirnaObj)
-    
+
     ## divide DEGs in up- and down-regulated
     upDeg <- deg$ID[deg$logFC > 0]
     downDeg <- deg$ID[deg$logFC < 0]
-    
+
     ## extract target genes and total genes
     targetsTable <- mirnaTargets(mirnaObj)
     targets <- targetsTable$Gene.Symbol
     targets <- unique(targets)
     totGenes <- rownames(mirnaObj[["genes"]])
     totGenes <- unique(totGenes)
-    
+
     ## define the association test used
     if (associationMethod == "boschloo") {
         meth <- "One-sided Boschloo's exact test"
@@ -487,13 +487,13 @@ associateMirnaTargets <- function(mirnaObj,
     } else if (associationMethod == "fisher") {
         meth <- "One-sided Fisher's exact test"
     }
-    
+
     ## compute the inverse association between each miRNA and its targets
     message("Performing ", meth, "...")
     association <- lapply(dem$ID, function(x) {
         ## differentiate between up-miRNA - down-genes and down-miRNA - up-genes
         fold <- ifelse(dem$logFC[dem$ID == x] > 0, "Up", "Down")
-        
+
         if (fold == "Up") {
             degFold <- downDeg
             geneFold <- "Down"
@@ -501,7 +501,7 @@ associateMirnaTargets <- function(mirnaObj,
             degFold <- upDeg
             geneFold <- "Up"
         }
-        
+
         ## build the contingency table
         degs <- degFold
         nonDegs <- setdiff(totGenes, degs)
@@ -513,26 +513,26 @@ associateMirnaTargets <- function(mirnaObj,
             totGenes,
             targetsTable$Gene.Symbol[targetsTable$MicroRNA == x]
         )
-        
+
         nonDegsNonTarg <- length(intersect(nonDegs, nonTarg))
         degsNonTarg <- length(intersect(degs, nonTarg))
         nonDegsTarg <- length(intersect(nonDegs, targ))
         degsTarg <- length(intersect(degs, targ))
-        
+
         contingencyTable <- matrix(c(
             nonDegsTarg,
             nonDegsNonTarg,
             degsTarg,
             degsNonTarg
         ), 2)
-        
+
         ## perform the appropriate statistical test
         pval <- association.helper(
             contingencyTable,
             associationMethod,
             nuisanceParam
         )
-        
+
         ## report results to a list object
         intRes <- c(
             x,
@@ -545,7 +545,7 @@ associateMirnaTargets <- function(mirnaObj,
         )
         intRes
     })
-    
+
     ## convert list object into a data.frame
     association <- as.data.frame(do.call(rbind, association))
     colnames(association) <- c(
@@ -557,18 +557,18 @@ associateMirnaTargets <- function(mirnaObj,
         "P.Val",
         "DE.targets"
     )
-    
+
     ## convert numeric columns
     association$P.Val <- as.numeric(association$P.Val)
     association$DE <- as.numeric(association$DE)
     association$targets <- as.numeric(association$targets)
-    
+
     ## correct p-values
     pAdj <- p.adjust(association$P.Val, method = pAdjustment)
     association$adj.P.Val <- pAdj
     association <- association[, c(1, 2, 3, 4, 5, 6, 8, 7)]
     association <- association[order(association$adj.P.Val), ]
-    
+
     ## print association results
     association <- association[association$adj.P.Val <= pCutoff, ]
     if (nrow(association) >= 1) {
@@ -584,7 +584,7 @@ associateMirnaTargets <- function(mirnaObj,
             "DE-miRNAs and DEGs were found."
         )
     }
-    
+
     ## return the object containing association results
     resList <- list(
         data = association,
@@ -613,7 +613,7 @@ association.helper <- function(
     } else if (associationMethod == "fisher") {
         pval <- fisher.midp(contingencyTable, midpAdjustment = FALSE)
     }
-    
+
     ## return the computed p-value
     return(pval)
 }
@@ -644,7 +644,7 @@ fisher.midp <- function(mat, midpAdjustment) {
 ## optimization helper function for p-value refinement
 optimization.helper <- function(p, Ns, moreExtremeMat) {
     sum(matrix(dbinom(seq(0, Ns[1]), Ns[1], p), ncol = 1) *
-            (moreExtremeMat %*% dbinom(seq(0, Ns[2]), Ns[2], p)))
+        (moreExtremeMat %*% dbinom(seq(0, Ns[2]), Ns[2], p)))
 }
 
 
@@ -655,30 +655,30 @@ optimization.helper <- function(p, Ns, moreExtremeMat) {
 boshloo.test <- function(data, npNumbers) {
     ## this implementation of the Boschloo's test is
     ## inspired by the Exact R package (Peter Calhoun)
-    
+
     ## create a vector of values for the nusiance parameter
     int <- seq(0.00001, 0.99999, length = npNumbers)
-    
+
     ## transpose contingency table to have fixed row sums
     data <- t(data)
-    
+
     ## extract values from contingency table
     x <- data[1, 1]
     y <- data[1, 2]
     Ns <- .colSums(data, 2, 2)
     N <- sum(Ns)
-    
+
     ## compute p-value resulting from Fisher's exact test
     fp <- fisher.midp(data, midpAdjustment = FALSE)
-    
+
     ## define a matrix for calculating the number of more extreme tables
     moreExtremeMat <- matrix(NA, Ns[1] + 1, Ns[2] + 1,
-                             dimnames = list(seq(0, Ns[1]), seq(0, Ns[2]))
+        dimnames = list(seq(0, Ns[1]), seq(0, Ns[2]))
     )
     for (j in seq(data[1, 2] + 1, Ns[2] + 1)) {
         moreExtremeMat[seq(0, data[1, 1] + 1), j] <- 1
     }
-    
+
     ## compute the number of more extreme tables for each row of the matrix
     for (i in seq(0, Ns[1])) {
         ## find first column with NA
@@ -688,11 +688,11 @@ boshloo.test <- function(data, npNumbers) {
             for (j in startJ:Ns[2]) {
                 ## define a new contingency table for each table
                 newDat <- matrix(c(i, Ns[1] - i, j, Ns[2] - j), 2, 2)
-                
+
                 ## calculate Fisher's exact test p-value for each table
                 newTX <- fisher.midp(newDat, midpAdjustment = FALSE)
                 newTX <- signif(newTX, 12) ## correct for rounding errors
-                
+
                 ## compare Fisher's p-value to the observed p-value
                 if (newTX <= fp) {
                     ## set the remaining columns in the row as more extreme
@@ -705,32 +705,34 @@ boshloo.test <- function(data, npNumbers) {
             }
         }
     }
-    
+
     ## create probability vector
     index <- 1
     prob <- rep(NA, length(int))
-    
+
     ## select the binomials needed
     Tbls <- which(moreExtremeMat == 1, arr.ind = TRUE) - 1
     maxX1 <- max(Tbls[, 1])
     minX2 <- min(Tbls[, 2])
-    
+
     ## calculate the probability for each value of the nuisance parameter
     for (probVal in int) {
         binomProb1 <- dbinom(seq(0, maxX1), Ns[1], probVal)
         binomProb2 <- dbinom(seq(minX2, Ns[2]), Ns[2], probVal)
         matVal <- moreExtremeMat[seq(maxX1 + 1), seq(minX2 + 1, Ns[2] + 1),
-                                 drop = FALSE]
+            drop = FALSE
+        ]
         prob[index] <- suppressWarnings(
-            sum(binomProb1 * (matVal %*% binomProb2)))
+            sum(binomProb1 * (matVal %*% binomProb2))
+        )
         index <- index + 1
     }
     prob <- signif(prob, 12)
-    
+
     ## identify the maximum p-value
     np <- int[which(prob == max(prob, na.rm = TRUE))]
     pvalue <- max(prob, na.rm = TRUE)
-    
+
     ## refine p-values through the optimize function
     refPvalue <- rep(0, length(np))
     refNp <- refPvalue
@@ -755,7 +757,7 @@ boshloo.test <- function(data, npNumbers) {
         np <- refNp[refPvalue == max(refPvalue)]
         pvalue <- max(refPvalue)
     }
-    
+
     ## return p-value
     return(pvalue)
 }
@@ -766,28 +768,28 @@ boshloo.test <- function(data, npNumbers) {
 
 ## rotation gene-set test for integrative analysis
 fryMirnaTargets <- function(mirnaObj,
-                            pCutoff,
-                            pAdjustment) {
+    pCutoff,
+    pAdjustment) {
     ## extract gene differential expression results
     de <- geneDE(mirnaObj, param = TRUE)
-    
+
     ## access sample metadata
     meta <- colData(mirnaObj)
     meta <- meta[!is.na(meta$geneCol), ]
-    
+
     ## reorder metadata based on expression matrix
     meta <- meta[order(match(meta$geneCol, colnames(mirnaObj[["genes"]]))), ]
-    
+
     ## build miRNA-target sets
     tg <- mirnaTargets(mirnaObj)
     tgList <- split(tg$Gene.Symbol, tg$MicroRNA)
-    
+
     ## determine the appropriate expression matrix and the experimental design
     if (de$method == "limma") {
         expr <- mirnaObj[["genes"]]
         des <- model.matrix(de$design, data = meta)
     } else if (de$method == "edgeR" |
-               de$method == "limma-voom") {
+        de$method == "limma-voom") {
         expr <- geneDE(mirnaObj, returnObject = TRUE)
         des <- expr$design
     } else if (de$method == "DESeq2") {
@@ -804,19 +806,19 @@ fryMirnaTargets <- function(mirnaObj,
         des <- model.matrix(de$design, data = meta)
         expr <- limma::voom(features, design = des)
     }
-    
+
     ## set up the contrast
     contrast <- strsplit(de$contrast, "-")[[1]]
-    
+
     ## determine if the model has intercept
     intercept <- attributes(terms(de$design))["intercept"] == 1
-    
+
     ## identify the comparison for DE analysis
     if (intercept == FALSE) {
         ## build the contrast of interest
         contrast <- paste(de$group, contrast, sep = "")
         contrast <- paste(contrast, collapse = "-")
-        
+
         ## create contrast matrix
         con <- limma::makeContrasts(
             contrasts = contrast,
@@ -827,7 +829,7 @@ fryMirnaTargets <- function(mirnaObj,
         con <- contrast[1]
         con <- paste(de$group, con, sep = "")
     }
-    
+
     ## perform integration through rotation gene set enrichment analysis
     message("Performing miRNA-gene integrative analysis using 'fry' method...")
     if (de$method == "edgeR") {
@@ -849,17 +851,17 @@ fryMirnaTargets <- function(mirnaObj,
             adjust.method = pAdjustment
         )
     }
-    
+
     ## retain effects in the right direction
     dem <- mirnaDE(mirnaObj)
     upDem <- dem$ID[dem$logFC > 0]
     downDem <- dem$ID[dem$logFC < 0]
     rs <- rs[(rownames(rs) %in% upDem & rs$Direction == "Down") |
-                 (rownames(rs) %in% downDem & rs$Direction == "Up"), ]
-    
+        (rownames(rs) %in% downDem & rs$Direction == "Up"), ]
+
     ## maintain interactions under the specified cutoff
     res <- rs[rs$FDR <= pCutoff, ]
-    
+
     ## print integration results
     if (nrow(res) == 0) {
         res <- data.frame()
@@ -889,7 +891,7 @@ fryMirnaTargets <- function(mirnaObj,
             "microRNA", "mirna.direction", "gene.direction",
             "DE", "targets", "P.Val", "adj.P.Val", "DE.targets"
         )
-        
+
         ## report results
         message(
             "A statistically significant association between ",
@@ -898,7 +900,7 @@ fryMirnaTargets <- function(mirnaObj,
             " genes was found!"
         )
     }
-    
+
     ## return the object containing association results
     resList <- list(
         data = res,

@@ -105,18 +105,18 @@
 #'
 #' @export
 batchCorrection <- function(mirnaObj,
-                            assay,
-                            batch = NULL,
-                            batch2 = NULL,
-                            covariates = NULL,
-                            includeWsva = FALSE,
-                            n.sv = 1L,
-                            weight.by.sd = TRUE) {
+    assay,
+    batch = NULL,
+    batch2 = NULL,
+    covariates = NULL,
+    includeWsva = FALSE,
+    n.sv = 1L,
+    weight.by.sd = TRUE) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
-             "See ?MirnaExperiment",
-             call. = FALSE
+            "See ?MirnaExperiment",
+            call. = FALSE
         )
     }
     if (length(assay) != 1 |
@@ -126,39 +126,39 @@ batchCorrection <- function(mirnaObj,
     if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0 &
         assay == "microRNA") {
         stop("MiRNA differential expression results are not present in ",
-             "'mirnaObj'. Please, use 'performMirnaDE()' before using ",
-             "this function. See ?performMirnaDE",
-             call. = FALSE
+            "'mirnaObj'. Please, use 'performMirnaDE()' before using ",
+            "this function. See ?performMirnaDE",
+            call. = FALSE
         )
     }
     if (nrow(geneDE(mirnaObj, onlySignificant = FALSE)) == 0 &
         assay == "genes") {
         stop("Gene differential expression results are not present in ",
-             "'mirnaObj'. Please, use 'performGeneDE()' before using ",
-             "this function. See ?performGeneDE",
-             call. = FALSE
+            "'mirnaObj'. Please, use 'performGeneDE()' before using ",
+            "this function. See ?performGeneDE",
+            call. = FALSE
         )
     }
     if (!is.null(batch)) {
         if (length(batch) == 1) {
             if (!is.character(batch) |
                 !(batch %in% colnames(colData(mirnaObj)) &
-                  !batch %in% c("primary", "mirnaCol", "geneCol"))) {
+                    !batch %in% c("primary", "mirnaCol", "geneCol"))) {
                 stop("'batch' must be a batch variable present in the ",
-                     "metadata (colData) of a MirnaExperiment object; or, ",
-                     "alternatively, it must be a character/factor object ",
-                     "that specifies the different batches.",
-                     call. = FALSE
+                    "metadata (colData) of a MirnaExperiment object; or, ",
+                    "alternatively, it must be a character/factor object ",
+                    "that specifies the different batches.",
+                    call. = FALSE
                 )
             }
         } else {
             if ((!is.character(batch) & !is.factor(batch)) |
                 length(batch) != ncol(mirnaObj[[assay]])) {
                 stop("'batch' must be a batch variable present in the ",
-                     "metadata (colData) of a MirnaExperiment object; or, ",
-                     "alternatively, it must be a character/factor object ",
-                     "that specifies the different batches.",
-                     call. = FALSE
+                    "metadata (colData) of a MirnaExperiment object; or, ",
+                    "alternatively, it must be a character/factor object ",
+                    "that specifies the different batches.",
+                    call. = FALSE
                 )
             }
         }
@@ -167,22 +167,22 @@ batchCorrection <- function(mirnaObj,
         if (length(batch2) == 1) {
             if (!is.character(batch2) |
                 !(batch2 %in% colnames(colData(mirnaObj)) &
-                  !batch2 %in% c("primary", "mirnaCol", "geneCol"))) {
+                    !batch2 %in% c("primary", "mirnaCol", "geneCol"))) {
                 stop("'batch2' must be a batch variable present in the ",
-                     "metadata (colData) of a MirnaExperiment object; or, ",
-                     "alternatively, it must be a character/factor object ",
-                     "that specifies the different batches.",
-                     call. = FALSE
+                    "metadata (colData) of a MirnaExperiment object; or, ",
+                    "alternatively, it must be a character/factor object ",
+                    "that specifies the different batches.",
+                    call. = FALSE
                 )
             }
         } else {
             if ((!is.character(batch2) & !is.factor(batch2)) |
                 length(batch2) != ncol(mirnaObj[[assay]])) {
                 stop("'batch2' must be a batch variable present in the ",
-                     "metadata (colData) of a MirnaExperiment object; or, ",
-                     "alternatively, it must be a character/factor object ",
-                     "that specifies the different batches.",
-                     call. = FALSE
+                    "metadata (colData) of a MirnaExperiment object; or, ",
+                    "alternatively, it must be a character/factor object ",
+                    "that specifies the different batches.",
+                    call. = FALSE
                 )
             }
         }
@@ -191,42 +191,42 @@ batchCorrection <- function(mirnaObj,
         if (is.character(covariates)) {
             if (any(!covariates %in% colnames(colData(mirnaObj)))) {
                 stop("'covariates' must be either a vector of column names ",
-                     "present in the metadata (colData) of a MirnaExperiment ",
-                     "object; or, alternatively, it must be a numeric vector ",
-                     "or matrix object that specifies the covariates to ",
-                     "correct for.",
-                     call. = FALSE
+                    "present in the metadata (colData) of a MirnaExperiment ",
+                    "object; or, alternatively, it must be a numeric vector ",
+                    "or matrix object that specifies the covariates to ",
+                    "correct for.",
+                    call. = FALSE
                 )
             }
         } else if (is.numeric(covariates)) {
             if (is.matrix(covariates)) {
                 if (nrow(covariates) != ncol(mirnaObj[[assay]])) {
                     stop("'covariates' must be either a vector of column ",
-                         "names present in the metadata (colData) of a ",
-                         "MirnaExperiment object; or, alternatively, it must ",
-                         "be a numeric vector or matrix object that ",
-                         "specifies the covariates to correct for.",
-                         call. = FALSE
+                        "names present in the metadata (colData) of a ",
+                        "MirnaExperiment object; or, alternatively, it must ",
+                        "be a numeric vector or matrix object that ",
+                        "specifies the covariates to correct for.",
+                        call. = FALSE
                     )
                 }
             } else {
                 if (length(covariates) != ncol(mirnaObj[[assay]])) {
                     stop("'covariates' must be either a vector of column ",
-                         "names present in the metadata (colData) of a ",
-                         "MirnaExperiment object; or, alternatively, it must ",
-                         "be a numeric vector or matrix object that ",
-                         "specifies the covariates to correct for.",
-                         call. = FALSE
+                        "names present in the metadata (colData) of a ",
+                        "MirnaExperiment object; or, alternatively, it must ",
+                        "be a numeric vector or matrix object that ",
+                        "specifies the covariates to correct for.",
+                        call. = FALSE
                     )
                 }
             }
         } else {
             stop("'covariates' must be either a vector of column names ",
-                 "present in the metadata (colData) of a MirnaExperiment ",
-                 "object; or, alternatively, it must be a numeric vector ",
-                 "or matrix object that specifies the covariates to ",
-                 "correct for.",
-                 call. = FALSE
+                "present in the metadata (colData) of a MirnaExperiment ",
+                "object; or, alternatively, it must be a numeric vector ",
+                "or matrix object that specifies the covariates to ",
+                "correct for.",
+                call. = FALSE
             )
         }
     }
@@ -239,30 +239,30 @@ batchCorrection <- function(mirnaObj,
         n.sv < 0 |
         !n.sv %% 1 == 0) {
         stop("'n.sv' must be a non-neagtive number! (default is 1)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(weight.by.sd) |
         length(weight.by.sd) != 1) {
         stop("'weight.by.sd' must be logical (TRUE/FALSE)!", call. = FALSE)
     }
-    
+
     ## verify that batch correction has not been performed yet
     if (!is.null(mirnaObj@metadata$uncorrectedMatrices[[assay]])) {
         warning("Batch effect correction has already been performed for ",
-                "this assay! The uncorrected matrix has been restored ",
-                "before overwriting the batch-corrected matrix.",
-                call. = FALSE
+            "this assay! The uncorrected matrix has been restored ",
+            "before overwriting the batch-corrected matrix.",
+            call. = FALSE
         )
         mirnaObj[[assay]] <- mirnaObj@metadata$uncorrectedMatrices[[assay]]
     } else {
         ## move normalized counts to metadata
         mirnaObj@metadata$uncorrectedMatrices[[assay]] <- mirnaObj[[assay]]
     }
-    
+
     ## extract expression matrix
     data <- mirnaObj[[assay]]
-    
+
     ## extract the parameters used for differential expression analysis
     if (assay == "microRNA") {
         deParam <- mirnaDE(mirnaObj, param = TRUE)
@@ -271,7 +271,7 @@ batchCorrection <- function(mirnaObj,
     }
     design <- deParam$design
     group <- deParam$group
-    
+
     ## extract the covariates to correct for
     sm <- sampleMap(mirnaObj)
     sm <- sm[sm$assay == assay, ]
@@ -280,24 +280,24 @@ batchCorrection <- function(mirnaObj,
     if (is.character(covariates)) {
         smCov <- sm[, covariates]
         allNumeric <- vapply(colnames(smCov),
-                             function(x) is.numeric(smCov[, x]),
-                             FUN.VALUE = logical(1)
+            function(x) is.numeric(smCov[, x]),
+            FUN.VALUE = logical(1)
         )
         if (any(allNumeric == FALSE)) {
             stop("'covariates' must only contain numeric variables! ",
-                 "See ?batchCorrection",
-                 call. = FALSE
+                "See ?batchCorrection",
+                call. = FALSE
             )
         }
         covariates <- as.matrix(smCov)
     }
-    
+
     ## perform surrogate variable analysis
     if (includeWsva == TRUE) {
         des <- model.matrix(design, data = sm)
         ws <- limma::wsva(data,
-                          design = des,
-                          n.sv = n.sv, weight.by.sd = weight.by.sd
+            design = des,
+            n.sv = n.sv, weight.by.sd = weight.by.sd
         )
         if (!is.null(covariates)) {
             covariates <- cbind(covariates, ws)
@@ -305,7 +305,7 @@ batchCorrection <- function(mirnaObj,
             covariates <- ws
         }
     }
-    
+
     ## define the batch and group effects
     if (!is.null(batch)) {
         batch <- sm[, batch]
@@ -313,18 +313,18 @@ batchCorrection <- function(mirnaObj,
     if (!is.null(batch2)) {
         batch2 <- sm[, batch2]
     }
-    
+
     ## remove batch effects from expression matrix
     data <- limma::removeBatchEffect(data,
-                                     batch = batch,
-                                     batch2 = batch2,
-                                     covariates = covariates,
-                                     group = sm[, group]
+        batch = batch,
+        batch2 = batch2,
+        covariates = covariates,
+        group = sm[, group]
     )
-    
+
     ## set expression levels to the batch-corrected ones
     mirnaObj[[assay]] <- data
-    
+
     ## return the MirnaExperiment object
     return(mirnaObj)
 }

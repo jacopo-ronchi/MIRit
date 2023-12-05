@@ -235,7 +235,7 @@ performMirnaDE <- function(
         correlationBlockVariable = correlationBlockVariable,
         duplicateCorrelation.args = duplicateCorrelation.args
     )
-    
+
     ## return mirnaObj
     return(mirnaObj)
 }
@@ -301,7 +301,7 @@ performGeneDE <- function(
         correlationBlockVariable = correlationBlockVariable,
         duplicateCorrelation.args = duplicateCorrelation.args
     )
-    
+
     ## return mirnaObj
     return(mirnaObj)
 }
@@ -312,85 +312,85 @@ performGeneDE <- function(
 
 ## internal function to perform differential expression analysis
 performDE <- function(assay,
-                      mirnaObj,
-                      group,
-                      contrast,
-                      design,
-                      method = "edgeR",
-                      logFC = 1,
-                      pCutoff = 0.05,
-                      pAdjustment = "fdr",
-                      filterByExpr.args = list(),
-                      calcNormFactors.args = list(),
-                      estimateDisp.args = list(robust = TRUE),
-                      glmQLFit.args = list(),
-                      glmQLFTest.args = list(),
-                      DESeq.args = list(),
-                      useVoomWithQualityWeights = TRUE,
-                      voom.args = list(),
-                      lmFit.args = list(),
-                      eBayes.args = list(),
-                      useArrayWeights = TRUE,
-                      useWsva = FALSE,
-                      wsva.args = list(),
-                      arrayWeights.args = list(),
-                      useDuplicateCorrelation = FALSE,
-                      correlationBlockVariable = NULL,
-                      duplicateCorrelation.args = list()) {
+    mirnaObj,
+    group,
+    contrast,
+    design,
+    method = "edgeR",
+    logFC = 1,
+    pCutoff = 0.05,
+    pAdjustment = "fdr",
+    filterByExpr.args = list(),
+    calcNormFactors.args = list(),
+    estimateDisp.args = list(robust = TRUE),
+    glmQLFit.args = list(),
+    glmQLFTest.args = list(),
+    DESeq.args = list(),
+    useVoomWithQualityWeights = TRUE,
+    voom.args = list(),
+    lmFit.args = list(),
+    eBayes.args = list(),
+    useArrayWeights = TRUE,
+    useWsva = FALSE,
+    wsva.args = list(),
+    arrayWeights.args = list(),
+    useDuplicateCorrelation = FALSE,
+    correlationBlockVariable = NULL,
+    duplicateCorrelation.args = list()) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
-             "See ?MirnaExperiment",
-             call. = FALSE
+            "See ?MirnaExperiment",
+            call. = FALSE
         )
     }
     if (!is.character(group) |
         length(group) != 1 |
         !(group %in% colnames(colData(mirnaObj)) &
-          !group %in% c("primary", "mirnaCol", "geneCol"))) {
+            !group %in% c("primary", "mirnaCol", "geneCol"))) {
         stop("'group' must be the column name of a variable specified ",
-             "in the metadata (colData) of a MirnaExperiment object.",
-             call. = FALSE
+            "in the metadata (colData) of a MirnaExperiment object.",
+            call. = FALSE
         )
     }
     if (!is.character(contrast) |
         length(contrast) != 1 |
         length(strsplit(contrast, "-")[[1]]) != 2 |
         !all(strsplit(contrast, "-")[[1]] %in%
-             colData(mirnaObj)[, group])) {
+            colData(mirnaObj)[, group])) {
         stop("'contrast' must be a character that specifies the groups ",
-             "for which you want to calculate differential expression ",
-             "(e.g. 'PTC-NTH'). For details, see ?performMirnaDE or ",
-             "?performGeneDE",
-             call. = FALSE
+            "for which you want to calculate differential expression ",
+            "(e.g. 'PTC-NTH'). For details, see ?performMirnaDE or ",
+            "?performGeneDE",
+            call. = FALSE
         )
     }
     if (!rlang::is_formula(design) |
         !all(labels(terms(design)) %in%
-             colnames(colData(mirnaObj)) &
-             !labels(terms(design)) %in%
-             c("primary", "mirnaCol", "geneCol"))) {
+            colnames(colData(mirnaObj)) &
+            !labels(terms(design)) %in%
+                c("primary", "mirnaCol", "geneCol"))) {
         stop("'design' must be an R formula that specifies the variables ",
-             "in colData that will be used to model expression. For ",
-             "details, see ?performMirnaDE or ?performGeneDE",
-             call. = FALSE
+            "in colData that will be used to model expression. For ",
+            "details, see ?performMirnaDE or ?performGeneDE",
+            call. = FALSE
         )
     }
     if (!is.character(method) |
         length(method) != 1 |
         !method %in% c("limma", "edgeR", "DESeq2", "voom")) {
         stop("'method' must be  one of: 'limma', 'edgeR' (default), ",
-             "'DESeq2', 'voom'. For additional details, see ?performMirnaDE ",
-             "or ?performGeneDE",
-             call. = FALSE
+            "'DESeq2', 'voom'. For additional details, see ?performMirnaDE ",
+            "or ?performGeneDE",
+            call. = FALSE
         )
     }
     if (!is.numeric(logFC) |
         length(logFC) != 1 |
         logFC < 0) {
         stop("'logFC' must be a non-neagtive number that specifies the ",
-             "minimum absolute significant fold change (default is 1)",
-             call. = FALSE
+            "minimum absolute significant fold change (default is 1)",
+            call. = FALSE
         )
     }
     if (!is.numeric(pCutoff) |
@@ -398,7 +398,7 @@ performDE <- function(assay,
         pCutoff > 1 |
         pCutoff < 0) {
         stop("'pCutoff' must be a number between 0 and 1! (default is 0.05)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(pAdjustment) |
@@ -408,41 +408,41 @@ performDE <- function(assay,
             "holm", "hommel", "BH"
         )) {
         stop("'pAdjustment' must be  one of: 'none', 'fdr' (default), ",
-             "'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg', ",
-             "'holm', 'hommel'",
-             call. = FALSE
+            "'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg', ",
+            "'holm', 'hommel'",
+            call. = FALSE
         )
     }
     if (!is.logical(useVoomWithQualityWeights) |
         length(useVoomWithQualityWeights) != 1) {
         stop("'useVoomWithQualityWeights' must be logical (TRUE/FALSE)!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(useArrayWeights) |
         length(useArrayWeights) != 1) {
         stop("'useArrayWeights' must be logical (TRUE/FALSE)!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(useWsva) |
         length(useWsva) != 1) {
         stop("'useWsva' must be logical (TRUE/FALSE)!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(useDuplicateCorrelation) |
         length(useDuplicateCorrelation) != 1) {
         stop("'useDuplicateCorrelation' must be logical (TRUE/FALSE)!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (useDuplicateCorrelation == TRUE &
         !is.character(correlationBlockVariable)) {
         stop("'correlationBlockVariable' must be the column name of a ",
-             "variable present in 'colData' for which we want to control ",
-             "correlation among samples!",
-             call. = FALSE
+            "variable present in 'colData' for which we want to control ",
+            "correlation among samples!",
+            call. = FALSE
         )
     }
     if (!is.list(filterByExpr.args) |
@@ -458,12 +458,12 @@ performDE <- function(assay,
         !is.list(arrayWeights.args) |
         !is.list(duplicateCorrelation.args)) {
         stop("Additional arguments passed to the limma, edgeR and DESeq2 ",
-             "functions must be passed as lists! See ?performMirnaDE ",
-             "or ?performGeneDE",
-             call. = FALSE
+            "functions must be passed as lists! See ?performMirnaDE ",
+            "or ?performGeneDE",
+            call. = FALSE
         )
     }
-    
+
     ## define assay name and any previous DE object
     if (assay == "miRNAs") {
         assayName <- "microRNA"
@@ -474,7 +474,7 @@ performDE <- function(assay,
         assayFunc <- "'geneDE()'"
         featCol <- "geneCol"
     }
-    
+
     ## check if differential expression has already been carried out
     oldCounts <- metadata(mirnaObj)[["oldCounts"]]
     if (!is.null(oldCounts[[assayName]])) {
@@ -485,42 +485,42 @@ performDE <- function(assay,
         oldCounts[[assayName]] <- mirnaObj[[assayName]]
         metadata(mirnaObj) <- list(oldCounts = oldCounts)
     }
-    
+
     ## verify that batch correction has not been performed yet
     if (!is.null(mirnaObj@metadata$uncorrectedMatrices[[assayName]])) {
         warning("Batch effect-corrected matrices can't be used for ",
-                "differential expression analyses! The uncorrected matrix ",
-                "has been restored before performing differential ",
-                "expression analysis",
-                call. = FALSE
+            "differential expression analyses! The uncorrected matrix ",
+            "has been restored before performing differential ",
+            "expression analysis",
+            call. = FALSE
         )
         mirnaObj[[assayName]] <-
             mirnaObj@metadata$uncorrectedMatrices[[assayName]]
     }
-    
+
     ## extract feature expression
     featExpr <- mirnaObj[[assayName]]
-    
+
     ## extract sample metadata
     samplesMetadata <- colData(mirnaObj)
     meta <- samplesMetadata[!is.na(samplesMetadata[, featCol]), ]
-    
+
     ## reorder metadata based on expression matrix
     meta <- meta[order(match(meta[, featCol], colnames(featExpr))), ]
-    
+
     ## determine if data derive from RNA-Seq or microarray experiments
     if (!all(featExpr %% 1 == 0) & method != "limma") {
         warning(method, " is not suitable for microarray experiments and ",
-                "requires count data. Instead, 'limma' will be used ",
-                "to assess differential expression...",
-                call. = FALSE
+            "requires count data. Instead, 'limma' will be used ",
+            "to assess differential expression...",
+            call. = FALSE
         )
         method <- "limma"
     } else if (all(featExpr %% 1 == 0) & method == "limma") {
         warning(method, " is not suitable for NGS experiments! ",
-                "Instead, 'limma-voom' will be used ",
-                "to assess differential expression...",
-                call. = FALSE
+            "Instead, 'limma-voom' will be used ",
+            "to assess differential expression...",
+            call. = FALSE
         )
         method <- "voom"
     } else {
@@ -529,7 +529,7 @@ performDE <- function(assay,
             method, "..."
         )
     }
-    
+
     ## perform differential expression with the appropriate method
     if (method == "edgeR") {
         deList <- edgeR.DE(
@@ -597,17 +597,17 @@ performDE <- function(assay,
             eBayes.args = eBayes.args
         )
     }
-    
+
     ## change count matrices in mirnaObj with normalized expression matrices
     mirnaObj[[assayName]] <- deList[["normExpr"]]
-    
+
     ## add differential expression results to mirnaObj
     if (assay == "miRNAs") {
         mirnaDE(mirnaObj) <- deList[seq(10)]
     } else if (assay == "genes") {
         geneDE(mirnaObj) <- deList[seq(10)]
     }
-    
+
     ## inform the user about differential expression results
     message(
         "Differential expression analysis reported ",
@@ -615,7 +615,7 @@ performDE <- function(assay,
         " with p < ", pCutoff, " (correction: ", pAdjustment, ").",
         " You can use the ", assayFunc, " function to access results."
     )
-    
+
     ## return the object after differential expression
     return(mirnaObj)
 }
@@ -626,113 +626,113 @@ performDE <- function(assay,
 
 ## perform differential expression with edgeR
 edgeR.DE <- function(counts,
-                     group,
-                     contrast,
-                     meta,
-                     design,
-                     logFC,
-                     pCutoff,
-                     pAdjustment,
-                     filterByExpr.args,
-                     calcNormFactors.args,
-                     estimateDisp.args,
-                     glmQLFit.args,
-                     glmQLFTest.args) {
+    group,
+    contrast,
+    meta,
+    design,
+    logFC,
+    pCutoff,
+    pAdjustment,
+    filterByExpr.args,
+    calcNormFactors.args,
+    estimateDisp.args,
+    glmQLFit.args,
+    glmQLFTest.args) {
     ## set the user-defined contrast character
     defCon <- contrast
-    
+
     ## identify numerator level and reference level
     contrast <- strsplit(contrast, "-")[[1]]
-    
+
     ## convert group variable to factor with specified reference level
     meta[, group] <- relevel(factor(meta[, group]), ref = contrast[2])
-    
+
     ## create edgeR object from counts
     features <- edgeR::DGEList(
         counts = counts,
         group = meta[, group],
         samples = meta
     )
-    
+
     ## filter features based on expression
     keep <- do.call(edgeR::filterByExpr, c(
         list(features),
         filterByExpr.args
     ))
     features <- features[keep, , keep.lib.sizes = FALSE]
-    
+
     ## normalize feature counts (default with TMM)
     features <- do.call(
         edgeR::calcNormFactors,
         c(list(features), calcNormFactors.args)
     )
-    
+
     ## design the model
     des <- model.matrix(design, data = meta)
-    
+
     ## estimate dispersion and fit negative binomial distribution
     features <- do.call(
         edgeR::estimateDisp,
         c(list(features, des), estimateDisp.args)
     )
     fit <- do.call(edgeR::glmQLFit, c(list(features, des), glmQLFit.args))
-    
+
     ## determine if the supplied model has intercept
     intercept <- attributes(terms(design))["intercept"] == 1
-    
+
     ## identify the comparison for DE analysis
     if (intercept == FALSE) {
         ## build the contrast of interest
         contrast <- paste(group, contrast, sep = "")
         contrast <- paste(contrast, collapse = "-")
-        
+
         ## fit the contrast
         con <- limma::makeContrasts(
             contrasts = contrast,
             levels = des
         )
-        
+
         ## set contrast parameter for DE
         comparison <- list(contrast = con)
     } else {
         ## set the coefficient name for the appropriate comparison
         cf <- contrast[1]
         cf <- paste(group, cf, sep = "")
-        
+
         ## set contrast parameter for DE
         comparison <- list(coef = cf)
     }
-    
+
     ## perform differential expression
     de <- do.call(
         edgeR::glmQLFTest,
         c(list(fit), comparison, glmQLFTest.args)
     )
-    
+
     ## extract normalized expression matrix
     normExpr <- edgeR::cpm(features, normalized.lib.sizes = TRUE, log = TRUE)
-    
+
     ## extract differential expression results
     deRes <- as.data.frame(edgeR::topTags(de,
-                                          n = Inf,
-                                          adjust.method = pAdjustment
+        n = Inf,
+        adjust.method = pAdjustment
     ))
-    
+
     ## add pAdjustment column id pAdjustment is 'none'
     if (pAdjustment == "none") {
         deRes$adj.P.Val <- deRes$PValue
     }
-    
+
     ## add 'ID' column to differentially expressed results
     deRes$ID <- rownames(deRes)
-    
+
     ## format differential expression table as required by MIRit
     deRes <- identifyColNames(deRes)
-    
+
     ## select significant features
     sig <- rownames(deRes[abs(deRes$logFC) > logFC &
-                              deRes$adj.P.Val < pCutoff, ])
-    
+        deRes$adj.P.Val < pCutoff, ])
+
     ## create a list with DE results
     deList <- list(
         data = deRes,
@@ -747,7 +747,7 @@ edgeR.DE <- function(counts,
         deObject = features,
         normExpr = normExpr
     )
-    
+
     ## return differential expression results
     return(deList)
 }
@@ -758,56 +758,56 @@ edgeR.DE <- function(counts,
 
 ## perform differential expression with DESeq2
 DESeq2.DE <- function(counts,
-                      group,
-                      contrast,
-                      meta,
-                      design,
-                      logFC,
-                      pCutoff,
-                      pAdjustment,
-                      DESeq.args) {
+    group,
+    contrast,
+    meta,
+    design,
+    logFC,
+    pCutoff,
+    pAdjustment,
+    DESeq.args) {
     ## set the user-defined contrast character
     defCon <- contrast
-    
+
     ## create DESeq2 object
     dds <- DESeq2::DESeqDataSetFromMatrix(
         countData = counts,
         colData = meta,
         design = design
     )
-    
+
     ## perform differential expression
     dds <- do.call(DESeq2::DESeq, c(list(dds), DESeq.args))
-    
+
     ## reconstruct the user-defined contrast
     contrast <- strsplit(contrast, "-")[[1]]
-    
+
     ## extract differential expression results for the appropriate contrast
     deRes <- DESeq2::results(dds,
-                             contrast = c(group, contrast[1], contrast[2]),
-                             pAdjustMethod = pAdjustment
+        contrast = c(group, contrast[1], contrast[2]),
+        pAdjustMethod = pAdjustment
     )
     deRes <- as.data.frame(deRes)
-    
+
     ## add 'ID' column to differentially expressed results
     deRes$ID <- rownames(deRes)
-    
+
     ## omit features with NA values
     deRes <- na.omit(deRes)
-    
+
     ## extract normalized expression values
     normExpr <- DESeq2::counts(dds, normalized = TRUE)
-    
+
     ## only retain valid features
     normExpr <- normExpr[rownames(normExpr) %in% deRes$ID, ]
-    
+
     ## format differential expression table as required by MIRit
     deRes <- identifyColNames(deRes)
-    
+
     ## select significant features
     sig <- rownames(deRes[abs(deRes$logFC) > logFC &
-                              deRes$adj.P.Val < pCutoff, ])
-    
+        deRes$adj.P.Val < pCutoff, ])
+
     ## create a list with DE results
     deList <- list(
         data = deRes,
@@ -822,7 +822,7 @@ DESeq2.DE <- function(counts,
         deObject = dds,
         normExpr = normExpr
     )
-    
+
     ## return differential expression results
     return(deList)
 }
@@ -833,54 +833,54 @@ DESeq2.DE <- function(counts,
 
 ## perform differential expression with limma-voom
 voom.DE <- function(counts,
-                    group,
-                    contrast,
-                    meta,
-                    design,
-                    logFC,
-                    pCutoff,
-                    pAdjustment,
-                    useVoomWithQualityWeights,
-                    filterByExpr.args,
-                    calcNormFactors.args,
-                    voom.args,
-                    lmFit.args,
-                    eBayes.args) {
+    group,
+    contrast,
+    meta,
+    design,
+    logFC,
+    pCutoff,
+    pAdjustment,
+    useVoomWithQualityWeights,
+    filterByExpr.args,
+    calcNormFactors.args,
+    voom.args,
+    lmFit.args,
+    eBayes.args) {
     ## set the user-defined contrast character
     defCon <- contrast
-    
+
     ## identify numerator level and reference level
     contrast <- strsplit(contrast, "-")[[1]]
-    
+
     ## convert group variable to factor with specified reference level
     meta[, group] <- relevel(factor(meta[, group]), ref = contrast[2])
-    
+
     ## create edgeR object from counts
     features <- edgeR::DGEList(
         counts = counts,
         group = meta[, group],
         samples = meta
     )
-    
+
     ## filter features based on expression
     keep <- do.call(edgeR::filterByExpr, c(
         list(features),
         filterByExpr.args
     ))
     features <- features[keep, , keep.lib.sizes = FALSE]
-    
+
     ## normalize feature counts (default with TMM)
     features <- do.call(
         edgeR::calcNormFactors,
         c(list(features), calcNormFactors.args)
     )
-    
+
     ## extract normalized expression matrix
     normExpr <- edgeR::cpm(features, normalized.lib.sizes = TRUE, log = TRUE)
-    
+
     ## design the model
     des <- model.matrix(design, data = meta)
-    
+
     ## apply voom transformation (with or without quality weights)
     if (useVoomWithQualityWeights == TRUE) {
         v <- do.call(
@@ -890,60 +890,60 @@ voom.DE <- function(counts,
     } else {
         v <- do.call(limma::voom, c(list(features, design = des), voom.args))
     }
-    
+
     ## fit a linear model for each gene
     fit <- do.call(limma::lmFit, c(list(v, design = des), lmFit.args))
-    
+
     ## determine if the supplied model has intercept
     intercept <- attributes(terms(design))["intercept"] == 1
-    
+
     ## identify the comparison for DE analysis
     if (intercept == FALSE) {
         ## build the contrast of interest
         contrast <- paste(group, contrast, sep = "")
         contrast <- paste(contrast, collapse = "-")
-        
+
         ## fit the contrast
         con <- limma::makeContrasts(
             contrasts = contrast,
             levels = des
         )
-        
+
         ## set contrast parameter for DE
         comparison <- list(contrast = con)
     } else {
         ## set the coefficient name for the appropriate comparison
         cf <- contrast[1]
         cf <- paste(group, cf, sep = "")
-        
+
         ## set contrast parameter for DE
         comparison <- list(coef = cf)
     }
-    
+
     ## fit the contrast matrix
     fit <- do.call(limma::contrasts.fit, c(list(fit), comparison))
-    
+
     ## perform empirical Bayes smoothing
     fit <- do.call(limma::eBayes, c(list(fit), eBayes.args))
-    
+
     ## retrieve differentially expressed features
     compName <- ifelse(intercept == TRUE, comparison[[1]], contrast)
     deRes <- limma::topTable(fit,
-                             coef = compName,
-                             number = Inf,
-                             adjust.method = pAdjustment
+        coef = compName,
+        number = Inf,
+        adjust.method = pAdjustment
     )
-    
+
     ## add 'ID' column to differentially expressed results
     deRes$ID <- rownames(deRes)
-    
+
     ## format differential expression table as required by MIRit
     deRes <- identifyColNames(deRes)
-    
+
     ## select significant features
     sig <- rownames(deRes[abs(deRes$logFC) > logFC &
-                              deRes$adj.P.Val < pCutoff, ])
-    
+        deRes$adj.P.Val < pCutoff, ])
+
     ## create a list with DE results
     deList <- list(
         data = deRes,
@@ -958,7 +958,7 @@ voom.DE <- function(counts,
         deObject = v,
         normExpr = normExpr
     )
-    
+
     ## return differential expression results
     return(deList)
 }
@@ -969,54 +969,54 @@ voom.DE <- function(counts,
 
 ## perform differential expression with limma
 limma.DE <- function(expr,
-                     group,
-                     contrast,
-                     meta,
-                     design,
-                     logFC,
-                     pCutoff,
-                     pAdjustment,
-                     useArrayWeights,
-                     useWsva,
-                     wsva.args,
-                     arrayWeights.args,
-                     useDuplicateCorrelation,
-                     correlationBlockVariable,
-                     duplicateCorrelation.args,
-                     lmFit.args,
-                     eBayes.args) {
+    group,
+    contrast,
+    meta,
+    design,
+    logFC,
+    pCutoff,
+    pAdjustment,
+    useArrayWeights,
+    useWsva,
+    wsva.args,
+    arrayWeights.args,
+    useDuplicateCorrelation,
+    correlationBlockVariable,
+    duplicateCorrelation.args,
+    lmFit.args,
+    eBayes.args) {
     ## set the user-defined contrast character
     defCon <- contrast
-    
+
     ## identify numerator level and reference level
     contrast <- strsplit(contrast, "-")[[1]]
-    
+
     ## convert group variable to factor with specified reference level
     meta[, group] <- relevel(factor(meta[, group]), ref = contrast[2])
-    
+
     ## design the linear model
     des <- model.matrix(design, data = meta)
-    
+
     ## correct for unknown sources of variability with WSVA
     if (useWsva == TRUE) {
         wcov <- do.call(limma::wsva, c(list(expr, design = des), wsva.args))
         des <- cbind(des, wcov)
     }
-    
+
     ## estimate array quality weights
     if (useArrayWeights == TRUE) {
         arrayw <- do.call(limma::arrayWeights, c(list(expr), arrayWeights.args))
         lmFit.args <- c(list(weights = arrayw), lmFit.args)
     }
-    
+
     ## account for correlated samples
     if (useDuplicateCorrelation == TRUE) {
         sampleCorr <- do.call(
             limma::duplicateCorrelation,
             c(
                 list(expr,
-                     design = des,
-                     block = meta[, correlationBlockVariable]
+                    design = des,
+                    block = meta[, correlationBlockVariable]
                 ),
                 duplicateCorrelation.args
             )
@@ -1026,60 +1026,60 @@ limma.DE <- function(expr,
             correlation = sampleCorr$consensus
         ), lmFit.args)
     }
-    
+
     ## fit a linear model for each gene
     fit <- do.call(limma::lmFit, c(list(expr, design = des), lmFit.args))
-    
+
     ## determine if the supplied model has intercept
     intercept <- attributes(terms(design))["intercept"] == 1
-    
+
     ## identify the comparison for DE analysis
     if (intercept == FALSE) {
         ## build the contrast of interest
         contrast <- paste(group, contrast, sep = "")
         contrast <- paste(contrast, collapse = "-")
-        
+
         ## fit the contrast
         con <- limma::makeContrasts(
             contrasts = contrast,
             levels = des
         )
-        
+
         ## set contrast parameter for DE
         comparison <- list(contrast = con)
     } else {
         ## set the coefficient name for the appropriate comparison
         cf <- contrast[1]
         cf <- paste(group, cf, sep = "")
-        
+
         ## set contrast parameter for DE
         comparison <- list(coef = cf)
     }
-    
+
     ## fit the contrast matrix
     fit <- do.call(limma::contrasts.fit, c(list(fit), comparison))
-    
+
     ## perform empirical Bayes smoothing
     fit <- do.call(limma::eBayes, c(list(fit), eBayes.args))
-    
+
     ## retrieve differentially expressed features
     compName <- ifelse(intercept == TRUE, comparison[[1]], contrast)
     deRes <- limma::topTable(fit,
-                             coef = compName,
-                             number = Inf,
-                             adjust.method = pAdjustment
+        coef = compName,
+        number = Inf,
+        adjust.method = pAdjustment
     )
-    
+
     ## add 'ID' column to differentially expressed results
     deRes$ID <- rownames(deRes)
-    
+
     ## format differential expression table as required by MIRit
     deRes <- identifyColNames(deRes)
-    
+
     ## select significant features
     sig <- rownames(deRes[abs(deRes$logFC) > logFC &
-                              deRes$adj.P.Val < pCutoff, ])
-    
+        deRes$adj.P.Val < pCutoff, ])
+
     ## create a list with DE results
     deList <- list(
         data = deRes,
@@ -1094,7 +1094,7 @@ limma.DE <- function(expr,
         deObject = fit,
         normExpr = expr
     )
-    
+
     ## return differential expression results
     return(deList)
 }
@@ -1238,27 +1238,27 @@ limma.DE <- function(expr,
 #'
 #' @export
 addDifferentialExpression <- function(mirnaObj,
-                                      mirnaDE = NULL,
-                                      geneDE = NULL,
-                                      mirna.logFC = 1,
-                                      mirna.pCutoff = 0.05,
-                                      mirna.pAdjustment = "fdr",
-                                      gene.logFC = 1,
-                                      gene.pCutoff = 0.05,
-                                      gene.pAdjustment = "fdr") {
+    mirnaDE = NULL,
+    geneDE = NULL,
+    mirna.logFC = 1,
+    mirna.pCutoff = 0.05,
+    mirna.pAdjustment = "fdr",
+    gene.logFC = 1,
+    gene.pCutoff = 0.05,
+    gene.pAdjustment = "fdr") {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
-             "See ?MirnaExperiment",
-             call. = FALSE
+            "See ?MirnaExperiment",
+            call. = FALSE
         )
     }
     if (!is.numeric(mirna.logFC) |
         length(mirna.logFC) != 1 |
         mirna.logFC < 0) {
         stop("'mirna.logFC' must be a non-neagtive number that specifies the ",
-             "minimum absolute significant fold change (default is 1)",
-             call. = FALSE
+            "minimum absolute significant fold change (default is 1)",
+            call. = FALSE
         )
     }
     if (!is.numeric(mirna.pCutoff) |
@@ -1266,8 +1266,8 @@ addDifferentialExpression <- function(mirnaObj,
         mirna.pCutoff > 1 |
         mirna.pCutoff < 0) {
         stop("'mirna.pCutoff' must be a number between 0 and 1! ",
-             "(default is 0.05)",
-             call. = FALSE
+            "(default is 0.05)",
+            call. = FALSE
         )
     }
     if (!is.character(mirna.pAdjustment) |
@@ -1277,17 +1277,17 @@ addDifferentialExpression <- function(mirnaObj,
             "holm", "hommel", "BH"
         )) {
         stop("'mirna.pAdjustment' must be  one of: 'none', 'fdr' (default), ",
-             "'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg', ",
-             "'holm', 'hommel'",
-             call. = FALSE
+            "'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg', ",
+            "'holm', 'hommel'",
+            call. = FALSE
         )
     }
     if (!is.numeric(gene.logFC) |
         length(gene.logFC) != 1 |
         gene.logFC < 0) {
         stop("'gene.logFC' must be a non-neagtive number that specifies the ",
-             "minimum absolute significant fold change (default is 1)",
-             call. = FALSE
+            "minimum absolute significant fold change (default is 1)",
+            call. = FALSE
         )
     }
     if (!is.numeric(gene.pCutoff) |
@@ -1295,8 +1295,8 @@ addDifferentialExpression <- function(mirnaObj,
         gene.pCutoff > 1 |
         gene.pCutoff < 0) {
         stop("'gene.pCutoff' must be a number between 0 and 1! ",
-             "(default is 0.05)",
-             call. = FALSE
+            "(default is 0.05)",
+            call. = FALSE
         )
     }
     if (!is.character(gene.pAdjustment) |
@@ -1306,38 +1306,38 @@ addDifferentialExpression <- function(mirnaObj,
             "holm", "hommel", "BH"
         )) {
         stop("'gene.pAdjustment' must be  one of: 'none', 'fdr' (default), ",
-             "'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg', ",
-             "'holm', 'hommel'",
-             call. = FALSE
+            "'BH' (same as 'fdr'), 'bonferroni', 'BY', 'hochberg', ",
+            "'holm', 'hommel'",
+            call. = FALSE
         )
     }
-    
+
     ## manually add miRNA differential expression
     if (!is.null(mirnaDE)) {
         ## check the validity of DE data.frame
         if (!is.data.frame(mirnaDE)) {
             stop("'mirnaDE' slot must be a data.frame object with miRNA ",
-                 "differential expression results, such as the output of ",
-                 "'topTable' in limma",
-                 call. = FALSE
+                "differential expression results, such as the output of ",
+                "'topTable' in limma",
+                call. = FALSE
             )
         }
-        
+
         ## check and set accepted column names in DE data.frame
         mirnaDE <- identifyColNames(mirnaDE, "miRNA")
-        
+
         ## check that miRNA names are the same across data
         if (any(!mirnaDE$ID %in% rownames(mirnaObj[["microRNA"]]))) {
             stop("The miRNA identifiers in 'mirnaDE' must be all present ",
-                 "within the row names of 'mirnaObj[['microRNA']]'",
-                 call. = FALSE
+                "within the row names of 'mirnaObj[['microRNA']]'",
+                call. = FALSE
             )
         }
-        
+
         ## define significantly differentially expressed miRNAs
         significantMirnas <- mirnaDE$ID[abs(mirnaDE$logFC) > mirna.logFC &
-                                            mirnaDE$adj.P.Val < mirna.pCutoff]
-        
+            mirnaDE$adj.P.Val < mirna.pCutoff]
+
         ## add miRNA differential expression results to mirnaObj
         mirnaDE(mirnaObj) <- list(
             data = mirnaDE,
@@ -1352,33 +1352,33 @@ addDifferentialExpression <- function(mirnaObj,
             deObject = NULL
         )
     }
-    
+
     ## manually add gene differential expression
     if (!is.null(geneDE)) {
         ## check the validity of DE data.frame
         if (!is.data.frame(geneDE)) {
             stop("'geneDE' slot must be a data.frame object with gene ",
-                 "differential expression results, such as the output of ",
-                 "'topTable' in limma",
-                 call. = FALSE
+                "differential expression results, such as the output of ",
+                "'topTable' in limma",
+                call. = FALSE
             )
         }
-        
+
         ## check and set accepted column names in DE data.frame
         geneDE <- identifyColNames(geneDE, "gene")
-        
+
         ## check that gene names are the same across data
         if (any(!geneDE$ID %in% rownames(mirnaObj[["genes"]]))) {
             stop("The gene symbols in 'geneDE' must be all present ",
-                 "within the row names of 'mirnaObj[['genes']]'",
-                 call. = FALSE
+                "within the row names of 'mirnaObj[['genes']]'",
+                call. = FALSE
             )
         }
-        
+
         ## define significantly differentially expressed genes
         significantGenes <- geneDE$ID[abs(geneDE$logFC) > gene.logFC &
-                                          geneDE$adj.P.Val < gene.pCutoff]
-        
+            geneDE$adj.P.Val < gene.pCutoff]
+
         ## add gene differential expression results to mirnaObj
         geneDE(mirnaObj) <- list(
             data = geneDE,
@@ -1393,7 +1393,7 @@ addDifferentialExpression <- function(mirnaObj,
             deObject = NULL
         )
     }
-    
+
     ## return mirnaObj
     return(mirnaObj)
 }

@@ -154,147 +154,147 @@
 #'
 #' @export
 visualizeNetwork <- function(object,
-                             pathway,
-                             algorithm = "dot",
-                             fontsize = 14,
-                             lfcScale = c("royalblue", "white", "red"),
-                             nodeBorderCol = "black",
-                             nodeTextCol = "black",
-                             edgeCol = "darkgrey",
-                             edgeWidth = 1,
-                             subgraph = NULL,
-                             highlightNodes = NULL,
-                             highlightCol = "gold",
-                             highlightWidth = 2,
-                             legendColorbar = TRUE,
-                             legendInteraction = TRUE,
-                             title = NULL,
-                             titleCex = 2,
-                             titleFace = 1) {
+    pathway,
+    algorithm = "dot",
+    fontsize = 14,
+    lfcScale = c("royalblue", "white", "red"),
+    nodeBorderCol = "black",
+    nodeTextCol = "black",
+    edgeCol = "darkgrey",
+    edgeWidth = 1,
+    subgraph = NULL,
+    highlightNodes = NULL,
+    highlightCol = "gold",
+    highlightWidth = 2,
+    legendColorbar = TRUE,
+    legendInteraction = TRUE,
+    title = NULL,
+    titleCex = 2,
+    titleFace = 1) {
     ## input checks
     if (!is(object, "IntegrativePathwayAnalysis")) {
         stop("'object' should be of class IntegrativePathwayAnalysis! ",
-             "See ?IntegrativePathwayAnalysis-class",
-             call. = FALSE
+            "See ?IntegrativePathwayAnalysis-class",
+            call. = FALSE
         )
     }
     if (!is.character(pathway) |
         length(pathway) != 1 |
         !pathway %in% names(augmentedPathways(object))) {
         stop("'pathway' must be the name of a valid pathway included in ",
-             "'names(augmentedPathways(object))'. For additional details, ",
-             "see ?visualizeNetwork",
-             call. = FALSE
+            "'names(augmentedPathways(object))'. For additional details, ",
+            "see ?visualizeNetwork",
+            call. = FALSE
         )
     }
     if (!is.character(algorithm) |
         length(algorithm) != 1 |
         !algorithm %in% c("dot", "circo", "fdp", "neato", "osage", "twopi")) {
         stop("'algorithm' must be either 'dot' (default), 'circo', 'fdp' ",
-             "'neato', 'osage' or 'twopi'. ",
-             "For additional details see ?visualizeNetwork",
-             call. = FALSE
+            "'neato', 'osage' or 'twopi'. ",
+            "For additional details see ?visualizeNetwork",
+            call. = FALSE
         )
     }
     if (!is.numeric(fontsize) |
         length(fontsize) != 1 |
         fontsize < 1) {
         stop("'fontsize' must be a number higher than 1! (default is 14)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (length(lfcScale) != 3 |
         any(areColors(lfcScale) == FALSE)) {
         stop("'lfcScale' must be a vector with R color names for ",
-             "downregulated features, non significant features, and ",
-             "upregulated features. The default value is ",
-             "c('royalblue', 'white', 'red').",
-             call. = FALSE
+            "downregulated features, non significant features, and ",
+            "upregulated features. The default value is ",
+            "c('royalblue', 'white', 'red').",
+            call. = FALSE
         )
     }
     if (!is.character(nodeBorderCol) |
         length(nodeBorderCol) != 1 |
         areColors(nodeBorderCol) == FALSE) {
         stop("'nodeBorderCol' must be an R color name.",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(nodeTextCol) |
         length(nodeTextCol) != 1 |
         areColors(nodeTextCol) == FALSE) {
         stop("'nodeTextCol' must be an R color name.",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(edgeCol) |
         length(edgeCol) != 1 |
         areColors(edgeCol) == FALSE) {
         stop("'edgeCol' must be an R color name.",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.numeric(edgeWidth) |
         length(edgeWidth) != 1 |
         edgeWidth < 0) {
         stop("'edgeWidth' must be a non-negative number! (default is 1)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.null(subgraph) &
         !is.character(subgraph)) {
         stop("'subgraph' must contain the names of nodes to ",
-             "maintain. For additional details see ?visualizeNetwork.",
-             call. = FALSE
+            "maintain. For additional details see ?visualizeNetwork.",
+            call. = FALSE
         )
     }
     if (!is.null(highlightNodes) &
         !is.character(highlightNodes)) {
         stop("'highlightNodes' must contain the names of nodes to ",
-             "highlight. For additional details see ?visualizeNetwork.",
-             call. = FALSE
+            "highlight. For additional details see ?visualizeNetwork.",
+            call. = FALSE
         )
     }
     if (!is.character(highlightCol) |
         length(highlightCol) != 1 |
         areColors(highlightCol) == FALSE) {
         stop("'highlightCol' must be an R color name.",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.numeric(highlightWidth) |
         length(highlightWidth) != 1 |
         highlightWidth < 0) {
         stop("'highlightWidth' must be a non-negative number! (default is 2)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(legendColorbar) |
         length(legendColorbar) != 1) {
         stop("'legendColorbar' must be logical (TRUE/FALSE)! ",
-             "See ?visualizeNetwork",
-             call. = FALSE
+            "See ?visualizeNetwork",
+            call. = FALSE
         )
     }
     if (!is.logical(legendInteraction) |
         length(legendInteraction) != 1) {
         stop("'legendInteraction' must be logical (TRUE/FALSE)! ",
-             "See ?visualizeNetwork",
-             call. = FALSE
+            "See ?visualizeNetwork",
+            call. = FALSE
         )
     }
     if (!(is.character(title) | is.null(title)) |
         !length(title) %in% c(0, 1)) {
         stop("'title' must be the title of the network. ",
-             "For additional details see ?visualizeNetwork",
-             call. = FALSE
+            "For additional details see ?visualizeNetwork",
+            call. = FALSE
         )
     }
     if (!is.numeric(titleCex) |
         length(titleCex) != 1 |
         titleCex <= 0) {
         stop("'titleCex' must be a positive number higher than 0! ",
-             "(default is 2)",
-             call. = FALSE
+            "(default is 2)",
+            call. = FALSE
         )
     }
     if (!is.numeric(titleFace) |
@@ -303,94 +303,94 @@ visualizeNetwork <- function(object,
         titleFace > 5 |
         titleFace %% 1 != 0) {
         stop("'titleFace' must be an integer between 1 and 5! (default is 1)",
-             call. = FALSE
+            call. = FALSE
         )
     }
-    
+
     ## extract augmented pathways
     pList <- augmentedPathways(object)
-    
+
     ## select the pathways of interest
     p <- pList[[pathway]]
-    
+
     ## return NULL for invalid pathways
     if (is.null(p)) {
         stop("The selected pathway is NULL!", call. = FALSE)
     }
-    
+
     ## retain just the nodes specified by the user
     if (!is.null(subgraph)) {
         ## check that supplied nodes are present
         if (any(!subgraph %in% graph::nodes(p))) {
             warning(
                 paste(subgraph[!subgraph %in% graph::nodes(p)],
-                      collapse = ", "
+                    collapse = ", "
                 ), " not belonging to this network! ",
                 "Ignoring these nodes...",
                 call. = FALSE
             )
             subgraph <- subgraph[subgraph %in% graph::nodes(p)]
         }
-        
+
         ## maintein only desired nodes
         p <- graph::subGraph(subgraph, p)
     }
-    
+
     ## extract expression changes
     featDE <- object@expression
-    
+
     ## extract weights and edges
     e <- vapply(Rgraphviz::edgeData(p), function(x) {
         x$weight
     }, FUN.VALUE = numeric(1))
-    
+
     ## extract nodes
     nodes <- graph::nodes(p)
-    
+
     ## retain expression changes just for nodes
     exprNodes <- featDE[nodes, ]
-    
+
     ## change edge names according to Rgraphviz
     names(e) <- gsub("|", "~", names(e), fixed = TRUE)
-    
+
     ## use different shapes for genes and miRNAs
     nS <- rep("ellipse", length(nodes))
     nS[exprNodes$type == "miRNA"] <- "box"
     names(nS) <- nodes
-    
+
     ## use larger node shapes for miRNAs
     fixedsize <- rep(TRUE, length(nodes))
     fixedsize[exprNodes$type == "miRNA"] <- FALSE
     names(fixedsize) <- nodes
-    
+
     ## set color scale for genes and miRNA fold changes
     filCol <- setColorScale(exprNodes$logFC,
-                            cols = lfcScale,
-                            numColors = 300
+        cols = lfcScale,
+        numColors = 300
     )
     names(filCol) <- nodes
-    
+
     ## change arrowheads on the basis of interaction type
     arrHead <- rep("open", length(e))
     arrHead[e == 0] <- "none"
     arrHead[e == -1] <- "tee"
     names(arrHead) <- names(e)
-    
+
     ## set linetype dashed for binding
     lty <- rep("solid", length(e))
     lty[e == 0] <- "dashed"
     names(lty) <- names(e)
-    
+
     ## arrange nodes in the network with respect to node shape
     g <- Rgraphviz::layoutGraph(p,
-                                layoutType = algorithm,
-                                nodeAttr = list(
-                                    shape = nS,
-                                    fixedsize = fixedsize,
-                                    fontsize = fontsize
-                                )
+        layoutType = algorithm,
+        nodeAttr = list(
+            shape = nS,
+            fixedsize = fixedsize,
+            fontsize = fontsize
+        )
     )
-    
+
     ## define node parameters
     nAttr <- list(
         fill = filCol,
@@ -398,7 +398,7 @@ visualizeNetwork <- function(object,
         col = nodeBorderCol,
         textCol = nodeTextCol
     )
-    
+
     ## define edge parameters
     eAttr <- list(
         col = edgeCol,
@@ -406,33 +406,33 @@ visualizeNetwork <- function(object,
         lty = lty,
         lwd = edgeWidth
     )
-    
+
     ## setting parameters for nodes and adges
     graph::nodeRenderInfo(g) <- nAttr
     graph::edgeRenderInfo(g) <- eAttr
-    
+
     ## highlight desired nodes
     if (!is.null(highlightNodes)) {
         ## check that supplied nodes are present
         if (any(!highlightNodes %in% nodes)) {
             warning(
                 paste(highlightNodes[!highlightNodes %in% nodes],
-                      collapse = ", "
+                    collapse = ", "
                 ), " not belonging to this network! ",
                 "Highlighting is ignored...",
                 call. = FALSE
             )
             highlightNodes <- highlightNodes[highlightNodes %in% nodes]
         }
-        
+
         ## set the properties of selected nodes and edges
         highNodeCol <- rep(highlightCol, length(highlightNodes))
         highNodeWidth <- rep(highlightWidth, length(highlightNodes))
         names(highNodeCol) <- highlightNodes
         names(highNodeWidth) <- highlightNodes
         highEdges <- as.character(outer(highlightNodes, highlightNodes,
-                                        paste,
-                                        sep = "~"
+            paste,
+            sep = "~"
         ))
         highEdges <- highEdges[highEdges %in% graph::edgeNames(g)]
         highEdgeCol <- rep(highlightCol, length(highEdges))
@@ -440,59 +440,63 @@ visualizeNetwork <- function(object,
         names(highEdgeCol) <- highEdges
         names(highEdgeWidth) <- highEdges
         if (length(highNodeCol) > 0) {
-            graph::nodeRenderInfo(g) <- list(col = highNodeCol,
-                                             lwd = highNodeWidth)
+            graph::nodeRenderInfo(g) <- list(
+                col = highNodeCol,
+                lwd = highNodeWidth
+            )
         }
         if (length(highEdgeCol) > 0) {
-            graph::edgeRenderInfo(g) <- list(col = highEdgeCol,
-                                             lwd = highEdgeWidth)
+            graph::edgeRenderInfo(g) <- list(
+                col = highEdgeCol,
+                lwd = highEdgeWidth
+            )
         }
     }
-    
+
     ## store current layout settings
     currentPar <- par(no.readonly = TRUE)
-    
+
     ## define plotting layout
     if (legendColorbar == TRUE &
         legendInteraction == TRUE) {
         layout(matrix(c(1, 1, 1, 0, 2, 3), ncol = 2),
-               widths = c(4, 1),
-               heights = c(0.5, 2, 2)
+            widths = c(4, 1),
+            heights = c(0.5, 2, 2)
         )
     } else if (legendColorbar == TRUE &
-               legendInteraction == FALSE) {
+        legendInteraction == FALSE) {
         layout(matrix(c(1, 1, 1, 0, 2, 0), ncol = 2),
-               widths = c(4, 1),
-               heights = c(1.2, 2, 1.2)
+            widths = c(4, 1),
+            heights = c(1.2, 2, 1.2)
         )
     } else if (legendColorbar == FALSE &
-               legendInteraction == TRUE) {
+        legendInteraction == TRUE) {
         layout(matrix(c(1, 1, 1, 0, 2, 0), ncol = 2),
-               widths = c(4, 1),
-               heights = c(1.4, 2, 1)
+            widths = c(4, 1),
+            heights = c(1.4, 2, 1)
         )
     } else {
         layout(1)
     }
-    
+
     ## add extra space for title
     if (!is.null(title)) {
         par(oma = c(0, 0, 2, 0))
     }
-    
+
     ## make sure to restore graphical parameters on exit
     on.exit({
         par(currentPar)
     })
-    
+
     ## produce the network graph
     Rgraphviz::renderGraph(g)
-    
+
     ## produce logFC color bar legend
     if (legendColorbar == TRUE) {
         par(mar = c(2, 4.2, 4, 4.2))
         legMat <- matrix(seq(min(exprNodes$logFC), max(exprNodes$logFC),
-                             length.out = 300
+            length.out = 300
         ))
         image(
             x = 1,
@@ -514,7 +518,7 @@ visualizeNetwork <- function(object,
         )
         axis(2, las = 1)
     }
-    
+
     ## create a legend for interaction types
     if (legendInteraction == TRUE) {
         par(mar = c(4, 2.5, 2, 2.5))
@@ -527,12 +531,12 @@ visualizeNetwork <- function(object,
         text(x = 0, y = 0.3, labels = "Inhibition", adj = 0)
         title(main = "Interaction", font.main = 1)
     }
-    
+
     ## add a title to the network plot
     if (!is.null(title)) {
         title(title,
-              line = 0, outer = TRUE,
-              cex.main = titleCex, font.main = titleFace
+            line = 0, outer = TRUE,
+            cex.main = titleCex, font.main = titleFace
         )
     }
 }
@@ -549,26 +553,26 @@ setColorScale <- function(values, cols, numColors) {
     } else if (all(values < 0)) {
         cols <- cols[c(1, 2)]
     }
-    
+
     ## create a function that generates the color scale
     colorScale <- colorRampPalette(cols)
-    
+
     ## generate the color scale with the desired number of colors
     colorVector <- colorScale(numColors)
-    
+
     ## define breaks for values
     posRatio <- sum(values > 0) / length(values)
     breaks <- c(
         -Inf, rev(seq(0, min(values), len = numColors / 2)),
         seq(0, max(values), len = numColors / 2)[-1], Inf
     )
-    
+
     ## assign color values based on another vector
     colorValues <- colorVector[cut(values, breaks = breaks)]
-    
+
     ## set the names of color values equal to those of vector
     names(colorValues) <- names(values)
-    
+
     ## return color values
     return(colorValues)
 }
@@ -625,61 +629,61 @@ setColorScale <- function(values, cols, numColors) {
 #'
 #' @export
 enrichmentDotplot <- function(enrichment,
-                              showTerms = 10,
-                              showTermsParam = "ratio",
-                              splitDir = TRUE,
-                              title = NULL) {
+    showTerms = 10,
+    showTermsParam = "ratio",
+    splitDir = TRUE,
+    title = NULL) {
     ## check inputs
     if (!is(enrichment, "FunctionalEnrichment")) {
         stop("'enrichment' should be of class FunctionalEnrichment!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (nrow(enrichmentResults(enrichment)) < 1) {
         stop("'enrichment' object does not contain any significant results!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(showTerms) &
         !(is.numeric(showTerms) & length(showTerms) == 1)) {
         stop("'showTerms' must be the number of top enriched terms ",
-             "to plot or, alternatively, a character vector containing ",
-             "the terms to be shown.",
-             call. = FALSE
+            "to plot or, alternatively, a character vector containing ",
+            "the terms to be shown.",
+            call. = FALSE
         )
     }
     if (is.character(showTerms) &
         !all(showTerms %in% enrichmentResults(enrichment)$pathway)) {
         stop("The terms provided are not present in 'enrichment' ",
-             "pathway column!",
-             call. = FALSE
+            "pathway column!",
+            call. = FALSE
         )
     }
     if (!is.character(showTermsParam) |
         length(showTermsParam) != 1 |
         !showTermsParam %in% c("ratio", "padj", "pval", "overlap")) {
         stop("'showTermsParam' must be one of: 'ratio' (default), 'padj', ",
-             "'pval', 'overlap'",
-             call. = FALSE
+            "'pval', 'overlap'",
+            call. = FALSE
         )
     }
     if (!is.logical(splitDir) |
         length(splitDir) != 1) {
         stop("'splitDir' must be logical (TRUE/FALSE)! See ?enrichmentDotplot",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!(is.character(title) | is.null(title)) |
         !length(title) %in% c(0, 1)) {
         stop("'title' must be the title of the plot (e.g. 'Enrichment'). ",
-             "For additional details see ?enrichmentDotplot",
-             call. = FALSE
+            "For additional details see ?enrichmentDotplot",
+            call. = FALSE
         )
     }
-    
+
     ## extract results from enrichment object
     res <- enrichmentResults(enrichment)
-    
+
     ## compute gene ratio and direction for different analyses
     if (enrichmentMethod(enrichment) == "Gene-Set Enrichment Analysis (GSEA)") {
         ov <- as.numeric(lapply(res$leadingEdge, length))
@@ -690,29 +694,29 @@ enrichmentDotplot <- function(enrichment,
     } else {
         res$ratio <- res$overlap / res$size
     }
-    
+
     ## order results on the basis of showTermsParam
     if (showTermsParam != "padj" & showTermsParam != "pval") {
         res <- res[order(res[, showTermsParam], decreasing = TRUE), ]
     } else {
         res <- res[order(res[, showTermsParam], decreasing = FALSE), ]
     }
-    
+
     ## select pathways to be shown in the dotplot
     if (is.numeric(showTerms)) {
         res <- res[seq(ifelse(showTerms <= nrow(res), showTerms, nrow(res))), ]
     } else if (is.character(showTerms)) {
         res <- res[which(res$pathway %in% showTerms), ]
     }
-    
+
     ## set the parameters for plotting
     ordBy <- "ratio"
     sizeBy <- "overlap"
     colBy <- "padj"
-    
+
     ## set an x-axis label for 'ratio'
     ordLabel <- "Gene-Set Overlap"
-    
+
     ## create a dotplot
     dotRes <- ggplot2::ggplot(
         res,
@@ -740,7 +744,7 @@ enrichmentDotplot <- function(enrichment,
         ) +
         ggplot2::xlab(ordLabel) +
         theme_enr()
-    
+
     ## divide by enrichment direction
     if (splitDir == TRUE &
         enrichmentMethod(enrichment) != "Over-Representation Analysis (ORA)") {
@@ -748,13 +752,13 @@ enrichmentDotplot <- function(enrichment,
             ggplot2::facet_grid(~direction) +
             ggplot2::theme(strip.text = ggplot2::element_text(size = 12))
     }
-    
+
     ## add the title of the plot
     if (!is.null(title)) {
         dotRes <- dotRes +
             ggplot2::ggtitle(title)
     }
-    
+
     ## return ggplot2 graph
     return(dotRes)
 }
@@ -810,61 +814,61 @@ enrichmentDotplot <- function(enrichment,
 #'
 #' @export
 enrichmentBarplot <- function(enrichment,
-                              showTerms = 10,
-                              showTermsParam = "ratio",
-                              splitDir = TRUE,
-                              title = NULL) {
+    showTerms = 10,
+    showTermsParam = "ratio",
+    splitDir = TRUE,
+    title = NULL) {
     ## check inputs
     if (!is(enrichment, "FunctionalEnrichment")) {
         stop("'enrichment' should be of class FunctionalEnrichment!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (nrow(enrichmentResults(enrichment)) < 1) {
         stop("'enrichment' object does not contain any significant results!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(showTerms) &
         !(is.numeric(showTerms) & length(showTerms) == 1)) {
         stop("'showTerms' must be the number of top enriched terms ",
-             "to plot or, alternatively, a character vector containing ",
-             "the terms to be shown.",
-             call. = FALSE
+            "to plot or, alternatively, a character vector containing ",
+            "the terms to be shown.",
+            call. = FALSE
         )
     }
     if (is.character(showTerms) &
         !all(showTerms %in% enrichmentResults(enrichment)$pathway)) {
         stop("The terms provided are not present in 'enrichment' ",
-             "pathway column!",
-             call. = FALSE
+            "pathway column!",
+            call. = FALSE
         )
     }
     if (!is.character(showTermsParam) |
         length(showTermsParam) != 1 |
         !showTermsParam %in% c("ratio", "padj", "pval", "overlap")) {
         stop("'showTermsParam' must be one of: 'ratio' (default), 'padj', ",
-             "'pval', 'overlap'",
-             call. = FALSE
+            "'pval', 'overlap'",
+            call. = FALSE
         )
     }
     if (!is.logical(splitDir) |
         length(splitDir) != 1) {
         stop("'splitDir' must be logical (TRUE/FALSE)! See ?enrichmentBarplot",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!(is.character(title) | is.null(title)) |
         !length(title) %in% c(0, 1)) {
         stop("'title' must be the title of the plot (e.g. 'Enrichment'). ",
-             "For additional details see ?enrichmentBarplot",
-             call. = FALSE
+            "For additional details see ?enrichmentBarplot",
+            call. = FALSE
         )
     }
-    
+
     ## extract results from enrichment object
     res <- enrichmentResults(enrichment)
-    
+
     ## compute gene ratio and direction for different analyses
     if (enrichmentMethod(enrichment) == "Gene-Set Enrichment Analysis (GSEA)") {
         ov <- as.numeric(lapply(res$leadingEdge, length))
@@ -875,28 +879,28 @@ enrichmentBarplot <- function(enrichment,
     } else {
         res$ratio <- res$overlap / res$size
     }
-    
+
     ## order results on the basis of showTermsParam
     if (showTermsParam != "padj" & showTermsParam != "pval") {
         res <- res[order(res[, showTermsParam], decreasing = TRUE), ]
     } else {
         res <- res[order(res[, showTermsParam], decreasing = FALSE), ]
     }
-    
+
     ## select pathways to be shown in the dotplot
     if (is.numeric(showTerms)) {
         res <- res[seq(ifelse(showTerms <= nrow(res), showTerms, nrow(res))), ]
     } else if (is.character(showTerms)) {
         res <- res[which(res$pathway %in% showTerms), ]
     }
-    
+
     ## set the parameters for plotting
     ordBy <- "ratio"
     colBy <- "padj"
-    
+
     ## set an x-axis label for 'ratio'
     ordLabel <- "Gene-Set Overlap"
-    
+
     ## create a dotplot
     barRes <- ggplot2::ggplot(
         res,
@@ -918,7 +922,7 @@ enrichmentBarplot <- function(enrichment,
         ggplot2::scale_y_discrete() +
         ggplot2::xlab(ordLabel) +
         theme_enr()
-    
+
     ## divide by enrichment direction
     if (splitDir == TRUE &
         enrichmentMethod(enrichment) != "Over-Representation Analysis (ORA)") {
@@ -926,13 +930,13 @@ enrichmentBarplot <- function(enrichment,
             ggplot2::facet_grid(~direction) +
             ggplot2::theme(strip.text = ggplot2::element_text(size = 12))
     }
-    
+
     ## add the title of the plot
     if (!is.null(title)) {
         barRes <- barRes +
             ggplot2::ggtitle(title)
     }
-    
+
     ## return ggplot2 graph
     return(barRes)
 }
@@ -980,102 +984,102 @@ enrichmentBarplot <- function(enrichment,
 #'
 #' @export
 gseaRidgeplot <- function(enrichment,
-                          showTerms = 10,
-                          showTermsParam = "padj",
-                          title = NULL) {
+    showTerms = 10,
+    showTermsParam = "padj",
+    title = NULL) {
     if (!is(enrichment, "FunctionalEnrichment")) {
         stop("'enrichment' should be of class FunctionalEnrichment!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (nrow(enrichmentResults(enrichment)) < 1) {
         stop("'enrichment' object does not contain any significant results!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(showTerms) &
         !(is.numeric(showTerms) & length(showTerms) == 1)) {
         stop("'showTerms' must be the number of top enriched terms ",
-             "to plot or, alternatively, a character vector containing ",
-             "the terms to be shown.",
-             call. = FALSE
+            "to plot or, alternatively, a character vector containing ",
+            "the terms to be shown.",
+            call. = FALSE
         )
     }
     if (is.character(showTerms) &
         !all(showTerms %in% enrichmentResults(enrichment)$pathway)) {
         stop("The terms provided are not present in 'enrichment' ",
-             "pathway column!",
-             call. = FALSE
+            "pathway column!",
+            call. = FALSE
         )
     }
     if (!is.character(showTermsParam) |
         length(showTermsParam) != 1 |
         !showTermsParam %in% c("ratio", "padj", "pval", "overlap")) {
         stop("'showTermsParam' must be one of: 'ratio', 'padj' (default), ",
-             "'pval', 'overlap'",
-             call. = FALSE
+            "'pval', 'overlap'",
+            call. = FALSE
         )
     }
     if (!(is.character(title) | is.null(title)) |
         !length(title) %in% c(0, 1)) {
         stop("'title' must be the title of the plot (e.g. 'Enrichment'). ",
-             "For additional details see ?enrichmentDotplot",
-             call. = FALSE
+            "For additional details see ?enrichmentDotplot",
+            call. = FALSE
         )
     }
-    
+
     ## check that GSEA has been performed
     if (enrichmentMethod(enrichment) != "Gene-Set Enrichment Analysis (GSEA)") {
         stop("To use this function, 'enrichment' must originate from a ",
-             "gene-set enrichment analysis (GSEA). ",
-             "For additional details see ?enrichmentBarplot",
-             call. = FALSE
+            "gene-set enrichment analysis (GSEA). ",
+            "For additional details see ?enrichmentBarplot",
+            call. = FALSE
         )
     }
-    
+
     ## check that ggridges is installed
     if (!requireNamespace("ggridges", quietly = TRUE)) {
         stop("The ggridges package is needed to use ",
-             "this function. Install it through: ",
-             paste("`install.packages('ggridges')`.",
-                   sep = ""
-             ),
-             call. = FALSE
+            "this function. Install it through: ",
+            paste("`install.packages('ggridges')`.",
+                sep = ""
+            ),
+            call. = FALSE
         )
     }
-    
+
     ## extract results from enrichment object
     res <- enrichmentResults(enrichment)
-    
+
     ## extract ranked list from FunctionalEnrichment object
     rankedList <- enrichmentMetric(enrichment)
     names(rankedList) <- enrichedFeatures(enrichment)
-    
+
     ## compute gene ratio
     ov <- as.numeric(lapply(res$leadingEdge, length))
     res$overlap <- ov
     res$ratio <- ov / res$size
-    
+
     ## order results on the basis of showTermsParam
     if (showTermsParam != "padj" & showTermsParam != "pval") {
         res <- res[order(res[, showTermsParam], decreasing = TRUE), ]
     } else {
         res <- res[order(res[, showTermsParam], decreasing = FALSE), ]
     }
-    
+
     ## select pathways to be shown in the dotplot
     if (is.numeric(showTerms)) {
         res <- res[seq(ifelse(showTerms <= nrow(res), showTerms, nrow(res))), ]
     } else if (is.character(showTerms)) {
         res <- res[which(res$pathway %in% showTerms), ]
     }
-    
+
     ## retrieve ranking metric for genes in each category
     metricSet <- lapply(res[, "leadingEdge"], function(x) {
         rankedList[intersect(x, names(rankedList))]
     })
     names(metricSet) <- res$pathway
-    
+
     ## create a data.frame with metric reported for each category
     setLen <- vapply(metricSet, length, FUN.VALUE = numeric(1))
     meanMetric <- vapply(metricSet, mean, FUN.VALUE = numeric(1))
@@ -1087,10 +1091,10 @@ gseaRidgeplot <- function(enrichment,
         metric = rep(meanMetric, setLen),
         val = unlist(metricSet)
     )
-    
+
     ## set the parameters for plotting
     colBy <- "padj"
-    
+
     ## create a ridgeplot
     ridPlot <- ggplot2::ggplot(
         ridgeDf,
@@ -1113,13 +1117,13 @@ gseaRidgeplot <- function(enrichment,
         ggplot2::ylab(NULL) +
         ggplot2::xlab("Ranking Metric") +
         theme_enr()
-    
+
     ## add the title of the plot
     if (!is.null(title)) {
         ridPlot <- ridPlot +
             ggplot2::ggtitle(title)
     }
-    
+
     ## return ggplot2 graph
     return(ridPlot)
 }
@@ -1177,121 +1181,121 @@ gseaRidgeplot <- function(enrichment,
 #'
 #' @export
 gseaPlot <- function(enrichment,
-                     pathway,
-                     showTitle = TRUE,
-                     rankingMetric = FALSE,
-                     lineColor = "green",
-                     lineSize = 1,
-                     vlineColor = "red",
-                     vlineSize = 0.6) {
+    pathway,
+    showTitle = TRUE,
+    rankingMetric = FALSE,
+    lineColor = "green",
+    lineSize = 1,
+    vlineColor = "red",
+    vlineSize = 0.6) {
     ## check inputs
     if (!is(enrichment, "FunctionalEnrichment")) {
         stop("'enrichment' should be of class FunctionalEnrichment!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (nrow(enrichmentResults(enrichment)) < 1) {
         stop("'enrichment' object does not contain any significant results!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (is.character(pathway) &
         !pathway %in% enrichmentResults(enrichment)$pathway) {
         stop("'pathway' is not present in 'enrichment' pathway column!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(showTitle) |
         length(showTitle) != 1) {
         stop("'showTitle' must be logical (TRUE/FALSE)! See ?gseaPlot",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(rankingMetric) |
         length(rankingMetric) != 1) {
         stop("'rankingMetric' must be logical (TRUE/FALSE)! See ?gseaPlot",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(lineColor) |
         length(lineColor) != 1 |
         areColors(lineColor) == FALSE) {
         stop("'lineColor' must be an R color name.",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.numeric(lineSize) |
         length(lineSize) != 1 |
         lineSize < 0) {
         stop("'lineSize' must be a non-neagtive number! (default is 1)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(vlineColor) |
         length(vlineColor) != 1 |
         areColors(vlineColor) == FALSE) {
         stop("'vlineColor' must be an R color name.",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.numeric(vlineSize) |
         length(vlineSize) != 1 |
         vlineSize < 0) {
         stop("'vlineSize' must be a non-neagtive number! (default is 0.6)",
-             call. = FALSE
+            call. = FALSE
         )
     }
-    
+
     ## check that GSEA has been performed
     if (enrichmentMethod(enrichment) != "Gene-Set Enrichment Analysis (GSEA)") {
         stop("To use this function, 'enrichment' must originate from a ",
-             "gene-set enrichment analysis (GSEA). ",
-             "For additional details see ?enrichmentBarplot",
-             call. = FALSE
+            "gene-set enrichment analysis (GSEA). ",
+            "For additional details see ?enrichmentBarplot",
+            call. = FALSE
         )
     }
-    
+
     ## extract ranked list and gene sets from FunctionalEnrichment object
     geneSet <- enrichment@geneSet
     rankedList <- enrichmentMetric(enrichment)
     names(rankedList) <- enrichedFeatures(enrichment)
-    
+
     ## extract the gene set of interest
     gs <- geneSet[[pathway]]
-    
+
     ## keep only the genes present in ranked list
     gs <- intersect(gs, names(rankedList))
-    
+
     ## define the lengths of gene set and ranked list
     lengthRank <- length(rankedList)
     lengthSet <- length(gs)
-    
+
     ## create vectors for positive and negative hits
     pos <- numeric(lengthRank)
     misses <- numeric(lengthRank)
-    
+
     ## identify the gene positions in ranked list belonging to the pathway
     hits <- names(rankedList) %in% gs
-    
+
     ## calculate scores
     pos[hits] <- abs(rankedList[hits])
     misses[!hits] <- 1 / (lengthRank - lengthSet)
-    
+
     ## determine cumulative sums
     pSum <- sum(pos)
     pos <- cumsum(pos / pSum)
     misses <- cumsum(misses)
-    
+
     ## compute GSEA running score
     runScore <- pos - misses
-    
+
     ## set the maximum absolute deviance from zero (ES)
     if (abs(max(runScore)) < abs(min(runScore))) {
         es <- min(runScore)
     } else {
         es <- max(runScore)
     }
-    
+
     ## create data.frame for ggplot2
     gseData <- data.frame(
         position = seq(length(runScore)),
@@ -1300,21 +1304,21 @@ gseaPlot <- function(enrichment,
         genes = names(rankedList),
         metric = rankedList
     )
-    
+
     ## add ymin and ymax for ranges
     gseData$ymin <- 0
     gseData$ymax <- 0
     gseData$ymin[hits] <- -diff(range(runScore)) / 20
     gseData$ymax[hits] <- diff(range(runScore)) / 20
-    
+
     ## create GSEA plot with ggplot2
     gsePlot <- ggplot2::ggplot(
         gseData,
         ggplot2::aes(x = .data$position)
     ) +
         ggplot2::geom_line(ggplot2::aes(y = runScore),
-                           linewidth = lineSize,
-                           color = lineColor
+            linewidth = lineSize,
+            color = lineColor
         ) +
         ggplot2::geom_vline(
             xintercept = which(runScore == es),
@@ -1330,13 +1334,13 @@ gseaPlot <- function(enrichment,
         ggplot2::xlab("Position in Ranked List of Genes") +
         ggplot2::ylab("Running Score") +
         theme_enr()
-    
+
     ## add pathway title if desired
     if (showTitle == TRUE) {
         gsePlot <- gsePlot +
             ggplot2::ggtitle(pathway)
     }
-    
+
     ## show ranking metric if wanted by the user
     if (rankingMetric == TRUE) {
         ## remove x axis element from GSEA plot
@@ -1346,7 +1350,7 @@ gseaPlot <- function(enrichment,
                 axis.text.x = ggplot2::element_blank(),
                 axis.ticks.x = ggplot2::element_blank()
             )
-        
+
         ## create rank plot
         rankPlot <- ggplot2::ggplot(
             gseData,
@@ -1363,16 +1367,16 @@ gseaPlot <- function(enrichment,
             ggplot2::ylab("Ranking Metric") +
             ggplot2::xlab("Position in Ranked List of Genes") +
             theme_enr()
-        
+
         ## merge GSEA plot and rank plot
         gsePlot <- ggpubr::ggarrange(gsePlot,
-                                     rankPlot,
-                                     ncol = 1,
-                                     heights = c(1, 0.7),
-                                     align = "v"
+            rankPlot,
+            ncol = 1,
+            heights = c(1, 0.7),
+            align = "v"
         )
     }
-    
+
     ## return ggplot2 object
     return(gsePlot)
 }
@@ -1429,7 +1433,7 @@ theme.MIRit <- function(
         br <- element_blank()
         al <- element_line(linewidth = borderWidth / 2, color = "black")
     }
-    
+
     ## define ggplot2 theme
     th <- theme_bw(base_size = base_size, base_family = base_family) +
         theme(
@@ -1441,12 +1445,12 @@ theme.MIRit <- function(
             legend.position = legend,
             plot.title = ggplot2::element_text(hjust = 0.5)
         )
-    
+
     ## set grid lines
     if (grid == FALSE) {
         th <- th + theme(panel.grid = element_blank())
     }
-    
+
     ## return the theme
     return(th)
 }
@@ -1519,22 +1523,22 @@ theme.MIRit <- function(
 #'
 #' @export
 mirVariantPlot <- function(variantId,
-                           snpAssociation,
-                           showContext = FALSE,
-                           showSequence = TRUE,
-                           snpFill = "lightblue",
-                           mirFill = "orange",
-                           from = NULL,
-                           to = NULL,
-                           title = NULL,
-                           ...) {
+    snpAssociation,
+    showContext = FALSE,
+    showSequence = TRUE,
+    snpFill = "lightblue",
+    mirFill = "orange",
+    from = NULL,
+    to = NULL,
+    title = NULL,
+    ...) {
     ## check inputs
     if (!is.character(variantId) |
         length(variantId) != 1 |
         !startsWith(variantId, "rs")) {
         stop("'variantId' must be a valid name of a SNP variant! ",
-             "(e.g. 'rs394581')",
-             call. = FALSE
+            "(e.g. 'rs394581')",
+            call. = FALSE
         )
     }
     if (!is.data.frame(snpAssociation) |
@@ -1548,48 +1552,48 @@ mirVariantPlot <- function(variantId,
             )
         )) {
         stop("'snpAssociation' must be a data.frame containing the ",
-             "list of SNPs occurring at DE-miRNA genes. To obtain this ",
-             "association you can use the 'findMirnaSNPs()' function. ",
-             "See ?findMirnaSNPs for details.",
-             call. = FALSE
+            "list of SNPs occurring at DE-miRNA genes. To obtain this ",
+            "association you can use the 'findMirnaSNPs()' function. ",
+            "See ?findMirnaSNPs for details.",
+            call. = FALSE
         )
     }
     if (nrow(snpAssociation) < 1) {
         stop("'snpAssociation' does not contain any significant results!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(showContext) |
         length(showContext) != 1) {
         stop("'showContext' must be logical (TRUE/FALSE)! See ?mirVariantPlot",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(showSequence) |
         length(showSequence) != 1) {
         stop("'showSequence' must be logical (TRUE/FALSE)! See ?mirVariantPlot",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(snpFill) |
         length(snpFill) != 1 |
         areColors(snpFill) == FALSE) {
         stop("'snpFill' must be an R color name. Default is: 'lightblue'",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(mirFill) |
         length(mirFill) != 1 |
         areColors(mirFill) == FALSE) {
         stop("'mirFill' must be an R color name. Default is: 'orange'",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!(is.character(title) | is.null(title)) |
         !length(title) %in% c(0, 1)) {
         stop("'title' must be the title of the plot (e.g. 'SNPs overlap'). ",
-             "For additional details see ?mirVariantPlot",
-             call. = FALSE
+            "For additional details see ?mirVariantPlot",
+            call. = FALSE
         )
     }
     if (!is.null(from)) {
@@ -1597,7 +1601,7 @@ mirVariantPlot <- function(variantId,
             length(from) != 1 |
             from < 0) {
             stop("'from' must be a non-neagtive number!",
-                 call. = FALSE
+                call. = FALSE
             )
         }
     }
@@ -1606,93 +1610,93 @@ mirVariantPlot <- function(variantId,
             length(to) != 1 |
             to < 0) {
             stop("'to' must be a non-neagtive number!",
-                 call. = FALSE
+                call. = FALSE
             )
         }
     }
-    
+
     ## check that GenomicRanges is installed
     if (!requireNamespace("GenomicRanges", quietly = TRUE)) {
         stop("The GenomicRanges package is needed to use ",
-             "this function. Install it through: ",
-             paste("`BiocManager::install('GenomicRanges')`.",
-                   sep = ""
-             ),
-             call. = FALSE
+            "this function. Install it through: ",
+            paste("`BiocManager::install('GenomicRanges')`.",
+                sep = ""
+            ),
+            call. = FALSE
         )
     }
-    
+
     ## check that Gviz is installed
     if (!requireNamespace("Gviz", quietly = TRUE)) {
         stop("The Gviz package is needed to use ",
-             "this function. Install it through: ",
-             paste("`BiocManager::install('Gviz')`.",
-                   sep = ""
-             ),
-             call. = FALSE
+            "this function. Install it through: ",
+            paste("`BiocManager::install('Gviz')`.",
+                sep = ""
+            ),
+            call. = FALSE
         )
     }
-    
+
     ## select the specified variant
     snpAssociation <- snpAssociation[snpAssociation$variant == variantId, ]
-    
+
     ## extract and format SNP genomic locations
     snpSeq <- snpAssociation[, c(5, 6, 6, 1)]
     colnames(snpSeq) <- c("chr", "start", "end", "variant")
     snpSeq$strand <- "*"
-    
+
     ## create GRanges object containing SNP positions
     snpSeq <- GenomicRanges::makeGRangesFromDataFrame(snpSeq,
-                                                      keep.extra.columns = TRUE
+        keep.extra.columns = TRUE
     )
-    
+
     ## extract and format miRNA genomic coordinates
     mirSeq <- snpAssociation[, c(5, 12, 13, 11, 2)]
     colnames(mirSeq) <- c("chr", "start", "end", "strand", "miRNA_gene")
     mirSeq$strand <- ifelse(mirSeq$strand == 1, "+", "-")
-    
+
     ## create GRanges object containing miRNA positions
     mirSeq <- GenomicRanges::makeGRangesFromDataFrame(mirSeq,
-                                                      keep.extra.columns = TRUE
+        keep.extra.columns = TRUE
     )
-    
+
     ## set parameters
     chr <- paste("chr", snpAssociation$chr, sep = "")
     g <- "hg38"
     lf <- 0.1
     rf <- 0.1
-    
+
     ## create ideomTrack
     iTrack <- Gviz::IdeogramTrack(genome = g, chromosome = chr, lwd = 4)
-    
+
     ## create genome axis track
     gTrack <- Gviz::GenomeAxisTrack()
-    
+
     ## create SNPs track
     snpTrack <- Gviz::GeneRegionTrack(snpSeq,
-                                      name = "SNP",
-                                      symbol = paste(variantId, "   "),
-                                      fill = snpFill
+        name = "SNP",
+        symbol = paste(variantId, "   "),
+        fill = snpFill
     )
-    
+
     ## create miRNA track
     mirTrack <- Gviz::GeneRegionTrack(mirSeq,
-                                      genome = g,
-                                      chromosome = chr,
-                                      name = "miRNA",
-                                      symbol = snpAssociation$miRNA.gene,
-                                      fill = mirFill
+        genome = g,
+        chromosome = chr,
+        name = "miRNA",
+        symbol = snpAssociation$miRNA.gene,
+        fill = mirFill
     )
-    
+
     ## create sequence track
     if (showSequence == TRUE) {
         if (!requireNamespace("BSgenome.Hsapiens.UCSC.hg38", quietly = TRUE)) {
             stop("The BSgenome.Hsapiens.UCSC.hg38 package is needed to use ",
-                 "this function. Install it through: ",
-                 paste("`BiocManager::install('BSgenome.Hsapiens.UCSC.hg38')`.",
-                       sep = ""
-                 ),
-                 call. = FALSE
+                "this function. Install it through: ",
+                paste("`BiocManager::install('BSgenome.Hsapiens.UCSC.hg38')`.",
+                    sep = ""
+                ),
+                call. = FALSE
             )
         }
         sTrack <- Gviz::SequenceTrack(
@@ -1700,16 +1704,16 @@ mirVariantPlot <- function(variantId,
             chromosome = chr
         )
     }
-    
+
     ## create genomic context track
     if (showContext == TRUE) {
         if (!requireNamespace("biomaRt", quietly = TRUE)) {
             stop("The biomaRt package is needed to use this function ",
-                 "with 'showContext = TRUE'. Install it through: ",
-                 paste("`BiocManager::install('biomaRt')`.",
-                       sep = ""
-                 ),
-                 call. = FALSE
+                "with 'showContext = TRUE'. Install it through: ",
+                paste("`BiocManager::install('biomaRt')`.",
+                    sep = ""
+                ),
+                call. = FALSE
             )
         }
         message("Retrieving genomic context from Ensembl...")
@@ -1722,7 +1726,7 @@ mirVariantPlot <- function(variantId,
             name = "Genomic context"
         )
     }
-    
+
     ## create trackplot element list
     if (showContext == TRUE) {
         pList <- list(iTrack, gTrack, biomTrack, snpTrack)
@@ -1735,22 +1739,22 @@ mirVariantPlot <- function(variantId,
             pList <- list(iTrack, gTrack, snpTrack, mirTrack)
         }
     }
-    
+
     ## ignore title if missing
     if (is.null(title)) {
         title <- ""
     }
-    
+
     ## create the trackplot object
     trackPlot <- Gviz::plotTracks(pList,
-                                  extend.left = lf,
-                                  extend.right = rf,
-                                  transcriptAnnotation = "symbol",
-                                  main = title,
-                                  collapseTranscripts = "meta",
-                                  from = from,
-                                  to = to,
-                                  ...
+        extend.left = lf,
+        extend.right = rf,
+        transcriptAnnotation = "symbol",
+        main = title,
+        collapseTranscripts = "meta",
+        from = from,
+        to = to,
+        ...
     )
 }
 
@@ -1844,76 +1848,76 @@ mirVariantPlot <- function(variantId,
 #'
 #' @export
 plotCorrelation <- function(mirnaObj,
-                            mirna,
-                            gene,
-                            condition = NULL,
-                            showCoeff = TRUE,
-                            regression = TRUE,
-                            useRanks = FALSE,
-                            lineCol = "red",
-                            lineType = "dashed",
-                            lineWidth = 0.8,
-                            pointSize = 3,
-                            colorScale = NULL,
-                            fontSize = 12,
-                            fontFamily = "",
-                            legend = "top",
-                            borderWidth = 1,
-                            allBorders = TRUE,
-                            grid = TRUE) {
+    mirna,
+    gene,
+    condition = NULL,
+    showCoeff = TRUE,
+    regression = TRUE,
+    useRanks = FALSE,
+    lineCol = "red",
+    lineType = "dashed",
+    lineWidth = 0.8,
+    pointSize = 3,
+    colorScale = NULL,
+    fontSize = 12,
+    fontFamily = "",
+    legend = "top",
+    borderWidth = 1,
+    allBorders = TRUE,
+    grid = TRUE) {
     ## input checks
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
-             "See ?MirnaExperiment",
-             call. = FALSE
+            "See ?MirnaExperiment",
+            call. = FALSE
         )
     }
     if (max(dim(integration(mirnaObj))) == 0) {
         stop("Integration analysis is not detected in 'mirnaObj'! ",
-             "Before using this function, expression levels of miRNAs and ",
-             "genes must be integrated with the 'mirnaIntegration()' ",
-             "function. See '?mirnaIntegration' for details.",
-             call. = FALSE
+            "Before using this function, expression levels of miRNAs and ",
+            "genes must be integrated with the 'mirnaIntegration()' ",
+            "function. See '?mirnaIntegration' for details.",
+            call. = FALSE
         )
     }
     if (pairedSamples(mirnaObj) == FALSE) {
         stop("Correlation analysis can only be performed for paired ",
-             "samples! See ?mirnaIntegration",
-             call. = FALSE
+            "samples! See ?mirnaIntegration",
+            call. = FALSE
         )
     }
     if (!is.character(mirna) |
         length(mirna) != 1 |
         !mirna %in% rownames(mirnaObj[["microRNA"]])) {
         stop("'mirna' must be a valid miRNA name that is present in ",
-             "miRNA expression matrix.",
-             call. = FALSE
+            "miRNA expression matrix.",
+            call. = FALSE
         )
     }
     if (!is.character(gene) |
         length(gene) != 1 |
         !gene %in% rownames(mirnaObj[["genes"]])) {
         stop("'gene' must be a valid gene name that is present in ",
-             "gene expression matrix.",
-             call. = FALSE
+            "gene expression matrix.",
+            call. = FALSE
         )
     }
     if (is.null(condition)) {
         if (mirnaObj@mirnaDE$group != mirnaObj@geneDE$group) {
             stop("For unpaired data, the 'group' variable used for ",
-                 "differential expression analysis must be the same for both ",
-                 "miRNAs and genes in order to use ",
-                 "this function with 'condition = NULL'. Instead, try to ",
-                 "supply 'condition' as a factor/character vector!",
-                 call. = FALSE
+                "differential expression analysis must be the same for both ",
+                "miRNAs and genes in order to use ",
+                "this function with 'condition = NULL'. Instead, try to ",
+                "supply 'condition' as a factor/character vector!",
+                call. = FALSE
             )
         }
         if (length(mirnaObj@mirnaDE$group) == 0 |
             length(mirnaObj@geneDE$group) == 0) {
             stop("For objects where differential expression has been manually ",
-                 "added, 'condition' must be specified as a factor/character ",
-                 "vector!",
-                 call. = FALSE
+                "added, 'condition' must be specified as a factor/character ",
+                "vector!",
+                call. = FALSE
             )
         }
     }
@@ -1921,24 +1925,24 @@ plotCorrelation <- function(mirnaObj,
         if (length(condition) == 1) {
             if (!is.character(condition) |
                 !(condition %in% colnames(colData(mirnaObj)) &
-                  !condition %in% c("primary", "mirnaCol", "geneCol"))) {
+                    !condition %in% c("primary", "mirnaCol", "geneCol"))) {
                 stop("'condition' must be the column name of a variable ",
-                     "present in the metadata (colData) of a MirnaExperiment ",
-                     "object; or, alternatively, it must be a ",
-                     "character/factor object that specifies group ",
-                     "memberships.",
-                     call. = FALSE
+                    "present in the metadata (colData) of a MirnaExperiment ",
+                    "object; or, alternatively, it must be a ",
+                    "character/factor object that specifies group ",
+                    "memberships.",
+                    call. = FALSE
                 )
             }
         } else {
             if ((!is.character(condition) & !is.factor(condition)) |
                 length(condition) != nrow(colData(mirnaObj))) {
                 stop("'condition' must be the column name of a variable ",
-                     "present in the metadata (colData) of a MirnaExperiment ",
-                     "object; or, alternatively, it must be a ",
-                     "character/factor object that specifies group ",
-                     "memberships.",
-                     call. = FALSE
+                    "present in the metadata (colData) of a MirnaExperiment ",
+                    "object; or, alternatively, it must be a ",
+                    "character/factor object that specifies group ",
+                    "memberships.",
+                    call. = FALSE
                 )
             }
         }
@@ -1959,7 +1963,7 @@ plotCorrelation <- function(mirnaObj,
         length(lineCol) != 1 |
         areColors(lineCol) == FALSE) {
         stop("'lineCol' must be an R color name.",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(lineType) |
@@ -1969,51 +1973,51 @@ plotCorrelation <- function(mirnaObj,
             "longdash", "twodash"
         )) {
         stop("'lineType' must be either 'blank', 'solid', 'dashed' ",
-             "(default), 'dotted', 'dotdash', 'longdash' or 'twodash'. ",
-             "For additional details see ?plotCorrelation",
-             call. = FALSE
+            "(default), 'dotted', 'dotdash', 'longdash' or 'twodash'. ",
+            "For additional details see ?plotCorrelation",
+            call. = FALSE
         )
     }
     if (!is.numeric(lineWidth) |
         length(lineWidth) != 1 |
         lineWidth < 0) {
         stop("'lineWidth' must be a non-neagtive number! (default is 0.8)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.numeric(pointSize) |
         length(pointSize) != 1 |
         pointSize < 0) {
         stop("'pointSize' must be a non-neagtive number! (default is 3)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.numeric(fontSize) |
         length(fontSize) != 1 |
         fontSize < 0) {
         stop("'fontSize' must be a non-neagtive number! (default is 12)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(fontFamily) |
         length(fontFamily) != 1) {
         stop("'fontFamily' must be a character of length 1",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(legend) |
         length(legend) != 1 |
         !legend %in% c("top", "bottom", "right", "left", "none")) {
         stop("'legend' must be one of 'top', 'bottom' 'right', 'left', ",
-             "and 'none'",
-             call. = FALSE
+            "and 'none'",
+            call. = FALSE
         )
     }
     if (!is.numeric(borderWidth) |
         length(borderWidth) != 1 |
         borderWidth < 0) {
         stop("'borderWidth' must be a non-neagtive number! (default is 1)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(allBorders) |
@@ -2024,42 +2028,42 @@ plotCorrelation <- function(mirnaObj,
         length(grid) != 1) {
         stop("'grid' must be logical (TRUE/FALSE)!", call. = FALSE)
     }
-    
+
     ## get integration results
     intRes <- integration(mirnaObj)
-    
+
     ## verify that correlation analysis has been performed
     if (grepl("correlation", mirnaObj@integration$method) == FALSE) {
         stop("Correlation analysis must be performed before using this ",
-             "function! See ?integration",
-             call. = FALSE
+            "function! See ?integration",
+            call. = FALSE
         )
     }
-    
+
     ## check if the specified miRNA-target pair is present
     if (nrow(intRes[intRes$microRNA == mirna &
-                    intRes$Target == gene, ]) == 0) {
+        intRes$Target == gene, ]) == 0) {
         stop("This miRNA-Target pair doesn't show any significant correlation!",
-             call. = FALSE
+            call. = FALSE
         )
     }
-    
+
     ## determine the correlation coefficient used
     corMethod <- integration(mirnaObj, param = TRUE)$method
     corMethod <- tolower(sub("([A-Za-z]+).*", "\\1", corMethod))
-    
+
     ## inform the user about using Pearson's correlation with rank data
     if (useRanks == TRUE & corMethod == "pearson") {
         warning("It's not possible to represent Pearson's correlation ",
-                "using rank data! Ignoring 'useRanks'...",
-                call. = FALSE
+            "using rank data! Ignoring 'useRanks'...",
+            call. = FALSE
         )
     }
-    
+
     ## extract miRNA and gene expression values
     mirnaExpr <- mirnaObj[["microRNA"]]
     geneExpr <- mirnaObj[["genes"]]
-    
+
     ## define condition vector
     if (is.null(condition)) {
         depM <- mirnaDE(mirnaObj, param = TRUE)
@@ -2076,7 +2080,7 @@ plotCorrelation <- function(mirnaObj,
         cond <- condition
     }
     names(cond) <- colData(mirnaObj)[, "primary"]
-    
+
     ## check the validity of color scale
     if (!is.null(colorScale)) {
         if (!is.character(colorScale) |
@@ -2086,37 +2090,37 @@ plotCorrelation <- function(mirnaObj,
                 as.character(sort(unique(cond)))
             )) {
             stop("'colorScale' must be a named character vector where values ",
-                 "consist of R colors, whereas names coincide to the ",
-                 "different conditions. For additional details ",
-                 "see ?plotCorrelations",
-                 call. = FALSE
+                "consist of R colors, whereas names coincide to the ",
+                "different conditions. For additional details ",
+                "see ?plotCorrelations",
+                call. = FALSE
             )
         }
     }
-    
+
     ## check if samples are paired, otherwise exclude unpaired samples
     sMap <- sampleMap(mirnaObj)
     mirnaSamples <- sMap$primary[sMap$assay == "microRNA"]
     geneSamples <- sMap$primary[sMap$assay == "genes"]
-    
+
     if (!identical(mirnaSamples, geneSamples)) {
         ## determine common and uncommon samples
         common <- intersect(mirnaSamples, geneSamples)
         unpaired <- setdiff(c(mirnaSamples, geneSamples), common)
-        
+
         ## remove samples without measurments of both miRNAs and genes
         if (length(unpaired) > 0) {
             mirnaExpr <- mirnaExpr[, sMap$colname[sMap$assay == "microRNA" &
-                                                      sMap$primary %in% common]]
+                sMap$primary %in% common]]
             geneExpr <- geneExpr[, sMap$colname[sMap$assay == "genes" &
-                                                    sMap$primary %in% common]]
+                sMap$primary %in% common]]
         }
-        
+
         ## order the columns of expression matrices in the same way
         mirnaMap <- sMap[sMap$assay == "microRNA" &
-                             sMap$primary %in% common, ]
+            sMap$primary %in% common, ]
         geneMap <- sMap[sMap$assay == "genes" &
-                            sMap$primary %in% common, ]
+            sMap$primary %in% common, ]
         mirnaOrder <- mirnaMap$primary[order(match(
             mirnaMap$colname,
             colnames(mirnaExpr)
@@ -2125,51 +2129,51 @@ plotCorrelation <- function(mirnaObj,
             geneMap$primary,
             mirnaOrder
         ))]]
-        
+
         ## re-define condition vector without removed samples
         cond <- cond[mirnaOrder]
-        
+
         ## re-define colorScale without removed conditions
         colorScale <- colorScale[names(colorScale) %in% cond]
     }
-    
+
     ## select the specified miRNA-target pair
     mirnaExpr <- mirnaExpr[mirna, ]
     geneExpr <- geneExpr[gene, ]
-    
+
     ## convert to ranks if desired by the user
     if (useRanks == TRUE & corMethod != "pearson") {
         mirnaExpr <- rank(mirnaExpr)
         geneExpr <- rank(geneExpr)
     }
-    
+
     ## create a dataframe with miRNA and gene expression
     corDf <- data.frame(
         "miRNA" = mirnaExpr,
         "gene" = geneExpr,
         "Condition" = cond
     )
-    
+
     ## define plot labels
     xlab <- paste(mirna, "expression")
     ylab <- paste(gene, "expression")
-    
+
     ## define miRNA-mRNA direction
     selPair <- intRes[intRes$microRNA == mirna &
-                          intRes$Target == gene, ]
+        intRes$Target == gene, ]
     dir <- selPair$microRNA.Direction
     monoDir <- ifelse(dir == "upregulated", "decreasing", "increasing")
     coeffPos <- ifelse(dir == "upregulated", 1, 0)
-    
+
     ## create correlation plot
     corPlot <- ggplot2::ggplot(
         corDf,
         ggplot2::aes(.data$miRNA, .data$gene)
     ) +
         ggplot2::geom_point(ggplot2::aes(color = .data$Condition),
-                            size = pointSize
+            size = pointSize
         )
-    
+
     ## fit regression line/curve
     if (regression == TRUE) {
         if (useRanks == TRUE | corMethod == "pearson") {
@@ -2185,32 +2189,32 @@ plotCorrelation <- function(mirnaObj,
             ## check that MonoPoly is installed
             if (!requireNamespace("MonoPoly", quietly = TRUE)) {
                 stop("The MonoPoly package is needed to plot correlations ",
-                     "with monotonic regression curves. Install it through: ",
-                     paste("`install.packages('MonoPoly')`.",
-                           sep = ""
-                     ),
-                     call. = FALSE
+                    "with monotonic regression curves. Install it through: ",
+                    paste("`install.packages('MonoPoly')`.",
+                        sep = ""
+                    ),
+                    call. = FALSE
                 )
             }
-            
+
             ## compute a monotonic regression curve
             x <- mirnaExpr
             y <- geneExpr
             monoFit <- MonoPoly::monpol(y ~ x,
-                                        plot.it = FALSE,
-                                        monotone = monoDir,
-                                        algorithm = "Hawkins"
+                plot.it = FALSE,
+                monotone = monoDir,
+                algorithm = "Hawkins"
             )
-            
+
             ## create a sequence of values for x-axis
             xSeq <- seq(min(corDf$miRNA), max(corDf$miRNA), length.out = 100)
-            
+
             ## predict the y values using the fitted model
             ySeq <- predict(monoFit, newdata = data.frame(x = xSeq))
-            
+
             ## create a data.frame for the fitted curve
             fitDf <- data.frame("xFit" = xSeq, "yFit" = ySeq[, "x"])
-            
+
             ## add the monotonic curve to the plot
             corPlot <- corPlot +
                 ggplot2::geom_line(
@@ -2225,7 +2229,7 @@ plotCorrelation <- function(mirnaObj,
                 )
         }
     }
-    
+
     ## add correlation coefficient to the plot
     if (showCoeff == TRUE) {
         ## determine coefficient symbol
@@ -2236,29 +2240,30 @@ plotCorrelation <- function(mirnaObj,
         } else if (corMethod == "kendall") {
             corCoeff <- "tau"
         }
-        
+
         ## add correlation coefficient through ggpubr::stat_cor()
         corPlot <- corPlot +
-            ggpubr::stat_cor(ggplot2::aes(label = ggplot2::after_stat(
-                .data$r.label)
-            ),
-            method = corMethod,
-            cor.coef.name = corCoeff,
-            label.x.npc = coeffPos, label.y.npc = 1,
-            hjust = coeffPos, vjust = 1
+            ggpubr::stat_cor(
+                ggplot2::aes(label = ggplot2::after_stat(
+                    .data$r.label
+                )),
+                method = corMethod,
+                cor.coef.name = corCoeff,
+                label.x.npc = coeffPos, label.y.npc = 1,
+                hjust = coeffPos, vjust = 1
             )
     }
-    
+
     ## add colorScale to ggplot2 graph
     if (!is.null(colorScale)) {
         corPlot <- corPlot +
             ggplot2::scale_color_manual(values = colorScale)
     }
-    
+
     ## rename plot labels
     corPlot <- corPlot +
         ggplot2::labs(x = xlab, y = ylab)
-    
+
     ## apply MIRit ggplot2 theme
     corPlot <- corPlot +
         theme.MIRit(
@@ -2269,7 +2274,7 @@ plotCorrelation <- function(mirnaObj,
             allBorders = allBorders,
             grid = grid
         )
-    
+
     ## return the generated plot
     return(corPlot)
 }
@@ -2361,42 +2366,42 @@ plotCorrelation <- function(mirnaObj,
 #' @importFrom ggpubr mean_sd
 #' @export
 plotDE <- function(mirnaObj,
-                   features,
-                   condition = NULL,
-                   graph = "boxplot",
-                   linear = TRUE,
-                   showSignificance = TRUE,
-                   starSig = TRUE,
-                   pCol = "adj.P.Val",
-                   sigLabelSize = 7,
-                   digits = 3,
-                   nameAsTitle = FALSE,
-                   colorScale = NULL,
-                   fontSize = 12,
-                   fontFamily = "",
-                   legend = "top",
-                   borderWidth = 1,
-                   allBorders = FALSE,
-                   grid = FALSE) {
+    features,
+    condition = NULL,
+    graph = "boxplot",
+    linear = TRUE,
+    showSignificance = TRUE,
+    starSig = TRUE,
+    pCol = "adj.P.Val",
+    sigLabelSize = 7,
+    digits = 3,
+    nameAsTitle = FALSE,
+    colorScale = NULL,
+    fontSize = 12,
+    fontFamily = "",
+    legend = "top",
+    borderWidth = 1,
+    allBorders = FALSE,
+    grid = FALSE) {
     ## input checks
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
-             "See ?MirnaExperiment",
-             call. = FALSE
+            "See ?MirnaExperiment",
+            call. = FALSE
         )
     }
     if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0) {
         stop("MiRNA differential expression results are not present in ",
-             "'mirnaObj'. Please, use 'performMirnaDE()' before using ",
-             "this function. See ?performMirnaDE",
-             call. = FALSE
+            "'mirnaObj'. Please, use 'performMirnaDE()' before using ",
+            "this function. See ?performMirnaDE",
+            call. = FALSE
         )
     }
     if (nrow(geneDE(mirnaObj, onlySignificant = FALSE)) == 0) {
         stop("Gene differential expression results are not present in ",
-             "'mirnaObj'. Please, use 'performGeneDE()' before using ",
-             "this function. See ?performGeneDE",
-             call. = FALSE
+            "'mirnaObj'. Please, use 'performGeneDE()' before using ",
+            "this function. See ?performGeneDE",
+            call. = FALSE
         )
     }
     if (!is.character(features) |
@@ -2404,27 +2409,27 @@ plotDE <- function(mirnaObj,
         any(!features %in% rownames(mirnaObj[["microRNA"]]) &
             !features %in% rownames(mirnaObj[["genes"]]))) {
         stop("'features' must be a character vector containing miRNA and/or ",
-             "gene symbols (e.g. c('hsa-miR-34a-5p', 'PAX8'). ",
-             "For additional details see ?plotDE",
-             call. = FALSE
+            "gene symbols (e.g. c('hsa-miR-34a-5p', 'PAX8'). ",
+            "For additional details see ?plotDE",
+            call. = FALSE
         )
     }
     if (is.null(condition)) {
         if (mirnaObj@mirnaDE$group != mirnaObj@geneDE$group) {
             stop("For unpaired data, the 'group' variable used for ",
-                 "differential expression analysis must be the same for both ",
-                 "miRNAs and genes in order to use ",
-                 "this function with 'condition = NULL'. Instead, try to ",
-                 "supply 'condition' as a factor/character vector!",
-                 call. = FALSE
+                "differential expression analysis must be the same for both ",
+                "miRNAs and genes in order to use ",
+                "this function with 'condition = NULL'. Instead, try to ",
+                "supply 'condition' as a factor/character vector!",
+                call. = FALSE
             )
         }
         if (length(mirnaObj@mirnaDE$group) == 0 |
             length(mirnaObj@geneDE$group) == 0) {
             stop("For objects where differential expression has been manually ",
-                 "added, 'condition' must be specified as a factor/character ",
-                 "vector!",
-                 call. = FALSE
+                "added, 'condition' must be specified as a factor/character ",
+                "vector!",
+                call. = FALSE
             )
         }
     }
@@ -2432,24 +2437,24 @@ plotDE <- function(mirnaObj,
         if (length(condition) == 1) {
             if (!is.character(condition) |
                 !(condition %in% colnames(colData(mirnaObj)) &
-                  !condition %in% c("primary", "mirnaCol", "geneCol"))) {
+                    !condition %in% c("primary", "mirnaCol", "geneCol"))) {
                 stop("'condition' must be the column name of a variable ",
-                     "present in the metadata (colData) of a MirnaExperiment ",
-                     "object; or, alternatively, it must be a ",
-                     "character/factor object that specifies group ",
-                     "memberships.",
-                     call. = FALSE
+                    "present in the metadata (colData) of a MirnaExperiment ",
+                    "object; or, alternatively, it must be a ",
+                    "character/factor object that specifies group ",
+                    "memberships.",
+                    call. = FALSE
                 )
             }
         } else {
             if ((!is.character(condition) & !is.factor(condition)) |
                 length(condition) != nrow(colData(mirnaObj))) {
                 stop("'condition' must be the column name of a variable ",
-                     "present in the metadata (colData) of a MirnaExperiment ",
-                     "object; or, alternatively, it must be a ",
-                     "character/factor object that specifies group ",
-                     "memberships.",
-                     call. = FALSE
+                    "present in the metadata (colData) of a MirnaExperiment ",
+                    "object; or, alternatively, it must be a ",
+                    "character/factor object that specifies group ",
+                    "memberships.",
+                    call. = FALSE
                 )
             }
         }
@@ -2458,41 +2463,41 @@ plotDE <- function(mirnaObj,
         length(graph) != 1 |
         !graph %in% c("boxplot", "barplot", "violinplot")) {
         stop("'graph' must be either 'boxplot' (default), `barplot` ",
-             "or 'violinplot'. For additional details see ?plotDE",
-             call. = FALSE
+            "or 'violinplot'. For additional details see ?plotDE",
+            call. = FALSE
         )
     }
     if (!is.logical(linear) |
         length(linear) != 1) {
         stop("'linear' must be logical (TRUE/FALSE)! See ?plotDE",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(showSignificance) |
         length(showSignificance) != 1) {
         stop("'showSignificance' must be logical (TRUE/FALSE)! See ?plotDE",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(starSig) |
         length(starSig) != 1) {
         stop("'starSig' must be logical (TRUE/FALSE)! See ?plotDE",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(pCol) |
         length(pCol) != 1 |
         !pCol %in% c("P.Value", "adj.P.Val")) {
         stop("'pCol' must be either 'P.Value' or 'adj.P.Val' (default). ",
-             "For additional details see ?plotDE",
-             call. = FALSE
+            "For additional details see ?plotDE",
+            call. = FALSE
         )
     }
     if (!is.numeric(sigLabelSize) |
         length(sigLabelSize) != 1 |
         sigLabelSize < 0) {
         stop("'sigLabelSize' must be a non-neagtive number! (default is 7)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.numeric(digits) |
@@ -2500,19 +2505,19 @@ plotDE <- function(mirnaObj,
         digits < 0 |
         !digits %% 1 == 0) {
         stop("'digits' must be a non-neagtive integer! (default is 3)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(nameAsTitle) |
         length(nameAsTitle) != 1) {
         stop("'nameAsTitle' must be logical (TRUE/FALSE)! See ?plotDE",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (nameAsTitle == TRUE & length(features) > 1) {
         warning("'nameAsTitle' can only be used for 1 miRNA/gene! ",
-                "This option has benn set to FALSE. See ?plotDE",
-                call. = FALSE
+            "This option has benn set to FALSE. See ?plotDE",
+            call. = FALSE
         )
         nameAsTitle <- FALSE
     }
@@ -2520,28 +2525,28 @@ plotDE <- function(mirnaObj,
         length(fontSize) != 1 |
         fontSize < 0) {
         stop("'fontSize' must be a non-neagtive number! (default is 12)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(fontFamily) |
         length(fontFamily) != 1) {
         stop("'fontFamily' must be a character of length 1",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(legend) |
         length(legend) != 1 |
         !legend %in% c("top", "bottom", "right", "left", "none")) {
         stop("'legend' must be one of 'top', 'bottom' 'right', 'left', ",
-             "and 'none'",
-             call. = FALSE
+            "and 'none'",
+            call. = FALSE
         )
     }
     if (!is.numeric(borderWidth) |
         length(borderWidth) != 1 |
         borderWidth < 0) {
         stop("'borderWidth' must be a non-neagtive number! (default is 1)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(allBorders) |
@@ -2552,11 +2557,11 @@ plotDE <- function(mirnaObj,
         length(grid) != 1) {
         stop("'grid' must be logical (TRUE/FALSE)!", call. = FALSE)
     }
-    
+
     ## extract miRNA and gene expression values
     mirnaExpr <- mirnaObj[["microRNA"]]
     geneExpr <- mirnaObj[["genes"]]
-    
+
     ## define condition vector
     if (is.null(condition)) {
         depM <- mirnaDE(mirnaObj, param = TRUE)
@@ -2578,7 +2583,7 @@ plotDE <- function(mirnaObj,
         lv2 <- unique(cond)[2]
     }
     names(cond) <- colData(mirnaObj)[, "primary"]
-    
+
     ## check the validity of color scale
     if (!is.null(colorScale)) {
         if (!is.character(colorScale) |
@@ -2588,20 +2593,20 @@ plotDE <- function(mirnaObj,
                 as.character(sort(unique(cond)))
             )) {
             stop("'colorScale' must be a named character vector where values ",
-                 "consist of R colors, whereas names coincide to the ",
-                 "different conditions. For additional details see ?plotDE",
-                 call. = FALSE
+                "consist of R colors, whereas names coincide to the ",
+                "different conditions. For additional details see ?plotDE",
+                call. = FALSE
             )
         }
     }
-    
+
     ## create a dataframe with miRNA and gene expression
     exprDf <- data.frame(
         "Expression" = numeric(),
         "Gene" = character(),
         "Condition" = character()
     )
-    
+
     ## add entries to this data.frame for each gene/miRNA
     for (gene in features) {
         ## retrieve feature expression
@@ -2612,10 +2617,10 @@ plotDE <- function(mirnaObj,
         } else {
             featExpr <- g
         }
-        
+
         ## subset condition vector based on available samples
         subCond <- cond[names(featExpr)]
-        
+
         ## return feature expression, name and condition
         newDf <- data.frame(
             "Expression" = featExpr,
@@ -2624,15 +2629,15 @@ plotDE <- function(mirnaObj,
         )
         exprDf <- rbind(exprDf, newDf)
     }
-    
+
     ## keep only the condition levels used for DE analysis
     exprDf <- exprDf[exprDf$Condition %in% c(lv1, lv2), ]
-    
+
     ## transform data in linear space
     if (linear == TRUE) {
         exprDf$Expression <- 2^exprDf$Expression
     }
-    
+
     ## produce the desired plot
     if (graph == "boxplot") {
         ## create a grouped boxplot
@@ -2661,13 +2666,15 @@ plotDE <- function(mirnaObj,
             add = "boxplot"
         )
     }
-    
+
     ## change y-axis label for log2 expression data
     if (linear == FALSE) {
-        dePlot <- dePlot + ggplot2::ylab(expression(paste(log[2],
-                                                          " expression")))
+        dePlot <- dePlot + ggplot2::ylab(expression(paste(
+            log[2],
+            " expression"
+        )))
     }
-    
+
     ## add significance levels
     if (showSignificance == TRUE) {
         ## load differential expression results
@@ -2675,26 +2682,26 @@ plotDE <- function(mirnaObj,
             mirnaDE(mirnaObj, onlySignificant = FALSE),
             geneDE(mirnaObj, onlySignificant = FALSE)
         )
-        
+
         ## restrict differential expression to the selected miRNAs/genes
         statTest <- statTest[features, ]
-        
+
         ## add conditions to differential expression results
         statTest$group1 <- lv1
         statTest$group2 <- lv2
-        
+
         ## add y position for p-value labels
         maxExpr <- vapply(features, function(g) {
             max(exprDf$Expression[exprDf$Gene == g])
         }, FUN.VALUE = numeric(1))
         maxExpr <- maxExpr + 0.1 * mean(maxExpr)
         statTest$y.position <- maxExpr
-        
+
         ## round p-values if plotting numbers
         if (starSig == FALSE) {
             statTest[, pCol] <- round(statTest[, pCol], digits = digits)
         }
-        
+
         ## use stars to show statistical significance
         if (starSig == TRUE) {
             statTest$star <- "ns"
@@ -2704,7 +2711,7 @@ plotDE <- function(mirnaObj,
             statTest$star[statTest[, pCol] < 0.0001] <- "****"
             pCol <- "star"
         }
-        
+
         ## add significance to the ggplot2 object
         dePlot <- dePlot +
             ggpubr::stat_pvalue_manual(
@@ -2713,20 +2720,20 @@ plotDE <- function(mirnaObj,
                 x = "ID",
                 size = sigLabelSize
             )
-        
+
         ## expand y-limit
         dePlot <- dePlot +
             ggplot2::ylim(c(NA, max(statTest$y.position) +
-                                0.05 * max(statTest$y.position)))
+                0.05 * max(statTest$y.position)))
     }
-    
+
     ## add colorScale to ggplot2 graph
     if (!is.null(colorScale)) {
         dePlot <- dePlot +
             ggplot2::scale_color_manual(values = colorScale) +
             ggplot2::scale_fill_manual(values = colorScale)
     }
-    
+
     ## apply MIRit ggplot2 theme
     dePlot <- dePlot +
         theme.MIRit(
@@ -2737,7 +2744,7 @@ plotDE <- function(mirnaObj,
             allBorders = allBorders,
             grid = grid
         )
-    
+
     ## remove x-axis and set gene name as title
     if (nameAsTitle == TRUE) {
         dePlot <- dePlot + ggplot2::ggtitle(features) +
@@ -2747,7 +2754,7 @@ plotDE <- function(mirnaObj,
                 axis.ticks.x = ggplot2::element_blank()
             )
     }
-    
+
     ## return the plot object
     return(dePlot)
 }
@@ -2824,27 +2831,27 @@ plotDE <- function(mirnaObj,
 #'
 #' @export
 plotVolcano <- function(mirnaObj,
-                        assay,
-                        labels = NULL,
-                        boxedLabel = TRUE,
-                        pointSize = 3,
-                        pointAlpha = 0.4,
-                        interceptWidth = 0.6,
-                        interceptColor = "black",
-                        interceptType = "dashed",
-                        colorScale = c("blue", "grey", "red"),
-                        title = NULL,
-                        fontSize = 12,
-                        fontFamily = "",
-                        legend = "none",
-                        borderWidth = 1,
-                        allBorders = TRUE,
-                        grid = FALSE) {
+    assay,
+    labels = NULL,
+    boxedLabel = TRUE,
+    pointSize = 3,
+    pointAlpha = 0.4,
+    interceptWidth = 0.6,
+    interceptColor = "black",
+    interceptType = "dashed",
+    colorScale = c("blue", "grey", "red"),
+    title = NULL,
+    fontSize = 12,
+    fontFamily = "",
+    legend = "none",
+    borderWidth = 1,
+    allBorders = TRUE,
+    grid = FALSE) {
     ## input checks
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
-             "See ?MirnaExperiment",
-             call. = FALSE
+            "See ?MirnaExperiment",
+            call. = FALSE
         )
     }
     if (!assay %in% c("microRNA", "genes")) {
@@ -2853,41 +2860,41 @@ plotVolcano <- function(mirnaObj,
     if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0 &
         assay == "microRNA") {
         stop("MiRNA differential expression results are not present in ",
-             "'mirnaObj'. Please, use 'performMirnaDE()' before using ",
-             "this function. See ?performMirnaDE",
-             call. = FALSE
+            "'mirnaObj'. Please, use 'performMirnaDE()' before using ",
+            "this function. See ?performMirnaDE",
+            call. = FALSE
         )
     }
     if (nrow(geneDE(mirnaObj, onlySignificant = FALSE)) == 0 &
         assay == "genes") {
         stop("Gene differential expression results are not present in ",
-             "'mirnaObj'. Please, use 'performGeneDE()' before using ",
-             "this function. See ?performGeneDE",
-             call. = FALSE
+            "'mirnaObj'. Please, use 'performGeneDE()' before using ",
+            "this function. See ?performGeneDE",
+            call. = FALSE
         )
     }
     if (!is.null(labels)) {
         if (!is.numeric(labels) &
             !is.character(labels)) {
             stop("'labels' must be a character vector indicating the features ",
-                 "to plot; or, alternatively, it must be a number indicating ",
-                 "the top significant features to show. Default is NULL, not ",
-                 "to include labels. For details see ?plotVolcano",
-                 call. = FALSE
+                "to plot; or, alternatively, it must be a number indicating ",
+                "the top significant features to show. Default is NULL, not ",
+                "to include labels. For details see ?plotVolcano",
+                call. = FALSE
             )
         }
     }
     if (!is.logical(boxedLabel) |
         length(boxedLabel) != 1) {
         stop("'boxedLabel' must be logical (TRUE/FALSE)! See ?plotVolcano",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.numeric(pointSize) |
         length(pointSize) != 1 |
         pointSize < 0) {
         stop("'pointSize' must be a non-neagtive number! (default is 3)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.numeric(pointAlpha) |
@@ -2895,21 +2902,21 @@ plotVolcano <- function(mirnaObj,
         pointAlpha < 0 |
         pointAlpha > 1) {
         stop("'pointAlpha' must be a number between 0 and 1! (default is 0.4)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.numeric(interceptWidth) |
         length(interceptWidth) != 1 |
         interceptWidth < 0) {
         stop("'interceptWidth' must be a non-neagtive number! (default is 0.6)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(interceptColor) |
         length(interceptColor) != 1 |
         areColors(interceptColor) == FALSE) {
         stop("'interceptColor' must be an R color name.",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(interceptType) |
@@ -2919,53 +2926,53 @@ plotVolcano <- function(mirnaObj,
             "longdash", "twodash"
         )) {
         stop("'interceptType' must be either 'blank', 'solid', 'dashed' ",
-             "(default), 'dotted', 'dotdash', 'longdash' or 'twodash'. ",
-             "For additional details see ?plotCorrelation",
-             call. = FALSE
+            "(default), 'dotted', 'dotdash', 'longdash' or 'twodash'. ",
+            "For additional details see ?plotCorrelation",
+            call. = FALSE
         )
     }
     if (length(colorScale) != 3 |
         any(areColors(colorScale) == FALSE)) {
         stop("'colorScale' must be a vector with R color names for ",
-             "downregulated features, non significant features, and ",
-             "upregulated features. The default value is ",
-             "c('blue', 'grey', 'red').",
-             call. = FALSE
+            "downregulated features, non significant features, and ",
+            "upregulated features. The default value is ",
+            "c('blue', 'grey', 'red').",
+            call. = FALSE
         )
     }
     if (!(is.character(title) | is.null(title)) |
         !length(title) %in% c(0, 1)) {
         stop("'title' must be the title of the plot. ",
-             "For additional details see ?plotVolcano",
-             call. = FALSE
+            "For additional details see ?plotVolcano",
+            call. = FALSE
         )
     }
     if (!is.numeric(fontSize) |
         length(fontSize) != 1 |
         fontSize < 0) {
         stop("'fontSize' must be a non-neagtive number! (default is 12)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(fontFamily) |
         length(fontFamily) != 1) {
         stop("'fontFamily' must be a character of length 1",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(legend) |
         length(legend) != 1 |
         !legend %in% c("top", "bottom", "right", "left", "none")) {
         stop("'legend' must be one of 'top', 'bottom' 'right', 'left', ",
-             "and 'none'",
-             call. = FALSE
+            "and 'none'",
+            call. = FALSE
         )
     }
     if (!is.numeric(borderWidth) |
         length(borderWidth) != 1 |
         borderWidth < 0) {
         stop("'borderWidth' must be a non-neagtive number! (default is 1)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(allBorders) |
@@ -2976,7 +2983,7 @@ plotVolcano <- function(mirnaObj,
         length(grid) != 1) {
         stop("'grid' must be logical (TRUE/FALSE)!", call. = FALSE)
     }
-    
+
     ## extract miRNA/gene differential expression and cutoffs
     if (assay == "microRNA") {
         featDE <- mirnaDE(mirnaObj, onlySignificant = FALSE)
@@ -2987,26 +2994,26 @@ plotVolcano <- function(mirnaObj,
         pCut <- mirnaObj@geneDE$pCutoff
         lCut <- mirnaObj@geneDE$logFC
     }
-    
+
     ## determine p-value cutoff based on adjusted p-value
     if (identical(featDE$P.Value, featDE$adj.P.Val)) {
         pCutoff <- pCut
     } else {
         pCutoff <- max(featDE$P.Value[featDE$adj.P.Val <= pCut])
     }
-    
+
     ## determine Up and Downregulated features
     featDE$Change <- "Stable"
     featDE$Change[which(featDE$logFC > lCut &
-                            featDE$adj.P.Val < pCut)] <- "Up"
+        featDE$adj.P.Val < pCut)] <- "Up"
     featDE$Change[which(featDE$logFC < -lCut &
-                            featDE$adj.P.Val < pCut)] <- "Down"
-    
+        featDE$adj.P.Val < pCut)] <- "Down"
+
     ## determine the labels to show
     if (is.character(labels)) {
         if (!all(labels %in% featDE$ID)) {
             stop("Not all specified labels are present in this assay!",
-                 call. = FALSE
+                call. = FALSE
             )
         } else {
             featDE$ID[which(!featDE$ID %in% labels)] <- ""
@@ -3015,7 +3022,7 @@ plotVolcano <- function(mirnaObj,
         fcFeat <- featDE[abs(featDE$logFC) > lCut, ]
         featDE$ID[which(!featDE$ID %in% fcFeat$ID[seq(labels)])] <- ""
     }
-    
+
     ## produce a volcano plot
     pVol <- ggplot2::ggplot(
         data = featDE,
@@ -3040,7 +3047,7 @@ plotVolcano <- function(mirnaObj,
             x = "log2(fold change)",
             y = "-log10 (p-value)"
         )
-    
+
     ## apply MIRit ggplot2 theme
     pVol <- pVol +
         theme.MIRit(
@@ -3051,16 +3058,16 @@ plotVolcano <- function(mirnaObj,
             allBorders = allBorders,
             grid = grid
         )
-    
+
     ## add desired labels through ggrepel
     if (!is.null(labels)) {
         if (!requireNamespace("ggrepel", quietly = TRUE)) {
             stop("The ggrepel package is needed to show labels in ",
-                 "this function. Install it through: ",
-                 paste("`install.packages('ggrepel')`.",
-                       sep = ""
-                 ),
-                 call. = FALSE
+                "this function. Install it through: ",
+                paste("`install.packages('ggrepel')`.",
+                    sep = ""
+                ),
+                call. = FALSE
             )
         }
         if (boxedLabel == TRUE) {
@@ -3071,13 +3078,13 @@ plotVolcano <- function(mirnaObj,
                 ggrepel::geom_text_repel(show.legend = FALSE)
         }
     }
-    
+
     ## add title if desired by the user
     if (!is.null(title)) {
         pVol <- pVol +
             ggplot2::ggtitle(title)
     }
-    
+
     ## return plot
     return(pVol)
 }
@@ -3162,27 +3169,27 @@ plotVolcano <- function(mirnaObj,
 #'
 #' @export
 plotDimensions <- function(mirnaObj,
-                           assay,
-                           condition = NULL,
-                           dimensions = c(1, 2),
-                           labels = FALSE,
-                           boxedLabel = TRUE,
-                           pointSize = 3,
-                           pointAlpha = 1,
-                           colorScale = NULL,
-                           title = NULL,
-                           fontSize = 12,
-                           fontFamily = "",
-                           legend = "top",
-                           borderWidth = 1,
-                           allBorders = TRUE,
-                           grid = FALSE,
-                           ...) {
+    assay,
+    condition = NULL,
+    dimensions = c(1, 2),
+    labels = FALSE,
+    boxedLabel = TRUE,
+    pointSize = 3,
+    pointAlpha = 1,
+    colorScale = NULL,
+    title = NULL,
+    fontSize = 12,
+    fontFamily = "",
+    legend = "top",
+    borderWidth = 1,
+    allBorders = TRUE,
+    grid = FALSE,
+    ...) {
     ## input checks
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
-             "See ?MirnaExperiment",
-             call. = FALSE
+            "See ?MirnaExperiment",
+            call. = FALSE
         )
     }
     if (!assay %in% c("microRNA", "genes")) {
@@ -3191,13 +3198,13 @@ plotDimensions <- function(mirnaObj,
     if (length(condition) == 1) {
         if (!is.character(condition) |
             !(condition %in% colnames(colData(mirnaObj)) &
-              !condition %in% c("primary", "mirnaCol", "geneCol"))) {
+                !condition %in% c("primary", "mirnaCol", "geneCol"))) {
             stop("'condition' must be the column name of a variable ",
-                 "present in the metadata (colData) of a MirnaExperiment ",
-                 "object; or, alternatively, it must be a ",
-                 "character/factor object that specifies group ",
-                 "memberships.",
-                 call. = FALSE
+                "present in the metadata (colData) of a MirnaExperiment ",
+                "object; or, alternatively, it must be a ",
+                "character/factor object that specifies group ",
+                "memberships.",
+                call. = FALSE
             )
         }
     } else {
@@ -3205,11 +3212,11 @@ plotDimensions <- function(mirnaObj,
             if ((!is.character(condition) & !is.factor(condition)) |
                 length(condition) != nrow(colData(mirnaObj))) {
                 stop("'condition' must be the column name of a variable ",
-                     "present in the metadata (colData) of a MirnaExperiment ",
-                     "object; or, alternatively, it must be a ",
-                     "character/factor object that specifies group ",
-                     "memberships.",
-                     call. = FALSE
+                    "present in the metadata (colData) of a MirnaExperiment ",
+                    "object; or, alternatively, it must be a ",
+                    "character/factor object that specifies group ",
+                    "memberships.",
+                    call. = FALSE
                 )
             }
         }
@@ -3219,9 +3226,9 @@ plotDimensions <- function(mirnaObj,
         any(dimensions %% 1 != 0) |
         any(dimensions <= 0)) {
         stop("'dimensions' must be a numeric vector of length 2, that ",
-             "specifies the dimensions to be represented in the MDS plot! ",
-             "(e.g. 'c(1, 2)')",
-             call. = FALSE
+            "specifies the dimensions to be represented in the MDS plot! ",
+            "(e.g. 'c(1, 2)')",
+            call. = FALSE
         )
     }
     if (dimensions[1] > dimensions[2]) {
@@ -3230,20 +3237,20 @@ plotDimensions <- function(mirnaObj,
     if (!is.logical(labels) |
         length(labels) != 1) {
         stop("'labels' must be logical (TRUE/FALSE)! See ?plotDimensions",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(boxedLabel) |
         length(boxedLabel) != 1) {
         stop("'boxedLabel' must be logical (TRUE/FALSE)! See ?plotDimensions",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.numeric(pointSize) |
         length(pointSize) != 1 |
         pointSize < 0) {
         stop("'pointSize' must be a non-neagtive number! (default is 3)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.numeric(pointAlpha) |
@@ -3251,7 +3258,7 @@ plotDimensions <- function(mirnaObj,
         pointAlpha < 0 |
         pointAlpha > 1) {
         stop("'pointAlpha' must be a number between 0 and 1! (default is 1)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (length(condition) == 1 & !is.null(colorScale)) {
@@ -3262,10 +3269,10 @@ plotDimensions <- function(mirnaObj,
                 sort(unique(colData(mirnaObj)[, condition]))
             )) {
             stop("'colorScale' must be a named character vector where values ",
-                 "consist of R colors, whereas names coincide to the ",
-                 "different conditions. For additional details ",
-                 "see ?plotDimensions",
-                 call. = FALSE
+                "consist of R colors, whereas names coincide to the ",
+                "different conditions. For additional details ",
+                "see ?plotDimensions",
+                call. = FALSE
             )
         }
     } else if (length(condition) != 1 & !is.null(colorScale)) {
@@ -3276,46 +3283,46 @@ plotDimensions <- function(mirnaObj,
                 as.character(sort(unique(condition)))
             )) {
             stop("'colorScale' must be a named character vector where values ",
-                 "consist of R colors, whereas names coincide to the ",
-                 "different conditions. For additional details ",
-                 "see ?plotDimensions",
-                 call. = FALSE
+                "consist of R colors, whereas names coincide to the ",
+                "different conditions. For additional details ",
+                "see ?plotDimensions",
+                call. = FALSE
             )
         }
     }
     if (!(is.character(title) | is.null(title)) |
         !length(title) %in% c(0, 1)) {
         stop("'title' must be the title of the plot. ",
-             "For additional details see ?plotDimensions",
-             call. = FALSE
+            "For additional details see ?plotDimensions",
+            call. = FALSE
         )
     }
     if (!is.numeric(fontSize) |
         length(fontSize) != 1 |
         fontSize < 0) {
         stop("'fontSize' must be a non-neagtive number! (default is 12)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(fontFamily) |
         length(fontFamily) != 1) {
         stop("'fontFamily' must be a character of length 1",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(legend) |
         length(legend) != 1 |
         !legend %in% c("top", "bottom", "right", "left", "none")) {
         stop("'legend' must be one of 'top', 'bottom' 'right', 'left', ",
-             "and 'none'",
-             call. = FALSE
+            "and 'none'",
+            call. = FALSE
         )
     }
     if (!is.numeric(borderWidth) |
         length(borderWidth) != 1 |
         borderWidth < 0) {
         stop("'borderWidth' must be a non-neagtive number! (default is 1)",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.logical(allBorders) |
@@ -3326,24 +3333,24 @@ plotDimensions <- function(mirnaObj,
         length(grid) != 1) {
         stop("'grid' must be logical (TRUE/FALSE)!", call. = FALSE)
     }
-    
+
     ## define assay column in sample map
     if (assay == "microRNA") {
         featCol <- "mirnaCol"
     } else if (assay == "genes") {
         featCol <- "geneCol"
     }
-    
+
     ## extract expression values
     featExpr <- mirnaObj[[assay]]
-    
+
     ## identify sample metadata
     samplesMetadata <- colData(mirnaObj)
     meta <- samplesMetadata[!is.na(samplesMetadata[, featCol]), ]
-    
+
     ## reorder metadata based on expression matrix
     meta <- meta[order(match(meta[, featCol], colnames(featExpr))), ]
-    
+
     ## define condition vector
     if (is.character(condition) & length(condition) == 1) {
         cond <- meta[, condition]
@@ -3354,19 +3361,19 @@ plotDimensions <- function(mirnaObj,
     } else {
         cond <- rep(NA, nrow(meta))
     }
-    
+
     ## define cpm values if expression values are count-based
     oldCounts <- metadata(mirnaObj)[["oldCounts"]]
     if (is.null(oldCounts[[assay]])) {
         featExpr <- edgeR::cpm(featExpr, log = TRUE)
     }
-    
+
     ## perform multidimensional scaling through limma
     mds <- limma::plotMDS(featExpr, dim.plot = dimensions, plot = FALSE, ...)
-    
+
     ## extract variance explained by the selected dimensions
     var.exp <- mds$var.explained[dimensions]
-    
+
     ## create a data.frame object with MDS coordinates and covariates
     mds <- data.frame(
         x = mds$x,
@@ -3374,7 +3381,7 @@ plotDimensions <- function(mirnaObj,
         primary = meta$primary,
         condition = cond
     )
-    
+
     ## create MDS plot based on biological condition or not
     if (!is.null(condition)) {
         Condition <- cond
@@ -3391,17 +3398,17 @@ plotDimensions <- function(mirnaObj,
             label = .data$primary
         ))
     }
-    
+
     ## add points to the MDS scatterplot
     mdsPlot <- mdsPlot +
         ggplot2::geom_point(alpha = pointAlpha, size = pointSize)
-    
+
     ## add the desired color scale
     if (!is.null(colorScale)) {
         mdsPlot <- mdsPlot +
             ggplot2::scale_color_manual(values = colorScale)
     }
-    
+
     ## apply MIRit ggplot2 theme
     mdsPlot <- mdsPlot +
         theme.MIRit(
@@ -3412,27 +3419,27 @@ plotDimensions <- function(mirnaObj,
             allBorders = allBorders,
             grid = grid
         )
-    
+
     ## set axis labels
     mdsPlot <- mdsPlot +
         ggplot2::xlab(paste("Dim ", dimensions[1], " (",
-                            round(var.exp[1] * 100), "%)",
-                            sep = ""
+            round(var.exp[1] * 100), "%)",
+            sep = ""
         )) +
         ggplot2::ylab(paste("Dim ", dimensions[2], " (",
-                            round(var.exp[2] * 100), "%)",
-                            sep = ""
+            round(var.exp[2] * 100), "%)",
+            sep = ""
         ))
-    
+
     ## add labels
     if (labels == TRUE) {
         if (!requireNamespace("ggrepel", quietly = TRUE)) {
             stop("The ggrepel package is needed to show labels in ",
-                 "this function. Install it through: ",
-                 paste("`install.packages('ggrepel')`.",
-                       sep = ""
-                 ),
-                 call. = FALSE
+                "this function. Install it through: ",
+                paste("`install.packages('ggrepel')`.",
+                    sep = ""
+                ),
+                call. = FALSE
             )
         }
         if (boxedLabel == TRUE) {
@@ -3443,13 +3450,13 @@ plotDimensions <- function(mirnaObj,
                 ggrepel::geom_text_repel(show.legend = FALSE)
         }
     }
-    
+
     ## add title
     if (!is.null(title)) {
         mdsPlot <- mdsPlot +
             ggplot2::ggtitle(title)
     }
-    
+
     ## return plot
     return(mdsPlot)
 }
@@ -3501,35 +3508,34 @@ plotDimensions <- function(mirnaObj,
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-integrationDotplot <- function(
-        object,
-        showTerms = 10,
-        showTermsParam = "normalized.score",
-        title = NULL) {
+integrationDotplot <- function(object,
+    showTerms = 10,
+    showTermsParam = "normalized.score",
+    title = NULL) {
     ## check inputs
     if (!is(object, "IntegrativePathwayAnalysis")) {
         stop("'object' should be of class IntegrativePathwayAnalysis!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (nrow(integratedPathways(object)) < 1) {
         stop("'object' object does not contain any significant results!",
-             call. = FALSE
+            call. = FALSE
         )
     }
     if (!is.character(showTerms) &
         !(is.numeric(showTerms) & length(showTerms) == 1)) {
         stop("'showTerms' must be the number of top significant pathways ",
-             "to plot or, alternatively, a character vector containing ",
-             "the pathways to be shown.",
-             call. = FALSE
+            "to plot or, alternatively, a character vector containing ",
+            "the pathways to be shown.",
+            call. = FALSE
         )
     }
     if (is.character(showTerms) &
         !all(showTerms %in% integratedPathways(object)$pathway)) {
         stop("The pathways provided are not present in 'object' ",
-             "pathway column!",
-             call. = FALSE
+            "pathway column!",
+            call. = FALSE
         )
     }
     if (!is.character(showTermsParam) |
@@ -3539,47 +3545,47 @@ integrationDotplot <- function(
             "normalized.score"
         )) {
         stop("'showTermsParam' must be one of: 'coverage', 'padj', ",
-             "'pval', 'score', 'normalized.score' (default)",
-             call. = FALSE
+            "'pval', 'score', 'normalized.score' (default)",
+            call. = FALSE
         )
     }
     if (!(is.character(title) | is.null(title)) |
         !length(title) %in% c(0, 1)) {
         stop("'title' must be the title of the plot. ",
-             "For additional details see ?integrationDotplot",
-             call. = FALSE
+            "For additional details see ?integrationDotplot",
+            call. = FALSE
         )
     }
-    
+
     ## extract results from object object
     res <- integratedPathways(object)
-    
+
     ## rename column p-value column names
     colnames(res)[colnames(res) %in%
-                      c("P.Val", "adj.P.Val")] <- c("pval", "padj")
-    
+        c("P.Val", "adj.P.Val")] <- c("pval", "padj")
+
     ## order results on the basis of showTermsParam
     if (showTermsParam != "padj" & showTermsParam != "pval") {
         res <- res[order(res[, showTermsParam], decreasing = TRUE), ]
     } else {
         res <- res[order(res[, showTermsParam], decreasing = FALSE), ]
     }
-    
+
     ## select pathways to be shown in the dotplot
     if (is.numeric(showTerms)) {
         res <- res[seq(ifelse(showTerms <= nrow(res), showTerms, nrow(res))), ]
     } else if (is.character(showTerms)) {
         res <- res[which(res$pathway %in% showTerms), ]
     }
-    
+
     ## set the parameters for plotting
     ordBy <- "normalized.score"
     sizeBy <- "coverage"
     colBy <- "padj"
-    
+
     ## set x-axis label
     ordLabel <- "Normalized pathway Score"
-    
+
     ## create a dotplot
     dotRes <- ggplot2::ggplot(
         res,
@@ -3607,13 +3613,13 @@ integrationDotplot <- function(
         ) +
         ggplot2::xlab(ordLabel) +
         theme_enr()
-    
+
     ## add the title of the plot
     if (!is.null(title)) {
         dotRes <- dotRes +
             ggplot2::ggtitle(title)
     }
-    
+
     ## return ggplot2 graph
     return(dotRes)
 }
