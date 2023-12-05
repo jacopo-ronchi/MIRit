@@ -130,6 +130,25 @@ limma/edgeR/DESeq2 object used for differential expression analysis</p></dd>
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<ul><li><p>the <code><a href="deAccessors.html">mirnaDE()</a></code> function returns a <code>data.frame</code> object with the results
+of miRNA differential expression analysis.</p></li>
+</ul><ul><li><p>the <code><a href="deAccessors.html">geneDE()</a></code> function returns a <code>data.frame</code> object with the results
+of gene differential expression analysis.</p></li>
+</ul><ul><li><p>the <code><a href="significantAccessors.html">significantMirnas()</a></code> function gives back a <code>character</code> vector with the
+names of differentially expressed miRNAs.</p></li>
+</ul><ul><li><p>the <code><a href="significantAccessors.html">significantGenes()</a></code> function gives back a <code>character</code> vector with the
+names of differentially expressed genes.</p></li>
+</ul><ul><li><p>the <code><a href="pairedSamples.html">pairedSamples()</a></code> function returns a <code>logical</code> object that specifies
+if the MirnaExperiment object has paired measurements or not.</p></li>
+</ul><ul><li><p>the <code><a href="mirnaTargets.html">mirnaTargets()</a></code> function provides a <code>data.frame</code> object with the
+list of target genes for the differentially expressed miRNAs.</p></li>
+</ul><ul><li><p>the <code><a href="integration.html">integration()</a></code> function gives back a <code>data.frame</code> object with the
+results of the integrative miRNA-mRNA analysis.</p></li>
+</ul></div>
+    <div class="section level2">
     <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a></h2>
     
 <ul><li><p><code>mirnaDE(MirnaExperiment)</code>: Access the results of miRNA differential
