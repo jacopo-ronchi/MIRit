@@ -5,26 +5,22 @@
 
 <!-- badges: start -->
 
+[![Devel
+version](https://img.shields.io/badge/devel%20version-0.99.0-blue.svg)](https://github.com/jacopo-ronchi/MIRit)
 [![GitHub
 issues](https://img.shields.io/github/issues/jacopo-ronchi/MIRit)](https://github.com/jacopo-ronchi/MIRit/issues)
 [![GitHub
 pulls](https://img.shields.io/github/issues-pr/jacopo-ronchi/MIRit)](https://github.com/jacopo-ronchi/MIRit/pulls)
+[![Last
+commit](https://img.shields.io/github/last-commit/jacopo-ronchi/MIRit.svg)](https://github.com/jacopo-ronchi/MIRit/commits/devel)
+[![Project Status:
+Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![Bioc release
-status](http://www.bioconductor.org/shields/build/release/bioc/MIRit.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/MIRit)
-[![Bioc devel
-status](http://www.bioconductor.org/shields/build/devel/bioc/MIRit.svg)](https://bioconductor.org/checkResults/devel/bioc-LATEST/MIRit)
-[![Bioc downloads
-rank](https://bioconductor.org/shields/downloads/release/MIRit.svg)](http://bioconductor.org/packages/stats/bioc/MIRit/)
-[![Bioc
-support](https://bioconductor.org/shields/posts/MIRit.svg)](https://support.bioconductor.org/tag/MIRit)
-[![Bioc
-history](https://bioconductor.org/shields/years-in-bioc/MIRit.svg)](https://bioconductor.org/packages/release/bioc/html/MIRit.html#since)
-[![Bioc last
-commit](https://bioconductor.org/shields/lastcommit/devel/bioc/MIRit.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/MIRit/)
-[![Bioc
-dependencies](https://bioconductor.org/shields/dependencies/release/MIRit.svg)](https://bioconductor.org/packages/release/bioc/html/MIRit.html#since)
+[![License: GPL (\>=
+3)](https://img.shields.io/badge/license-GPL%20(%3E=%203)-blue.svg)](https://cran.r-project.org/web/licenses/GPL%20(%3E=%203))
+[![DOI
+badge](https://img.shields.io/badge/doi-10.1101/2023.11.24.568528-yellow.svg)](https://doi.org/10.1101/2023.11.24.568528)
 [![R-CMD-check-bioc](https://github.com/jacopo-ronchi/MIRit/actions/workflows/check-bioc.yml/badge.svg)](https://github.com/jacopo-ronchi/MIRit/actions/workflows/check-bioc.yml)
 [![Codecov test
 coverage](https://codecov.io/gh/jacopo-ronchi/MIRit/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/jacopo-ronchi/MIRit?branch=devel)
