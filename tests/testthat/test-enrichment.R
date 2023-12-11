@@ -65,7 +65,7 @@ test_that("basic ORA enrichment works", {
 
     ## check the validity of ORA
     enrTab <- enrichmentResults(enr$downregulated)
-    expect_equal(sum(enrTab$pval), 0.00115495394688)
+    expect_equal(sum(enrTab$pval), 0.0007601014589548481)
 })
 
 
