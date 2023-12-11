@@ -54,22 +54,15 @@ Milano-Bicocca, Italy
 
 ## Installation
 
-Get the latest stable `R` release from
-[CRAN](http://cran.r-project.org/). Then install `MIRit` from
-[Bioconductor](http://bioconductor.org/) using the following code:
+`MIRit` is currently undergoing Bioconductor submission. In the
+meantime, you can install it from
+[GitHub](https://github.com/jacopo-ronchi/MIRit) with:
 
 ``` r
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
 }
 
-BiocManager::install("MIRit")
-```
-
-Alternatively, the development version of `MIRit` can be installed from
-[GitHub](https://github.com/jacopo-ronchi/MIRit) with:
-
-``` r
 BiocManager::install("jacopo-ronchi/MIRit")
 ```
 
