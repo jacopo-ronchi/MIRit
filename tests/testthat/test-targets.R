@@ -1,7 +1,7 @@
 test_that("targets retrieval through mirDIP works", {
     ## skip on Bioconductor
     skip_on_bioc()
-    
+
     ## load test object
     obj <- createDummyData(de = TRUE)
 

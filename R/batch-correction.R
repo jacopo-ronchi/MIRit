@@ -104,14 +104,15 @@
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-batchCorrection <- function(mirnaObj,
-    assay,
-    batch = NULL,
-    batch2 = NULL,
-    covariates = NULL,
-    includeWsva = FALSE,
-    n.sv = 1L,
-    weight.by.sd = TRUE) {
+batchCorrection <- function(
+        mirnaObj,
+        assay,
+        batch = NULL,
+        batch2 = NULL,
+        covariates = NULL,
+        includeWsva = FALSE,
+        n.sv = 1L,
+        weight.by.sd = TRUE) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",

@@ -1,10 +1,9 @@
 ## create dummy objects needed for running unit tests
-createDummyData <- function(
-        nGenes = 100,
-        nMirnas = 50,
-        counts = TRUE,
-        paired = "all",
-        de = FALSE) {
+createDummyData <- function(nGenes = 100,
+    nMirnas = 50,
+    counts = TRUE,
+    paired = "all",
+    de = FALSE) {
     ## load experiment
     obj <- loadExamples()
 
@@ -145,12 +144,12 @@ loadSet <- function(organism, database, category) {
 
 ## helper function to load KEGG gene-sets for testing enrichment methods
 loadExampleGeneSets <- function() {
-  ## load the example GSEA object
-  enr <- loadExamples("FunctionalEnrichment")
-  
-  ## extract gene-sets from example GSEA object
-  gs <- geneSet(enr)
-  
-  ## return the gene-sets
-  return(gs)
+    ## load the example GSEA object
+    enr <- loadExamples("FunctionalEnrichment")
+
+    ## extract gene-sets from example GSEA object
+    gs <- geneSet(enr)
+
+    ## return the gene-sets
+    return(gs)
 }

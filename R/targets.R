@@ -90,10 +90,11 @@
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-getTargets <- function(mirnaObj,
-    organism = "Homo sapiens",
-    score = "High",
-    includeValidated = TRUE) {
+getTargets <- function(
+        mirnaObj,
+        organism = "Homo sapiens",
+        score = "High",
+        includeValidated = TRUE) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",

@@ -133,14 +133,15 @@
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-mirnaIntegration <- function(mirnaObj,
-    test = "auto",
-    pCutoff = 0.05,
-    pAdjustment = "fdr",
-    corMethod = "spearman",
-    corCutoff = 0.5,
-    associationMethod = "boschloo",
-    nuisanceParam = 100) {
+mirnaIntegration <- function(
+        mirnaObj,
+        test = "auto",
+        pCutoff = 0.05,
+        pAdjustment = "fdr",
+        corMethod = "spearman",
+        corCutoff = 0.5,
+        associationMethod = "boschloo",
+        nuisanceParam = 100) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -304,11 +305,12 @@ mirnaIntegration <- function(mirnaObj,
 
 
 ## correlation analysis
-correlateMirnaTargets <- function(mirnaObj,
-    corMethod,
-    corCutoff,
-    pCutoff,
-    pAdjustment) {
+correlateMirnaTargets <- function(
+        mirnaObj,
+        corMethod,
+        corCutoff,
+        pCutoff,
+        pAdjustment) {
     ## extract miRNA and gene expression values
     mirnaExpr <- mirnaObj[["microRNA"]]
     geneExpr <- mirnaObj[["genes"]]
@@ -456,11 +458,12 @@ correlateMirnaTargets <- function(mirnaObj,
 
 
 ## one-sided association tests for integrative analysis
-associateMirnaTargets <- function(mirnaObj,
-    pCutoff,
-    pAdjustment,
-    associationMethod,
-    nuisanceParam) {
+associateMirnaTargets <- function(
+        mirnaObj,
+        pCutoff,
+        pAdjustment,
+        associationMethod,
+        nuisanceParam) {
     ## obtain differentially expressed miRNAs and genes
     dem <- mirnaDE(mirnaObj)
     deg <- geneDE(mirnaObj)
@@ -601,10 +604,9 @@ associateMirnaTargets <- function(mirnaObj,
 
 
 ## helper function for choosing the association test
-association.helper <- function(
-        contingencyTable,
-        associationMethod,
-        nuisanceParam) {
+association.helper <- function(contingencyTable,
+    associationMethod,
+    nuisanceParam) {
     ## perform the appropriate statistical test
     if (associationMethod == "boschloo") {
         pval <- boshloo.test(contingencyTable, nuisanceParam)
@@ -767,9 +769,10 @@ boshloo.test <- function(data, npNumbers) {
 
 
 ## rotation gene-set test for integrative analysis
-fryMirnaTargets <- function(mirnaObj,
-    pCutoff,
-    pAdjustment) {
+fryMirnaTargets <- function(
+        mirnaObj,
+        pCutoff,
+        pAdjustment) {
     ## extract gene differential expression results
     de <- geneDE(mirnaObj, param = TRUE)
 

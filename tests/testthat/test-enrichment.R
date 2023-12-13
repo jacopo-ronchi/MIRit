@@ -57,16 +57,18 @@ test_that("gene-sets are correctly created for each supported database", {
 test_that("basic ORA enrichment works", {
     ## load the example MirnaExperiment object
     obj <- loadExamples()
-    
+
     ## load example gene-sets
     gs <- loadExampleGeneSets()
 
     ## perform functional enrichment with ORA
     expect_no_error(
-        enr <- oraInternal(obj, gs, pCutoff = 0.05, pAdjustment = "none",
-                           minSize = 10, maxSize = 500,
-                           dataInfo = "KEGG (category: pathway)",
-                           organism = "Homo sapiens", integrated = TRUE)
+        enr <- oraInternal(obj, gs,
+            pCutoff = 0.05, pAdjustment = "none",
+            minSize = 10, maxSize = 500,
+            dataInfo = "KEGG (category: pathway)",
+            organism = "Homo sapiens", integrated = TRUE
+        )
     )
 
     ## check the validity of ORA
@@ -81,17 +83,19 @@ test_that("basic GSEA enrichment works", {
 
     # load the example MirnaExperiment object
     obj <- loadExamples()
-    
+
     ## load example gene-sets
     gs <- loadExampleGeneSets()
 
     ## perform functional enrichment with GSEA
     expect_no_error(
-        enr <- gseaInternal(obj, gs, pCutoff = 0.05, pAdjustment = "none",
-                            minSize = 10, maxSize = 500,
-                            dataInfo = "KEGG (category: pathway)",
-                            organism = "Homo sapiens",
-                            rankMetric = "signed.pval", eps = 1e-50)
+        enr <- gseaInternal(obj, gs,
+            pCutoff = 0.05, pAdjustment = "none",
+            minSize = 10, maxSize = 500,
+            dataInfo = "KEGG (category: pathway)",
+            organism = "Homo sapiens",
+            rankMetric = "signed.pval", eps = 1e-50
+        )
     )
 
     ## check the validity of GSEA
@@ -106,17 +110,19 @@ test_that("basic CAMERA enrichment works", {
 
     # load the example MirnaExperiment object
     obj <- loadExamples()
-    
+
     ## load example gene-sets
     gs <- loadExampleGeneSets()
 
     ## perform functional enrichment with CAMERA
     expect_no_error(
-        enr <- cameraInternal(obj, gs, pCutoff = 0.05,
-                              pAdjustment = "none", minSize = 10,
-                              maxSize = 500,
-                              dataInfo = "KEGG (category: pathway)",
-                              organism = "Homo sapiens")
+        enr <- cameraInternal(obj, gs,
+            pCutoff = 0.05,
+            pAdjustment = "none", minSize = 10,
+            maxSize = 500,
+            dataInfo = "KEGG (category: pathway)",
+            organism = "Homo sapiens"
+        )
     )
 
     ## check the validity of CAMERA

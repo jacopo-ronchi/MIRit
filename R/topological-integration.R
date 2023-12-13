@@ -83,11 +83,12 @@
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-preparePathways <- function(mirnaObj,
-    database = "KEGG",
-    organism = "Homo sapiens",
-    minPc = 10,
-    BPPARAM = bpparam()) {
+preparePathways <- function(
+        mirnaObj,
+        database = "KEGG",
+        organism = "Homo sapiens",
+        minPc = 10,
+        BPPARAM = bpparam()) {
     ## input checks
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -345,14 +346,15 @@ preparePathways <- function(mirnaObj,
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-topologicalAnalysis <- function(mirnaObj,
-    pathways,
-    pCutoff = 0.05,
-    pAdjustment = "max-T",
-    nPerm = 10000,
-    progress = FALSE,
-    tasks = 0,
-    BPPARAM = bpparam()) {
+topologicalAnalysis <- function(
+        mirnaObj,
+        pathways,
+        pCutoff = 0.05,
+        pAdjustment = "max-T",
+        nPerm = 10000,
+        progress = FALSE,
+        tasks = 0,
+        BPPARAM = bpparam()) {
     ## input checks
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -573,55 +575,56 @@ topologicalAnalysis <- function(mirnaObj,
 
 
 ## helper function for creating miRNA augmented pathways
-preparePathways.internal <- function(database, org, targ, features,
-    minPc, BPPARAM) {
-  ## load cache
-  bfc <- .get_cache()
-  
-  ## download the appropriate pathways or load them from cache
-  dbId <- paste(database, org, sep = "_")
-  cache <- BiocFileCache::bfcquery(bfc, dbId)
-  if (dbId %in% cache$rname) {
-    ## load cached pathways
-    message("Reading ", database, " pathways from cache...")
-    pathDb <- readRDS(BiocFileCache::bfcrpath(bfc, dbId)[1])
-  } else {
-    ## download pathways from the specified database
-    message("Downloading pathways from ", database, " database...")
-    pathDb <- graphite::pathways(species = org, database = tolower(database))
-    
-    ## retrieve the appropriate organism database
-    dbName <- graphite:::selectDb(org)
-    
-    ## check if the user has installed the required database
-    suppressMessages(
-      if (!requireNamespace(dbName, quietly = TRUE)) {
-        stop("The ", dbName, " package is not installed. Install it ",
-             "before runnning this function through: ",
-             paste("`BiocManager::install(\"", dbName, "\")`.", sep = ""),
-             call. = FALSE
+preparePathways.internal <- function(
+        database, org, targ, features,
+        minPc, BPPARAM) {
+    ## load cache
+    bfc <- .get_cache()
+
+    ## download the appropriate pathways or load them from cache
+    dbId <- paste(database, org, sep = "_")
+    cache <- BiocFileCache::bfcquery(bfc, dbId)
+    if (dbId %in% cache$rname) {
+        ## load cached pathways
+        message("Reading ", database, " pathways from cache...")
+        pathDb <- readRDS(BiocFileCache::bfcrpath(bfc, dbId)[1])
+    } else {
+        ## download pathways from the specified database
+        message("Downloading pathways from ", database, " database...")
+        pathDb <- graphite::pathways(species = org, database = tolower(database))
+
+        ## retrieve the appropriate organism database
+        dbName <- graphite:::selectDb(org)
+
+        ## check if the user has installed the required database
+        suppressMessages(
+            if (!requireNamespace(dbName, quietly = TRUE)) {
+                stop("The ", dbName, " package is not installed. Install it ",
+                    "before runnning this function through: ",
+                    paste("`BiocManager::install(\"", dbName, "\")`.", sep = ""),
+                    call. = FALSE
+                )
+            }
         )
-      }
-    )
-    
-    ## convert pathway identifiers to gene symbols by accessing OrgDb through
-    ## parallel workers
-    message("Converting identifiers to gene symbols...")
-    pathDb <- BiocParallel::bplapply(pathDb, function(path) {
-      db <- getFromNamespace(dbName, dbName)
-      db <- suppressPackageStartupMessages(
-        AnnotationDbi::loadDb(AnnotationDbi::dbfile(db))
-      )
-      on.exit(AnnotationDbi::dbFileDisconnect(AnnotationDbi::dbconn(db)))
-      suppressMessages(
-        convertNodes(path, db = db)
-      )
-    }, BPPARAM = BPPARAM)
-    
-    ## save pathways to cache
-    savepath <- BiocFileCache::bfcnew(bfc, rname = dbId, ext = ".RDS")
-    saveRDS(pathDb, file = savepath)
-  }
+
+        ## convert pathway identifiers to gene symbols by accessing OrgDb through
+        ## parallel workers
+        message("Converting identifiers to gene symbols...")
+        pathDb <- BiocParallel::bplapply(pathDb, function(path) {
+            db <- getFromNamespace(dbName, dbName)
+            db <- suppressPackageStartupMessages(
+                AnnotationDbi::loadDb(AnnotationDbi::dbfile(db))
+            )
+            on.exit(AnnotationDbi::dbFileDisconnect(AnnotationDbi::dbconn(db)))
+            suppressMessages(
+                convertNodes(path, db = db)
+            )
+        }, BPPARAM = BPPARAM)
+
+        ## save pathways to cache
+        savepath <- BiocFileCache::bfcnew(bfc, rname = dbId, ext = ".RDS")
+        saveRDS(pathDb, file = savepath)
+    }
 
     ## create a list of augmented pathways
     message("Adding miRNA-gene interactions to biological pathways...")
@@ -681,8 +684,9 @@ preparePathways.internal <- function(database, org, targ, features,
 
 
 ## helper function for adding miRNA-target pairs to network objects
-augmentPathway <- function(pathway,
-    targets) {
+augmentPathway <- function(
+        pathway,
+        targets) {
     ## convert pathway to a graph network
     pathGraph <- graphite::pathwayGraph(pathway = pathway)
     graph::nodes(pathGraph) <- gsub("SYMBOL:", "", graph::nodes(pathGraph))
