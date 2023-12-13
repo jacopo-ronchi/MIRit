@@ -138,3 +138,19 @@ loadSet <- function(organism, database, category) {
     ## return gene set
     return(gs)
 }
+
+
+
+
+
+## helper function to load KEGG gene-sets for testing enrichment methods
+loadExampleGeneSets <- function() {
+  ## load the example GSEA object
+  enr <- loadExamples("FunctionalEnrichment")
+  
+  ## extract gene-sets from example GSEA object
+  gs <- geneSet(enr)
+  
+  ## return the gene-sets
+  return(gs)
+}

@@ -563,13 +563,29 @@ enrichGenes <- function(mirnaObj,
     ## check if category is included in the specified database
     validateCategories(database, category, organism)
 
-    ## download the appropriate gene set
-    message("Preparing the appropriate gene set...")
-    gs <- prepareGeneSet(
+    ## load cache
+    bfc <- .get_cache()
+    
+    ## download the appropriate gene set or load it from cache
+    gsId <- paste(database, category, organism, sep = "_")
+    cache <- BiocFileCache::bfcquery(bfc, gsId)
+    if (gsId %in% cache$rname) {
+      ## load cached gene-sets
+      message("Reading ", database, " gene-sets from cache...")
+      gs <- readRDS(BiocFileCache::bfcrpath(bfc, gsId)[1])
+    } else {
+      ## download the relevant gene-sets
+      message("Preparing the appropriate gene set...")
+      gs <- prepareGeneSet(
         organism = organism,
         database = database,
         category = category
-    )
+      )
+      
+      ## save gene-sets to cache
+      savepath <- BiocFileCache::bfcnew(bfc, rname = gsId, ext = ".RDS")
+      saveRDS(gs, file = savepath)
+    }
 
     ## set a describer for the database used
     if (database %in% c(
@@ -1151,13 +1167,29 @@ enrichTargets <- function(mirnaObj,
     ## check if category is included in the specified database
     validateCategories(database, category, organism)
 
-    ## download the appropriate gene set
-    message("Preparing the appropriate gene set...")
-    gs <- prepareGeneSet(
+    ## load cache
+    bfc <- .get_cache()
+    
+    ## download the appropriate gene set or load it from cache
+    gsId <- paste(database, category, organism, sep = "_")
+    cache <- BiocFileCache::bfcquery(bfc, gsId)
+    if (gsId %in% cache$rname) {
+      ## load cached gene-sets
+      message("Reading ", database, " gene-sets from cache...")
+      gs <- readRDS(BiocFileCache::bfcrpath(bfc, gsId)[1])
+    } else {
+      ## download the relevant gene-sets
+      message("Preparing the appropriate gene set...")
+      gs <- prepareGeneSet(
         organism = organism,
         database = database,
         category = category
-    )
+      )
+      
+      ## save gene-sets to cache
+      savepath <- BiocFileCache::bfcnew(bfc, rname = gsId, ext = ".RDS")
+      saveRDS(gs, file = savepath)
+    }
 
     ## set a describer for the database used
     if (database %in% c(

@@ -57,15 +57,21 @@ test_that("gene-sets are correctly created for each supported database", {
 test_that("basic ORA enrichment works", {
     ## load the example MirnaExperiment object
     obj <- loadExamples()
+    
+    ## load example gene-sets
+    gs <- loadExampleGeneSets()
 
     ## perform functional enrichment with ORA
     expect_no_error(
-        enr <- enrichGenes(obj, method = "ORA", database = "GO")
+        enr <- oraInternal(obj, gs, pCutoff = 0.05, pAdjustment = "none",
+                           minSize = 10, maxSize = 500,
+                           dataInfo = "KEGG (category: pathway)",
+                           organism = "Homo sapiens", integrated = TRUE)
     )
 
     ## check the validity of ORA
     enrTab <- enrichmentResults(enr$downregulated)
-    expect_equal(sum(enrTab$pval), 0.0007601014589548481)
+    expect_equal(sum(enrTab$pval), 0.6349798379940161)
 })
 
 
@@ -75,15 +81,22 @@ test_that("basic GSEA enrichment works", {
 
     # load the example MirnaExperiment object
     obj <- loadExamples()
+    
+    ## load example gene-sets
+    gs <- loadExampleGeneSets()
 
     ## perform functional enrichment with GSEA
     expect_no_error(
-        enr <- enrichGenes(obj, method = "GSEA", database = "KEGG")
+        enr <- gseaInternal(obj, gs, pCutoff = 0.05, pAdjustment = "none",
+                            minSize = 10, maxSize = 500,
+                            dataInfo = "KEGG (category: pathway)",
+                            organism = "Homo sapiens",
+                            rankMetric = "signed.pval", eps = 1e-50)
     )
 
     ## check the validity of GSEA
     enrTab <- enrichmentResults(enr)
-    expect_equal(sum(enrTab$pval), 0.00089149223387)
+    expect_equal(sum(enrTab$pval), 0.162313766403252)
 })
 
 
@@ -93,16 +106,20 @@ test_that("basic CAMERA enrichment works", {
 
     # load the example MirnaExperiment object
     obj <- loadExamples()
+    
+    ## load example gene-sets
+    gs <- loadExampleGeneSets()
 
     ## perform functional enrichment with CAMERA
     expect_no_error(
-        enr <- enrichGenes(obj,
-            method = "CAMERA", database = "KEGG",
-            pCutoff = 0.5
-        )
+        enr <- cameraInternal(obj, gs, pCutoff = 0.05,
+                              pAdjustment = "none", minSize = 10,
+                              maxSize = 500,
+                              dataInfo = "KEGG (category: pathway)",
+                              organism = "Homo sapiens")
     )
 
     ## check the validity of CAMERA
     enrTab <- enrichmentResults(enr)
-    expect_equal(sum(enrTab$pval), 0.0288973773151)
+    expect_equal(sum(enrTab$pval), 0.2732096022757788)
 })
