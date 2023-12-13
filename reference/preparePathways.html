@@ -20,7 +20,7 @@ topologicalAnalysis() function."><meta property="og:image" content="/logo.svg"><
     
     <a class="navbar-brand me-2" href="../index.html">MIRit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -165,8 +165,7 @@ BMC Bioinformatics 13, 20 (2012),
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># retrieve pathways from KEGG and augment them with miRNA-gene interactions</span></span></span>
 <span class="r-in"><span><span class="va">paths</span> <span class="op">&lt;-</span> <span class="fu">preparePathways</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading pathways from KEGG database...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting identifiers to gene symbols...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading KEGG pathways from cache...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding miRNA-gene interactions to biological pathways...</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>152 pathways have been ignored because they contain too few nodes with gene expression measurement.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Performing topological sorting of pathway nodes...</span>
@@ -185,8 +184,8 @@ BMC Bioinformatics 13, 20 (2012),
 <span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid hormone synthesis Thyroid hormone synthesis 0.3469388 12.12941</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid cancer                       Thyroid cancer 0.2820513 11.56291</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                           normalized.score       P.Val adj.P.Val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid hormone synthesis         8.604123 0.000999001     0.015</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid cancer                    7.641694 0.001998002     0.028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid hormone synthesis         8.274499 0.000999001     0.020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid cancer                    7.228664 0.000999001     0.037</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># create a dotplot of integrated pathways</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="integrationDotplot.html">integrationDotplot</a></span><span class="op">(</span><span class="va">ipa</span><span class="op">)</span></span></span>

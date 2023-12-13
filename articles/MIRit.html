@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="pandoc">
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
-<meta name="date" content="2023-12-11">
+<meta name="date" content="2023-12-13">
 <title>Integrate miRNA and gene expression data with MIRit</title>
 <script src="MIRit_files/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="MIRit_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
@@ -343,11 +343,11 @@ function toggle_visibility(id1) {
 <p class="author-name">Jacopo Ronchi<span class="affil-mark">1*</span></p>
 <p class="author-affiliation"><span class="affil-mark">1</span>University of Milano-Bicocca, Italy</p>
 <p class="author-email"><span class="affil-mark">*</span><a href="mailto:jacopo.ronchi@unimib.it">jacopo.ronchi@unimib.it</a></p>
-<h4 class="date">11 December 2023</h4>
+<h4 class="date">13 December 2023</h4>
 <h4 class="abstract">Abstract</h4>
 <p>In this vignette, we are going to see how to use MIRit for investigating the compromised miRNA-gene regulatory networks in thyroid cancer. In particular, an RNA-Seq experiment will be used as an example to demonstrate how to perform an integrative analysis with MIRit, including differential expression analysis, functional enrichment and characterization, correlation analysis and, lastly, the construction and visualization of the impaired miRNAs regulatory axes within biological pathways.</p>
 <h4 class="package">Package</h4>
-<p>MIRit 0.99.0</p>
+<p>MIRit 0.99.1</p>
 
 </div>
 
@@ -893,7 +893,7 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <code class="sourceCode R"><span><span class="co">## perform over-representation analysis with GO</span></span>
 <span><span class="va">ora</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichGenes.html">enrichGenes</a></span><span class="op">(</span><span class="va">experiment</span>, method <span class="op">=</span> <span class="st">"ORA"</span>, database <span class="op">=</span> <span class="st">"GO"</span>, organism <span class="op">=</span> <span class="st">"Homo sapiens"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Since not specified, 'category' for GO database is set to bp (default).</span></span>
-<span><span class="co">#&gt; Preparing the appropriate gene set...</span></span>
+<span><span class="co">#&gt; Reading GO gene-sets from cache...</span></span>
 <span><span class="co">#&gt; Performing the enrichment of upregulated genes...</span></span>
 <span><span class="co">#&gt; Performing the enrichment of downregulated genes...</span></span>
 <span><span class="co">#&gt; The enrichment of genes reported 9 significantly enriched terms for downregulated genes and 0 for upregulated genes.</span></span></code></pre></div>
@@ -903,10 +903,7 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <code class="sourceCode R"><span><span class="co">## perform gene-set enrichment analysis with KEGG</span></span>
 <span><span class="va">gse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichGenes.html">enrichGenes</a></span><span class="op">(</span><span class="va">experiment</span>, method <span class="op">=</span> <span class="st">"GSEA"</span>, database <span class="op">=</span> <span class="st">"KEGG"</span>, organism <span class="op">=</span> <span class="st">"Homo sapiens"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Since not specified, 'category' for KEGG database is set to pathway (default).</span></span>
-<span><span class="co">#&gt; Preparing the appropriate gene set...</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Some ID occurs one-to-many match, like "79154, 7920, 79143"...</span></span>
-<span><span class="co">#&gt; 99.96% genes are mapped to symbol</span></span>
+<span><span class="co">#&gt; Reading KEGG gene-sets from cache...</span></span>
 <span><span class="co">#&gt; Ranking genes based on signed.pval...</span></span>
 <span><span class="co">#&gt; Performing gene-set enrichment analysis (GSEA)...</span></span>
 <span><span class="co">#&gt; GSEA reported 2 significantly enriched terms.</span></span></code></pre></div>
@@ -948,20 +945,20 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <tr class="odd">
 <td align="left">Protein processing in endoplasmic reticulum</td>
 <td align="right">0</td>
-<td align="right">0.02</td>
+<td align="right">0.01</td>
 <td align="right">0.54</td>
 <td align="right">-0.54</td>
-<td align="right">-1.83</td>
+<td align="right">-1.88</td>
 <td align="right">55</td>
 <td align="left">BCL2, HY….</td>
 </tr>
 <tr class="even">
 <td align="left">Thyroid hormone synthesis</td>
 <td align="right">0</td>
-<td align="right">0.02</td>
-<td align="right">0.52</td>
+<td align="right">0.01</td>
+<td align="right">0.54</td>
 <td align="right">-0.67</td>
-<td align="right">-1.99</td>
+<td align="right">-2.02</td>
 <td align="right">27</td>
 <td align="left">SLC26A4,….</td>
 </tr>
@@ -1291,9 +1288,7 @@ Figure 6: <span class="caption-title">Correlation between miRNAs and key thyroid
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## enrichment of integrated targets</span></span>
 <span><span class="va">oraTarg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichTargets.html">enrichTargets</a></span><span class="op">(</span><span class="va">experiment</span>, database <span class="op">=</span> <span class="st">"DO"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Preparing the appropriate gene set...</span></span>
-<span><span class="co">#&gt; Some ID occurs one-to-many match, like "26476, 127068, 101060321"...</span></span>
-<span><span class="co">#&gt; 99.06% genes are mapped to symbol</span></span>
+<span><span class="co">#&gt; Reading DO gene-sets from cache...</span></span>
 <span><span class="co">#&gt; Performing the enrichment of upregulated genes...</span></span>
 <span><span class="co">#&gt; Performing the enrichment of downregulated genes...</span></span>
 <span><span class="co">#&gt; The enrichment of genes reported 113 significantly enriched terms for downregulated genes and 0 for upregulated genes.</span></span>
@@ -1446,101 +1441,63 @@ Figure 9: <span class="caption-title">Impaired miRNA-mRNA regulatory network pre
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] fstcore_0.9.18   MIRit_0.99.0     BiocStyle_2.31.0</span></span>
+<span><span class="co">#&gt; [1] MIRit_0.99.1     BiocStyle_2.31.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;   [1] splines_4.4.0                 later_1.3.2                  </span></span>
-<span><span class="co">#&gt;   [3] genekitr_1.2.5                urltools_1.7.3               </span></span>
-<span><span class="co">#&gt;   [5] bitops_1.0-7                  ggplotify_0.1.2              </span></span>
-<span><span class="co">#&gt;   [7] filelock_1.0.3                tibble_3.2.1                 </span></span>
-<span><span class="co">#&gt;   [9] triebeard_0.4.1               polyclip_1.10-6              </span></span>
-<span><span class="co">#&gt;  [11] graph_1.81.0                  lifecycle_1.0.4              </span></span>
-<span><span class="co">#&gt;  [13] rstatix_0.7.2                 edgeR_4.1.2                  </span></span>
-<span><span class="co">#&gt;  [15] lattice_0.22-5                MASS_7.3-60.1                </span></span>
-<span><span class="co">#&gt;  [17] MultiAssayExperiment_1.29.0   backports_1.4.1              </span></span>
-<span><span class="co">#&gt;  [19] magrittr_2.0.3                openxlsx_4.2.5.2             </span></span>
-<span><span class="co">#&gt;  [21] limma_3.59.1                  sass_0.4.8                   </span></span>
-<span><span class="co">#&gt;  [23] rmarkdown_2.25                remotes_2.4.2.1              </span></span>
-<span><span class="co">#&gt;  [25] jquerylib_0.1.4               yaml_2.3.7                   </span></span>
-<span><span class="co">#&gt;  [27] httpuv_1.6.13                 zip_2.3.0                    </span></span>
-<span><span class="co">#&gt;  [29] sessioninfo_1.2.2             pkgbuild_1.4.3               </span></span>
-<span><span class="co">#&gt;  [31] ggvenn_0.1.10                 cowplot_1.1.1                </span></span>
-<span><span class="co">#&gt;  [33] DBI_1.1.3                     RColorBrewer_1.1-3           </span></span>
-<span><span class="co">#&gt;  [35] pkgload_1.3.3                 abind_1.4-5                  </span></span>
-<span><span class="co">#&gt;  [37] zlibbioc_1.49.0               quadprog_1.5-8               </span></span>
-<span><span class="co">#&gt;  [39] GenomicRanges_1.55.1          purrr_1.0.2                  </span></span>
-<span><span class="co">#&gt;  [41] ggraph_2.1.0                  BiocGenerics_0.49.1          </span></span>
-<span><span class="co">#&gt;  [43] RCurl_1.98-1.13               yulab.utils_0.1.0            </span></span>
-<span><span class="co">#&gt;  [45] tweenr_2.0.2                  rappdirs_0.3.3               </span></span>
-<span><span class="co">#&gt;  [47] GenomeInfoDbData_1.2.11       IRanges_2.37.0               </span></span>
-<span><span class="co">#&gt;  [49] S4Vectors_0.41.2              enrichplot_1.23.1            </span></span>
-<span><span class="co">#&gt;  [51] ggrepel_0.9.4                 tidytree_0.4.5               </span></span>
-<span><span class="co">#&gt;  [53] codetools_0.2-19              DelayedArray_0.29.0          </span></span>
-<span><span class="co">#&gt;  [55] xml2_1.3.6                    DOSE_3.29.0                  </span></span>
-<span><span class="co">#&gt;  [57] ggforce_0.4.1                 tidyselect_1.2.0             </span></span>
-<span><span class="co">#&gt;  [59] aplot_0.2.2                   farver_2.1.1                 </span></span>
-<span><span class="co">#&gt;  [61] viridis_0.6.4                 matrixStats_1.1.0            </span></span>
-<span><span class="co">#&gt;  [63] stats4_4.4.0                  BiocFileCache_2.11.1         </span></span>
-<span><span class="co">#&gt;  [65] jsonlite_1.8.8                fst_0.9.8                    </span></span>
-<span><span class="co">#&gt;  [67] ellipsis_0.3.2                tidygraph_1.2.3              </span></span>
-<span><span class="co">#&gt;  [69] progress_1.2.3                tools_4.4.0                  </span></span>
-<span><span class="co">#&gt;  [71] treeio_1.27.0                 HPO.db_0.99.2                </span></span>
-<span><span class="co">#&gt;  [73] Rcpp_1.0.11                   glue_1.6.2                   </span></span>
-<span><span class="co">#&gt;  [75] gridExtra_2.3                 SparseArray_1.3.1            </span></span>
-<span><span class="co">#&gt;  [77] BiocBaseUtils_1.5.0           xfun_0.41                    </span></span>
-<span><span class="co">#&gt;  [79] usethis_2.2.2                 qvalue_2.35.0                </span></span>
-<span><span class="co">#&gt;  [81] MatrixGenerics_1.15.0         GenomeInfoDb_1.39.1          </span></span>
-<span><span class="co">#&gt;  [83] dplyr_1.1.4                   withr_2.5.2                  </span></span>
-<span><span class="co">#&gt;  [85] BiocManager_1.30.22           fastmap_1.1.1                </span></span>
-<span><span class="co">#&gt;  [87] fansi_1.0.6                   digest_0.6.33                </span></span>
-<span><span class="co">#&gt;  [89] R6_2.5.1                      mime_0.12                    </span></span>
-<span><span class="co">#&gt;  [91] gridGraphics_0.5-1            colorspace_2.1-0             </span></span>
-<span><span class="co">#&gt;  [93] GO.db_3.18.0                  RSQLite_2.3.4                </span></span>
-<span><span class="co">#&gt;  [95] utf8_1.2.4                    tidyr_1.3.0                  </span></span>
-<span><span class="co">#&gt;  [97] generics_0.1.3                data.table_1.14.10           </span></span>
-<span><span class="co">#&gt;  [99] htmlwidgets_1.6.4             prettyunits_1.2.0            </span></span>
-<span><span class="co">#&gt; [101] graphlayouts_1.0.2            httr_1.4.7                   </span></span>
-<span><span class="co">#&gt; [103] S4Arrays_1.3.1                scatterpie_0.2.1             </span></span>
-<span><span class="co">#&gt; [105] pkgconfig_2.0.3               gtable_0.3.4                 </span></span>
-<span><span class="co">#&gt; [107] blob_1.2.4                    XVector_0.43.0               </span></span>
-<span><span class="co">#&gt; [109] shadowtext_0.1.2              clusterProfiler_4.11.0       </span></span>
-<span><span class="co">#&gt; [111] htmltools_0.5.7               carData_3.0-5                </span></span>
-<span><span class="co">#&gt; [113] geneset_0.2.7                 profvis_0.3.8                </span></span>
-<span><span class="co">#&gt; [115] bookdown_0.37                 fgsea_1.29.0                 </span></span>
-<span><span class="co">#&gt; [117] scales_1.3.0                  Biobase_2.63.0               </span></span>
-<span><span class="co">#&gt; [119] png_0.1-8                     ggfun_0.1.3                  </span></span>
-<span><span class="co">#&gt; [121] knitr_1.45                    reshape2_1.4.4               </span></span>
-<span><span class="co">#&gt; [123] nlme_3.1-164                  curl_5.2.0                   </span></span>
-<span><span class="co">#&gt; [125] cachem_1.0.8                  stringr_1.5.1                </span></span>
-<span><span class="co">#&gt; [127] BiocVersion_3.19.1            miniUI_0.1.1.1               </span></span>
-<span><span class="co">#&gt; [129] parallel_4.4.0                HDO.db_0.99.1                </span></span>
-<span><span class="co">#&gt; [131] AnnotationDbi_1.65.2          pillar_1.9.0                 </span></span>
-<span><span class="co">#&gt; [133] grid_4.4.0                    vctrs_0.6.5                  </span></span>
-<span><span class="co">#&gt; [135] urlchecker_1.0.1              promises_1.2.1               </span></span>
-<span><span class="co">#&gt; [137] ggpubr_0.6.0                  car_3.1-2                    </span></span>
-<span><span class="co">#&gt; [139] dbplyr_2.4.0                  xtable_1.8-4                 </span></span>
-<span><span class="co">#&gt; [141] Rgraphviz_2.47.0              evaluate_0.23                </span></span>
-<span><span class="co">#&gt; [143] cli_3.6.2                     locfit_1.5-9.8               </span></span>
-<span><span class="co">#&gt; [145] compiler_4.4.0                rlang_1.1.2                  </span></span>
-<span><span class="co">#&gt; [147] crayon_1.5.2                  ggsignif_0.6.4               </span></span>
-<span><span class="co">#&gt; [149] labeling_0.4.3                plyr_1.8.9                   </span></span>
-<span><span class="co">#&gt; [151] fs_1.6.3                      stringi_1.8.2                </span></span>
-<span><span class="co">#&gt; [153] viridisLite_0.4.2             BiocParallel_1.37.0          </span></span>
-<span><span class="co">#&gt; [155] MPO.db_0.99.7                 munsell_0.5.0                </span></span>
-<span><span class="co">#&gt; [157] Biostrings_2.71.1             lazyeval_0.2.2               </span></span>
-<span><span class="co">#&gt; [159] devtools_2.4.5                GOSemSim_2.29.0              </span></span>
-<span><span class="co">#&gt; [161] Matrix_1.6-4                  europepmc_0.4.3              </span></span>
-<span><span class="co">#&gt; [163] hms_1.1.3                     patchwork_1.1.3              </span></span>
-<span><span class="co">#&gt; [165] bit64_4.0.5                   ggplot2_3.4.4                </span></span>
-<span><span class="co">#&gt; [167] KEGGREST_1.43.0               statmod_1.5.0                </span></span>
-<span><span class="co">#&gt; [169] shiny_1.8.0                   SummarizedExperiment_1.33.1  </span></span>
-<span><span class="co">#&gt; [171] interactiveDisplayBase_1.41.0 highr_0.10                   </span></span>
-<span><span class="co">#&gt; [173] AnnotationHub_3.11.0          igraph_1.6.0                 </span></span>
-<span><span class="co">#&gt; [175] broom_1.0.5                   memoise_2.0.1                </span></span>
-<span><span class="co">#&gt; [177] bslib_0.6.1                   ggtree_3.11.0                </span></span>
-<span><span class="co">#&gt; [179] fastmatch_1.1-4               bit_4.0.5                    </span></span>
-<span><span class="co">#&gt; [181] MonoPoly_0.3-10               gson_0.1.0                   </span></span>
-<span><span class="co">#&gt; [183] ape_5.7-1</span></span></code></pre>
+<span><span class="co">#&gt;   [1] DBI_1.1.3                   bitops_1.0-7               </span></span>
+<span><span class="co">#&gt;   [3] gridExtra_2.3               rlang_1.1.2                </span></span>
+<span><span class="co">#&gt;   [5] magrittr_2.0.3              MonoPoly_0.3-10            </span></span>
+<span><span class="co">#&gt;   [7] matrixStats_1.2.0           compiler_4.4.0             </span></span>
+<span><span class="co">#&gt;   [9] RSQLite_2.3.4               vctrs_0.6.5                </span></span>
+<span><span class="co">#&gt;  [11] quadprog_1.5-8              stringr_1.5.1              </span></span>
+<span><span class="co">#&gt;  [13] pkgconfig_2.0.3             crayon_1.5.2               </span></span>
+<span><span class="co">#&gt;  [15] fastmap_1.1.1               backports_1.4.1            </span></span>
+<span><span class="co">#&gt;  [17] dbplyr_2.4.0                XVector_0.43.0             </span></span>
+<span><span class="co">#&gt;  [19] labeling_0.4.3              utf8_1.2.4                 </span></span>
+<span><span class="co">#&gt;  [21] rmarkdown_2.25              graph_1.81.0               </span></span>
+<span><span class="co">#&gt;  [23] purrr_1.0.2                 bit_4.0.5                  </span></span>
+<span><span class="co">#&gt;  [25] xfun_0.41                   MultiAssayExperiment_1.29.0</span></span>
+<span><span class="co">#&gt;  [27] zlibbioc_1.49.0             cachem_1.0.8               </span></span>
+<span><span class="co">#&gt;  [29] GenomeInfoDb_1.39.1         jsonlite_1.8.8             </span></span>
+<span><span class="co">#&gt;  [31] blob_1.2.4                  highr_0.10                 </span></span>
+<span><span class="co">#&gt;  [33] DelayedArray_0.29.0         BiocParallel_1.37.0        </span></span>
+<span><span class="co">#&gt;  [35] broom_1.0.5                 parallel_4.4.0             </span></span>
+<span><span class="co">#&gt;  [37] R6_2.5.1                    bslib_0.6.1                </span></span>
+<span><span class="co">#&gt;  [39] stringi_1.8.3               limma_3.59.1               </span></span>
+<span><span class="co">#&gt;  [41] car_3.1-2                   GenomicRanges_1.55.1       </span></span>
+<span><span class="co">#&gt;  [43] jquerylib_0.1.4             Rcpp_1.0.11                </span></span>
+<span><span class="co">#&gt;  [45] bookdown_0.37               SummarizedExperiment_1.33.1</span></span>
+<span><span class="co">#&gt;  [47] knitr_1.45                  IRanges_2.37.0             </span></span>
+<span><span class="co">#&gt;  [49] BiocBaseUtils_1.5.0         Matrix_1.6-4               </span></span>
+<span><span class="co">#&gt;  [51] splines_4.4.0               tidyselect_1.2.0           </span></span>
+<span><span class="co">#&gt;  [53] abind_1.4-5                 yaml_2.3.8                 </span></span>
+<span><span class="co">#&gt;  [55] codetools_0.2-19            curl_5.2.0                 </span></span>
+<span><span class="co">#&gt;  [57] geneset_0.2.7               lattice_0.22-5             </span></span>
+<span><span class="co">#&gt;  [59] tibble_3.2.1                Biobase_2.63.0             </span></span>
+<span><span class="co">#&gt;  [61] withr_2.5.2                 evaluate_0.23              </span></span>
+<span><span class="co">#&gt;  [63] BiocFileCache_2.11.1        pillar_1.9.0               </span></span>
+<span><span class="co">#&gt;  [65] BiocManager_1.30.22         ggpubr_0.6.0               </span></span>
+<span><span class="co">#&gt;  [67] filelock_1.0.3              MatrixGenerics_1.15.0      </span></span>
+<span><span class="co">#&gt;  [69] carData_3.0-5               stats4_4.4.0               </span></span>
+<span><span class="co">#&gt;  [71] generics_0.1.3              RCurl_1.98-1.13            </span></span>
+<span><span class="co">#&gt;  [73] S4Vectors_0.41.2            ggplot2_3.4.4              </span></span>
+<span><span class="co">#&gt;  [75] munsell_0.5.0               scales_1.3.0               </span></span>
+<span><span class="co">#&gt;  [77] glue_1.6.2                  tools_4.4.0                </span></span>
+<span><span class="co">#&gt;  [79] data.table_1.14.10          fgsea_1.29.0               </span></span>
+<span><span class="co">#&gt;  [81] locfit_1.5-9.8              ggsignif_0.6.4             </span></span>
+<span><span class="co">#&gt;  [83] fastmatch_1.1-4             cowplot_1.1.1              </span></span>
+<span><span class="co">#&gt;  [85] grid_4.4.0                  tidyr_1.3.0                </span></span>
+<span><span class="co">#&gt;  [87] edgeR_4.1.3                 colorspace_2.1-0           </span></span>
+<span><span class="co">#&gt;  [89] GenomeInfoDbData_1.2.11     cli_3.6.2                  </span></span>
+<span><span class="co">#&gt;  [91] fansi_1.0.6                 S4Arrays_1.3.1             </span></span>
+<span><span class="co">#&gt;  [93] dplyr_1.1.4                 Rgraphviz_2.47.0           </span></span>
+<span><span class="co">#&gt;  [95] gtable_0.3.4                rstatix_0.7.2              </span></span>
+<span><span class="co">#&gt;  [97] sass_0.4.8                  digest_0.6.33              </span></span>
+<span><span class="co">#&gt;  [99] BiocGenerics_0.49.1         SparseArray_1.3.1          </span></span>
+<span><span class="co">#&gt; [101] farver_2.1.1                memoise_2.0.1              </span></span>
+<span><span class="co">#&gt; [103] htmltools_0.5.7             lifecycle_1.0.4            </span></span>
+<span><span class="co">#&gt; [105] httr_1.4.7                  statmod_1.5.0              </span></span>
+<span><span class="co">#&gt; [107] bit64_4.0.5</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
