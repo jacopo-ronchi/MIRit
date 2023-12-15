@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="pandoc">
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
-<meta name="date" content="2023-12-13">
+<meta name="date" content="2023-12-15">
 <title>Integrate miRNA and gene expression data with MIRit</title>
 <script src="MIRit_files/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="MIRit_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
@@ -343,11 +343,11 @@ function toggle_visibility(id1) {
 <p class="author-name">Jacopo Ronchi<span class="affil-mark">1*</span></p>
 <p class="author-affiliation"><span class="affil-mark">1</span>University of Milano-Bicocca, Italy</p>
 <p class="author-email"><span class="affil-mark">*</span><a href="mailto:jacopo.ronchi@unimib.it">jacopo.ronchi@unimib.it</a></p>
-<h4 class="date">13 December 2023</h4>
+<h4 class="date">15 December 2023</h4>
 <h4 class="abstract">Abstract</h4>
 <p>In this vignette, we are going to see how to use MIRit for investigating the compromised miRNA-gene regulatory networks in thyroid cancer. In particular, an RNA-Seq experiment will be used as an example to demonstrate how to perform an integrative analysis with MIRit, including differential expression analysis, functional enrichment and characterization, correlation analysis and, lastly, the construction and visualization of the impaired miRNAs regulatory axes within biological pathways.</p>
 <h4 class="package">Package</h4>
-<p>MIRit 0.99.1</p>
+<p>MIRit 0.99.2</p>
 
 </div>
 
@@ -906,7 +906,7 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <span><span class="co">#&gt; Reading KEGG gene-sets from cache...</span></span>
 <span><span class="co">#&gt; Ranking genes based on signed.pval...</span></span>
 <span><span class="co">#&gt; Performing gene-set enrichment analysis (GSEA)...</span></span>
-<span><span class="co">#&gt; GSEA reported 3 significantly enriched terms.</span></span></code></pre></div>
+<span><span class="co">#&gt; GSEA reported 2 significantly enriched terms.</span></span></code></pre></div>
 <p>In this case, the <code><a href="../reference/enrichGenes.html">enrichGenes()</a></code> function returns a single object of class <code>FunctionalEnrichment</code>, containing GSEA results.</p>
 </div>
 <div class="section level3" number="4.5">
@@ -946,9 +946,9 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <td align="left">Protein processing in endoplasmic reticulum</td>
 <td align="right">0</td>
 <td align="right">0.01</td>
-<td align="right">0.54</td>
+<td align="right">0.52</td>
 <td align="right">-0.54</td>
-<td align="right">-1.86</td>
+<td align="right">-1.87</td>
 <td align="right">55</td>
 <td align="left">BCL2, HY….</td>
 </tr>
@@ -956,21 +956,11 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <td align="left">Thyroid hormone synthesis</td>
 <td align="right">0</td>
 <td align="right">0.01</td>
-<td align="right">0.54</td>
+<td align="right">0.52</td>
 <td align="right">-0.67</td>
-<td align="right">-2.01</td>
+<td align="right">-1.98</td>
 <td align="right">27</td>
 <td align="left">SLC26A4,….</td>
-</tr>
-<tr class="odd">
-<td align="left">Coronavirus disease - COVID-19</td>
-<td align="right">0</td>
-<td align="right">0.05</td>
-<td align="right">0.48</td>
-<td align="right">-0.45</td>
-<td align="right">-1.67</td>
-<td align="right">85</td>
-<td align="left">JUN, RPL….</td>
 </tr>
 </tbody>
 </table></div>
@@ -1451,7 +1441,7 @@ Figure 9: <span class="caption-title">Impaired miRNA-mRNA regulatory network pre
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] MIRit_0.99.1     BiocStyle_2.31.0</span></span>
+<span><span class="co">#&gt; [1] MIRit_0.99.2     BiocStyle_2.31.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;   [1] DBI_1.1.3                   bitops_1.0-7               </span></span>
@@ -1468,7 +1458,7 @@ Figure 9: <span class="caption-title">Impaired miRNA-mRNA regulatory network pre
 <span><span class="co">#&gt;  [23] purrr_1.0.2                 bit_4.0.5                  </span></span>
 <span><span class="co">#&gt;  [25] xfun_0.41                   MultiAssayExperiment_1.29.0</span></span>
 <span><span class="co">#&gt;  [27] zlibbioc_1.49.0             cachem_1.0.8               </span></span>
-<span><span class="co">#&gt;  [29] GenomeInfoDb_1.39.1         jsonlite_1.8.8             </span></span>
+<span><span class="co">#&gt;  [29] GenomeInfoDb_1.39.2         jsonlite_1.8.8             </span></span>
 <span><span class="co">#&gt;  [31] blob_1.2.4                  highr_0.10                 </span></span>
 <span><span class="co">#&gt;  [33] DelayedArray_0.29.0         BiocParallel_1.37.0        </span></span>
 <span><span class="co">#&gt;  [35] broom_1.0.5                 parallel_4.4.0             </span></span>
@@ -1495,7 +1485,7 @@ Figure 9: <span class="caption-title">Impaired miRNA-mRNA regulatory network pre
 <span><span class="co">#&gt;  [77] glue_1.6.2                  tools_4.4.0                </span></span>
 <span><span class="co">#&gt;  [79] data.table_1.14.10          fgsea_1.29.0               </span></span>
 <span><span class="co">#&gt;  [81] locfit_1.5-9.8              ggsignif_0.6.4             </span></span>
-<span><span class="co">#&gt;  [83] fastmatch_1.1-4             cowplot_1.1.1              </span></span>
+<span><span class="co">#&gt;  [83] fastmatch_1.1-4             cowplot_1.1.2              </span></span>
 <span><span class="co">#&gt;  [85] grid_4.4.0                  tidyr_1.3.0                </span></span>
 <span><span class="co">#&gt;  [87] edgeR_4.1.3                 colorspace_2.1-0           </span></span>
 <span><span class="co">#&gt;  [89] GenomeInfoDbData_1.2.11     cli_3.6.2                  </span></span>
