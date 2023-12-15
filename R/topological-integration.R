@@ -87,12 +87,13 @@
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-preparePathways <- function(mirnaObj,
-    database = "KEGG",
-    organism = "Homo sapiens",
-    minPc = 10,
-    size = NULL,
-    BPPARAM = bpparam()) {
+preparePathways <- function(
+        mirnaObj,
+        database = "KEGG",
+        organism = "Homo sapiens",
+        minPc = 10,
+        size = NULL,
+        BPPARAM = bpparam()) {
     ## input checks
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -366,15 +367,14 @@ preparePathways <- function(mirnaObj,
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-topologicalAnalysis <- function(
-        mirnaObj,
-        pathways,
-        pCutoff = 0.05,
-        pAdjustment = "max-T",
-        nPerm = 10000,
-        progress = FALSE,
-        tasks = 0,
-        BPPARAM = bpparam()) {
+topologicalAnalysis <- function(mirnaObj,
+    pathways,
+    pCutoff = 0.05,
+    pAdjustment = "max-T",
+    nPerm = 10000,
+    progress = FALSE,
+    tasks = 0,
+    BPPARAM = bpparam()) {
     ## input checks
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -480,7 +480,6 @@ topologicalAnalysis <- function(
     permVec <- rep(randomVec, each = length(pathways))
 
     ## add a functional progress bar for parallel computation
-    bpOps <- list()
     if (progress == TRUE) {
         if (hasMethod("bpprogressbar<-",
             signature = c(class(BPPARAM), "logical")
@@ -488,7 +487,15 @@ topologicalAnalysis <- function(
             hasMethod("bptasks<-",
                 signature = c(class(BPPARAM), "integer")
             )) {
-            bpOps <- bpoptions(tasks = tasks, progressbar = TRUE)
+            ## add the progress bar to the backend
+            pbar <- bpprogressbar(BPPARAM)
+            bpprogressbar(BPPARAM) <- TRUE
+            on.exit(bpprogressbar(BPPARAM) <- pbar, add = TRUE)
+
+            ## set the desired number of tasks
+            tk <- bptasks(BPPARAM)
+            bptasks(BPPARAM) <- tasks * bpnworkers(BPPARAM)
+            on.exit(bptasks(BPPARAM) <- tk, add = TRUE)
         } else {
             warning("Unable to show a progress bar for a BiocParallel backend ",
                 "of type ", class(BPPARAM)[1],
@@ -506,7 +513,7 @@ topologicalAnalysis <- function(
             edges = pathway@graphData$interactions,
             weights = pathway@graphData$eW
         )
-    }, paths, permVec, BPPARAM = BPPARAM, BPOPTIONS = bpOps)
+    }, paths, permVec, BPPARAM = BPPARAM)
 
     ## split permuted scores according to pathways
     permList <- split(permScores, names(paths))
@@ -595,8 +602,9 @@ topologicalAnalysis <- function(
 
 
 ## helper function for creating miRNA augmented pathways
-preparePathways.internal <- function(database, org, targ, features,
-    minPc, size, BPPARAM) {
+preparePathways.internal <- function(
+        database, org, targ, features,
+        minPc, size, BPPARAM) {
     ## load cache
     bfc <- .get_cache()
 
@@ -610,8 +618,10 @@ preparePathways.internal <- function(database, org, targ, features,
     } else {
         ## download pathways from the specified database
         message("Downloading pathways from ", database, " database...")
-        pathDb <- graphite::pathways(species = org,
-                                     database = tolower(database))
+        pathDb <- graphite::pathways(
+            species = org,
+            database = tolower(database)
+        )
 
         ## retrieve the appropriate organism database
         dbName <- graphite:::selectDb(org)
@@ -622,7 +632,8 @@ preparePathways.internal <- function(database, org, targ, features,
                 stop("The ", dbName, " package is not installed. Install it ",
                     "before runnning this function through: ",
                     paste("`BiocManager::install(\"", dbName, "\")`.",
-                          sep = ""),
+                        sep = ""
+                    ),
                     call. = FALSE
                 )
             }
@@ -710,9 +721,8 @@ preparePathways.internal <- function(database, org, targ, features,
 
 
 ## helper function for adding miRNA-target pairs to network objects
-augmentPathway <- function(
-        pathway,
-        targets) {
+augmentPathway <- function(pathway,
+    targets) {
     ## convert pathway to a graph network
     pathGraph <- graphite::pathwayGraph(pathway = pathway)
     graph::nodes(pathGraph) <- gsub("SYMBOL:", "", graph::nodes(pathGraph))

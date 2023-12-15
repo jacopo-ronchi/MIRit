@@ -180,31 +180,32 @@ NULL
 
 #' @describeIn deAnalysis Perform differential expression analysis for miRNAs
 #' @export
-performMirnaDE <- function(mirnaObj,
-    group,
-    contrast,
-    design,
-    method = "edgeR",
-    logFC = 1,
-    pCutoff = 0.05,
-    pAdjustment = "fdr",
-    filterByExpr.args = list(),
-    calcNormFactors.args = list(),
-    estimateDisp.args = list(robust = TRUE),
-    glmQLFit.args = list(),
-    glmQLFTest.args = list(),
-    DESeq.args = list(),
-    useVoomWithQualityWeights = TRUE,
-    voom.args = list(),
-    lmFit.args = list(),
-    eBayes.args = list(),
-    useArrayWeights = TRUE,
-    useWsva = FALSE,
-    wsva.args = list(),
-    arrayWeights.args = list(),
-    useDuplicateCorrelation = FALSE,
-    correlationBlockVariable = NULL,
-    duplicateCorrelation.args = list()) {
+performMirnaDE <- function(
+        mirnaObj,
+        group,
+        contrast,
+        design,
+        method = "edgeR",
+        logFC = 1,
+        pCutoff = 0.05,
+        pAdjustment = "fdr",
+        filterByExpr.args = list(),
+        calcNormFactors.args = list(),
+        estimateDisp.args = list(robust = TRUE),
+        glmQLFit.args = list(),
+        glmQLFTest.args = list(),
+        DESeq.args = list(),
+        useVoomWithQualityWeights = TRUE,
+        voom.args = list(),
+        lmFit.args = list(),
+        eBayes.args = list(),
+        useArrayWeights = TRUE,
+        useWsva = FALSE,
+        wsva.args = list(),
+        arrayWeights.args = list(),
+        useDuplicateCorrelation = FALSE,
+        correlationBlockVariable = NULL,
+        duplicateCorrelation.args = list()) {
     ## perform differential expression analyis for miRNAs
     mirnaObj <- performDE(
         assay = "miRNAs",
@@ -245,31 +246,32 @@ performMirnaDE <- function(mirnaObj,
 
 #' @describeIn deAnalysis Perform differential expression analysis for genes
 #' @export
-performGeneDE <- function(mirnaObj,
-    group,
-    contrast,
-    design,
-    method = "edgeR",
-    logFC = 1,
-    pCutoff = 0.05,
-    pAdjustment = "fdr",
-    filterByExpr.args = list(),
-    calcNormFactors.args = list(),
-    estimateDisp.args = list(robust = TRUE),
-    glmQLFit.args = list(),
-    glmQLFTest.args = list(),
-    DESeq.args = list(),
-    useVoomWithQualityWeights = TRUE,
-    voom.args = list(),
-    lmFit.args = list(),
-    eBayes.args = list(),
-    useArrayWeights = TRUE,
-    useWsva = FALSE,
-    wsva.args = list(),
-    arrayWeights.args = list(),
-    useDuplicateCorrelation = FALSE,
-    correlationBlockVariable = NULL,
-    duplicateCorrelation.args = list()) {
+performGeneDE <- function(
+        mirnaObj,
+        group,
+        contrast,
+        design,
+        method = "edgeR",
+        logFC = 1,
+        pCutoff = 0.05,
+        pAdjustment = "fdr",
+        filterByExpr.args = list(),
+        calcNormFactors.args = list(),
+        estimateDisp.args = list(robust = TRUE),
+        glmQLFit.args = list(),
+        glmQLFTest.args = list(),
+        DESeq.args = list(),
+        useVoomWithQualityWeights = TRUE,
+        voom.args = list(),
+        lmFit.args = list(),
+        eBayes.args = list(),
+        useArrayWeights = TRUE,
+        useWsva = FALSE,
+        wsva.args = list(),
+        arrayWeights.args = list(),
+        useDuplicateCorrelation = FALSE,
+        correlationBlockVariable = NULL,
+        duplicateCorrelation.args = list()) {
     ## perform differential expression analyis for genes
     mirnaObj <- performDE(
         assay = "genes",
@@ -309,33 +311,32 @@ performGeneDE <- function(mirnaObj,
 
 
 ## internal function to perform differential expression analysis
-performDE <- function(
-        assay,
-        mirnaObj,
-        group,
-        contrast,
-        design,
-        method = "edgeR",
-        logFC = 1,
-        pCutoff = 0.05,
-        pAdjustment = "fdr",
-        filterByExpr.args = list(),
-        calcNormFactors.args = list(),
-        estimateDisp.args = list(robust = TRUE),
-        glmQLFit.args = list(),
-        glmQLFTest.args = list(),
-        DESeq.args = list(),
-        useVoomWithQualityWeights = TRUE,
-        voom.args = list(),
-        lmFit.args = list(),
-        eBayes.args = list(),
-        useArrayWeights = TRUE,
-        useWsva = FALSE,
-        wsva.args = list(),
-        arrayWeights.args = list(),
-        useDuplicateCorrelation = FALSE,
-        correlationBlockVariable = NULL,
-        duplicateCorrelation.args = list()) {
+performDE <- function(assay,
+    mirnaObj,
+    group,
+    contrast,
+    design,
+    method = "edgeR",
+    logFC = 1,
+    pCutoff = 0.05,
+    pAdjustment = "fdr",
+    filterByExpr.args = list(),
+    calcNormFactors.args = list(),
+    estimateDisp.args = list(robust = TRUE),
+    glmQLFit.args = list(),
+    glmQLFTest.args = list(),
+    DESeq.args = list(),
+    useVoomWithQualityWeights = TRUE,
+    voom.args = list(),
+    lmFit.args = list(),
+    eBayes.args = list(),
+    useArrayWeights = TRUE,
+    useWsva = FALSE,
+    wsva.args = list(),
+    arrayWeights.args = list(),
+    useDuplicateCorrelation = FALSE,
+    correlationBlockVariable = NULL,
+    duplicateCorrelation.args = list()) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -624,20 +625,19 @@ performDE <- function(
 
 
 ## perform differential expression with edgeR
-edgeR.DE <- function(
-        counts,
-        group,
-        contrast,
-        meta,
-        design,
-        logFC,
-        pCutoff,
-        pAdjustment,
-        filterByExpr.args,
-        calcNormFactors.args,
-        estimateDisp.args,
-        glmQLFit.args,
-        glmQLFTest.args) {
+edgeR.DE <- function(counts,
+    group,
+    contrast,
+    meta,
+    design,
+    logFC,
+    pCutoff,
+    pAdjustment,
+    filterByExpr.args,
+    calcNormFactors.args,
+    estimateDisp.args,
+    glmQLFit.args,
+    glmQLFTest.args) {
     ## set the user-defined contrast character
     defCon <- contrast
 
@@ -757,16 +757,15 @@ edgeR.DE <- function(
 
 
 ## perform differential expression with DESeq2
-DESeq2.DE <- function(
-        counts,
-        group,
-        contrast,
-        meta,
-        design,
-        logFC,
-        pCutoff,
-        pAdjustment,
-        DESeq.args) {
+DESeq2.DE <- function(counts,
+    group,
+    contrast,
+    meta,
+    design,
+    logFC,
+    pCutoff,
+    pAdjustment,
+    DESeq.args) {
     ## set the user-defined contrast character
     defCon <- contrast
 
@@ -833,21 +832,20 @@ DESeq2.DE <- function(
 
 
 ## perform differential expression with limma-voom
-voom.DE <- function(
-        counts,
-        group,
-        contrast,
-        meta,
-        design,
-        logFC,
-        pCutoff,
-        pAdjustment,
-        useVoomWithQualityWeights,
-        filterByExpr.args,
-        calcNormFactors.args,
-        voom.args,
-        lmFit.args,
-        eBayes.args) {
+voom.DE <- function(counts,
+    group,
+    contrast,
+    meta,
+    design,
+    logFC,
+    pCutoff,
+    pAdjustment,
+    useVoomWithQualityWeights,
+    filterByExpr.args,
+    calcNormFactors.args,
+    voom.args,
+    lmFit.args,
+    eBayes.args) {
     ## set the user-defined contrast character
     defCon <- contrast
 
@@ -970,24 +968,23 @@ voom.DE <- function(
 
 
 ## perform differential expression with limma
-limma.DE <- function(
-        expr,
-        group,
-        contrast,
-        meta,
-        design,
-        logFC,
-        pCutoff,
-        pAdjustment,
-        useArrayWeights,
-        useWsva,
-        wsva.args,
-        arrayWeights.args,
-        useDuplicateCorrelation,
-        correlationBlockVariable,
-        duplicateCorrelation.args,
-        lmFit.args,
-        eBayes.args) {
+limma.DE <- function(expr,
+    group,
+    contrast,
+    meta,
+    design,
+    logFC,
+    pCutoff,
+    pAdjustment,
+    useArrayWeights,
+    useWsva,
+    wsva.args,
+    arrayWeights.args,
+    useDuplicateCorrelation,
+    correlationBlockVariable,
+    duplicateCorrelation.args,
+    lmFit.args,
+    eBayes.args) {
     ## set the user-defined contrast character
     defCon <- contrast
 
@@ -1206,29 +1203,9 @@ limma.DE <- function(
 #'     samplesMetadata = meta, pairedSamples = TRUE
 #' )
 #'
-#' # perform miRNA DE with DESeq2 separately
-#' dds_m <- DESeq2::DESeqDataSetFromMatrix(
-#'     countData = mirnaCounts, colData = meta, design = ~ 0 + disease + patient
-#' )
-#' dds_m <- DESeq2::DESeq(dds_m)
-#' de_m <- as.data.frame(DESeq2::results(dds_m,
-#'     contrast = c("disease", "PTC", "NTH"), pAdjustMethod = "fdr"
-#' ))
-#'
-#' # perform gene DE with DESeq2 separately
-#' dds_g <- DESeq2::DESeqDataSetFromMatrix(
-#'     countData = geneCounts, colData = meta, design = ~ 0 + disease + patient
-#' )
-#' dds_g <- DESeq2::DESeq(dds_g)
-#' de_g <- as.data.frame(DESeq2::results(dds_g,
-#'     contrast = c("disease", "PTC", "NTH"), pAdjustMethod = "fdr"
-#' ))
-#'
-#' # prepare DE tables
-#' de_m$ID <- rownames(de_m)
-#' de_m <- na.omit(de_m)
-#' de_g$ID <- rownames(de_g)
-#' de_g <- na.omit(de_g)
+#' # load example tables with differential expression results
+#' de_m <- mirnaDE(object = loadExamples(), onlySignificant = FALSE)
+#' de_g <- geneDE(object = loadExamples(), onlySignificant = FALSE)
 #'
 #' # add DE results to MirnaExperiment object
 #' obj <- addDifferentialExpression(obj, de_m, de_g,
@@ -1240,16 +1217,15 @@ limma.DE <- function(
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-addDifferentialExpression <- function(
-        mirnaObj,
-        mirnaDE = NULL,
-        geneDE = NULL,
-        mirna.logFC = 1,
-        mirna.pCutoff = 0.05,
-        mirna.pAdjustment = "fdr",
-        gene.logFC = 1,
-        gene.pCutoff = 0.05,
-        gene.pAdjustment = "fdr") {
+addDifferentialExpression <- function(mirnaObj,
+    mirnaDE = NULL,
+    geneDE = NULL,
+    mirna.logFC = 1,
+    mirna.pCutoff = 0.05,
+    mirna.pAdjustment = "fdr",
+    gene.logFC = 1,
+    gene.pCutoff = 0.05,
+    gene.pAdjustment = "fdr") {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",

@@ -424,18 +424,17 @@ validateCategories <- function(database, category, organism) {
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-enrichGenes <- function(
-        mirnaObj,
-        method = "GSEA",
-        database = "GO",
-        category = NULL,
-        organism = "Homo sapiens",
-        pCutoff = 0.05,
-        pAdjustment = "fdr",
-        minSize = 10L,
-        maxSize = 500L,
-        rankMetric = "signed.pval",
-        eps = 1e-50) {
+enrichGenes <- function(mirnaObj,
+    method = "GSEA",
+    database = "GO",
+    category = NULL,
+    organism = "Homo sapiens",
+    pCutoff = 0.05,
+    pAdjustment = "fdr",
+    minSize = 10L,
+    maxSize = 500L,
+    rankMetric = "signed.pval",
+    eps = 1e-50) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -645,16 +644,15 @@ enrichGenes <- function(
 
 
 ## perform a simple over-representation analysis (ORA)
-oraInternal <- function(
-        mirnaObj,
-        geneSet,
-        pCutoff,
-        pAdjustment,
-        minSize,
-        maxSize,
-        dataInfo,
-        organism,
-        integrated = FALSE) {
+oraInternal <- function(mirnaObj,
+    geneSet,
+    pCutoff,
+    pAdjustment,
+    minSize,
+    maxSize,
+    dataInfo,
+    organism,
+    integrated = FALSE) {
     ## retrieve upregulated and downregulated genes/integrated targets
     if (integrated == TRUE) {
         up <- selectTargets(mirnaObj, miRNA.Direction = "downregulated")
@@ -746,17 +744,16 @@ oraInternal <- function(
 
 
 ## perform a gene-set enrichment analysis (GSEA)
-gseaInternal <- function(
-        mirnaObj,
-        geneSet,
-        pCutoff,
-        pAdjustment,
-        minSize,
-        maxSize,
-        dataInfo,
-        organism,
-        rankMetric,
-        eps) {
+gseaInternal <- function(mirnaObj,
+    geneSet,
+    pCutoff,
+    pAdjustment,
+    minSize,
+    maxSize,
+    dataInfo,
+    organism,
+    rankMetric,
+    eps) {
     ## retrieve gene differential expression
     de <- geneDE(mirnaObj, onlySignificant = FALSE)
 
@@ -824,15 +821,14 @@ gseaInternal <- function(
 
 ## perform a competitive gene set test accounting for inter-gene
 ## correlation (CAMERA)
-cameraInternal <- function(
-        mirnaObj,
-        geneSet,
-        pCutoff,
-        pAdjustment,
-        minSize,
-        maxSize,
-        dataInfo,
-        organism) {
+cameraInternal <- function(mirnaObj,
+    geneSet,
+    pCutoff,
+    pAdjustment,
+    minSize,
+    maxSize,
+    dataInfo,
+    organism) {
     ## determine gene set sizes
     sizes <- unlist(lapply(geneSet, length))
 
@@ -1051,15 +1047,14 @@ cameraInternal <- function(
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-enrichTargets <- function(
-        mirnaObj,
-        database = "GO",
-        category = NULL,
-        organism = "Homo sapiens",
-        pCutoff = 0.05,
-        pAdjustment = "fdr",
-        minSize = 10L,
-        maxSize = 500L) {
+enrichTargets <- function(mirnaObj,
+    database = "GO",
+    category = NULL,
+    organism = "Homo sapiens",
+    pCutoff = 0.05,
+    pAdjustment = "fdr",
+    minSize = 10L,
+    maxSize = 500L) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",

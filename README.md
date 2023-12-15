@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Devel
-version](https://img.shields.io/badge/devel%20version-0.99.2-blue.svg)](https://github.com/jacopo-ronchi/MIRit)
+version](https://img.shields.io/badge/devel%20version-0.99.3-blue.svg)](https://github.com/jacopo-ronchi/MIRit)
 [![GitHub
 issues](https://img.shields.io/github/issues/jacopo-ronchi/MIRit)](https://github.com/jacopo-ronchi/MIRit/issues)
 [![GitHub
@@ -113,8 +113,6 @@ contributing to this project, you agree to abide by its terms.
 - The documentation is formatted thanks to
   *[devtools](https://CRAN.R-project.org/package=devtools)* and
   *[roxygen2](https://CRAN.R-project.org/package=roxygen2)*.
-
-For more details, check the `dev` directory.
 
 This package was developed using
 *[biocthis](https://bioconductor.org/packages/3.17/biocthis)*.

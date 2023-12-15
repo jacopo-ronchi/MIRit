@@ -161,9 +161,8 @@ searchDisease <- function(diseaseName) {
 #'
 #' @importFrom rlang .data
 #' @export
-findMirnaSNPs <- function(
-        mirnaObj,
-        diseaseEFO) {
+findMirnaSNPs <- function(mirnaObj,
+    diseaseEFO) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -348,9 +347,8 @@ findMirnaSNPs <- function(
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-getEvidence <- function(
-        variant,
-        diseaseEFO) {
+getEvidence <- function(variant,
+    diseaseEFO) {
     ## check inputs
     if (!is.character(variant) | length(variant) != 1) {
         stop("'variant' should be a character with the ID of a SNP.",

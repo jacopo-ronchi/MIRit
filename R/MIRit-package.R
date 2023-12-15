@@ -10,6 +10,7 @@
 #' @importFrom BiocParallel bpprogressbar<-
 #' @importFrom BiocParallel bptasks
 #' @importFrom BiocParallel bptasks<-
+#' @importFrom BiocParallel bpnworkers
 #' @importFrom graphics arrows
 #' @importFrom graphics axis
 #' @importFrom graphics image

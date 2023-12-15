@@ -439,11 +439,10 @@ setValidity("MirnaExperiment", function(object) {
 #'
 #' @export
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
-MirnaExperiment <- function(
-        mirnaExpr,
-        geneExpr,
-        samplesMetadata,
-        pairedSamples = TRUE) {
+MirnaExperiment <- function(mirnaExpr,
+    geneExpr,
+    samplesMetadata,
+    pairedSamples = TRUE) {
     ## check expression matrices validity
     if (!is.matrix(mirnaExpr) &
         canCoerce(mirnaExpr, "matrix") == FALSE) {

@@ -153,25 +153,24 @@
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-visualizeNetwork <- function(
-        object,
-        pathway,
-        algorithm = "dot",
-        fontsize = 14,
-        lfcScale = c("royalblue", "white", "red"),
-        nodeBorderCol = "black",
-        nodeTextCol = "black",
-        edgeCol = "darkgrey",
-        edgeWidth = 1,
-        subgraph = NULL,
-        highlightNodes = NULL,
-        highlightCol = "gold",
-        highlightWidth = 2,
-        legendColorbar = TRUE,
-        legendInteraction = TRUE,
-        title = NULL,
-        titleCex = 2,
-        titleFace = 1) {
+visualizeNetwork <- function(object,
+    pathway,
+    algorithm = "dot",
+    fontsize = 14,
+    lfcScale = c("royalblue", "white", "red"),
+    nodeBorderCol = "black",
+    nodeTextCol = "black",
+    edgeCol = "darkgrey",
+    edgeWidth = 1,
+    subgraph = NULL,
+    highlightNodes = NULL,
+    highlightCol = "gold",
+    highlightWidth = 2,
+    legendColorbar = TRUE,
+    legendInteraction = TRUE,
+    title = NULL,
+    titleCex = 2,
+    titleFace = 1) {
     ## input checks
     if (!is(object, "IntegrativePathwayAnalysis")) {
         stop("'object' should be of class IntegrativePathwayAnalysis! ",
@@ -629,12 +628,11 @@ setColorScale <- function(values, cols, numColors) {
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-enrichmentDotplot <- function(
-        enrichment,
-        showTerms = 10,
-        showTermsParam = "ratio",
-        splitDir = TRUE,
-        title = NULL) {
+enrichmentDotplot <- function(enrichment,
+    showTerms = 10,
+    showTermsParam = "ratio",
+    splitDir = TRUE,
+    title = NULL) {
     ## check inputs
     if (!is(enrichment, "FunctionalEnrichment")) {
         stop("'enrichment' should be of class FunctionalEnrichment!",
@@ -815,12 +813,11 @@ enrichmentDotplot <- function(
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-enrichmentBarplot <- function(
-        enrichment,
-        showTerms = 10,
-        showTermsParam = "ratio",
-        splitDir = TRUE,
-        title = NULL) {
+enrichmentBarplot <- function(enrichment,
+    showTerms = 10,
+    showTermsParam = "ratio",
+    splitDir = TRUE,
+    title = NULL) {
     ## check inputs
     if (!is(enrichment, "FunctionalEnrichment")) {
         stop("'enrichment' should be of class FunctionalEnrichment!",
@@ -986,11 +983,10 @@ enrichmentBarplot <- function(
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-gseaRidgeplot <- function(
-        enrichment,
-        showTerms = 10,
-        showTermsParam = "padj",
-        title = NULL) {
+gseaRidgeplot <- function(enrichment,
+    showTerms = 10,
+    showTermsParam = "padj",
+    title = NULL) {
     if (!is(enrichment, "FunctionalEnrichment")) {
         stop("'enrichment' should be of class FunctionalEnrichment!",
             call. = FALSE
@@ -1184,15 +1180,14 @@ gseaRidgeplot <- function(
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-gseaPlot <- function(
-        enrichment,
-        pathway,
-        showTitle = TRUE,
-        rankingMetric = FALSE,
-        lineColor = "green",
-        lineSize = 1,
-        vlineColor = "red",
-        vlineSize = 0.6) {
+gseaPlot <- function(enrichment,
+    pathway,
+    showTitle = TRUE,
+    rankingMetric = FALSE,
+    lineColor = "green",
+    lineSize = 1,
+    vlineColor = "red",
+    vlineSize = 0.6) {
     ## check inputs
     if (!is(enrichment, "FunctionalEnrichment")) {
         stop("'enrichment' should be of class FunctionalEnrichment!",
@@ -1419,12 +1414,13 @@ theme_enr <- function() {
 
 ## helper function for the definition of a ggplot2 theme for MIRit
 #' @import ggplot2
-theme.MIRit <- function(base_size = 12,
-    base_family = "",
-    legend = "top",
-    borderWidth = 1,
-    allBorders = TRUE,
-    grid = FALSE) {
+theme.MIRit <- function(
+        base_size = 12,
+        base_family = "",
+        legend = "top",
+        borderWidth = 1,
+        allBorders = TRUE,
+        grid = FALSE) {
     ## set plot borders
     if (allBorders == TRUE) {
         br <- element_rect(
@@ -1526,17 +1522,16 @@ theme.MIRit <- function(base_size = 12,
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-mirVariantPlot <- function(
-        variantId,
-        snpAssociation,
-        showContext = FALSE,
-        showSequence = TRUE,
-        snpFill = "lightblue",
-        mirFill = "orange",
-        from = NULL,
-        to = NULL,
-        title = NULL,
-        ...) {
+mirVariantPlot <- function(variantId,
+    snpAssociation,
+    showContext = FALSE,
+    showSequence = TRUE,
+    snpFill = "lightblue",
+    mirFill = "orange",
+    from = NULL,
+    to = NULL,
+    title = NULL,
+    ...) {
     ## check inputs
     if (!is.character(variantId) |
         length(variantId) != 1 |
@@ -1852,25 +1847,24 @@ mirVariantPlot <- function(
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-plotCorrelation <- function(
-        mirnaObj,
-        mirna,
-        gene,
-        condition = NULL,
-        showCoeff = TRUE,
-        regression = TRUE,
-        useRanks = FALSE,
-        lineCol = "red",
-        lineType = "dashed",
-        lineWidth = 0.8,
-        pointSize = 3,
-        colorScale = NULL,
-        fontSize = 12,
-        fontFamily = "",
-        legend = "top",
-        borderWidth = 1,
-        allBorders = TRUE,
-        grid = TRUE) {
+plotCorrelation <- function(mirnaObj,
+    mirna,
+    gene,
+    condition = NULL,
+    showCoeff = TRUE,
+    regression = TRUE,
+    useRanks = FALSE,
+    lineCol = "red",
+    lineType = "dashed",
+    lineWidth = 0.8,
+    pointSize = 3,
+    colorScale = NULL,
+    fontSize = 12,
+    fontFamily = "",
+    legend = "top",
+    borderWidth = 1,
+    allBorders = TRUE,
+    grid = TRUE) {
     ## input checks
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -2371,25 +2365,24 @@ plotCorrelation <- function(
 #'
 #' @importFrom ggpubr mean_sd
 #' @export
-plotDE <- function(
-        mirnaObj,
-        features,
-        condition = NULL,
-        graph = "boxplot",
-        linear = TRUE,
-        showSignificance = TRUE,
-        starSig = TRUE,
-        pCol = "adj.P.Val",
-        sigLabelSize = 7,
-        digits = 3,
-        nameAsTitle = FALSE,
-        colorScale = NULL,
-        fontSize = 12,
-        fontFamily = "",
-        legend = "top",
-        borderWidth = 1,
-        allBorders = FALSE,
-        grid = FALSE) {
+plotDE <- function(mirnaObj,
+    features,
+    condition = NULL,
+    graph = "boxplot",
+    linear = TRUE,
+    showSignificance = TRUE,
+    starSig = TRUE,
+    pCol = "adj.P.Val",
+    sigLabelSize = 7,
+    digits = 3,
+    nameAsTitle = FALSE,
+    colorScale = NULL,
+    fontSize = 12,
+    fontFamily = "",
+    legend = "top",
+    borderWidth = 1,
+    allBorders = FALSE,
+    grid = FALSE) {
     ## input checks
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -2837,24 +2830,23 @@ plotDE <- function(
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-plotVolcano <- function(
-        mirnaObj,
-        assay,
-        labels = NULL,
-        boxedLabel = TRUE,
-        pointSize = 3,
-        pointAlpha = 0.4,
-        interceptWidth = 0.6,
-        interceptColor = "black",
-        interceptType = "dashed",
-        colorScale = c("blue", "grey", "red"),
-        title = NULL,
-        fontSize = 12,
-        fontFamily = "",
-        legend = "none",
-        borderWidth = 1,
-        allBorders = TRUE,
-        grid = FALSE) {
+plotVolcano <- function(mirnaObj,
+    assay,
+    labels = NULL,
+    boxedLabel = TRUE,
+    pointSize = 3,
+    pointAlpha = 0.4,
+    interceptWidth = 0.6,
+    interceptColor = "black",
+    interceptType = "dashed",
+    colorScale = c("blue", "grey", "red"),
+    title = NULL,
+    fontSize = 12,
+    fontFamily = "",
+    legend = "none",
+    borderWidth = 1,
+    allBorders = TRUE,
+    grid = FALSE) {
     ## input checks
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -3176,24 +3168,23 @@ plotVolcano <- function(
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-plotDimensions <- function(
-        mirnaObj,
-        assay,
-        condition = NULL,
-        dimensions = c(1, 2),
-        labels = FALSE,
-        boxedLabel = TRUE,
-        pointSize = 3,
-        pointAlpha = 1,
-        colorScale = NULL,
-        title = NULL,
-        fontSize = 12,
-        fontFamily = "",
-        legend = "top",
-        borderWidth = 1,
-        allBorders = TRUE,
-        grid = FALSE,
-        ...) {
+plotDimensions <- function(mirnaObj,
+    assay,
+    condition = NULL,
+    dimensions = c(1, 2),
+    labels = FALSE,
+    boxedLabel = TRUE,
+    pointSize = 3,
+    pointAlpha = 1,
+    colorScale = NULL,
+    title = NULL,
+    fontSize = 12,
+    fontFamily = "",
+    legend = "top",
+    borderWidth = 1,
+    allBorders = TRUE,
+    grid = FALSE,
+    ...) {
     ## input checks
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -3517,11 +3508,10 @@ plotDimensions <- function(
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-integrationDotplot <- function(
-        object,
-        showTerms = 10,
-        showTermsParam = "normalized.score",
-        title = NULL) {
+integrationDotplot <- function(object,
+    showTerms = 10,
+    showTermsParam = "normalized.score",
+    title = NULL) {
     ## check inputs
     if (!is(object, "IntegrativePathwayAnalysis")) {
         stop("'object' should be of class IntegrativePathwayAnalysis!",
