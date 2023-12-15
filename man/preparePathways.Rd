@@ -9,6 +9,7 @@ preparePathways(
   database = "KEGG",
   organism = "Homo sapiens",
   minPc = 10,
+  size = NULL,
   BPPARAM = bpparam()
 )
 }
@@ -27,6 +28,11 @@ Default specie is \verb{Homo sapiens}}
 \item{minPc}{The minimum percentage of measured features that a pathway must
 have for being considered in the analysis. Default is 10. See the \emph{details}
 section for additional information}
+
+\item{size}{An optional numeric vector of length 2, containing the minimum
+and maximum number of nodes for each pathway. For example, if
+\code{size = c(10, 150)}, all the pathways with less than 10 nodes and those with
+more than 150 nodes will be discarded. Default is NULL to keep all pathways}
 
 \item{BPPARAM}{The desired parallel computing behavior. This parameter
 defaults to \code{BiocParallel::bpparam()}, but this can be edited. See

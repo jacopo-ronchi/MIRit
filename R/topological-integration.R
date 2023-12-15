@@ -41,6 +41,10 @@
 #' @param minPc The minimum percentage of measured features that a pathway must
 #' have for being considered in the analysis. Default is 10. See the *details*
 #' section for additional information
+#' @param size An optional numeric vector of length 2, containing the minimum
+#' and maximum number of nodes for each pathway. For example, if
+#' `size = c(10, 150)`, all the pathways with less than 10 nodes and those with
+#' more than 150 nodes will be discarded. Default is NULL to keep all pathways
 #' @param BPPARAM The desired parallel computing behavior. This parameter
 #' defaults to `BiocParallel::bpparam()`, but this can be edited. See
 #' [BiocParallel::bpparam()] for information on parallel computing in R
@@ -83,12 +87,12 @@
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
-preparePathways <- function(
-        mirnaObj,
-        database = "KEGG",
-        organism = "Homo sapiens",
-        minPc = 10,
-        BPPARAM = bpparam()) {
+preparePathways <- function(mirnaObj,
+    database = "KEGG",
+    organism = "Homo sapiens",
+    minPc = 10,
+    size = NULL,
+    BPPARAM = bpparam()) {
     ## input checks
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -119,6 +123,21 @@ preparePathways <- function(
             "(default is 10)",
             call. = FALSE
         )
+    }
+    if (!is.null(size)) {
+        if (!is.numeric(size) |
+            any(size < 0) |
+            length(size) != 2 |
+            size[1] >= size[2]) {
+            stop("'size' must be a numeric vector of length 2 which specifies ",
+                "the minimum and maximum number of nodes that pathways ",
+                "must have in order to be considered. For example, ",
+                "'c(10, 150)' keeps all the pathways with a number of ",
+                "nodes between 10 and 150. Default is NULL to keep all ",
+                "the pathways.",
+                call. = FALSE
+            )
+        }
     }
 
     ## check if database is supported for the given specie
@@ -156,6 +175,7 @@ preparePathways <- function(
         targ = intTargets,
         features = features,
         minPc = minPc,
+        size = size,
         BPPARAM = BPPARAM
     )
 
@@ -174,7 +194,7 @@ preparePathways <- function(
         p
     })
 
-    ## returned miRNA-augmented pathways
+    ## return miRNA-augmented pathways
     return(graphList)
 }
 
@@ -575,9 +595,8 @@ topologicalAnalysis <- function(
 
 
 ## helper function for creating miRNA augmented pathways
-preparePathways.internal <- function(
-        database, org, targ, features,
-        minPc, BPPARAM) {
+preparePathways.internal <- function(database, org, targ, features,
+    minPc, size, BPPARAM) {
     ## load cache
     bfc <- .get_cache()
 
@@ -591,7 +610,8 @@ preparePathways.internal <- function(
     } else {
         ## download pathways from the specified database
         message("Downloading pathways from ", database, " database...")
-        pathDb <- graphite::pathways(species = org, database = tolower(database))
+        pathDb <- graphite::pathways(species = org,
+                                     database = tolower(database))
 
         ## retrieve the appropriate organism database
         dbName <- graphite:::selectDb(org)
@@ -601,14 +621,15 @@ preparePathways.internal <- function(
             if (!requireNamespace(dbName, quietly = TRUE)) {
                 stop("The ", dbName, " package is not installed. Install it ",
                     "before runnning this function through: ",
-                    paste("`BiocManager::install(\"", dbName, "\")`.", sep = ""),
+                    paste("`BiocManager::install(\"", dbName, "\")`.",
+                          sep = ""),
                     call. = FALSE
                 )
             }
         )
 
-        ## convert pathway identifiers to gene symbols by accessing OrgDb through
-        ## parallel workers
+        ## convert pathway identifiers to gene symbols by accessing OrgDb
+        ## through parallel workers
         message("Converting identifiers to gene symbols...")
         pathDb <- BiocParallel::bplapply(pathDb, function(path) {
             db <- getFromNamespace(dbName, dbName)
@@ -674,6 +695,11 @@ preparePathways.internal <- function(
         net
     })
     names(graphList) <- names(pathCov)
+
+    ## remove pathways with too many nodes or too few nodes
+    if (!is.null(size)) {
+        graphList <- graphList[cNodes >= size[1] & cNodes <= size[2]]
+    }
 
     ## return pathways
     return(graphList)
