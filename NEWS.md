@@ -1,3 +1,9 @@
+# MIRit 0.99.4
+
+After the implementation of the IS_BIOC_BUILD_MACHINE variable to the Single
+Package Builder (SPB), this version bump drives a new build to fix errors 
+during R CMD check on SPB.
+
 # MIRit 0.99.3
 
 This version fixes a bug in the `topologicalAnalysis()` function that
