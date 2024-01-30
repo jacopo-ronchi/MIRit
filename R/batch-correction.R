@@ -275,18 +275,21 @@ batchCorrection <- function(mirnaObj,
     ## extract the covariates to correct for
     sm <- sampleMap(mirnaObj)
     sm <- sm[sm$assay == assay, ]
+    meta <- colData(mirnaObj)
+    meta <- meta[meta$primary %in% sm$primary, ]
+    sm <- cbind(sm, meta, by = "primary")
     rownames(sm) <- sm$colname
     sm <- sm[colnames(mirnaObj[[assay]]), ]
     if (is.character(covariates)) {
         smCov <- sm[, covariates]
         allNumeric <- vapply(colnames(smCov),
-            function(x) is.numeric(smCov[, x]),
-            FUN.VALUE = logical(1)
+                             function(x) is.numeric(smCov[, x]),
+                             FUN.VALUE = logical(1)
         )
         if (any(allNumeric == FALSE)) {
             stop("'covariates' must only contain numeric variables! ",
-                "See ?batchCorrection",
-                call. = FALSE
+                 "See ?batchCorrection",
+                 call. = FALSE
             )
         }
         covariates <- as.matrix(smCov)

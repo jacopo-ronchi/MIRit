@@ -1,3 +1,9 @@
+# MIRit 0.99.5
+
+This update fixes a bug in the `batchCorrection()` function that prevented the
+correct use of this function with newer versions of the `MultiAssayExperiment`
+package.
+
 # MIRit 0.99.4
 
 After the implementation of the IS_BIOC_BUILD_MACHINE variable to the Single
