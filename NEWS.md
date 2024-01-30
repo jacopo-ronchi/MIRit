@@ -1,3 +1,8 @@
+# MIRit 0.99.6
+
+The testing suite has been redefined to allow different results for different
+versions of packages employed in differential expression analysis.
+
 # MIRit 0.99.5
 
 This update fixes a bug in the `batchCorrection()` function that prevented the

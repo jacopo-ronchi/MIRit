@@ -1,6 +1,6 @@
 Package: MIRit
 Title: Integrate microRNA and gene expression to decipher pathway complexity
-Version: 0.99.5
+Version: 0.99.6
 Date: 2023-11-23
 Authors@R: c(
     person("Jacopo", "Ronchi", email = "jacopo.ronchi@unimib.it",
