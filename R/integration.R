@@ -113,12 +113,6 @@
 #' # perform integration analysis with default settings
 #' obj <- mirnaIntegration(obj)
 #'
-#' # perform Kendall's correlation analysis with tau > 0.8 and p < 0.05
-#' obj <- mirnaIntegration(obj,
-#'     test = "correlation",
-#'     corMethod = "kendall", corCutoff = 0.8
-#' )
-#'
 #' @references
 #' Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015). “limma
 #' powers differential expression analyses for RNA-sequencing and microarray
@@ -664,7 +658,7 @@ optimization.helper <- function(p, Ns, moreExtremeMat) {
 
 
 
-## calculate p-values fro Boshloo's exact test
+## calculate p-values fro Boschloo's exact test
 boshloo.test <- function(data, npNumbers) {
     ## this implementation of the Boschloo's test is
     ## inspired by the Exact R package (Peter Calhoun)

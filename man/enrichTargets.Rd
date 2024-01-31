@@ -88,15 +88,6 @@ obj <- loadExamples()
 # perform enrichment analysis of integrated targets with DO
 targets_enrichment <- enrichTargets(obj, database = "DO")
 
-# extract enrichment results of downregulated targets
-enr_down <- targets_enrichment[["downregulated"]]
-
-# extract enrichment results as a data.frame
-enr_df <- enrichmentResults(enr_down)
-
-# create a dotplot of enriched terms
-enrichmentDotplot(enr_down)
-
 }
 \references{
 Liu, Y., Li, G. Empowering biologists to decode omics data: the Genekitr R

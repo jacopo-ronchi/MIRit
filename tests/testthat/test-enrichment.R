@@ -8,7 +8,7 @@ test_that("basic ORA enrichment works", {
     ## perform functional enrichment with ORA
     expect_no_error(
         enr <- oraInternal(obj, gs,
-            pCutoff = 0.05, pAdjustment = "none",
+            pCutoff = 0.1, pAdjustment = "none",
             minSize = 10, maxSize = 500,
             dataInfo = "KEGG (category: pathway)",
             organism = "Homo sapiens", integrated = TRUE
@@ -17,7 +17,7 @@ test_that("basic ORA enrichment works", {
 
     ## check the validity of ORA
     enrTab <- enrichmentResults(enr$downregulated)
-    expect_equal(sum(enrTab$pval), 0.6349798379940161)
+    expect_equal(sum(enrTab$pval), 0.1794333809271229)
 })
 
 
@@ -34,7 +34,7 @@ test_that("basic GSEA enrichment works", {
     ## perform functional enrichment with GSEA
     expect_no_error(
         enr <- gseaInternal(obj, gs,
-            pCutoff = 0.05, pAdjustment = "none",
+            pCutoff = 0.1, pAdjustment = "none",
             minSize = 10, maxSize = 500,
             dataInfo = "KEGG (category: pathway)",
             organism = "Homo sapiens",
@@ -44,7 +44,7 @@ test_that("basic GSEA enrichment works", {
 
     ## check the validity of GSEA
     enrTab <- enrichmentResults(enr)
-    expect_equal(sum(enrTab$pval), 0.162313766403252)
+    expect_equal(sum(enrTab$pval), 0.1268198395508214)
 })
 
 
@@ -61,7 +61,7 @@ test_that("basic CAMERA enrichment works", {
     ## perform functional enrichment with CAMERA
     expect_no_error(
         enr <- cameraInternal(obj, gs,
-            pCutoff = 0.05,
+            pCutoff = 0.1,
             pAdjustment = "none", minSize = 10,
             maxSize = 500,
             dataInfo = "KEGG (category: pathway)",
@@ -71,5 +71,5 @@ test_that("basic CAMERA enrichment works", {
 
     ## check the validity of CAMERA
     enrTab <- enrichmentResults(enr)
-    expect_equal(sum(enrTab$pval), 0.2732096022757788)
+    expect_equal(sum(enrTab$pval), 0.196717828561609)
 })

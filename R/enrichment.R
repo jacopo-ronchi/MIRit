@@ -388,14 +388,8 @@ validateCategories <- function(database, category, organism) {
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
 #'
-#' # perform GSEA with KEGG
-#' de_enr <- enrichGenes(obj, method = "GSEA", database = "KEGG")
-#'
-#' # extract results
-#' de_df <- enrichmentResults(de_enr)
-#'
-#' # create a dotplot of enriched terms
-#' enrichmentDotplot(de_enr)
+#' # perform ORA with GO
+#' de_enr <- enrichGenes(obj, method = "ORA", database = "GO")
 #'
 #' @note
 #' To download gene sets from the above mentioned databases, MIRit uses the
@@ -1019,15 +1013,6 @@ cameraInternal <- function(mirnaObj,
 #'
 #' # perform enrichment analysis of integrated targets with DO
 #' targets_enrichment <- enrichTargets(obj, database = "DO")
-#'
-#' # extract enrichment results of downregulated targets
-#' enr_down <- targets_enrichment[["downregulated"]]
-#'
-#' # extract enrichment results as a data.frame
-#' enr_df <- enrichmentResults(enr_down)
-#'
-#' # create a dotplot of enriched terms
-#' enrichmentDotplot(enr_down)
 #'
 #' @note
 #' To download gene sets from the above mentioned databases, MIRit uses the

@@ -113,9 +113,6 @@ R package, which implements the algorithm proposed by Murray et al. in 2016.
 # load example MirnaExperiment object
 obj <- loadExamples()
 
-# perform miRNA-target integration
-obj <- mirnaIntegration(obj)
-
 # plot correlation between miR-146b and PAX8 with monotonic regression curve
 plotCorrelation(obj, "hsa-miR-146b-5p", "PAX8", condition = "disease")
 

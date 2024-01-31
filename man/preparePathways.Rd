@@ -74,13 +74,14 @@ parameters used to create the networks are all stored in the \code{graphData}
 slot of each \code{graphNEL} object.
 }
 \examples{
+
+\donttest{
 # load example MirnaExperiment object
 obj <- loadExamples()
 
 # perform integration analysis with default settings
 obj <- mirnaIntegration(obj)
 
-\donttest{
 # retrieve pathways from KEGG and augment them with miRNA-gene interactions
 paths <- preparePathways(obj)
 

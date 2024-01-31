@@ -54,13 +54,14 @@
 #' objects.
 #'
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
-#'
-#' # perform integration analysis with default settings
-#' obj <- mirnaIntegration(obj)
 #'
 #' \donttest{
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
+#' # perform integration analysis with default settings
+#' obj <- mirnaIntegration(obj)
+#' 
 #' # retrieve pathways from KEGG and augment them with miRNA-gene interactions
 #' paths <- preparePathways(obj)
 #'
@@ -335,13 +336,14 @@ preparePathways <- function(
 #' the results of the analysis. See the relative help page for further details.
 #'
 #' @examples
+#' 
+#' \donttest{
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
 #'
 #' # perform integration analysis with default settings
 #' obj <- mirnaIntegration(obj)
-#'
-#' \donttest{
+#' 
 #' # retrieve pathways from KEGG and augment them with miRNA-gene interactions
 #' paths <- preparePathways(obj)
 #'

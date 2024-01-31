@@ -68,10 +68,11 @@ This function retrieves genomic coordinates from the output of
 the trackplot.
 }
 \examples{
+
+\donttest{
 # load example MirnaExperiment object
 obj <- loadExamples()
 
-\donttest{
 # retrieve associated SNPs
 association <- findMirnaSNPs(obj, "response to antidepressant")
 

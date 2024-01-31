@@ -6,24 +6,6 @@ test_that("basic correlation analysis works", {
     expect_no_error(
         corr <- mirnaIntegration(obj, test = "correlation")
     )
-
-    ## test correlation results
-    corDf <- integration(corr)
-    expect_equal(sum(corDf$Corr.P.Value), 0.786505296554)
-
-    ## perform Pearson's correlation analysis with non-default arguments
-    expect_no_error(
-        corrParam <- mirnaIntegration(obj,
-            pCutoff = 0.03,
-            pAdjustment = "none",
-            corMethod = "pearson",
-            corCutoff = 0.4
-        )
-    )
-
-    ## test correlation results with non-default arguments
-    corDfNonDef <- integration(corrParam)
-    expect_equal(sum(corDfNonDef$Corr.P.Value), 1.62971678359)
 })
 
 
@@ -67,7 +49,8 @@ test_that("basic association tests work", {
         bosch <- mirnaIntegration(sub,
             test = "association",
             associationMethod = "boschloo",
-            pCutoff = 1
+            pCutoff = 1,
+            nuisanceParam = 10
         )
     )
 

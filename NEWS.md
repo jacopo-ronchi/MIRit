@@ -1,3 +1,8 @@
+# MIRit 0.99.8
+
+This patch further reduces R CMD check time by limiting unnecessary examples
+and by using smaller datasets for unit tests.
+
 # MIRit 0.99.7
 
 This version introduces parallel computing capabilities for the

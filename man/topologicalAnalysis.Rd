@@ -155,13 +155,14 @@ efficient than not including a progress bar.
 }
 }
 \examples{
+
+\donttest{
 # load example MirnaExperiment object
 obj <- loadExamples()
 
 # perform integration analysis with default settings
 obj <- mirnaIntegration(obj)
 
-\donttest{
 # retrieve pathways from KEGG and augment them with miRNA-gene interactions
 paths <- preparePathways(obj)
 

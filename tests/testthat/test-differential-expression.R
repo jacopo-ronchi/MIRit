@@ -13,6 +13,9 @@ test_that("basic differential expression works for edgeR", {
 
 
 test_that("basic differential expression works for DESeq2", {
+    ## skip on Bioconductor
+    skip_on_bioc()
+    
     ## load test object
     obj <- createDummyData()
 

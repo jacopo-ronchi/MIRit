@@ -141,12 +141,6 @@ obj <- loadExamples()
 # perform integration analysis with default settings
 obj <- mirnaIntegration(obj)
 
-# perform Kendall's correlation analysis with tau > 0.8 and p < 0.05
-obj <- mirnaIntegration(obj,
-    test = "correlation",
-    corMethod = "kendall", corCutoff = 0.8
-)
-
 }
 \references{
 Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015). “limma

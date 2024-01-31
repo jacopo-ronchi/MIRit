@@ -100,6 +100,9 @@ loadExampleGeneSets <- function() {
     ## extract gene-sets from example GSEA object
     gs <- geneSet(enr)
     
+    ## create a subset of KEGG gene-sets for testing purposes
+    gs <- gs[seq(200, 240)]
+    
     ## return the gene-sets
     return(gs)
 }
@@ -224,7 +227,7 @@ testPreparePathways.internal <- function(
     }
     
     ## select a subset of KEGG pathways for testing purposes
-    pathDb <- pathDb[205:210]
+    pathDb <- pathDb[seq(205, 210)]
     
     ## create a list of augmented pathways
     message("Adding miRNA-gene interactions to biological pathways...")

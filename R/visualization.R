@@ -138,10 +138,11 @@
 #' A base R plot with the augmented pathway.
 #'
 #' @examples
-#' # load example IntegrativePathwayAnalysis object
-#' obj <- loadExamples("IntegrativePathwayAnalysis")
 #'
 #' \donttest{
+#' # load example IntegrativePathwayAnalysis object
+#' obj <- loadExamples("IntegrativePathwayAnalysis")
+#' 
 #' # explore a specific biological network
 #' visualizeNetwork(obj, "Thyroid hormone synthesis")
 #' }
@@ -1507,10 +1508,11 @@ theme.MIRit <- function(
 #' A trackplot with information about chromosome, SNP and miRNA gene location.
 #'
 #' @examples
-#' # load example MirnaExperiment object
-#' obj <- loadExamples()
 #'
 #' \donttest{
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#' 
 #' # retrieve associated SNPs
 #' association <- findMirnaSNPs(obj, "response to antidepressant")
 #'
@@ -1836,9 +1838,6 @@ mirVariantPlot <- function(variantId,
 #' @examples
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
-#'
-#' # perform miRNA-target integration
-#' obj <- mirnaIntegration(obj)
 #'
 #' # plot correlation between miR-146b and PAX8 with monotonic regression curve
 #' plotCorrelation(obj, "hsa-miR-146b-5p", "PAX8", condition = "disease")
@@ -2350,12 +2349,6 @@ plotCorrelation <- function(mirnaObj,
 #'
 #' # produce a boxplot for PAX8 and miR-34a-5p
 #' plotDE(obj, features = c("hsa-miR-34a-5p", "PAX8"))
-#'
-#' # produce a barplot for PAX8 and miR-34a-5p without significance
-#' plotDE(obj,
-#'     features = c("hsa-miR-34a-5p", "PAX8"),
-#'     graph = "barplot", showSignificance = FALSE
-#' )
 #'
 #' # produce a violinplot for BCL2
 #' plotDE(obj, features = "BCL2", graph = "violinplot")

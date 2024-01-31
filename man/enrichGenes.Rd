@@ -233,14 +233,8 @@ To download gene sets from the above mentioned databases, MIRit uses the
 # load example MirnaExperiment object
 obj <- loadExamples()
 
-# perform GSEA with KEGG
-de_enr <- enrichGenes(obj, method = "GSEA", database = "KEGG")
-
-# extract results
-de_df <- enrichmentResults(de_enr)
-
-# create a dotplot of enriched terms
-enrichmentDotplot(de_enr)
+# perform ORA with GO
+de_enr <- enrichGenes(obj, method = "ORA", database = "GO")
 
 }
 \references{
