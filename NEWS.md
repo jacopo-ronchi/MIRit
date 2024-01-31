@@ -1,3 +1,10 @@
+# MIRit 0.99.7
+
+This version introduces parallel computing capabilities for the
+`mirnaIntegration()` function. This is particularly useful for Boschloo's
+exact test, whose execution is now faster. Moreover, the test suite has been
+redefined to reduce running times.
+
 # MIRit 0.99.6
 
 The testing suite has been redefined to allow different results for different

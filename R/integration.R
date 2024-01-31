@@ -64,6 +64,11 @@
 #' a fast approximation to rotation gene-set testing called `fry`, implemented
 #' in the `limma` package, can be used to statistically quantify the influence
 #' of miRNAs on the expression changes of their target genes.
+#' 
+#' To speed up the identification of anti-correlated or anti-associated
+#' miRNA-target pairs, this function implements parallel computation via
+#' [BiocParallel::bpparam()]. In this regard, the parallelization behavior can
+#' be specified via the `BPPARAM` parameter.
 #'
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
 #' containing miRNA and gene data
@@ -90,6 +95,9 @@
 #' @param nuisanceParam The number of nuisance parameter values considered for
 #' p-value calculation in `boschloo` method. The higher this value, the better
 #' the p-value estimation accuracy. Default is 100
+#' @param BPPARAM The desired parallel computing behavior. This parameter
+#' defaults to `BiocParallel::bpparam()`, but this can be edited. See
+#' [BiocParallel::bpparam()] for information on parallel computing in R
 #'
 #' @returns
 #' A [`MirnaExperiment`][MirnaExperiment-class] object containing integration
@@ -140,7 +148,8 @@ mirnaIntegration <- function(mirnaObj,
     corMethod = "spearman",
     corCutoff = 0.5,
     associationMethod = "boschloo",
-    nuisanceParam = 100) {
+    nuisanceParam = 100,
+    BPPARAM = bpparam()) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -277,7 +286,8 @@ mirnaIntegration <- function(mirnaObj,
             corMethod,
             corCutoff,
             pCutoff,
-            pAdjustment
+            pAdjustment,
+            BPPARAM
         )
     } else if (intMethod == "association") {
         mirnaObj <- associateMirnaTargets(
@@ -285,7 +295,8 @@ mirnaIntegration <- function(mirnaObj,
             pCutoff,
             pAdjustment,
             associationMethod,
-            nuisanceParam
+            nuisanceParam,
+            BPPARAM
         )
     } else if (intMethod == "fry") {
         mirnaObj <- fryMirnaTargets(
@@ -308,7 +319,8 @@ correlateMirnaTargets <- function(mirnaObj,
     corMethod,
     corCutoff,
     pCutoff,
-    pAdjustment) {
+    pAdjustment,
+    BPPARAM) {
     ## extract miRNA and gene expression values
     mirnaExpr <- mirnaObj[["microRNA"]]
     geneExpr <- mirnaObj[["genes"]]
@@ -381,7 +393,7 @@ correlateMirnaTargets <- function(mirnaObj,
     ## compute the correlation between each pair of DE-miRNA - target
     usedCoef <- gsub("(^)([[:alpha:]])", "\\1\\U\\2", corMethod, perl = TRUE)
     message("Performing ", usedCoef, "'s correlation analysis...")
-    correlation <- mapply(function(mirna, gene) {
+    correlation <- bpmapply(function(mirna, gene) {
         ## extract the expression values of the microRNA and the target
         mirnaInt <- as.numeric(mirnaExpr[mirna, ])
         geneInt <- as.numeric(targetExpr[gene, ])
@@ -408,7 +420,7 @@ correlateMirnaTargets <- function(mirnaObj,
             corPair$p.value
         )
         pair
-    }, targetsTable$MicroRNA, targetsTable$Gene.Symbol)
+    }, targetsTable$MicroRNA, targetsTable$Gene.Symbol, BPPARAM = BPPARAM)
 
     ## convert correlation output to a data.frame object
     corRes <- as.data.frame(t(correlation))
@@ -460,7 +472,8 @@ associateMirnaTargets <- function(mirnaObj,
     pCutoff,
     pAdjustment,
     associationMethod,
-    nuisanceParam) {
+    nuisanceParam,
+    BPPARAM) {
     ## obtain differentially expressed miRNAs and genes
     dem <- mirnaDE(mirnaObj)
     deg <- geneDE(mirnaObj)
@@ -490,7 +503,7 @@ associateMirnaTargets <- function(mirnaObj,
 
     ## compute the inverse association between each miRNA and its targets
     message("Performing ", meth, "...")
-    association <- lapply(dem$ID, function(x) {
+    association <- bplapply(dem$ID, function(x) {
         ## differentiate between up-miRNA - down-genes and down-miRNA - up-genes
         fold <- ifelse(dem$logFC[dem$ID == x] > 0, "Up", "Down")
 
@@ -544,7 +557,7 @@ associateMirnaTargets <- function(mirnaObj,
             paste(intersect(degs, targ), collapse = "/")
         )
         intRes
-    })
+    }, BPPARAM = BPPARAM)
 
     ## convert list object into a data.frame
     association <- as.data.frame(do.call(rbind, association))

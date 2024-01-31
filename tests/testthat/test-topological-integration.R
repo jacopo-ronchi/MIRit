@@ -7,7 +7,7 @@ test_that("miRNA augmented pathways are created properly", {
 
     ## prepare augmented pathways
     expect_warning(
-        computedPaths <- preparePathways(obj),
+        computedPaths <- testPreparePathways(obj),
         "pathways have been ignored because they"
     )
 

@@ -109,7 +109,7 @@ passed to \code{\link[edgeR:estimateDisp]{edgeR::estimateDisp()}} function. It i
 set to \code{edgeR}. Default is \code{list(robust = TRUE)} to use the robust parameter}
 
 \item{glmQLFit.args}{A \code{list} object containing additional arguments
-passed to \code{\link[edgeR:glmQLFTest]{edgeR::glmQLFit()}} function. It is used when \code{method} is
+passed to \code{\link[edgeR:glmQLFit]{edgeR::glmQLFit()}} function. It is used when \code{method} is
 set to \code{edgeR}}
 
 \item{glmQLFTest.args}{A \code{list} object containing additional arguments

@@ -12,7 +12,8 @@ mirnaIntegration(
   corMethod = "spearman",
   corCutoff = 0.5,
   associationMethod = "boschloo",
-  nuisanceParam = 100
+  nuisanceParam = 100,
+  BPPARAM = bpparam()
 )
 }
 \arguments{
@@ -48,6 +49,10 @@ mid-p correction; \code{fisher}, to perform a one-sided Fisher's exact test}
 \item{nuisanceParam}{The number of nuisance parameter values considered for
 p-value calculation in \code{boschloo} method. The higher this value, the better
 the p-value estimation accuracy. Default is 100}
+
+\item{BPPARAM}{The desired parallel computing behavior. This parameter
+defaults to \code{BiocParallel::bpparam()}, but this can be edited. See
+\code{\link[BiocParallel:register]{BiocParallel::bpparam()}} for information on parallel computing in R}
 }
 \value{
 A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing integration
@@ -123,6 +128,11 @@ target genes can be estimated through rotation gene-set tests. In particular,
 a fast approximation to rotation gene-set testing called \code{fry}, implemented
 in the \code{limma} package, can be used to statistically quantify the influence
 of miRNAs on the expression changes of their target genes.
+
+To speed up the identification of anti-correlated or anti-associated
+miRNA-target pairs, this function implements parallel computation via
+\code{\link[BiocParallel:register]{BiocParallel::bpparam()}}. In this regard, the parallelization behavior can
+be specified via the \code{BPPARAM} parameter.
 }
 \examples{
 # load example MirnaExperiment object
