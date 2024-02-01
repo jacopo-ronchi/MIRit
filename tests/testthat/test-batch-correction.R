@@ -1,6 +1,6 @@
 test_that("batch effect correction works", {
     ## load the example MirnaExperiment object
-    obj <- loadExamples()
+    obj <- loadTestObject()
 
     ## correct batch effect
     expect_no_error(
@@ -8,14 +8,14 @@ test_that("batch effect correction works", {
     )
 
     ##  verify the resulting matrix
-    expect_equal(sum(obj[["microRNA"]][, 1]), 2529.95084387)
-    expect_equal(sum(obj[["microRNA"]][, 6]), 2542.02835449)
+    expect_equal(sum(obj[["microRNA"]][, 1]), 370.3815170194314)
+    expect_equal(sum(obj[["microRNA"]][, 6]), 397.9221554885439)
 })
 
 
 test_that("batch effect can't be used before differential expression", {
     ## load the example MirnaExperiment object
-    obj <- loadExamples()
+    obj <- loadTestObject()
 
     ## correct batch effect
     obj <- batchCorrection(obj, "microRNA", batch = "patient")

@@ -619,9 +619,6 @@ setColorScale <- function(values, cols, numColors) {
 #' # load example FunctionalEnrichment object
 #' obj <- loadExamples("FunctionalEnrichment")
 #'
-#' # extract results
-#' res <- enrichmentResults(obj)
-#'
 #' # plot results
 #' enrichmentDotplot(obj)
 #'
@@ -804,9 +801,6 @@ enrichmentDotplot <- function(enrichment,
 #' # load example FunctionalEnrichment object
 #' obj <- loadExamples("FunctionalEnrichment")
 #'
-#' # extract results
-#' res <- enrichmentResults(obj)
-#'
 #' # plot results
 #' enrichmentBarplot(obj)
 #'
@@ -973,9 +967,6 @@ enrichmentBarplot <- function(enrichment,
 #' @examples
 #' # load example FunctionalEnrichment object
 #' obj <- loadExamples("FunctionalEnrichment")
-#'
-#' # extract results
-#' res <- enrichmentResults(obj)
 #'
 #' # plot results
 #' gseaRidgeplot(obj)
@@ -1170,9 +1161,6 @@ gseaRidgeplot <- function(enrichment,
 #' @examples
 #' # load example FunctionalEnrichment object
 #' obj <- loadExamples("FunctionalEnrichment")
-#'
-#' # extract results
-#' res <- enrichmentResults(obj)
 #'
 #' # plot results
 #' gseaPlot(obj, pathway = "Thyroid hormone synthesis")
@@ -2350,9 +2338,6 @@ plotCorrelation <- function(mirnaObj,
 #' # produce a boxplot for PAX8 and miR-34a-5p
 #' plotDE(obj, features = c("hsa-miR-34a-5p", "PAX8"))
 #'
-#' # produce a violinplot for BCL2
-#' plotDE(obj, features = "BCL2", graph = "violinplot")
-#'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
@@ -2812,9 +2797,6 @@ plotDE <- function(mirnaObj,
 #' @examples
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
-#'
-#' # produce a volcano plot for miRNAs with labels
-#' plotVolcano(obj, "microRNA", labels = 5)
 #'
 #' # produce a volcano plot for genes
 #' plotVolcano(obj, "genes")
@@ -3490,9 +3472,6 @@ plotDimensions <- function(mirnaObj,
 #' @examples
 #' # load example IntegrativePathwayAnalysis object
 #' obj <- loadExamples("IntegrativePathwayAnalysis")
-#'
-#' # access the results of pathway analysis
-#' integratedPathways(obj)
 #'
 #' # create a dotplot of integrated pathways
 #' integrationDotplot(obj)

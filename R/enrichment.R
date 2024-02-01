@@ -685,8 +685,8 @@ oraInternal <- function(mirnaObj,
     oraDown$padj <- p.adjust(oraDown$pval, method = pAdjustment)
 
     ## restrict the results to significant terms
-    oraUp <- oraUp[oraUp$padj < pCutoff, ]
-    oraDown <- oraDown[oraDown$padj < pCutoff, ]
+    oraUp <- oraUp[oraUp$padj <= pCutoff, ]
+    oraDown <- oraDown[oraDown$padj <= pCutoff, ]
 
     ## order results based on padj
     oraUp <- oraUp[order(oraUp$padj), ]
@@ -783,7 +783,7 @@ gseaInternal <- function(mirnaObj,
     gse$padj <- p.adjust(gse$pval, method = pAdjustment)
 
     ## restrict the results to significant terms
-    gse <- gse[gse$padj < pCutoff, ]
+    gse <- gse[gse$padj <= pCutoff, ]
 
     ## order results based on padj
     gse <- gse[order(gse$padj), ]
@@ -920,7 +920,7 @@ cameraInternal <- function(mirnaObj,
 
     ## restrict the results to significant terms
     rs <- na.omit(rs)
-    rs <- rs[rs$padj < pCutoff, ]
+    rs <- rs[rs$padj <= pCutoff, ]
 
     ## order results based on padj
     rs <- rs[order(rs$padj), ]

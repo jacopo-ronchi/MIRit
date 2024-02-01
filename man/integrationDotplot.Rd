@@ -48,9 +48,6 @@ each pathway.
 # load example IntegrativePathwayAnalysis object
 obj <- loadExamples("IntegrativePathwayAnalysis")
 
-# access the results of pathway analysis
-integratedPathways(obj)
-
 # create a dotplot of integrated pathways
 integrationDotplot(obj)
 

@@ -54,9 +54,6 @@ p-values of each category.
 # load example FunctionalEnrichment object
 obj <- loadExamples("FunctionalEnrichment")
 
-# extract results
-res <- enrichmentResults(obj)
-
 # plot results
 enrichmentDotplot(obj)
 

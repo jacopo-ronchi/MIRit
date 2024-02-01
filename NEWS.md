@@ -1,3 +1,9 @@
+# MIRit 0.99.9
+
+With this version, significant p-values originating from functional enrichment
+analyses now include extreme values. Further, examples have been shortened and
+unit tests now use smaller datasets.
+
 # MIRit 0.99.8
 
 This patch further reduces R CMD check time by limiting unnecessary examples

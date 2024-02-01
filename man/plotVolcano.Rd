@@ -97,9 +97,6 @@ cutoff used for differential expression analysis.
 # load example MirnaExperiment object
 obj <- loadExamples()
 
-# produce a volcano plot for miRNAs with labels
-plotVolcano(obj, "microRNA", labels = 5)
-
 # produce a volcano plot for genes
 plotVolcano(obj, "genes")
 

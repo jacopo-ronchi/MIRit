@@ -60,9 +60,6 @@ whereas gene positions in the ranked list are reported on the x-axis.
 # load example FunctionalEnrichment object
 obj <- loadExamples("FunctionalEnrichment")
 
-# extract results
-res <- enrichmentResults(obj)
-
 # plot results
 gseaPlot(obj, pathway = "Thyroid hormone synthesis")
 

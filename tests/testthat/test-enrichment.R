@@ -1,6 +1,6 @@
 test_that("basic ORA enrichment works", {
     ## load the example MirnaExperiment object
-    obj <- loadExamples()
+    obj <- loadTestObject()
 
     ## load example gene-sets
     gs <- loadExampleGeneSets()
@@ -8,8 +8,8 @@ test_that("basic ORA enrichment works", {
     ## perform functional enrichment with ORA
     expect_no_error(
         enr <- oraInternal(obj, gs,
-            pCutoff = 0.1, pAdjustment = "none",
-            minSize = 10, maxSize = 500,
+            pCutoff = 0.05, pAdjustment = "none",
+            minSize = 0, maxSize = 500,
             dataInfo = "KEGG (category: pathway)",
             organism = "Homo sapiens", integrated = TRUE
         )
@@ -17,7 +17,7 @@ test_that("basic ORA enrichment works", {
 
     ## check the validity of ORA
     enrTab <- enrichmentResults(enr$downregulated)
-    expect_equal(sum(enrTab$pval), 0.1794333809271229)
+    expect_equal(sum(enrTab$pval), 0.03193418836636841)
 })
 
 
@@ -26,7 +26,7 @@ test_that("basic GSEA enrichment works", {
     set.seed(1234)
 
     # load the example MirnaExperiment object
-    obj <- loadExamples()
+    obj <- loadTestObject()
 
     ## load example gene-sets
     gs <- loadExampleGeneSets()
@@ -34,8 +34,8 @@ test_that("basic GSEA enrichment works", {
     ## perform functional enrichment with GSEA
     expect_no_error(
         enr <- gseaInternal(obj, gs,
-            pCutoff = 0.1, pAdjustment = "none",
-            minSize = 10, maxSize = 500,
+            pCutoff = 0.4, pAdjustment = "none",
+            minSize = 0, maxSize = 500,
             dataInfo = "KEGG (category: pathway)",
             organism = "Homo sapiens",
             rankMetric = "signed.pval", eps = 1e-50
@@ -44,7 +44,7 @@ test_that("basic GSEA enrichment works", {
 
     ## check the validity of GSEA
     enrTab <- enrichmentResults(enr)
-    expect_equal(sum(enrTab$pval), 0.1268198395508214)
+    expect_equal(sum(enrTab$pval), 2.133066913614023)
 })
 
 
@@ -53,7 +53,7 @@ test_that("basic CAMERA enrichment works", {
     set.seed(1234)
 
     # load the example MirnaExperiment object
-    obj <- loadExamples()
+    obj <- loadTestObject()
 
     ## load example gene-sets
     gs <- loadExampleGeneSets()
@@ -71,5 +71,5 @@ test_that("basic CAMERA enrichment works", {
 
     ## check the validity of CAMERA
     enrTab <- enrichmentResults(enr)
-    expect_equal(sum(enrTab$pval), 0.196717828561609)
+    expect_equal(sum(enrTab$pval), 0.06110395732354543)
 })

@@ -1,6 +1,6 @@
 test_that("basic correlation analysis works", {
     ## load the example MirnaExperiment object
-    obj <- loadExamples()
+    obj <- loadTestObject()
 
     ## perform integrative analysis through correlation analysis
     expect_no_error(
@@ -12,7 +12,7 @@ test_that("basic correlation analysis works", {
 
 test_that("basic association tests work", {
     ## load the example MirnaExperiment object
-    obj <- loadExamples()
+    obj <- loadTestObject()
 
     ## perform integrative analysis through Fisher's exact test
     expect_no_error(
@@ -25,7 +25,7 @@ test_that("basic association tests work", {
 
     ## test Fisher's results
     fshDf <- integration(fsh)
-    expect_equal(sum(fshDf$P.Val), 26.1883179793)
+    expect_equal(sum(fshDf$P.Val), 2.027636906888526)
 
     ## perform integrative analysis through Fisher's exact test with mid-p
     expect_no_error(
@@ -38,7 +38,7 @@ test_that("basic association tests work", {
 
     ## test Fisher's results with mid-p correction
     fshMidpDf <- integration(fshMidP)
-    expect_equal(sum(fshMidpDf$P.Val), 23.6569746263)
+    expect_equal(sum(fshMidpDf$P.Val), 1.295765532749468)
 
     ## create a small subset of data to try Boschloo's exact test
     sub <- obj
@@ -56,13 +56,13 @@ test_that("basic association tests work", {
 
     ## test Boschloo's results
     boschDf <- integration(bosch)
-    expect_equal(sum(boschDf$P.Val), 1.61070991767)
+    expect_equal(sum(boschDf$P.Val), 1.440940848709)
 })
 
 
 test_that("basic fry integration works", {
     ## load the example MirnaExperiment object
-    obj <- loadExamples()
+    obj <- loadTestObject()
 
     ## perform integrative analysis through fry
     expect_no_error(
@@ -71,7 +71,7 @@ test_that("basic fry integration works", {
 
     ## test fry results
     fryDf <- integration(fry)
-    expect_equal(sum(fryDf$P.Val), 4.79817344549)
+    expect_equal(sum(fryDf$P.Val), 0.09717489414755009)
 })
 
 

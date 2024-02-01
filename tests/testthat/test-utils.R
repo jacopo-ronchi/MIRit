@@ -1,6 +1,6 @@
 test_that("integrated targets selection works for each integration strategy", {
     ## load the example MirnaExperiment object
-    obj <- loadExamples()
+    obj <- loadTestObject()
 
     ## integrate data through the various approaches (except for correlation)
     asc <- mirnaIntegration(obj,

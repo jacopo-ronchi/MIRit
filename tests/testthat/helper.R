@@ -101,7 +101,7 @@ loadExampleGeneSets <- function() {
     gs <- geneSet(enr)
     
     ## create a subset of KEGG gene-sets for testing purposes
-    gs <- gs[seq(200, 240)]
+    gs <- gs[seq(300, 340)]
     
     ## return the gene-sets
     return(gs)
@@ -285,4 +285,14 @@ testPreparePathways.internal <- function(
     
     ## return pathways
     return(graphList)
+}
+
+
+
+
+
+## helper function for loading the test object
+loadTestObject <- function() {
+    ## return the test object
+    return(testObject)
 }

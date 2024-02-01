@@ -110,9 +110,6 @@ obj <- loadExamples()
 # produce a boxplot for PAX8 and miR-34a-5p
 plotDE(obj, features = c("hsa-miR-34a-5p", "PAX8"))
 
-# produce a violinplot for BCL2
-plotDE(obj, features = "BCL2", graph = "violinplot")
-
 }
 \author{
 Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
