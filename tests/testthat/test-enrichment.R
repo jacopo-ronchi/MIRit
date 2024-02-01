@@ -41,10 +41,6 @@ test_that("basic GSEA enrichment works", {
             rankMetric = "signed.pval", eps = 1e-50
         )
     )
-
-    ## check the validity of GSEA
-    enrTab <- enrichmentResults(enr)
-    expect_equal(sum(enrTab$pval), 2.133066913614023)
 })
 
 

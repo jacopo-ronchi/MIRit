@@ -1,3 +1,7 @@
+# MIRit 0.99.10
+
+This patch introduces a minor fix for one unit test.
+
 # MIRit 0.99.9
 
 With this version, significant p-values originating from functional enrichment
