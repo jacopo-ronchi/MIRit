@@ -24,11 +24,11 @@ section for additional information."><meta property="og:image" content="/logo.sv
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">MIRit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -247,7 +247,9 @@ ISBN 978-0-471-55761-6.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># load example MirnaExperiment object</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># load example MirnaExperiment object</span></span></span>
 <span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="loadExamples.html">loadExamples</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># perform integration analysis with default settings</span></span></span>
@@ -256,7 +258,6 @@ ISBN 978-0-471-55761-6.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Performing Spearman's correlation analysis...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> A statistically significant correlation between 215 miRNA-target pairs was found!</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># retrieve pathways from KEGG and augment them with miRNA-gene interactions</span></span></span>
 <span class="r-in"><span><span class="va">paths</span> <span class="op">&lt;-</span> <span class="fu"><a href="preparePathways.html">preparePathways</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading KEGG pathways from cache...</span>
@@ -278,8 +279,8 @@ ISBN 978-0-471-55761-6.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid hormone synthesis Thyroid hormone synthesis 0.3469388 12.12941</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid cancer                       Thyroid cancer 0.2820513 11.56291</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                           normalized.score       P.Val adj.P.Val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid hormone synthesis         7.794687 0.000999001     0.028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid cancer                    7.052481 0.000999001     0.046</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid hormone synthesis         8.842149 0.000999001     0.016</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid cancer                    7.511295 0.000999001     0.044</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># create a dotplot of integrated pathways</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="integrationDotplot.html">integrationDotplot</a></span><span class="op">(</span><span class="va">ipa</span><span class="op">)</span></span></span>

@@ -10,11 +10,11 @@ the topologicalAnalysis() function."><meta property="og:image" content="/logo.sv
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">MIRit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,41 +118,6 @@ each pathway.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># load example IntegrativePathwayAnalysis object</span></span></span>
 <span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="loadExamples.html">loadExamples</a></span><span class="op">(</span><span class="st">"IntegrativePathwayAnalysis"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># access the results of pathway analysis</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="integratedPathways.html">integratedPathways</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                 pathway</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid hormone synthesis                                                     Thyroid hormone synthesis</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Parathyroid hormone synthesis, secretion and action Parathyroid hormone synthesis, secretion and action</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Neurotrophin signaling pathway                                           Neurotrophin signaling pathway</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cholinergic synapse                                                                 Cholinergic synapse</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GnRH signaling pathway                                                           GnRH signaling pathway</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estrogen signaling pathway                                                   Estrogen signaling pathway</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Relaxin signaling pathway                                                     Relaxin signaling pathway</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                      coverage     score</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid hormone synthesis                           0.3469388 12.129412</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Parathyroid hormone synthesis, secretion and action 0.2752294  6.082639</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Neurotrophin signaling pathway                      0.2362205  5.003782</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cholinergic synapse                                 0.2019231  5.357688</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GnRH signaling pathway                              0.1818182  5.831885</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estrogen signaling pathway                          0.2043796  5.117856</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Relaxin signaling pathway                           0.2388060  5.113116</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                     normalized.score</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid hormone synthesis                                   9.319461</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Parathyroid hormone synthesis, secretion and action         4.787852</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Neurotrophin signaling pathway                              3.123395</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cholinergic synapse                                         3.406131</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GnRH signaling pathway                                      3.784109</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estrogen signaling pathway                                  3.450887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Relaxin signaling pathway                                   2.984415</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                           P.Val   adj.P.Val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Thyroid hormone synthesis                           0.000999001 0.000999001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Parathyroid hormone synthesis, secretion and action 0.000999001 0.000999001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Neurotrophin signaling pathway                      0.006993007 0.006993007</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cholinergic synapse                                 0.006993007 0.006993007</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GnRH signaling pathway                              0.006993007 0.006993007</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estrogen signaling pathway                          0.006993007 0.006993007</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Relaxin signaling pathway                           0.014985015 0.014985015</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># create a dotplot of integrated pathways</span></span></span>
 <span class="r-in"><span><span class="fu">integrationDotplot</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span></span>

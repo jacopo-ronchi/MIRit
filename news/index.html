@@ -6,11 +6,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">MIRit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +47,38 @@
       <small>Source: <a href="https://github.com/jacopo-ronchi/MIRit/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.99.11" id="mirit-09911">MIRit 0.99.11<a class="anchor" aria-label="anchor" href="#mirit-09911"></a></h2>
+<p>This new version introduces the possibility of limiting validated targets retrieval from miRTarBase to only those interactions supported by extensive experimental evidence. Moreover, minor fixes were made to the vignette, documentation, and internal data. Finally, some examples have been redefined to reduce checking time.</p>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.99.10" id="mirit-09910">MIRit 0.99.10<a class="anchor" aria-label="anchor" href="#mirit-09910"></a></h2>
+<p>This patch introduces a minor fix for one unit test.</p>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.99.9" id="mirit-0999">MIRit 0.99.9<a class="anchor" aria-label="anchor" href="#mirit-0999"></a></h2>
+<p>With this version, significant p-values originating from functional enrichment analyses now include extreme values. Further, examples have been shortened and unit tests now use smaller datasets.</p>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.99.8" id="mirit-0998">MIRit 0.99.8<a class="anchor" aria-label="anchor" href="#mirit-0998"></a></h2>
+<p>This patch further reduces R CMD check time by limiting unnecessary examples and by using smaller datasets for unit tests.</p>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.99.7" id="mirit-0997">MIRit 0.99.7<a class="anchor" aria-label="anchor" href="#mirit-0997"></a></h2>
+<p>This version introduces parallel computing capabilities for the <code><a href="../reference/mirnaIntegration.html">mirnaIntegration()</a></code> function. This is particularly useful for Boschloo’s exact test, whose execution is now faster. Moreover, the test suite has been redefined to reduce running times.</p>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.99.6" id="mirit-0996">MIRit 0.99.6<a class="anchor" aria-label="anchor" href="#mirit-0996"></a></h2>
+<p>The testing suite has been redefined to allow different results for different versions of packages employed in differential expression analysis.</p>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.99.5" id="mirit-0995">MIRit 0.99.5<a class="anchor" aria-label="anchor" href="#mirit-0995"></a></h2>
+<p>This update fixes a bug in the <code><a href="../reference/batchCorrection.html">batchCorrection()</a></code> function that prevented the correct use of this function with newer versions of the <code>MultiAssayExperiment</code> package.</p>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.99.4" id="mirit-0994">MIRit 0.99.4<a class="anchor" aria-label="anchor" href="#mirit-0994"></a></h2>
+<p>After the implementation of the IS_BIOC_BUILD_MACHINE variable to the Single Package Builder (SPB), this version bump drives a new build to fix errors during R CMD check on SPB.</p>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.99.3" id="mirit-0993">MIRit 0.99.3<a class="anchor" aria-label="anchor" href="#mirit-0993"></a></h2>
 <p>This version fixes a bug in the <code><a href="../reference/topologicalAnalysis.html">topologicalAnalysis()</a></code> function that prevented the use of a functional progress bar during permutation testing. Moreover, the example for the <code><a href="../reference/addDifferentialExpression.html">addDifferentialExpression()</a></code> function has been updated to reduce its running time.</p>

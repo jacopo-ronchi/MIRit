@@ -14,11 +14,11 @@ specified through the graph parameter.'><meta property="og:image" content="/logo
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">MIRit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -211,21 +211,6 @@ bottom and left borders. Default is FALSE</p></dd>
 <span class="r-in"><span><span class="co"># produce a boxplot for PAX8 and miR-34a-5p</span></span></span>
 <span class="r-in"><span><span class="fu">plotDE</span><span class="op">(</span><span class="va">obj</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hsa-miR-34a-5p"</span>, <span class="st">"PAX8"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotDE-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># produce a barplot for PAX8 and miR-34a-5p without significance</span></span></span>
-<span class="r-in"><span><span class="fu">plotDE</span><span class="op">(</span><span class="va">obj</span>,</span></span>
-<span class="r-in"><span>    features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hsa-miR-34a-5p"</span>, <span class="st">"PAX8"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    graph <span class="op">=</span> <span class="st">"barplot"</span>, showSignificance <span class="op">=</span> <span class="cn">FALSE</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Computation failed in `stat_summary()`</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by error in `get()`:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> object 'mean_sd' of mode 'function' was not found</span>
-<span class="r-plt img"><img src="plotDE-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># produce a violinplot for BCL2</span></span></span>
-<span class="r-in"><span><span class="fu">plotDE</span><span class="op">(</span><span class="va">obj</span>, features <span class="op">=</span> <span class="st">"BCL2"</span>, graph <span class="op">=</span> <span class="st">"violinplot"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 77 rows containing missing values (`geom_violin()`).</span>
-<span class="r-plt img"><img src="plotDE-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

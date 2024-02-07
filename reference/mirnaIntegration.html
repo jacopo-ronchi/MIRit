@@ -32,11 +32,11 @@ Boschloo's exact test. See the details section for further information."><meta p
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">MIRit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,7 +101,8 @@ Boschloo's exact test. See the <em>details</em> section for further information.
 <span>  corMethod <span class="op">=</span> <span class="st">"spearman"</span>,</span>
 <span>  corCutoff <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  associationMethod <span class="op">=</span> <span class="st">"boschloo"</span>,</span>
-<span>  nuisanceParam <span class="op">=</span> <span class="fl">100</span></span>
+<span>  nuisanceParam <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  BPPARAM <span class="op">=</span> <span class="fu">bpparam</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -154,6 +155,12 @@ mid-p correction; <code>fisher</code>, to perform a one-sided Fisher's exact tes
 <dd><p>The number of nuisance parameter values considered for
 p-value calculation in <code>boschloo</code> method. The higher this value, the better
 the p-value estimation accuracy. Default is 100</p></dd>
+
+
+<dt>BPPARAM</dt>
+<dd><p>The desired parallel computing behavior. This parameter
+defaults to <code><a href="https://rdrr.io/pkg/BiocParallel/man/register.html" class="external-link">BiocParallel::bpparam()</a></code>, but this can be edited. See
+<code><a href="https://rdrr.io/pkg/BiocParallel/man/register.html" class="external-link">BiocParallel::bpparam()</a></code> for information on parallel computing in R</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -210,6 +217,10 @@ target genes can be estimated through rotation gene-set tests. In particular,
 a fast approximation to rotation gene-set testing called <code>fry</code>, implemented
 in the <code>limma</code> package, can be used to statistically quantify the influence
 of miRNAs on the expression changes of their target genes.</p>
+<p>To speed up the identification of anti-correlated or anti-associated
+miRNA-target pairs, this function implements parallel computation via
+<code><a href="https://rdrr.io/pkg/BiocParallel/man/register.html" class="external-link">BiocParallel::bpparam()</a></code>. In this regard, the parallelization behavior can
+be specified via the <code>BPPARAM</code> parameter.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -242,15 +253,6 @@ Statistica Neerlandica. 24: 1–35.
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Since data derive from paired samples, a correlation test will be used.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Performing Spearman's correlation analysis...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> A statistically significant correlation between 215 miRNA-target pairs was found!</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># perform Kendall's correlation analysis with tau &gt; 0.8 and p &lt; 0.05</span></span></span>
-<span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu">mirnaIntegration</span><span class="op">(</span><span class="va">obj</span>,</span></span>
-<span class="r-in"><span>    test <span class="op">=</span> <span class="st">"correlation"</span>,</span></span>
-<span class="r-in"><span>    corMethod <span class="op">=</span> <span class="st">"kendall"</span>, corCutoff <span class="op">=</span> <span class="fl">0.8</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> As specified by the user, a correlation will be used.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Performing Kendall's correlation analysis...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> A statistically significant correlation between 1 miRNA-target pairs was found!</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

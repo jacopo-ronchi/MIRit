@@ -24,11 +24,11 @@ function, please refer to the details section."><meta property="og:image" conten
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">MIRit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -345,23 +345,18 @@ PMC3458527.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># load example MirnaExperiment object</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># load example MirnaExperiment object</span></span></span>
 <span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="loadExamples.html">loadExamples</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># perform GSEA with KEGG</span></span></span>
-<span class="r-in"><span><span class="va">de_enr</span> <span class="op">&lt;-</span> <span class="fu">enrichGenes</span><span class="op">(</span><span class="va">obj</span>, method <span class="op">=</span> <span class="st">"GSEA"</span>, database <span class="op">=</span> <span class="st">"KEGG"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Since not specified, 'category' for KEGG database is set to pathway (default).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading KEGG gene-sets from cache...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Ranking genes based on signed.pval...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Performing gene-set enrichment analysis (GSEA)...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA reported 3 significantly enriched terms.</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># extract results</span></span></span>
-<span class="r-in"><span><span class="va">de_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="enrichmentResults.html">enrichmentResults</a></span><span class="op">(</span><span class="va">de_enr</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># create a dotplot of enriched terms</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="enrichmentDotplot.html">enrichmentDotplot</a></span><span class="op">(</span><span class="va">de_enr</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="enrichGenes-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co"># perform ORA with GO</span></span></span>
+<span class="r-in"><span><span class="va">de_enr</span> <span class="op">&lt;-</span> <span class="fu">enrichGenes</span><span class="op">(</span><span class="va">obj</span>, method <span class="op">=</span> <span class="st">"ORA"</span>, database <span class="op">=</span> <span class="st">"GO"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Since not specified, 'category' for GO database is set to bp (default).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading GO gene-sets from cache...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Performing the enrichment of upregulated genes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Performing the enrichment of downregulated genes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The enrichment of genes reported 9 significantly enriched terms for downregulated genes and 0 for upregulated genes.</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

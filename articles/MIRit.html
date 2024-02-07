@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="pandoc">
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
-<meta name="date" content="2023-12-15">
+<meta name="date" content="2024-02-07">
 <title>Integrate miRNA and gene expression data with MIRit</title>
 <script src="MIRit_files/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="MIRit_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
@@ -343,11 +343,11 @@ function toggle_visibility(id1) {
 <p class="author-name">Jacopo Ronchi<span class="affil-mark">1*</span></p>
 <p class="author-affiliation"><span class="affil-mark">1</span>University of Milano-Bicocca, Italy</p>
 <p class="author-email"><span class="affil-mark">*</span><a href="mailto:jacopo.ronchi@unimib.it">jacopo.ronchi@unimib.it</a></p>
-<h4 class="date">15 December 2023</h4>
+<h4 class="date">7 February 2024</h4>
 <h4 class="abstract">Abstract</h4>
 <p>In this vignette, we are going to see how to use MIRit for investigating the compromised miRNA-gene regulatory networks in thyroid cancer. In particular, an RNA-Seq experiment will be used as an example to demonstrate how to perform an integrative analysis with MIRit, including differential expression analysis, functional enrichment and characterization, correlation analysis and, lastly, the construction and visualization of the impaired miRNAs regulatory axes within biological pathways.</p>
 <h4 class="package">Package</h4>
-<p>MIRit 0.99.3</p>
+<p>MIRit 0.99.11</p>
 
 </div>
 
@@ -582,13 +582,11 @@ function toggle_visibility(id1) {
 <p>That said, we can proceed to create the <code>data.frame</code> with sample metadata as follows.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## create a data.frame containing sample metadata</span></span>
-<span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>    primary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mirnaCounts</span><span class="op">)</span>,</span>
-<span>    mirnaCol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mirnaCounts</span><span class="op">)</span>,</span>
-<span>    geneCol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">geneCounts</span><span class="op">)</span>,</span>
-<span>    disease <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"PTC"</span>, <span class="fl">8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"NTH"</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    patient <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Sample_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>primary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mirnaCounts</span><span class="op">)</span>,</span>
+<span>                   mirnaCol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mirnaCounts</span><span class="op">)</span>,</span>
+<span>                   geneCol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">geneCounts</span><span class="op">)</span>,</span>
+<span>                   disease <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"PTC"</span>, <span class="fl">8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"NTH"</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                   patient <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Sample_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3" number="2.5">
 <h3 id="create-a-mirnaexperiment-object">
@@ -598,12 +596,10 @@ function toggle_visibility(id1) {
 <p>The easiest way to create a valid <code>MirnaExperiment</code> object is to use the <code><a href="../reference/MirnaExperiment.html">MirnaExperiment()</a></code> function, which automatically handles the formatting of input data and the creation of the object.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## create the MirnaExperiment object</span></span>
-<span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MirnaExperiment.html">MirnaExperiment</a></span><span class="op">(</span></span>
-<span>    mirnaExpr <span class="op">=</span> <span class="va">mirnaCounts</span>,</span>
-<span>    geneExpr <span class="op">=</span> <span class="va">geneCounts</span>,</span>
-<span>    samplesMetadata <span class="op">=</span> <span class="va">meta</span>,</span>
-<span>    pairedSamples <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MirnaExperiment.html">MirnaExperiment</a></span><span class="op">(</span>mirnaExpr <span class="op">=</span> <span class="va">mirnaCounts</span>,</span>
+<span>                              geneExpr <span class="op">=</span> <span class="va">geneCounts</span>,</span>
+<span>                              samplesMetadata <span class="op">=</span> <span class="va">meta</span>,</span>
+<span>                              pairedSamples <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2" number="3">
@@ -619,20 +615,17 @@ function toggle_visibility(id1) {
 <p>In our example, let’s examine expression variability for both miRNAs and genes, and let’s color the samples based on “disease”, a variable included in the previously defined metadata.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">geneMDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotDimensions.html">plotDimensions</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
-<span>    assay <span class="op">=</span> <span class="st">"genes"</span>,</span>
-<span>    condition <span class="op">=</span> <span class="st">"disease"</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"MDS plot for genes"</span></span>
-<span><span class="op">)</span></span>
+<span>                          assay <span class="op">=</span> <span class="st">"genes"</span>,</span>
+<span>                          condition <span class="op">=</span> <span class="st">"disease"</span>,</span>
+<span>                          title <span class="op">=</span> <span class="st">"MDS plot for genes"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">mirnaMDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotDimensions.html">plotDimensions</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
-<span>    assay <span class="op">=</span> <span class="st">"microRNA"</span>,</span>
-<span>    condition <span class="op">=</span> <span class="st">"disease"</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"MDS plot for miRNAs"</span></span>
-<span><span class="op">)</span></span>
+<span>                           assay <span class="op">=</span> <span class="st">"microRNA"</span>,</span>
+<span>                           condition <span class="op">=</span> <span class="st">"disease"</span>,</span>
+<span>                           title <span class="op">=</span> <span class="st">"MDS plot for miRNAs"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">geneMDS</span>, <span class="va">mirnaMDS</span>,</span>
-<span>    nrow <span class="op">=</span> <span class="fl">1</span>, labels <span class="op">=</span> <span class="st">"AUTO"</span>,</span>
-<span>    common.legend <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>                  nrow <span class="op">=</span> <span class="fl">1</span>, labels <span class="op">=</span> <span class="st">"AUTO"</span>, common.legend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <span style="display:block;" id="fig:mds"></span>
 <img src="MIRit_files/figure-html/mds-1.png" alt="MDS plots for miRNAs and genes. Both plots show that the main source of variability is given by the disease condition." width="100%" class="widefigure"><p class="caption">
@@ -687,15 +680,17 @@ Figure 1: <span class="caption-title">MDS plots for miRNAs and genes</span><br>B
 <p>Following our example, let’s calculate differentially expressed genes and differentially expressed miRNAs in thyroid cancer.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## perform differential expression for genes</span></span>
-<span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/deAnalysis.html">performGeneDE</a></span><span class="op">(</span><span class="va">experiment</span>, group <span class="op">=</span> <span class="st">"disease"</span>, contrast <span class="op">=</span> <span class="st">"PTC-NTH"</span>, design <span class="op">=</span> <span class="va">model</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Performing differential expression analysis with edgeR...</span></span>
-<span><span class="co">#&gt; Differential expression analysis reported 265 significant genes with p &lt; 0.05 (correction: fdr). You can use the 'geneDE()' function to access results.</span></span>
+<span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/deAnalysis.html">performGeneDE</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
+<span>                            group <span class="op">=</span> <span class="st">"disease"</span>,</span>
+<span>                            contrast <span class="op">=</span> <span class="st">"PTC-NTH"</span>,</span>
+<span>                            design <span class="op">=</span> <span class="va">model</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## perform differential expression for miRNAs</span></span>
-<span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/deAnalysis.html">performMirnaDE</a></span><span class="op">(</span><span class="va">experiment</span>, group <span class="op">=</span> <span class="st">"disease"</span>, contrast <span class="op">=</span> <span class="st">"PTC-NTH"</span>, design <span class="op">=</span> <span class="va">model</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Performing differential expression analysis with edgeR...</span></span>
-<span><span class="co">#&gt; Differential expression analysis reported 40 significant miRNAs with p &lt; 0.05 (correction: fdr). You can use the 'mirnaDE()' function to access results.</span></span></code></pre></div>
-<p>In the end, the analysis reported 265 differentially expressed genes, and 40 differentially expressed miRNAs. If not specified, the <code><a href="../reference/deAnalysis.html">performMirnaDE()</a></code> and <code><a href="../reference/deAnalysis.html">performGeneDE()</a></code> functions will define differentially expressed genes/miRNAs as those having an adjusted p-value lower than 0.05, and an absolute log2 fold change higher than 1 (FC &gt; 2). However, this behavior can be changed by tweaking the <code>pCutoff</code> parameter, that specifies the statistical significance threshold; the <code>logFC</code> parameter, which indicates the minimum log2 fold change that features must display for being considered as differentially expressed; and the <code>pAdjustment</code> parameter, which specifies the approach used for multiple testing correction (default is <code>fdr</code> to use the Benjamini-Hochberg method).</p>
+<span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/deAnalysis.html">performMirnaDE</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
+<span>                             group <span class="op">=</span> <span class="st">"disease"</span>,</span>
+<span>                             contrast <span class="op">=</span> <span class="st">"PTC-NTH"</span>,</span>
+<span>                             design <span class="op">=</span> <span class="va">model</span><span class="op">)</span></span></code></pre></div>
+<p>If not specified, the <code><a href="../reference/deAnalysis.html">performMirnaDE()</a></code> and <code><a href="../reference/deAnalysis.html">performGeneDE()</a></code> functions will define differentially expressed genes/miRNAs as those having an adjusted p-value lower than 0.05, and an absolute log2 fold change higher than 1 (FC &gt; 2). However, this behavior can be changed by tweaking the <code>pCutoff</code> parameter, that specifies the statistical significance threshold; the <code>logFC</code> parameter, which indicates the minimum log2 fold change that features must display for being considered as differentially expressed; and the <code>pAdjustment</code> parameter, which specifies the approach used for multiple testing correction (default is <code>fdr</code> to use the Benjamini-Hochberg method).</p>
 </div>
 <div class="section level4" number="3.2.4">
 <h4 id="param">
@@ -784,21 +779,17 @@ Figure 1: <span class="caption-title">MDS plots for miRNAs and genes</span><br>B
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## create a volcano plot for genes</span></span>
 <span><span class="va">geneVolcano</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotVolcano.html">plotVolcano</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
-<span>    assay <span class="op">=</span> <span class="st">"genes"</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"Gene differential expression"</span></span>
-<span><span class="op">)</span></span>
+<span>                           assay <span class="op">=</span> <span class="st">"genes"</span>,</span>
+<span>                           title <span class="op">=</span> <span class="st">"Gene differential expression"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## create a volcano plot for miRNAs</span></span>
 <span><span class="va">mirnaVolcano</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotVolcano.html">plotVolcano</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
-<span>    assay <span class="op">=</span> <span class="st">"microRNA"</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"miRNA differential expression"</span></span>
-<span><span class="op">)</span></span>
+<span>                            assay <span class="op">=</span> <span class="st">"microRNA"</span>,</span>
+<span>                            title <span class="op">=</span> <span class="st">"miRNA differential expression"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## plot graphs side by side</span></span>
 <span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">geneVolcano</span>, <span class="va">mirnaVolcano</span>,</span>
-<span>    nrow <span class="op">=</span> <span class="fl">1</span>, labels <span class="op">=</span> <span class="st">"AUTO"</span>,</span>
-<span>    common.legend <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>                  nrow <span class="op">=</span> <span class="fl">1</span>, labels <span class="op">=</span> <span class="st">"AUTO"</span>, common.legend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <span style="display:block;" id="fig:volcano"></span>
 <img src="MIRit_files/figure-html/volcano-1.png" alt="Volcano plots of gene and miRNA differential expression." width="100%" class="widefigure"><p class="caption">
@@ -813,9 +804,8 @@ Figure 2: <span class="caption-title">Volcano plots of gene and miRNA differenti
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## create a bar plot for all thyroid features</span></span>
 <span><span class="va">thyrBar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotDE.html">plotDE</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
-<span>    features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TG"</span>, <span class="st">"TPO"</span>, <span class="st">"DIO2"</span>, <span class="st">"PAX8"</span><span class="op">)</span>,</span>
-<span>    graph <span class="op">=</span> <span class="st">"barplot"</span>, linear <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span>
+<span>                  features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TG"</span>, <span class="st">"TPO"</span>, <span class="st">"DIO2"</span>, <span class="st">"PAX8"</span><span class="op">)</span>,</span>
+<span>                  graph <span class="op">=</span> <span class="st">"barplot"</span>, linear <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## show the resulting plot</span></span>
 <span><span class="va">thyrBar</span></span>
@@ -891,7 +881,10 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <p>In our example, we are going to perform the enrichment analysis by using ORA with GO database (biological processes).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## perform over-representation analysis with GO</span></span>
-<span><span class="va">ora</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichGenes.html">enrichGenes</a></span><span class="op">(</span><span class="va">experiment</span>, method <span class="op">=</span> <span class="st">"ORA"</span>, database <span class="op">=</span> <span class="st">"GO"</span>, organism <span class="op">=</span> <span class="st">"Homo sapiens"</span><span class="op">)</span></span>
+<span><span class="va">ora</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichGenes.html">enrichGenes</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
+<span>                   method <span class="op">=</span> <span class="st">"ORA"</span>,</span>
+<span>                   database <span class="op">=</span> <span class="st">"GO"</span>,</span>
+<span>                   organism <span class="op">=</span> <span class="st">"Homo sapiens"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Since not specified, 'category' for GO database is set to bp (default).</span></span>
 <span><span class="co">#&gt; Reading GO gene-sets from cache...</span></span>
 <span><span class="co">#&gt; Performing the enrichment of upregulated genes...</span></span>
@@ -900,13 +893,19 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <p>MIRit performs ORA separately for upregulated and downregulated genes, as it has been shown that this is more powerful compared to enriching all DE genes <span class="citation">(<a href="#ref-hong_separate_2014-1">Hong et al. 2014</a>)</span>. Therefore, when we use ORA, <code><a href="../reference/enrichGenes.html">enrichGenes()</a></code> returns a <code>list</code> containing two objects of class <code>FunctionalEnrichment</code>, one storing enrichment results for upregulated genes, and one for downregulated genes.</p>
 <p>Before exploring the results of the analysis, we will also demonstrate the capabilities of MIRit by performing GSEA with the gene sets provided by the KEGG pathway database.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## perform gene-set enrichment analysis with KEGG</span></span>
-<span><span class="va">gse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichGenes.html">enrichGenes</a></span><span class="op">(</span><span class="va">experiment</span>, method <span class="op">=</span> <span class="st">"GSEA"</span>, database <span class="op">=</span> <span class="st">"KEGG"</span>, organism <span class="op">=</span> <span class="st">"Homo sapiens"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co">## set seed for reproducible results</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## perform gene-set enrichment analysis with KEGG</span></span>
+<span><span class="va">gse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichGenes.html">enrichGenes</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
+<span>                   method <span class="op">=</span> <span class="st">"GSEA"</span>,</span>
+<span>                   database <span class="op">=</span> <span class="st">"KEGG"</span>,</span>
+<span>                   organism <span class="op">=</span> <span class="st">"Homo sapiens"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Since not specified, 'category' for KEGG database is set to pathway (default).</span></span>
 <span><span class="co">#&gt; Reading KEGG gene-sets from cache...</span></span>
 <span><span class="co">#&gt; Ranking genes based on signed.pval...</span></span>
 <span><span class="co">#&gt; Performing gene-set enrichment analysis (GSEA)...</span></span>
-<span><span class="co">#&gt; GSEA reported 2 significantly enriched terms.</span></span></code></pre></div>
+<span><span class="co">#&gt; GSEA reported 3 significantly enriched terms.</span></span></code></pre></div>
 <p>In this case, the <code><a href="../reference/enrichGenes.html">enrichGenes()</a></code> function returns a single object of class <code>FunctionalEnrichment</code>, containing GSEA results.</p>
 </div>
 <div class="section level3" number="4.5">
@@ -943,24 +942,34 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 </tr></thead>
 <tbody>
 <tr class="odd">
+<td align="left">Thyroid hormone synthesis</td>
+<td align="right">0</td>
+<td align="right">0.01</td>
+<td align="right">0.56</td>
+<td align="right">-0.67</td>
+<td align="right">-2.02</td>
+<td align="right">27</td>
+<td align="left">SLC26A4,….</td>
+</tr>
+<tr class="even">
 <td align="left">Protein processing in endoplasmic reticulum</td>
 <td align="right">0</td>
 <td align="right">0.02</td>
-<td align="right">0.54</td>
+<td align="right">0.52</td>
 <td align="right">-0.54</td>
-<td align="right">-1.87</td>
+<td align="right">-1.88</td>
 <td align="right">55</td>
 <td align="left">BCL2, HY….</td>
 </tr>
-<tr class="even">
-<td align="left">Thyroid hormone synthesis</td>
+<tr class="odd">
+<td align="left">Coronavirus disease - COVID-19</td>
 <td align="right">0</td>
-<td align="right">0.02</td>
-<td align="right">0.52</td>
-<td align="right">-0.67</td>
-<td align="right">-2.00</td>
-<td align="right">27</td>
-<td align="left">SLC26A4,….</td>
+<td align="right">0.04</td>
+<td align="right">0.48</td>
+<td align="right">-0.45</td>
+<td align="right">-1.68</td>
+<td align="right">85</td>
+<td align="left">JUN, RPL….</td>
 </tr>
 </tbody>
 </table></div>
@@ -1154,21 +1163,19 @@ Figure 5: <span class="caption-title">GSEA-style plot for Thyroid hormone synthe
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## plot the correlation between miR-146b-5p and DIO2</span></span>
 <span><span class="va">cor1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCorrelation.html">plotCorrelation</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
-<span>    mirna <span class="op">=</span> <span class="st">"hsa-miR-146b-5p"</span>,</span>
-<span>    gene <span class="op">=</span> <span class="st">"DIO2"</span>, condition <span class="op">=</span> <span class="st">"disease"</span></span>
-<span><span class="op">)</span></span>
+<span>                        mirna <span class="op">=</span> <span class="st">"hsa-miR-146b-5p"</span>,</span>
+<span>                        gene <span class="op">=</span> <span class="st">"DIO2"</span>,</span>
+<span>                        condition <span class="op">=</span> <span class="st">"disease"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## plot the correlation between miR-146b-3p and PAX8</span></span>
 <span><span class="va">cor2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCorrelation.html">plotCorrelation</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
-<span>    mirna <span class="op">=</span> <span class="st">"hsa-miR-146b-3p"</span>,</span>
-<span>    gene <span class="op">=</span> <span class="st">"PAX8"</span>, condition <span class="op">=</span> <span class="st">"disease"</span></span>
-<span><span class="op">)</span></span>
+<span>                        mirna <span class="op">=</span> <span class="st">"hsa-miR-146b-3p"</span>,</span>
+<span>                        gene <span class="op">=</span> <span class="st">"PAX8"</span>,</span>
+<span>                        condition <span class="op">=</span> <span class="st">"disease"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## plot graphs side by side</span></span>
-<span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">cor1</span>, <span class="va">cor2</span>,</span>
-<span>    nrow <span class="op">=</span> <span class="fl">1</span>, labels <span class="op">=</span> <span class="st">"AUTO"</span>,</span>
-<span>    common.legend <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">cor1</span>, <span class="va">cor2</span>, nrow <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                  labels <span class="op">=</span> <span class="st">"AUTO"</span>, common.legend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <span style="display:block;" id="fig:corPlot"></span>
 <img src="MIRit_files/figure-html/corPlot-1.png" alt="Correlation between miRNAs and key thyroid genes. These plots suggest that the upregulation of miR-146b-5p and miR-146b-3p may be responsible for the downregulation of DIO2 and PAX8, respectively." width="100%" class="widefigure"><p class="caption">
@@ -1259,10 +1266,9 @@ Figure 6: <span class="caption-title">Correlation between miRNAs and key thyroid
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## perform a one-sided inverse association</span></span>
 <span><span class="va">exp.association</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mirnaIntegration.html">mirnaIntegration</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
-<span>    test <span class="op">=</span> <span class="st">"association"</span>,</span>
-<span>    associationMethod <span class="op">=</span> <span class="st">"boschloo"</span>,</span>
-<span>    pAdjustment <span class="op">=</span> <span class="st">"none"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>                                    test <span class="op">=</span> <span class="st">"association"</span>,</span>
+<span>                                    associationMethod <span class="op">=</span> <span class="st">"boschloo"</span>,</span>
+<span>                                    pAdjustment <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
 <p>Finally, after performing the association analysis, results can be accessed through the <code><a href="../reference/integration.html">integration()</a></code> function in the same way as we can do for correlation analyses.</p>
 </div>
 </div>
@@ -1275,9 +1281,8 @@ Figure 6: <span class="caption-title">Correlation between miRNAs and key thyroid
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## perform the integrative analysis through 'fry' method</span></span>
 <span><span class="va">exp.fry</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mirnaIntegration.html">mirnaIntegration</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
-<span>    test <span class="op">=</span> <span class="st">"fry"</span>,</span>
-<span>    pCutoff <span class="op">=</span> <span class="fl">0.1</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>                            test <span class="op">=</span> <span class="st">"fry"</span>,</span>
+<span>                            pCutoff <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3" number="7.4">
 <h3 id="functional-enrichment-of-integrated-target-genes">
@@ -1295,9 +1300,9 @@ Figure 6: <span class="caption-title">Correlation between miRNAs and key thyroid
 <span></span>
 <span><span class="co">## show a dot plot for the enrichment of downregulated genes</span></span>
 <span><span class="fu"><a href="../reference/enrichmentDotplot.html">enrichmentDotplot</a></span><span class="op">(</span><span class="va">oraTarg</span><span class="op">$</span><span class="va">downregulated</span>,</span>
-<span>    showTerms <span class="op">=</span> <span class="fl">7</span>,</span>
-<span>    showTermsParam <span class="op">=</span> <span class="st">"padj"</span>, title <span class="op">=</span> <span class="st">"Depleted diseases"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>                  showTerms <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>                  showTermsParam <span class="op">=</span> <span class="st">"padj"</span>,</span>
+<span>                  title <span class="op">=</span> <span class="st">"Depleted diseases"</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <span style="display:block;" id="fig:intTargEnr"></span>
 <img src="MIRit_files/figure-html/intTargEnr-1.png" alt="Functional enrichment of integrated targets. This dot plot shows the enriched diseases for downregulated genes." width="100%"><p class="caption">
@@ -1357,9 +1362,8 @@ Figure 7: <span class="caption-title">Functional enrichment of integrated target
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## create miRNA-augmented networks using KEGG pathways</span></span>
 <span><span class="va">networks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/preparePathways.html">preparePathways</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
-<span>    database <span class="op">=</span> <span class="st">"KEGG"</span>,</span>
-<span>    organism <span class="op">=</span> <span class="st">"Homo sapiens"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>                            database <span class="op">=</span> <span class="st">"KEGG"</span>,</span>
+<span>                            organism <span class="op">=</span> <span class="st">"Homo sapiens"</span><span class="op">)</span></span></code></pre></div>
 <p>After running this function, pathways with less than 10% of nodes with expression measurements are removed. This option can be changed by specifying the <code>minPc</code> parameter.</p>
 <p>Now, we are ready to perform TAIPA through the <code><a href="../reference/topologicalAnalysis.html">topologicalAnalysis()</a></code> function, which is used to calculate pathway scores for all the augmented networks and to evaluate their statistical significance through permutation tests.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
@@ -1368,9 +1372,8 @@ Figure 7: <span class="caption-title">Functional enrichment of integrated target
 <span></span>
 <span><span class="co">## perform TAIPA</span></span>
 <span><span class="va">taipa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/topologicalAnalysis.html">topologicalAnalysis</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
-<span>    pathways <span class="op">=</span> <span class="va">networks</span>,</span>
-<span>    nPerm <span class="op">=</span> <span class="fl">10000</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>                             pathways <span class="op">=</span> <span class="va">networks</span>,</span>
+<span>                             nPerm <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span></code></pre></div>
 <p>As a result of the analysis, an object of class <code>IntegrativePathwayAnalysis</code> storing the results of TAIPA is returned. Notably, the user can change the behavior of the <code><a href="../reference/topologicalAnalysis.html">topologicalAnalysis()</a></code> in several ways. For example, the <code>pCutoff</code> and <code>pAdjustment</code> parameters can be used to change the significance threshold and the multiple testing correction method, respectively. Moreover, the <code>nPerm</code> parameter can be tweaked to change the number of permutations to use for evaluating statistical significance. In this regard, we recommend using at least 10000 permutations, with no less than 1000.</p>
 </div>
 <div class="section level3" number="8.3">
@@ -1418,7 +1421,7 @@ Figure 9: <span class="caption-title">Impaired miRNA-mRNA regulatory network pre
 <div class="section level2">
 <h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<pre><code><span><span class="co">#&gt; R Under development (unstable) (2023-11-22 r85609)</span></span>
+<pre><code><span><span class="co">#&gt; R Under development (unstable) (2024-01-31 r85845)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
 <span><span class="co">#&gt; Running under: Ubuntu 22.04.3 LTS</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1441,63 +1444,62 @@ Figure 9: <span class="caption-title">Impaired miRNA-mRNA regulatory network pre
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] MIRit_0.99.3     BiocStyle_2.31.0</span></span>
+<span><span class="co">#&gt; [1] MIRit_0.99.11    BiocStyle_2.31.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;   [1] DBI_1.1.3                   bitops_1.0-7               </span></span>
-<span><span class="co">#&gt;   [3] gridExtra_2.3               rlang_1.1.2                </span></span>
+<span><span class="co">#&gt;   [1] DBI_1.2.1                   bitops_1.0-7               </span></span>
+<span><span class="co">#&gt;   [3] gridExtra_2.3               rlang_1.1.3                </span></span>
 <span><span class="co">#&gt;   [5] magrittr_2.0.3              MonoPoly_0.3-10            </span></span>
 <span><span class="co">#&gt;   [7] matrixStats_1.2.0           compiler_4.4.0             </span></span>
-<span><span class="co">#&gt;   [9] RSQLite_2.3.4               vctrs_0.6.5                </span></span>
+<span><span class="co">#&gt;   [9] RSQLite_2.3.5               vctrs_0.6.5                </span></span>
 <span><span class="co">#&gt;  [11] quadprog_1.5-8              stringr_1.5.1              </span></span>
 <span><span class="co">#&gt;  [13] pkgconfig_2.0.3             crayon_1.5.2               </span></span>
 <span><span class="co">#&gt;  [15] fastmap_1.1.1               backports_1.4.1            </span></span>
-<span><span class="co">#&gt;  [17] dbplyr_2.4.0                XVector_0.43.0             </span></span>
+<span><span class="co">#&gt;  [17] dbplyr_2.4.0                XVector_0.43.1             </span></span>
 <span><span class="co">#&gt;  [19] labeling_0.4.3              utf8_1.2.4                 </span></span>
 <span><span class="co">#&gt;  [21] rmarkdown_2.25              graph_1.81.0               </span></span>
 <span><span class="co">#&gt;  [23] purrr_1.0.2                 bit_4.0.5                  </span></span>
-<span><span class="co">#&gt;  [25] xfun_0.41                   MultiAssayExperiment_1.29.0</span></span>
+<span><span class="co">#&gt;  [25] xfun_0.41                   MultiAssayExperiment_1.29.1</span></span>
 <span><span class="co">#&gt;  [27] zlibbioc_1.49.0             cachem_1.0.8               </span></span>
-<span><span class="co">#&gt;  [29] GenomeInfoDb_1.39.2         jsonlite_1.8.8             </span></span>
+<span><span class="co">#&gt;  [29] GenomeInfoDb_1.39.5         jsonlite_1.8.8             </span></span>
 <span><span class="co">#&gt;  [31] blob_1.2.4                  highr_0.10                 </span></span>
-<span><span class="co">#&gt;  [33] DelayedArray_0.29.0         BiocParallel_1.37.0        </span></span>
+<span><span class="co">#&gt;  [33] DelayedArray_0.29.1         BiocParallel_1.37.0        </span></span>
 <span><span class="co">#&gt;  [35] broom_1.0.5                 parallel_4.4.0             </span></span>
 <span><span class="co">#&gt;  [37] R6_2.5.1                    bslib_0.6.1                </span></span>
-<span><span class="co">#&gt;  [39] stringi_1.8.3               limma_3.59.1               </span></span>
-<span><span class="co">#&gt;  [41] car_3.1-2                   GenomicRanges_1.55.1       </span></span>
-<span><span class="co">#&gt;  [43] jquerylib_0.1.4             Rcpp_1.0.11                </span></span>
-<span><span class="co">#&gt;  [45] bookdown_0.37               SummarizedExperiment_1.33.1</span></span>
-<span><span class="co">#&gt;  [47] knitr_1.45                  IRanges_2.37.0             </span></span>
-<span><span class="co">#&gt;  [49] BiocBaseUtils_1.5.0         Matrix_1.6-4               </span></span>
-<span><span class="co">#&gt;  [51] splines_4.4.0               tidyselect_1.2.0           </span></span>
-<span><span class="co">#&gt;  [53] abind_1.4-5                 yaml_2.3.8                 </span></span>
-<span><span class="co">#&gt;  [55] codetools_0.2-19            curl_5.2.0                 </span></span>
-<span><span class="co">#&gt;  [57] geneset_0.2.7               lattice_0.22-5             </span></span>
-<span><span class="co">#&gt;  [59] tibble_3.2.1                Biobase_2.63.0             </span></span>
-<span><span class="co">#&gt;  [61] withr_2.5.2                 evaluate_0.23              </span></span>
-<span><span class="co">#&gt;  [63] BiocFileCache_2.11.1        pillar_1.9.0               </span></span>
-<span><span class="co">#&gt;  [65] BiocManager_1.30.22         ggpubr_0.6.0               </span></span>
-<span><span class="co">#&gt;  [67] filelock_1.0.3              MatrixGenerics_1.15.0      </span></span>
-<span><span class="co">#&gt;  [69] carData_3.0-5               stats4_4.4.0               </span></span>
-<span><span class="co">#&gt;  [71] generics_0.1.3              RCurl_1.98-1.13            </span></span>
-<span><span class="co">#&gt;  [73] S4Vectors_0.41.2            ggplot2_3.4.4              </span></span>
-<span><span class="co">#&gt;  [75] munsell_0.5.0               scales_1.3.0               </span></span>
-<span><span class="co">#&gt;  [77] glue_1.6.2                  tools_4.4.0                </span></span>
-<span><span class="co">#&gt;  [79] data.table_1.14.10          fgsea_1.29.0               </span></span>
-<span><span class="co">#&gt;  [81] locfit_1.5-9.8              ggsignif_0.6.4             </span></span>
-<span><span class="co">#&gt;  [83] fastmatch_1.1-4             cowplot_1.1.2              </span></span>
-<span><span class="co">#&gt;  [85] grid_4.4.0                  tidyr_1.3.0                </span></span>
-<span><span class="co">#&gt;  [87] edgeR_4.1.3                 colorspace_2.1-0           </span></span>
-<span><span class="co">#&gt;  [89] GenomeInfoDbData_1.2.11     cli_3.6.2                  </span></span>
-<span><span class="co">#&gt;  [91] fansi_1.0.6                 S4Arrays_1.3.1             </span></span>
-<span><span class="co">#&gt;  [93] dplyr_1.1.4                 Rgraphviz_2.47.0           </span></span>
-<span><span class="co">#&gt;  [95] gtable_0.3.4                rstatix_0.7.2              </span></span>
-<span><span class="co">#&gt;  [97] sass_0.4.8                  digest_0.6.33              </span></span>
-<span><span class="co">#&gt;  [99] BiocGenerics_0.49.1         SparseArray_1.3.1          </span></span>
-<span><span class="co">#&gt; [101] farver_2.1.1                memoise_2.0.1              </span></span>
-<span><span class="co">#&gt; [103] htmltools_0.5.7             lifecycle_1.0.4            </span></span>
-<span><span class="co">#&gt; [105] httr_1.4.7                  statmod_1.5.0              </span></span>
-<span><span class="co">#&gt; [107] bit64_4.0.5</span></span></code></pre>
+<span><span class="co">#&gt;  [39] stringi_1.8.3               limma_3.59.2               </span></span>
+<span><span class="co">#&gt;  [41] car_3.1-2                   GenomicRanges_1.55.2       </span></span>
+<span><span class="co">#&gt;  [43] jquerylib_0.1.4             Rcpp_1.0.12                </span></span>
+<span><span class="co">#&gt;  [45] bookdown_0.37               SummarizedExperiment_1.33.3</span></span>
+<span><span class="co">#&gt;  [47] knitr_1.45                  IRanges_2.37.1             </span></span>
+<span><span class="co">#&gt;  [49] BiocBaseUtils_1.5.0         Matrix_1.6-5               </span></span>
+<span><span class="co">#&gt;  [51] tidyselect_1.2.0            abind_1.4-5                </span></span>
+<span><span class="co">#&gt;  [53] yaml_2.3.8                  codetools_0.2-19           </span></span>
+<span><span class="co">#&gt;  [55] curl_5.2.0                  geneset_0.2.7              </span></span>
+<span><span class="co">#&gt;  [57] lattice_0.22-5              tibble_3.2.1               </span></span>
+<span><span class="co">#&gt;  [59] Biobase_2.63.0              withr_3.0.0                </span></span>
+<span><span class="co">#&gt;  [61] evaluate_0.23               BiocFileCache_2.11.1       </span></span>
+<span><span class="co">#&gt;  [63] pillar_1.9.0                BiocManager_1.30.22        </span></span>
+<span><span class="co">#&gt;  [65] ggpubr_0.6.0                filelock_1.0.3             </span></span>
+<span><span class="co">#&gt;  [67] MatrixGenerics_1.15.0       carData_3.0-5              </span></span>
+<span><span class="co">#&gt;  [69] stats4_4.4.0                generics_0.1.3             </span></span>
+<span><span class="co">#&gt;  [71] RCurl_1.98-1.14             S4Vectors_0.41.3           </span></span>
+<span><span class="co">#&gt;  [73] ggplot2_3.4.4               munsell_0.5.0              </span></span>
+<span><span class="co">#&gt;  [75] scales_1.3.0                glue_1.7.0                 </span></span>
+<span><span class="co">#&gt;  [77] tools_4.4.0                 data.table_1.15.0          </span></span>
+<span><span class="co">#&gt;  [79] fgsea_1.29.0                locfit_1.5-9.8             </span></span>
+<span><span class="co">#&gt;  [81] ggsignif_0.6.4              fastmatch_1.1-4            </span></span>
+<span><span class="co">#&gt;  [83] cowplot_1.1.3               grid_4.4.0                 </span></span>
+<span><span class="co">#&gt;  [85] tidyr_1.3.1                 edgeR_4.1.15               </span></span>
+<span><span class="co">#&gt;  [87] colorspace_2.1-0            GenomeInfoDbData_1.2.11    </span></span>
+<span><span class="co">#&gt;  [89] cli_3.6.2                   fansi_1.0.6                </span></span>
+<span><span class="co">#&gt;  [91] S4Arrays_1.3.3              dplyr_1.1.4                </span></span>
+<span><span class="co">#&gt;  [93] Rgraphviz_2.47.0            gtable_0.3.4               </span></span>
+<span><span class="co">#&gt;  [95] rstatix_0.7.2               sass_0.4.8                 </span></span>
+<span><span class="co">#&gt;  [97] digest_0.6.34               BiocGenerics_0.49.1        </span></span>
+<span><span class="co">#&gt;  [99] SparseArray_1.3.3           farver_2.1.1               </span></span>
+<span><span class="co">#&gt; [101] memoise_2.0.1               htmltools_0.5.7            </span></span>
+<span><span class="co">#&gt; [103] lifecycle_1.0.4             httr_1.4.7                 </span></span>
+<span><span class="co">#&gt; [105] statmod_1.5.0               bit64_4.0.5</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

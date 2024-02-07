@@ -18,11 +18,11 @@ cutoff used for differential expression analysis."><meta property="og:image" con
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">MIRit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -201,13 +201,9 @@ bottom and left borders. Default is TRUE</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># load example MirnaExperiment object</span></span></span>
 <span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="loadExamples.html">loadExamples</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># produce a volcano plot for miRNAs with labels</span></span></span>
-<span class="r-in"><span><span class="fu">plotVolcano</span><span class="op">(</span><span class="va">obj</span>, <span class="st">"microRNA"</span>, labels <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plotVolcano-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># produce a volcano plot for genes</span></span></span>
 <span class="r-in"><span><span class="fu">plotVolcano</span><span class="op">(</span><span class="va">obj</span>, <span class="st">"genes"</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plotVolcano-2.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="plotVolcano-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
