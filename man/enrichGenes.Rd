@@ -230,11 +230,13 @@ To download gene sets from the above mentioned databases, MIRit uses the
 \code{fgsea} algorithm, whereas for CAMERA, the \code{limma} package is used.
 }
 \examples{
+\donttest{
 # load example MirnaExperiment object
 obj <- loadExamples()
 
 # perform ORA with GO
 de_enr <- enrichGenes(obj, method = "ORA", database = "GO")
+}
 
 }
 \references{

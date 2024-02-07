@@ -100,11 +100,8 @@ To perform multidimensional scaling, this function internally uses
 # load example MirnaExperiment object
 obj <- loadExamples()
 
-# produce MDS plot for miRNA expression with labels
-plotDimensions(obj, "microRNA", condition = "disease", labels = TRUE)
-
-# produce MDS plot for genes without condition color
-plotDimensions(obj, "genes")
+# produce MDS plot for genes with condition color
+plotDimensions(obj, "genes", condition = "disease")
 
 }
 \references{

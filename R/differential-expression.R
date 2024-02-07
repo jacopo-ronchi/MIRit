@@ -130,6 +130,7 @@
 #' [mirnaDE()] and [geneDE()] functions for miRNAs and genes, respectively.
 #'
 #' @examples
+#' \donttest{
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
 #'
@@ -138,6 +139,19 @@
 #'     group = "disease", contrast = "PTC-NTH",
 #'     design = ~ 0 + disease + patient, method = "edgeR"
 #' )
+#' 
+#' # perform miRNA DE with DESeq2
+#' obj <- performMirnaDE(obj,
+#'     group = "disease", contrast = "PTC-NTH",
+#'     design = ~ 0 + disease + patient, method = "DESeq2"
+#' )
+#' 
+#' # perform miRNA DE with limma-voom
+#' obj <- performMirnaDE(obj,
+#'     group = "disease", contrast = "PTC-NTH",
+#'     design = ~ 0 + disease + patient, method = "voom"
+#' )
+#' }
 #'
 #' @references
 #' Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015). “limma

@@ -8,7 +8,8 @@ getTargets(
   mirnaObj,
   organism = "Homo sapiens",
   score = "High",
-  includeValidated = TRUE
+  includeValidated = TRUE,
+  evidence = "all"
 )
 }
 \arguments{
@@ -30,6 +31,11 @@ remaining predictions, respectively}
 from miRTarBase or not. Default is TRUE in order to retrieve both predicted
 and validated targets. Note that for species other than Homo sapines only
 validated interactions are considered.}
+
+\item{evidence}{The support evidence required for miRTarBase validated
+interactions. The possible options are \code{strong}, to only include targets
+with strong experimental support, and \code{all} (default) to also include
+validated interactions with less strong evidence.}
 }
 \value{
 A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing miRNA targets
@@ -70,23 +76,26 @@ metric check Tokar et al. 2018 and Hauschild et al. 2023.
 This function defines miRNA targets by considering both validated
 interactions present in miRTarBase (version 9), and predicted interactions
 identified by mirDIP. Please note that for species other than Homo sapiens,
-only miRTarBase interactions are available.
+only miRTarBase interactions are available. Further, it is possible to
+include all validated miRNA-target interactions, or limit the retrieval to
+interactions with strong supporting evidence.
 }
 \note{
 To access mirDIP database at \url{https://ophid.utoronto.ca/mirDIP/}, this
 function directly use mirDIP API through R.
 }
 \examples{
+\donttest{
 # load example MirnaExperiment object
 obj <- loadExamples()
 
-\donttest{
 # retrieve targets
 obj <- getTargets(mirnaObj = obj)
-}
 
 # access targets
 tg <- mirnaTargets(obj)
+
+}
 
 }
 \references{

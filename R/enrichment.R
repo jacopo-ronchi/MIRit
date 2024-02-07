@@ -385,11 +385,13 @@ validateCategories <- function(database, category, organism) {
 #' [gseaPlot()], and [gseaRidgeplot()].
 #'
 #' @examples
+#' \donttest{
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
 #'
 #' # perform ORA with GO
 #' de_enr <- enrichGenes(obj, method = "ORA", database = "GO")
+#' }
 #'
 #' @note
 #' To download gene sets from the above mentioned databases, MIRit uses the

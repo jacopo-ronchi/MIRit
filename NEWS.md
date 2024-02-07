@@ -1,3 +1,11 @@
+# MIRit 0.99.11
+
+This new version introduces the possibility of limiting validated targets
+retrieval from miRTarBase to only those interactions supported by extensive
+experimental evidence. Moreover, minor fixes were made to the vignette,
+documentation, and internal data. Finally, some examples have been redefined
+to reduce checking time.
+
 # MIRit 0.99.10
 
 This patch introduces a minor fix for one unit test.

@@ -33,7 +33,9 @@
 #' This function defines miRNA targets by considering both validated
 #' interactions present in miRTarBase (version 9), and predicted interactions
 #' identified by mirDIP. Please note that for species other than Homo sapiens,
-#' only miRTarBase interactions are available.
+#' only miRTarBase interactions are available. Further, it is possible to
+#' include all validated miRNA-target interactions, or limit the retrieval to
+#' interactions with strong supporting evidence.
 #'
 #' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
 #' containing miRNA and gene data
@@ -50,6 +52,10 @@
 #' from miRTarBase or not. Default is TRUE in order to retrieve both predicted
 #' and validated targets. Note that for species other than Homo sapines only
 #' validated interactions are considered.
+#' @param evidence The support evidence required for miRTarBase validated
+#' interactions. The possible options are `strong`, to only include targets
+#' with strong experimental support, and `all` (default) to also include
+#' validated interactions with less strong evidence.
 #'
 #' @returns
 #' A [`MirnaExperiment`][MirnaExperiment-class] object containing miRNA targets
@@ -57,16 +63,17 @@
 #' [mirnaTargets()] function.
 #'
 #' @examples
+#' \donttest{
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
 #'
-#' \donttest{
 #' # retrieve targets
 #' obj <- getTargets(mirnaObj = obj)
-#' }
 #'
 #' # access targets
 #' tg <- mirnaTargets(obj)
+#' 
+#' }
 #'
 #' @references
 #' Tomas Tokar and others, mirDIP 4.1—integrative database of human microRNA
@@ -93,7 +100,8 @@
 getTargets <- function(mirnaObj,
     organism = "Homo sapiens",
     score = "High",
-    includeValidated = TRUE) {
+    includeValidated = TRUE,
+    evidence = "all") {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -136,6 +144,14 @@ getTargets <- function(mirnaObj,
     if (!is.logical(includeValidated) |
         length(includeValidated) != 1) {
         stop("'includeValidated' must be logical (TRUE/FALSE)!", call. = FALSE)
+    }
+    if (!is.character(evidence) |
+        length(evidence) != 1 |
+        !evidence %in% c("all", "strong")) {
+        stop("'evidence' must be one of 'all' and 'strong'. ",
+             "For additional details, see ?getTargets",
+             call. = FALSE
+        )
     }
 
     ## define miRNAs
@@ -244,7 +260,13 @@ getTargets <- function(mirnaObj,
 
         ## load miRTarBase
         mt <- quiet(readxl::read_xlsx(BiocFileCache::bfcrpath(bfc, rids = rid)))
-
+        
+        ## limit results to strongly supported interactions
+        if (evidence == "strong") {
+            weakSupport <- grepl("Weak", mt$`Support Type`)
+            mt <- mt[!weakSupport, ]
+        }
+        
         ## keep interactions involving measured miRNAs
         mt <- mt[mt$miRNA %in% allMirnas, c("miRNA", "Target Gene")]
         mt <- unique(mt)

@@ -138,14 +138,11 @@
 #' A base R plot with the augmented pathway.
 #'
 #' @examples
-#'
-#' \donttest{
 #' # load example IntegrativePathwayAnalysis object
 #' obj <- loadExamples("IntegrativePathwayAnalysis")
 #' 
 #' # explore a specific biological network
 #' visualizeNetwork(obj, "Thyroid hormone synthesis")
-#' }
 #'
 #' @note
 #' This function uses the `Rgraphviz` package to render the network object.
@@ -3128,11 +3125,8 @@ plotVolcano <- function(mirnaObj,
 #' # load example MirnaExperiment object
 #' obj <- loadExamples()
 #'
-#' # produce MDS plot for miRNA expression with labels
-#' plotDimensions(obj, "microRNA", condition = "disease", labels = TRUE)
-#'
-#' # produce MDS plot for genes without condition color
-#' plotDimensions(obj, "genes")
+#' # produce MDS plot for genes with condition color
+#' plotDimensions(obj, "genes", condition = "disease")
 #'
 #' @references
 #' Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015). “limma

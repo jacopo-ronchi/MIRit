@@ -191,14 +191,11 @@ include a network title with the desired look.
 This function uses the \code{Rgraphviz} package to render the network object.
 }
 \examples{
-
-\donttest{
 # load example IntegrativePathwayAnalysis object
 obj <- loadExamples("IntegrativePathwayAnalysis")
 
 # explore a specific biological network
 visualizeNetwork(obj, "Thyroid hormone synthesis")
-}
 
 }
 \author{
