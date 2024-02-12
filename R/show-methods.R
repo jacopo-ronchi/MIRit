@@ -8,15 +8,15 @@
 #' @export
 #' @importMethodsFrom MultiAssayExperiment show
 setMethod("show", "MirnaExperiment", function(object) {
-    cat("An object of class MirnaExperiment, which extends",
+    cat("An object of class MirnaExperiment, which extends ",
         "MultiAssayExperiment class and contains:\n\n",
         "\t- microRNA expression values: ",
-        class(experiments(object)[["microRNA"]]), " with ",
+        class(experiments(object)[["microRNA"]])[1], " with ",
         nrow(experiments(object)[["microRNA"]]),
         " rows and ",
         ncol(experiments(object)[["microRNA"]]),
         " columns\n", "\t- gene expression values: ",
-        class(experiments(object)[["genes"]]), " with ",
+        class(experiments(object)[["genes"]])[1], " with ",
         nrow(experiments(object)[["genes"]]), " rows and ",
         ncol(experiments(object)[["genes"]]), " columns\n",
         "\t- samples metadata: ", class(colData(object)),
@@ -61,13 +61,13 @@ setMethod("show", "MirnaExperiment", function(object) {
 #' @export
 setMethod("show", "FunctionalEnrichment", function(object) {
     cat("Object of class FunctionalEnrichment containing:\n\n",
-        "\t- over-representation analysis results: ",
+        "\t- functional enrichment results: ",
         class(enrichmentResults(object)), " with ",
         nrow(enrichmentResults(object)), " rows and ",
         ncol(enrichmentResults(object)), " columns\n",
-        "\t- functional enrichment analysis: ", object@method, "\n",
+        "\t- enrichment method: ", object@method, "\n",
         "\t- organism: ", object@organism, "\n",
-        "\t- gene sets database: ", enrichmentDatabase(object), "\n",
+        "\t- gene-sets database: ", enrichmentDatabase(object), "\n",
         "\t- p-value cutoff used: ", object@pCutoff, "\n",
         "\t- p-value adjustment method: ", object@pAdjustment, "\n",
         "\t- features used for the enrichment: ", class(object@features),

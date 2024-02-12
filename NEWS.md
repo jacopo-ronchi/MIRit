@@ -1,3 +1,11 @@
+# MIRit 0.99.12
+
+This version includes several improvements, including a completely revised
+vignette where all chunks are evaluated, minor tweaks to default values for
+differential expression analysis, and some bug fixes to the error bars in the
+`plotDE()` function. Other issues, such as artifacts in show methods, lacks in
+documentation, and dependence in DESCRIPTION, have been addressed too.
+
 # MIRit 0.99.11
 
 This new version introduces the possibility of limiting validated targets

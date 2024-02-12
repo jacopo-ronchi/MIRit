@@ -62,8 +62,8 @@ obj <- loadExamples()
 
 \donttest{
 # search disease
-searchDisease("Alzheimer disease")
-disId <- "Alzheimer disease"
+searchDisease("response to antidepressant")
+disId <- "response to antidepressant"
 
 # retrieve associated SNPs
 association <- findMirnaSNPs(obj, disId)

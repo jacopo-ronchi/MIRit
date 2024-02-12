@@ -2338,7 +2338,6 @@ plotCorrelation <- function(mirnaObj,
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
-#' @importFrom ggpubr mean_sd
 #' @export
 plotDE <- function(mirnaObj,
     features,
@@ -2621,16 +2620,30 @@ plotDE <- function(mirnaObj,
             y = "Expression", fill = "Condition"
         )
     } else if (graph == "barplot") {
+        ## calculate standard error intervals
+        interval <- vapply(seq(nrow(exprDf)), function(x) {
+            g <- exprDf[x, "Gene"]
+            cG <- exprDf[x, "Condition"]
+            expCond <- exprDf[exprDf$Gene == g & exprDf$Condition == cG, ]
+            se <- sd(expCond$Expression)/sqrt(nrow(expCond))
+            c(mean(expCond$Expression) + se,
+              mean(expCond$Expression - se))
+        }, FUN.VALUE = numeric(2))
+        exprDf$upperCi <- interval[1, ]
+        exprDf$lowerCi <- interval[2, ]
+        
         ## create a grouped barplot
         dePlot <- ggpubr::ggbarplot(
             data = exprDf,
             x = "Gene",
             y = "Expression",
             fill = "Condition",
-            position = ggplot2::position_dodge(0.8),
-            add = "mean_sd",
-            error.plot = "upper_errorbar"
-        )
+            merge = TRUE,
+            add = "mean"
+        ) + geom_errorbar(aes(group = Condition, ymax = upperCi,
+                              ymin = lowerCi),
+                          position = position_dodge(width = 0.8),
+                          width = 0.25)
     } else if (graph == "violinplot") {
         ## create a grouped violinplot
         dePlot <- ggpubr::ggviolin(
@@ -2976,10 +2989,10 @@ plotVolcano <- function(mirnaObj,
 
     ## determine Up and Downregulated features
     featDE$Change <- "Stable"
-    featDE$Change[which(featDE$logFC > lCut &
-        featDE$adj.P.Val < pCut)] <- "Up"
-    featDE$Change[which(featDE$logFC < -lCut &
-        featDE$adj.P.Val < pCut)] <- "Down"
+    featDE$Change[which(featDE$logFC >= lCut &
+        featDE$adj.P.Val <= pCut)] <- "Up"
+    featDE$Change[which(featDE$logFC <= -lCut &
+        featDE$adj.P.Val <= pCut)] <- "Down"
 
     ## determine the labels to show
     if (is.character(labels)) {
@@ -2991,7 +3004,7 @@ plotVolcano <- function(mirnaObj,
             featDE$ID[which(!featDE$ID %in% labels)] <- ""
         }
     } else if (is.numeric(labels)) {
-        fcFeat <- featDE[abs(featDE$logFC) > lCut, ]
+        fcFeat <- featDE[abs(featDE$logFC) >= lCut, ]
         featDE$ID[which(!featDE$ID %in% fcFeat$ID[seq(labels)])] <- ""
     }
 
@@ -3007,18 +3020,28 @@ plotVolcano <- function(mirnaObj,
     ) +
         ggplot2::geom_point(alpha = pointAlpha, size = pointSize) +
         ggplot2::scale_color_manual(values = colorScale) +
-        ggplot2::geom_vline(
-            xintercept = c(-lCut, lCut), lty = interceptType,
-            col = interceptColor, lwd = interceptWidth
-        ) +
-        ggplot2::geom_hline(
-            yintercept = -log10(pCutoff), lty = interceptType,
-            col = interceptColor, lwd = interceptWidth
-        ) +
         ggplot2::labs(
             x = "log2(fold change)",
             y = "-log10 (p-value)"
         )
+    
+    ## add logFC cutoff lines
+    if (lCut != 0) {
+        pVol <- pVol +
+            ggplot2::geom_vline(
+                xintercept = c(-lCut, lCut), lty = interceptType,
+                col = interceptColor, lwd = interceptWidth
+            )
+    }
+    
+    ## add p-value cutoff line
+    if (pCutoff != 1) {
+        pVol <- pVol +
+            ggplot2::geom_hline(
+                yintercept = -log10(pCutoff), lty = interceptType,
+                col = interceptColor, lwd = interceptWidth
+            )
+    }
 
     ## apply MIRit ggplot2 theme
     pVol <- pVol +

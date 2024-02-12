@@ -3,10 +3,11 @@
 #' `performMirnaDE()` and `performGeneDE()` are two functions provided by MIRit
 #' to conduct miRNA and gene differential expression analysis, respectively.
 #' In particular, these functions allow the user to compute differential
-#' expression through different methods, namely `edgeR`, `DESeq2`, `limma-voom`
-#' and `limma`. Data deriving from NGS experiments and microarray technology
-#' are all suitable for these functions. For precise indications about how to
-#' use these functions, please refer to the *details* section.
+#' expression through different methods, namely `edgeR` (Quasi-Likelihood
+#' framework), `DESeq2`, `limma-voom` and `limma`. Data deriving from NGS
+#' experiments and microarray technology are all suitable for these functions.
+#' For precise indications about how to use these functions, please refer to
+#' the *details* section.
 #'
 #' @details
 #' When performing differential expression for NGS experiments, count matrices
@@ -69,7 +70,7 @@
 #' `DESeq2`, and `voom` (for limma-voom). Instead, for microarray data, only
 #' `limma` can be used
 #' @param logFC The minimum log2 fold change required to consider a gene as
-#' differentially expressed. Default is 1, to retain only two-fold differences
+#' differentially expressed. Optional, default is 0
 #' @param pCutoff The adjusted p-value cutoff to use for statistical
 #' significance. The default value is `0.05`
 #' @param pAdjustment The p-value correction method for multiple testing. It
@@ -188,7 +189,7 @@ performMirnaDE <- function(
         contrast,
         design,
         method = "edgeR",
-        logFC = 1,
+        logFC = 0,
         pCutoff = 0.05,
         pAdjustment = "fdr",
         filterByExpr.args = list(),
@@ -254,7 +255,7 @@ performGeneDE <- function(
         contrast,
         design,
         method = "edgeR",
-        logFC = 1,
+        logFC = 0,
         pCutoff = 0.05,
         pAdjustment = "fdr",
         filterByExpr.args = list(),
@@ -319,7 +320,7 @@ performDE <- function(assay,
     contrast,
     design,
     method = "edgeR",
-    logFC = 1,
+    logFC = 0,
     pCutoff = 0.05,
     pAdjustment = "fdr",
     filterByExpr.args = list(),
@@ -391,7 +392,7 @@ performDE <- function(assay,
         length(logFC) != 1 |
         logFC < 0) {
         stop("'logFC' must be a non-neagtive number that specifies the ",
-            "minimum absolute significant fold change (default is 1)",
+            "minimum absolute significant fold change (default is 0)",
             call. = FALSE
         )
     }
@@ -732,8 +733,8 @@ edgeR.DE <- function(counts,
     deRes <- identifyColNames(deRes)
 
     ## select significant features
-    sig <- rownames(deRes[abs(deRes$logFC) > logFC &
-        deRes$adj.P.Val < pCutoff, ])
+    sig <- rownames(deRes[abs(deRes$logFC) >= logFC &
+        deRes$adj.P.Val <= pCutoff, ])
 
     ## create a list with DE results
     deList <- list(
@@ -807,8 +808,8 @@ DESeq2.DE <- function(counts,
     deRes <- identifyColNames(deRes)
 
     ## select significant features
-    sig <- rownames(deRes[abs(deRes$logFC) > logFC &
-        deRes$adj.P.Val < pCutoff, ])
+    sig <- rownames(deRes[abs(deRes$logFC) >= logFC &
+        deRes$adj.P.Val <= pCutoff, ])
 
     ## create a list with DE results
     deList <- list(
@@ -943,8 +944,8 @@ voom.DE <- function(counts,
     deRes <- identifyColNames(deRes)
 
     ## select significant features
-    sig <- rownames(deRes[abs(deRes$logFC) > logFC &
-        deRes$adj.P.Val < pCutoff, ])
+    sig <- rownames(deRes[abs(deRes$logFC) >= logFC &
+        deRes$adj.P.Val <= pCutoff, ])
 
     ## create a list with DE results
     deList <- list(
@@ -1079,8 +1080,8 @@ limma.DE <- function(expr,
     deRes <- identifyColNames(deRes)
 
     ## select significant features
-    sig <- rownames(deRes[abs(deRes$logFC) > logFC &
-        deRes$adj.P.Val < pCutoff, ])
+    sig <- rownames(deRes[abs(deRes$logFC) >= logFC &
+        deRes$adj.P.Val <= pCutoff, ])
 
     ## create a list with DE results
     deList <- list(
@@ -1166,15 +1167,14 @@ limma.DE <- function(expr,
 #' expression analysis. Check the *details* section to see the required format.
 #' Default is NULL not to add gene differential expression results
 #' @param mirna.logFC The minimum log2 fold change required to consider a miRNA
-#' as differentially expressed. Default is 1, to retain only two-fold
-#' differences
+#' as differentially expressed. Optional, default is 0
 #' @param mirna.pCutoff The adjusted p-value cutoff to use for miRNA statistical
 #' significance. The default value is `0.05`
 #' @param mirna.pAdjustment The p-value correction method for miRNA multiple
 #' testing. It must be one of: `fdr` (default), `BH`, `none`, `holm`,
 #' `hochberg`, `hommel`, `bonferroni`, `BY`
 #' @param gene.logFC The minimum log2 fold change required to consider a gene as
-#' differentially expressed. Default is 1, to retain only two-fold differences
+#' differentially expressed. Optional, default is 0
 #' @param gene.pCutoff The adjusted p-value cutoff to use for gene statistical
 #' significance. The default value is `0.05`
 #' @param gene.pAdjustment The p-value correction method for gene multiple
@@ -1211,8 +1211,8 @@ limma.DE <- function(expr,
 #'
 #' # add DE results to MirnaExperiment object
 #' obj <- addDifferentialExpression(obj, de_m, de_g,
-#'     mirna.logFC = 1, mirna.pCutoff = 0.05,
-#'     gene.logFC = 1, gene.pCutoff = 0.05
+#'     mirna.pCutoff = 0.05,
+#'     gene.pCutoff = 0.05
 #' )
 #'
 #' @author
@@ -1222,10 +1222,10 @@ limma.DE <- function(expr,
 addDifferentialExpression <- function(mirnaObj,
     mirnaDE = NULL,
     geneDE = NULL,
-    mirna.logFC = 1,
+    mirna.logFC = 0,
     mirna.pCutoff = 0.05,
     mirna.pAdjustment = "fdr",
-    gene.logFC = 1,
+    gene.logFC = 0,
     gene.pCutoff = 0.05,
     gene.pAdjustment = "fdr") {
     ## check inputs
@@ -1239,7 +1239,7 @@ addDifferentialExpression <- function(mirnaObj,
         length(mirna.logFC) != 1 |
         mirna.logFC < 0) {
         stop("'mirna.logFC' must be a non-neagtive number that specifies the ",
-            "minimum absolute significant fold change (default is 1)",
+            "minimum absolute significant fold change (default is 0)",
             call. = FALSE
         )
     }
@@ -1268,7 +1268,7 @@ addDifferentialExpression <- function(mirnaObj,
         length(gene.logFC) != 1 |
         gene.logFC < 0) {
         stop("'gene.logFC' must be a non-neagtive number that specifies the ",
-            "minimum absolute significant fold change (default is 1)",
+            "minimum absolute significant fold change (default is 0)",
             call. = FALSE
         )
     }
@@ -1317,8 +1317,8 @@ addDifferentialExpression <- function(mirnaObj,
         }
 
         ## define significantly differentially expressed miRNAs
-        significantMirnas <- mirnaDE$ID[abs(mirnaDE$logFC) > mirna.logFC &
-            mirnaDE$adj.P.Val < mirna.pCutoff]
+        significantMirnas <- mirnaDE$ID[abs(mirnaDE$logFC) >= mirna.logFC &
+            mirnaDE$adj.P.Val <= mirna.pCutoff]
 
         ## add miRNA differential expression results to mirnaObj
         mirnaDE(mirnaObj) <- list(
@@ -1358,8 +1358,8 @@ addDifferentialExpression <- function(mirnaObj,
         }
 
         ## define significantly differentially expressed genes
-        significantGenes <- geneDE$ID[abs(geneDE$logFC) > gene.logFC &
-            geneDE$adj.P.Val < gene.pCutoff]
+        significantGenes <- geneDE$ID[abs(geneDE$logFC) >= gene.logFC &
+            geneDE$adj.P.Val <= gene.pCutoff]
 
         ## add gene differential expression results to mirnaObj
         geneDE(mirnaObj) <- list(

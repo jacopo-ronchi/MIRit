@@ -8,10 +8,10 @@ addDifferentialExpression(
   mirnaObj,
   mirnaDE = NULL,
   geneDE = NULL,
-  mirna.logFC = 1,
+  mirna.logFC = 0,
   mirna.pCutoff = 0.05,
   mirna.pAdjustment = "fdr",
-  gene.logFC = 1,
+  gene.logFC = 0,
   gene.pCutoff = 0.05,
   gene.pAdjustment = "fdr"
 )
@@ -29,8 +29,7 @@ expression analysis. Check the \emph{details} section to see the required format
 Default is NULL not to add gene differential expression results}
 
 \item{mirna.logFC}{The minimum log2 fold change required to consider a miRNA
-as differentially expressed. Default is 1, to retain only two-fold
-differences}
+as differentially expressed. Optional, default is 0}
 
 \item{mirna.pCutoff}{The adjusted p-value cutoff to use for miRNA statistical
 significance. The default value is \code{0.05}}
@@ -40,7 +39,7 @@ testing. It must be one of: \code{fdr} (default), \code{BH}, \code{none}, \code{
 \code{hochberg}, \code{hommel}, \code{bonferroni}, \code{BY}}
 
 \item{gene.logFC}{The minimum log2 fold change required to consider a gene as
-differentially expressed. Default is 1, to retain only two-fold differences}
+differentially expressed. Optional, default is 0}
 
 \item{gene.pCutoff}{The adjusted p-value cutoff to use for gene statistical
 significance. The default value is \code{0.05}}
@@ -132,8 +131,8 @@ de_g <- geneDE(object = loadExamples(), onlySignificant = FALSE)
 
 # add DE results to MirnaExperiment object
 obj <- addDifferentialExpression(obj, de_m, de_g,
-    mirna.logFC = 1, mirna.pCutoff = 0.05,
-    gene.logFC = 1, gene.pCutoff = 0.05
+    mirna.pCutoff = 0.05,
+    gene.pCutoff = 0.05
 )
 
 }

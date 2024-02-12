@@ -845,8 +845,7 @@ fryMirnaTargets <- function(mirnaObj,
             y = expr,
             index = tgList,
             design = des,
-            contrast = con,
-            adjust.method = pAdjustment
+            contrast = con
         )
     } else {
         ## perform miRNA-target integration through 'fry'
@@ -854,10 +853,12 @@ fryMirnaTargets <- function(mirnaObj,
             y = expr,
             index = tgList,
             design = des,
-            contrast = con,
-            adjust.method = pAdjustment
+            contrast = con
         )
     }
+    
+    ## correct p-values for multiple testing
+    rs$adj.P.Val <- p.adjust(rs$PValue, method = pAdjustment)
 
     ## retain effects in the right direction
     dem <- mirnaDE(mirnaObj)
@@ -867,7 +868,7 @@ fryMirnaTargets <- function(mirnaObj,
         (rownames(rs) %in% downDem & rs$Direction == "Up"), ]
 
     ## maintain interactions under the specified cutoff
-    res <- rs[rs$FDR <= pCutoff, ]
+    res <- rs[rs$adj.P.Val <= pCutoff, ]
 
     ## print integration results
     if (nrow(res) == 0) {
@@ -893,7 +894,7 @@ fryMirnaTargets <- function(mirnaObj,
         }, res$microRNA, res$mirna.direction)
         res$DE_targets <- deTarg[1, ]
         res$DE <- deTarg[2, ]
-        res <- res[, c(7, 8, 2, 10, 1, 3, 4, 9)]
+        res <- res[, c(8, 9, 2, 11, 1, 3, 7, 10)]
         colnames(res) <- c(
             "microRNA", "mirna.direction", "gene.direction",
             "DE", "targets", "P.Val", "adj.P.Val", "DE.targets"

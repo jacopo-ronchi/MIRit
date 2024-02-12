@@ -12,7 +12,7 @@ performMirnaDE(
   contrast,
   design,
   method = "edgeR",
-  logFC = 1,
+  logFC = 0,
   pCutoff = 0.05,
   pAdjustment = "fdr",
   filterByExpr.args = list(),
@@ -40,7 +40,7 @@ performGeneDE(
   contrast,
   design,
   method = "edgeR",
-  logFC = 1,
+  logFC = 0,
   pCutoff = 0.05,
   pAdjustment = "fdr",
   filterByExpr.args = list(),
@@ -87,7 +87,7 @@ expression. For NGS experiments, it must be one of \code{edgeR} (default),
 \code{limma} can be used}
 
 \item{logFC}{The minimum log2 fold change required to consider a gene as
-differentially expressed. Default is 1, to retain only two-fold differences}
+differentially expressed. Optional, default is 0}
 
 \item{pCutoff}{The adjusted p-value cutoff to use for statistical
 significance. The default value is \code{0.05}}
@@ -170,10 +170,11 @@ expression results. To access these results, the user may run the
 \code{performMirnaDE()} and \code{performGeneDE()} are two functions provided by MIRit
 to conduct miRNA and gene differential expression analysis, respectively.
 In particular, these functions allow the user to compute differential
-expression through different methods, namely \code{edgeR}, \code{DESeq2}, \code{limma-voom}
-and \code{limma}. Data deriving from NGS experiments and microarray technology
-are all suitable for these functions. For precise indications about how to
-use these functions, please refer to the \emph{details} section.
+expression through different methods, namely \code{edgeR} (Quasi-Likelihood
+framework), \code{DESeq2}, \code{limma-voom} and \code{limma}. Data deriving from NGS
+experiments and microarray technology are all suitable for these functions.
+For precise indications about how to use these functions, please refer to
+the \emph{details} section.
 }
 \details{
 When performing differential expression for NGS experiments, count matrices

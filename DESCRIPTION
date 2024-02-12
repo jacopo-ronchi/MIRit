@@ -1,6 +1,6 @@
 Package: MIRit
 Title: Integrate microRNA and gene expression to decipher pathway complexity
-Version: 0.99.11
+Version: 0.99.12
 Date: 2023-11-23
 Authors@R: c(
     person("Jacopo", "Ronchi", email = "jacopo.ronchi@unimib.it",
@@ -18,7 +18,7 @@ Description: MIRit is an R package that provides several methods for
     characterization.
 License: GPL (>= 3)
 URL: https://github.com/jacopo-ronchi/MIRit
-BugReports: https://support.bioconductor.org/tag/MIRit
+BugReports: https://github.com/jacopo-ronchi/MIRit/issues
 biocViews: Software, GeneRegulation, NetworkEnrichment, NetworkInference, Epigenetics, FunctionalGenomics, SystemsBiology, Network, Pathways, GeneExpression, DifferentialExpression
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -41,7 +41,6 @@ Imports:
     httr,
     limma,
     methods,
-    MultiAssayExperiment,
     Rcpp,
     readxl,
     Rgraphviz (>= 2.44.0),
@@ -79,6 +78,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 Depends: 
+    MultiAssayExperiment,
     R (>= 4.4.0)
 LazyData: false
 VignetteBuilder: knitr

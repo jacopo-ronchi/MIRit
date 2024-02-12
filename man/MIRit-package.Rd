@@ -14,7 +14,7 @@ MIRit is an R package that provides several methods for investigating the relati
 Useful links:
 \itemize{
   \item \url{https://github.com/jacopo-ronchi/MIRit}
-  \item Report bugs at \url{https://support.bioconductor.org/tag/MIRit}
+  \item Report bugs at \url{https://github.com/jacopo-ronchi/MIRit/issues}
 }
 
 }
