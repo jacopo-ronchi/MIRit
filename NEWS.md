@@ -1,3 +1,7 @@
+# MIRit 0.99.13
+
+A minor fix was made to fix the undefined variables note during R CMD check.
+
 # MIRit 0.99.12
 
 This version includes several improvements, including a completely revised

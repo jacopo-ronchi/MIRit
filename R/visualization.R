@@ -2640,8 +2640,9 @@ plotDE <- function(mirnaObj,
             fill = "Condition",
             merge = TRUE,
             add = "mean"
-        ) + geom_errorbar(aes(group = Condition, ymax = upperCi,
-                              ymin = lowerCi),
+        ) + geom_errorbar(aes(group = .data$Condition,
+                              ymax = .data$upperCi,
+                              ymin = .data$lowerCi),
                           position = position_dodge(width = 0.8),
                           width = 0.25)
     } else if (graph == "violinplot") {
