@@ -24,7 +24,7 @@ from different technologies."><meta property="og:image" content="/logo.svg"><!--
     
     <a class="navbar-brand me-2" href="../index.html">MIRit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.12</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,10 +79,10 @@ from different technologies.</p>
 <span>  <span class="va">mirnaObj</span>,</span>
 <span>  mirnaDE <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  geneDE <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  mirna.logFC <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  mirna.logFC <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  mirna.pCutoff <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  mirna.pAdjustment <span class="op">=</span> <span class="st">"fdr"</span>,</span>
-<span>  gene.logFC <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  gene.logFC <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  gene.pCutoff <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  gene.pAdjustment <span class="op">=</span> <span class="st">"fdr"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -109,8 +109,7 @@ Default is NULL not to add gene differential expression results</p></dd>
 
 <dt>mirna.logFC</dt>
 <dd><p>The minimum log2 fold change required to consider a miRNA
-as differentially expressed. Default is 1, to retain only two-fold
-differences</p></dd>
+as differentially expressed. Optional, default is 0</p></dd>
 
 
 <dt>mirna.pCutoff</dt>
@@ -126,7 +125,7 @@ testing. It must be one of: <code>fdr</code> (default), <code>BH</code>, <code>n
 
 <dt>gene.logFC</dt>
 <dd><p>The minimum log2 fold change required to consider a gene as
-differentially expressed. Default is 1, to retain only two-fold differences</p></dd>
+differentially expressed. Optional, default is 0</p></dd>
 
 
 <dt>gene.pCutoff</dt>
@@ -222,8 +221,8 @@ differentially expressed.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># add DE results to MirnaExperiment object</span></span></span>
 <span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu">addDifferentialExpression</span><span class="op">(</span><span class="va">obj</span>, <span class="va">de_m</span>, <span class="va">de_g</span>,</span></span>
-<span class="r-in"><span>    mirna.logFC <span class="op">=</span> <span class="fl">1</span>, mirna.pCutoff <span class="op">=</span> <span class="fl">0.05</span>,</span></span>
-<span class="r-in"><span>    gene.logFC <span class="op">=</span> <span class="fl">1</span>, gene.pCutoff <span class="op">=</span> <span class="fl">0.05</span></span></span>
+<span class="r-in"><span>    mirna.pCutoff <span class="op">=</span> <span class="fl">0.05</span>,</span></span>
+<span class="r-in"><span>    gene.pCutoff <span class="op">=</span> <span class="fl">0.05</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

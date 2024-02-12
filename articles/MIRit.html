@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="pandoc">
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
-<meta name="date" content="2024-02-07">
+<meta name="date" content="2024-02-12">
 <title>Integrate miRNA and gene expression data with MIRit</title>
 <script src="MIRit_files/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="MIRit_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
@@ -343,11 +343,17 @@ function toggle_visibility(id1) {
 <p class="author-name">Jacopo Ronchi<span class="affil-mark">1*</span></p>
 <p class="author-affiliation"><span class="affil-mark">1</span>University of Milano-Bicocca, Italy</p>
 <p class="author-email"><span class="affil-mark">*</span><a href="mailto:jacopo.ronchi@unimib.it">jacopo.ronchi@unimib.it</a></p>
-<h4 class="date">7 February 2024</h4>
+<h4 class="date">12 February 2024</h4>
 <h4 class="abstract">Abstract</h4>
-<p>In this vignette, we are going to see how to use MIRit for investigating the compromised miRNA-gene regulatory networks in thyroid cancer. In particular, an RNA-Seq experiment will be used as an example to demonstrate how to perform an integrative analysis with MIRit, including differential expression analysis, functional enrichment and characterization, correlation analysis and, lastly, the construction and visualization of the impaired miRNAs regulatory axes within biological pathways.</p>
+<p>In this vignette, we are going to see how to use MIRit for investigating the
+compromised miRNA-gene regulatory networks in thyroid cancer. In particular,
+an RNA-Seq experiment will be used as an example to demonstrate how to perform
+an integrative analysis with MIRit, including differential expression
+analysis, functional enrichment and characterization, correlation analysis
+and, lastly, the construction and visualization of the impaired miRNAs
+regulatory axes within biological pathways.</p>
 <h4 class="package">Package</h4>
-<p>MIRit 0.99.11</p>
+<p>MIRit 0.99.12</p>
 
 </div>
 
@@ -356,53 +362,85 @@ function toggle_visibility(id1) {
 <h2 id="introduction">
 <span class="header-section-number">1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p><img src="../reference/figures/logo.svg" style="float:right; padding:20px" height="192" alt=""></p>
+<p><img src="../reference/figures/logo.svg" style="float:right;
+padding:20px" height="192" alt=""></p>
 <div class="section level3" number="1.1">
 <h3 id="what-is-mirit">
 <span class="header-section-number">1.1</span> What is MIRit<a class="anchor" aria-label="anchor" href="#what-is-mirit"></a>
 </h3>
-<p><code>MIRit</code> (miRNA integration tool) is an open-source R package that aims to facilitate the comprehension of microRNA (miRNA) biology through the integrative analysis of gene and miRNA expression data deriving from different platforms, including microarrays, RNA-Seq, miRNA-Seq, proteomics and single-cell transcriptomics. Given their regulatory importance, a complete characterization of miRNA dysregulations results crucial to explore the molecular networks that may lead to the insurgence of complex diseases. Unfortunately, there are no currently available options for thoroughly interpreting the biological consequences of miRNA dysregulations, thus limiting the ability to identify the affected pathways and reconstruct the compromised molecular networks. To tackle this limitation, we developed MIRit, an all-in-one framework that provides flexible and powerful methods for performing integrative miRNA-mRNA multi-omic analyses from start to finish. In particular, MIRit includes multiple modules that allow to perform:</p>
+<p><code>MIRit</code> (miRNA integration tool) is an open source R package that aims to
+facilitate the comprehension of microRNA (miRNA) biology through the integrative
+analysis of gene and miRNA expression data deriving from different platforms,
+including microarrays, RNA-Seq, miRNA-Seq, proteomics and single-cell
+transcriptomics. Given their regulatory importance, a complete characterization
+of miRNA dysregulations results crucial to explore the molecular networks that
+may lead to the insurgence of complex diseases. Unfortunately, there are no
+currently available options for thoroughly interpreting the biological
+consequences of miRNA dysregulations, thus limiting the ability to identify
+the affected pathways and reconstruct the compromised molecular networks. To
+tackle this limitation, we developed MIRit, an all-in-one framework that
+provides flexible and powerful methods for performing integrative miRNA-mRNA
+multi-omic analyses from start to finish. In particular, MIRit includes multiple
+modules that allow to perform:</p>
 <ol style="list-style-type: decimal">
 <li>
-<strong>Differential expression analysis</strong>, which identifies miRNAs and genes that vary across biological conditions for both RNA-Seq and microarray experiments (even though other technologies can also be used);</li>
+<strong>Differential expression analysis</strong>, which identifies miRNAs and genes that
+vary across biological conditions for both RNA-Seq and microarray experiments
+(even though other technologies can also be used);</li>
 <li>
-<strong>Functional enrichment analysis</strong>, which allows to understand the consequences of gene dysregulations through different strategies, including over-representation analysis (ORA), gene-set enrichment analysis (GSEA) and Correlation Adjusted MEan RAnk gene set test (CAMERA);</li>
+<strong>Functional enrichment analysis</strong>, which allows to understand the
+consequences of gene dysregulations through different strategies, including
+over-representation analysis (ORA), gene-set enrichment analysis (GSEA) and
+Correlation Adjusted MEan RAnk gene set test (CAMERA);</li>
 <li>
-<strong>SNP association</strong>, that links miRNA dysregulations to disease-associated SNPs occurring at miRNA gene loci;</li>
+<strong>SNP association</strong>, that links miRNA dysregulations to disease-associated
+SNPs occurring at miRNA gene loci;</li>
 <li>
-<strong>Target identification</strong>, which retrieves predicted and validated miRNA-target interactions through innovative state-of-the-art approaches that limit false discoveries;</li>
+<strong>Target identification</strong>, which retrieves predicted and validated
+miRNA-target interactions through innovative state-of-the-art approaches that
+limit false discoveries;</li>
 <li>
-<strong>Expression levels integration</strong>, which integrates the expression levels of miRNAs and mRNAs for both paired data, through correlation analyses, and unpaired data, through association tests and rotation gene-set tests;</li>
+<strong>Expression levels integration</strong>, which integrates the expression levels of
+miRNAs and mRNAs for both paired data, through correlation analyses, and
+unpaired data, through association tests and rotation gene-set tests;</li>
 <li>
-<strong>Topological analysis</strong>, which implements a novel approach called <em>Topologically-Aware Integrative Pathway Analysis (TAIPA)</em> for identifying the impaired molecular networks that affect biological pathways retrieved from KEGG, Reactome and WikiPathways.</li>
+<strong>Topological analysis</strong>, which implements a novel approach called
+<em>Topology-Aware Integrative Pathway Analysis (TAIPA)</em> for identifying the
+impaired molecular networks that affect biological pathways retrieved from KEGG,
+Reactome and WikiPathways.</li>
 </ol>
 </div>
 <div class="section level3" number="1.2">
 <h3 id="how-to-cite-mirit">
 <span class="header-section-number">1.2</span> How to cite MIRit<a class="anchor" aria-label="anchor" href="#how-to-cite-mirit"></a>
 </h3>
-<p>If you use MIRit in published research, please cite:</p>
+<p>If you use MIRit in published research, please cite the following paper:</p>
 <blockquote>
-<p>Ronchi J and Foti M. ‘MIRit: an integrative R framework for the identification of impaired miRNA-mRNA regulatory networks in complex diseases’. bioRxiv (2023). <a href="doi:10.1101/2023.11.24.568528" class="uri">doi:10.1101/2023.11.24.568528</a></p>
+<p>Ronchi J and Foti M. ‘MIRit: an integrative R framework for the identification
+of impaired miRNA-mRNA regulatory networks in complex diseases’. bioRxiv (2023).
+<a href="doi:10.1101/2023.11.24.568528" class="uri">doi:10.1101/2023.11.24.568528</a></p>
 </blockquote>
-<p>This package internally uses different R/Bioconductor packages, remember to cite the appropriate publication.</p>
+<p>This package internally uses different R/Bioconductor packages, remember to cite
+the appropriate publications.</p>
 </div>
 <div class="section level3" number="1.3">
 <h3 id="installation">
 <span class="header-section-number">1.3</span> Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h3>
-<p>Before starting, MIRit must be installed on your system. You can do this through Bioconductor.</p>
+<p>Before starting, MIRit must be installed on your system. You can do this through
+Bioconductor.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## install MIRit from Bioconductor</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"MIRit"</span><span class="op">)</span></span></code></pre></div>
-<p>If needed, you could also install the development version of MIRit directly from GitHub:</p>
+<p>If needed, you could also install the development version of MIRit directly from
+GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## install the development version from GitHub</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"jacopo-ronchi/MIRit"</span><span class="op">)</span></span></code></pre></div>
 <p>When MIRit is installed, we can load it through:</p>
@@ -419,8 +457,14 @@ function toggle_visibility(id1) {
 <h3 id="load-example-data">
 <span class="header-section-number">2.1</span> Load example data<a class="anchor" aria-label="anchor" href="#load-example-data"></a>
 </h3>
-<p>To demonstrate the capabilities of MIRit we will use RNA-Seq data from <span class="citation">Riesco-Eizaguirre et al. (<a href="#ref-riesco-eizaguirre_mir-146b-3ppax8nis_2015">2015</a>)</span>. This experiment collected samples from 8 papillary thyroid carcinoma tumors and contralateral normal thyroid tissue from the same patients. These samples were profiled for gene expression through RNA-Seq, and for miRNA expression through miRNA-Seq. To provide an easy access to the user, raw count matrices have been retrieved from GEO and included in this package.</p>
-<p>To load the example data, we can simply use the <code><a href="https://rdrr.io/r/utils/data.html" class="external-link">data()</a></code> function for both gene and miRNA count matrices.</p>
+<p>To demonstrate the capabilities of MIRit we will use RNA-Seq data from
+<span class="citation">Riesco-Eizaguirre et al. (<a href="#ref-riesco-eizaguirre_mir-146b-3ppax8nis_2015">2015</a>)</span>. This experiment collected samples
+from 8 papillary thyroid carcinoma tumors and contralateral normal thyroid
+tissue from the same patients. These samples were profiled for gene expression
+through RNA-Seq, and for miRNA expression through miRNA-Seq. To provide easy
+access to the user, raw count matrices have been retrieved from GEO and included
+in this package.</p>
+<p>To load example data, we can simply use the <code><a href="https://rdrr.io/r/utils/data.html" class="external-link">data()</a></code> function:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## load count matrix for genes</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">geneCounts</span>, package <span class="op">=</span> <span class="st">"MIRit"</span><span class="op">)</span></span>
@@ -432,16 +476,37 @@ function toggle_visibility(id1) {
 <h3 id="paired-vs-unpaired-data">
 <span class="header-section-number">2.2</span> Paired vs unpaired data<a class="anchor" aria-label="anchor" href="#paired-vs-unpaired-data"></a>
 </h3>
-<p>When using MIRit, we must specify whether miRNA and gene expression values derive from the same individuals or not. As already mentioned, <strong>paired data</strong> are those where individuals used to measure gene expression are the same subjects used to measure miRNA expression. On the other hand, <strong>unpaired data</strong> are those where gene expression and miRNA expression derive from different cohorts of donors. Importantly, MIRit considers as paired samples those data sets where paired measurements are available for at least some samples.</p>
-<p>In our case, miRNA and gene expression data originate from the same subjects, and therefore we will conduct a <em>paired samples</em> analysis.</p>
+<p>When using MIRit, we must specify whether miRNA and gene expression values
+derive from the same individuals or not. As already mentioned, <strong>paired data</strong>
+are those where individuals used to measure gene expression are the same
+subjects used to measure miRNA expression. On the other hand, <strong>unpaired data</strong>
+are those where gene expression and miRNA expression derive from different
+cohorts of donors. Importantly, MIRit considers as paired samples those data
+sets where paired measurements are available for at least some samples.</p>
+<p>In our case, miRNA and gene expression data originate from the same subjects,
+and therefore we will conduct a <em>paired samples</em> analysis.</p>
 </div>
 <div class="section level3" number="2.3">
 <h3 id="set-up-expression-matrices">
 <span class="header-section-number">2.3</span> Set up expression matrices<a class="anchor" aria-label="anchor" href="#set-up-expression-matrices"></a>
 </h3>
-<p>As input data, MIRit requires miRNA and gene expression measurements as matrices with samples as columns, and genes/miRNAs as rows. Further, the row names of miRNA expression matrix should contain miRNA names according to miRBase nomenclature (e.g. hsa-miR-151a-5p, hsa-miR-21-5p), whereas for gene expression matrix, row names must contain gene symbols according to HGNC (e.g. TYK2, BDNF, NTRK2).</p>
-<p>These matrices may handle different types of values deriving from multiple technologies, including microarrays, RNA-Seq and proteomics. The only requirement is that, for microarray studies, expression matrices must be normalized and log2 transformed. This can be achieved by applying the RMA algorithm implemented in the <em><a href="https://bioconductor.org/packages/3.19/oligo" class="external-link">oligo</a></em> <span class="citation">(<a href="#ref-carvalho_framework_2010">Carvalho and Irizarry 2010</a>)</span> package, or by applying other quantile normalization strategies. On the contrary, for RNA-Seq and miRNA-Seq experiments, the simple count matrix must be supplied.</p>
-<p>Eventually, expression matrices required by MIRit should appear as those in <code>mirnaCounts</code> and <code>geneCounts</code>, which are displayed in Tables <a href="#tab:geneExpr">1</a> and <a href="#tab:mirnaExpr">2</a>.</p>
+<p>As input data, MIRit requires miRNA and gene expression measurements as
+matrices with samples as columns, and genes/miRNAs as rows. Further, the row
+names of miRNA expression matrix should contain miRNA names according to
+miRBase nomenclature (e.g. hsa-miR-151a-5p, hsa-miR-21-5p), whereas for gene
+expression matrix, row names must contain gene symbols according to HGNC
+(e.g. TYK2, BDNF, NTRK2).</p>
+<p>These matrices may handle different types of values deriving from multiple
+technologies, including microarrays, RNA-Seq and proteomics. The only
+requirement is that, for microarray studies, expression matrices must be
+normalized and log2 transformed. This can be achieved by applying the RMA
+algorithm implemented in the <em><a href="https://bioconductor.org/packages/3.19/oligo" class="external-link">oligo</a></em> <span class="citation">(<a href="#ref-carvalho_framework_2010">Carvalho and Irizarry 2010</a>)</span>
+package, or by applying other quantile normalization strategies. On the
+contrary, for RNA-Seq and miRNA-Seq experiments, the simple count matrix must
+be supplied.</p>
+<p>Eventually, expression matrices required by MIRit should appear as those in
+<code>mirnaCounts</code> and <code>geneCounts</code>, which are displayed in Tables
+<a href="#tab:geneExpr">1</a> and <a href="#tab:mirnaExpr">2</a>.</p>
 <div class="horizontal-scroll"><table class="table">
 <caption>
 <span id="tab:geneExpr">Table 1: </span><span class="caption-title">Gene expression matrix</span><br>An expression matrix containing normalized values, with row names according to hgnc.</caption>
@@ -555,15 +620,22 @@ function toggle_visibility(id1) {
 <h3 id="meta">
 <span class="header-section-number">2.4</span> Define sample metadata<a class="anchor" aria-label="anchor" href="#meta"></a>
 </h3>
-<p>Once we have expression matrices in the proper format, we need to inform MIRit about the samples in study and the biological conditions of interest. To do so, we need to create a <code>data.frame</code> that must contain:</p>
+<p>Once we have expression matrices in the proper format, we need to inform MIRit
+about the samples in study and the biological conditions of interest. To do so,
+we need to create a <code>data.frame</code> that must contain:</p>
 <ul>
-<li>a column named <code>primary</code>, specifying a unique identifier for each different subject;</li>
-<li>a column named <code>mirnaCol</code>, matching the column name used for each sample in the miRNA expression matrix;</li>
-<li>a column named <code>geneCol</code>, matching the column name used for each sample in the gene expression matrix;</li>
+<li>a column named <code>primary</code>, specifying a unique identifier for each different
+subject;</li>
+<li>a column named <code>mirnaCol</code>, matching the column name used for each sample in
+the miRNA expression matrix;</li>
+<li>a column named <code>geneCol</code>, matching the column name used for each sample in
+the gene expression matrix;</li>
 <li>a column that defines the biological condition of interest;</li>
-<li>other optional columns that store specific sample metadata, such as age, sex and so on…</li>
+<li>other optional columns that store specific sample metadata, such as age, sex
+and so on…</li>
 </ul>
-<p>Firstly, let’s take a look at the column names used for miRNA and gene expression matrices.</p>
+<p>Firstly, let’s take a look at the column names used for miRNA and gene
+expression matrices.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## print sample names in geneCounts</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">geneCounts</span><span class="op">)</span></span>
@@ -578,8 +650,15 @@ function toggle_visibility(id1) {
 <span><span class="co">## check if samples in geneCounts are equal to those in mirnaCounts</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">geneCounts</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mirnaCounts</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
-<p>In our case, we see that both expression matrices have the same column names, and therefore <code>mirnaCol</code> and <code>geneCol</code> will contain the same values. However, note that is not always the case, especially for unpaired data, where miRNA and gene expression values derive from different subjects. In these cases, <code>mirnaCol</code> and <code>geneCol</code> must map each column of miRNA and gene expression matrices to the relative subjects indicated in the <code>primary</code> column. Notably, for unpaired data, NAs can be used for missing entries in <code>mirnaCol</code>/<code>geneCol</code>.</p>
-<p>That said, we can proceed to create the <code>data.frame</code> with sample metadata as follows.</p>
+<p>In our case, we see that both expression matrices have the same column names,
+and therefore <code>mirnaCol</code> and <code>geneCol</code> will be identical. However, note that is
+not always the case, especially for unpaired data, where miRNA and gene
+expression values derive from different subjects. In these cases, <code>mirnaCol</code> and
+<code>geneCol</code> must map each column of miRNA and gene expression matrices to the
+relative subjects indicated in the <code>primary</code> column. Notably, for unpaired data,
+<code>NAs</code> can be used for missing entries in <code>mirnaCol</code>/<code>geneCol</code>.</p>
+<p>That said, we can proceed to create the <code>data.frame</code> with sample metadata as
+follows.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## create a data.frame containing sample metadata</span></span>
 <span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>primary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mirnaCounts</span><span class="op">)</span>,</span>
@@ -592,8 +671,15 @@ function toggle_visibility(id1) {
 <h3 id="create-a-mirnaexperiment-object">
 <span class="header-section-number">2.5</span> Create a <code>MirnaExperiment</code> object<a class="anchor" aria-label="anchor" href="#create-a-mirnaexperiment-object"></a>
 </h3>
-<p>At this point, after setting up expression matrices, and after defining sample metadata, we need to create an object of class <code>MirnaExperiment</code>, which is the main class used in MIRit to store all the data that are necessary for the integrative miRNA-mRNA analysis. In particular, this class extends the <code>MultiAssayExperiment</code> class from the homonym package <span class="citation">(<a href="#ref-ramos_software_2017">Ramos et al. 2017</a>)</span> to store expression levels of both miRNAs and genes, differential expression results, miRNA-target pairs and integrative miRNA-gene analysis.</p>
-<p>The easiest way to create a valid <code>MirnaExperiment</code> object is to use the <code><a href="../reference/MirnaExperiment.html">MirnaExperiment()</a></code> function, which automatically handles the formatting of input data and the creation of the object.</p>
+<p>At this point, we need to create an object of class <code>MirnaExperiment</code>, which is
+the main class used in MIRit for integrative miRNA-mRNA analyses. In particular,
+this class extends the <code>MultiAssayExperiment</code> class from the homonym package
+<span class="citation">(<a href="#ref-ramos_software_2017">Ramos et al. 2017</a>)</span> to store expression levels of both miRNAs and genes,
+differential expression results, miRNA-target pairs and integrative miRNA-gene
+analysis.</p>
+<p>The easiest way to create a valid <code>MirnaExperiment</code> object is to use the
+<code><a href="../reference/MirnaExperiment.html">MirnaExperiment()</a></code> function, which automatically handles the formatting of
+input data and the creation of the object.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## create the MirnaExperiment object</span></span>
 <span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MirnaExperiment.html">MirnaExperiment</a></span><span class="op">(</span>mirnaExpr <span class="op">=</span> <span class="va">mirnaCounts</span>,</span>
@@ -606,13 +692,23 @@ function toggle_visibility(id1) {
 <h2 id="differential-expression-analysis">
 <span class="header-section-number">3</span> Differential expression analysis<a class="anchor" aria-label="anchor" href="#differential-expression-analysis"></a>
 </h2>
-<p>Now that the <code>MirnaExperiment</code> object has been created, we can move to differential expression analysis, which aims to define differentially expressed features across biological conditions.</p>
+<p>Now that the <code>MirnaExperiment</code> object has been created, we can move to
+differential expression analysis, which aims to define differentially expressed
+features across biological conditions.</p>
 <div class="section level3" number="3.1">
 <h3 id="visualize-expression-variability">
 <span class="header-section-number">3.1</span> Visualize expression variability<a class="anchor" aria-label="anchor" href="#visualize-expression-variability"></a>
 </h3>
-<p>Firstly, before doing anything else, it is useful to explore miRNA and gene expression variability through dimensionality reduction techniques. This is useful because it allows us to visualize the main drivers of expression variability. In this regard, MIRit offers the <code><a href="../reference/plotDimensions.html">plotDimensions()</a></code> function, which enables to visualize both miRNA and gene expression in the multidimensional space (MDS plots). Moreover, it is possible to color samples based on specific variables, hence allowing to explore miRNA/gene expression variation between distinct biological groups.</p>
-<p>In our example, let’s examine expression variability for both miRNAs and genes, and let’s color the samples based on “disease”, a variable included in the previously defined metadata.</p>
+<p>Firstly, before doing anything else, it is useful to explore expression
+variability through dimensionality reduction techniques. This is useful because
+it allows us to visualize the main drivers of expression differences. In this
+regard, MIRit offers the <code><a href="../reference/plotDimensions.html">plotDimensions()</a></code> function, which enables to visualize
+both miRNA and gene expression in the multidimensional space (MDS plots).
+Moreover, it is possible to color samples based on specific variables, hence
+allowing to explore specific patterns between distinct biological groups.</p>
+<p>In our example, let’s examine expression variability for both miRNAs and genes,
+and let’s color the samples based on “disease”, a variable included in the
+previously defined metadata.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">geneMDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotDimensions.html">plotDimensions</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
 <span>                          assay <span class="op">=</span> <span class="st">"genes"</span>,</span>
@@ -632,7 +728,13 @@ function toggle_visibility(id1) {
 Figure 1: <span class="caption-title">MDS plots for miRNAs and genes</span><br>Both plots show that the main source of variability is given by the disease condition.
 </p>
 </div>
-<p>As we can see from Figures <a href="#fig:mds">1</a>A and <a href="#fig:mds">1</a>B, the samples are very well separated on the basis of disease condition, thus suggesting that this is the major factor that influences expression variability. This is exactly what we want, since we aim to evaluate the differences between cancer and normal tissue. If this wasn’t the case, we should identify the confounding variables, and include them in the model used for differential expression analysis (see Section <a href="#model">3.2.2</a>).</p>
+<p>As we can see from Figures <a href="#fig:mds">1</a>A and <a href="#fig:mds">1</a>B, the samples are
+very well separated on the basis of disease condition, thus suggesting that this
+is the major factor that influences expression variability. This is exactly what
+we want, since we aim to evaluate the differences between cancer and normal
+tissue. If this wasn’t the case, we should identify the confounding variables
+and include them in the model used for differential expression analysis
+(see Section <a href="#model">3.2.2</a>).</p>
 </div>
 <div class="section level3" number="3.2">
 <h3 id="perform-mirna-and-gene-differential-expression">
@@ -642,61 +744,117 @@ Figure 1: <span class="caption-title">MDS plots for miRNAs and genes</span><br>B
 <h4 id="deMethods">
 <span class="header-section-number">3.2.1</span> Available methods for RNA-Seq and microarrays<a class="anchor" aria-label="anchor" href="#deMethods"></a>
 </h4>
-<p>Now, we are ready to perform differential expression analysis. In this concern, MIRit provides different options based on the technology used for generating expression data. Indeed, when expression measurements derive from microarrays, MIRit calculates differentially expressed features through the pipeline implemented in the <em><a href="https://bioconductor.org/packages/3.19/limma" class="external-link">limma</a></em> package. On the other hand, when expression values derive from RNA-Seq experiments, MIRit allows to choose between different approaches, including:</p>
+<p>Now, we are ready to perform differential expression analysis. In this concern,
+MIRit provides different options based on the technology used. Indeed, when
+expression measurements derive from microarrays, MIRit calculates differentially
+expressed features through the pipeline implemented in the <em><a href="https://bioconductor.org/packages/3.19/limma" class="external-link">limma</a></em>
+package. On the other hand, when expression values derive from RNA-Seq
+experiments, MIRit allows to choose between different approaches, including:</p>
 <ul>
-<li>the approach defined in the <em><a href="https://bioconductor.org/packages/3.19/edgeR" class="external-link">edgeR</a></em> package;</li>
+<li>the Quasi-Likelihood framework defined in the <em><a href="https://bioconductor.org/packages/3.19/edgeR" class="external-link">edgeR</a></em> package;</li>
 <li>the approach defined in the <em><a href="https://bioconductor.org/packages/3.19/DESeq2" class="external-link">DESeq2</a></em> package;</li>
 <li>the <code>limma-voom</code> approach defined in the <em><a href="https://bioconductor.org/packages/3.19/limma" class="external-link">limma</a></em> package.</li>
 </ul>
-<p>Moreover, MIRit gives the possibility of fully customizing the parameters used for differential expression analysis, thus allowing a finer control that makes it easy to adopt strategies that differ from the standard pipelines proposed in these packages. For additional information, see Section <a href="#param">3.2.4</a>.</p>
+<p>Moreover, MIRit gives the possibility of fully customizing the parameters used
+for differential expression analysis, thus allowing a finer control that makes
+it possible to adopt strategies that differ from the standard pipelines proposed
+in these packages. For additional information, see Section <a href="#param">3.2.4</a>.</p>
 </div>
 <div class="section level4" number="3.2.2">
 <h4 id="model">
 <span class="header-section-number">3.2.2</span> Model design<a class="anchor" aria-label="anchor" href="#model"></a>
 </h4>
-<p>After identifying the variable of interest and the confounding factors, we must indicate the experimental model used for fitting expression values. Notably, MIRit will automatically take care of model fitting, so that we only need to indicate a formula with the appropriate variables.</p>
-<p>In our case, we want to evaluate the differences between cancer and normal thyroid. Therefore, disease condition is our variable of interest. However, in this experimental design, each individual has been assayed twice, one time for cancer tissue, and one time for healthy contralateral thyroid. Thus, we also need to include the patient ID as a covariate in order to prevent the individual differences between subjects from confounding the differences due to the disease.</p>
+<p>After identifying the variable of interest and the confounding factors, we must
+indicate the experimental model used for fitting expression values. Notably,
+MIRit will automatically take care of model fitting, so that we only need to
+indicate a formula with the appropriate variables.</p>
+<p>In our case, we want to evaluate the differences between cancer and normal
+thyroid. Therefore, disease condition is our variable of interest. However,
+in this experimental design, each individual has been assayed twice, one time
+for cancer tissue, and one time for healthy contralateral thyroid. Thus, we also
+need to include the patient ID as a covariate in order to prevent the individual
+differences between subjects from confounding the differences due to disease.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## design the linear model for both genes and miRNAs</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">disease</span> <span class="op">+</span> <span class="va">patient</span></span></code></pre></div>
-<p>If other variables affecting miRNA and gene expression are observed, they should be included in this formula.</p>
+<p>If other variables affecting miRNA and gene expression are observed, they should
+be included in this formula.</p>
 </div>
 <div class="section level4" number="3.2.3">
 <h4 id="the-performmirnade-and-performgenede-functions">
 <span class="header-section-number">3.2.3</span> The <code>performMirnaDE()</code> and <code>performGeneDE()</code> functions<a class="anchor" aria-label="anchor" href="#the-performmirnade-and-performgenede-functions"></a>
 </h4>
-<p>Once the linear model has been defined, we can perform the differential expression analysis through the <code><a href="../reference/deAnalysis.html">performMirnaDE()</a></code> and <code><a href="../reference/deAnalysis.html">performGeneDE()</a></code> functions. Indeed, these two functions take as input a <code>MirnaExperiment</code> object, and compute differential expression for miRNAs and genes.</p>
-<p>Additionally, when we run these functions, we must define different arguments, namely:</p>
+<p>Once the linear model has been defined, we can perform differential expression
+analysis through the <code><a href="../reference/deAnalysis.html">performMirnaDE()</a></code> and <code><a href="../reference/deAnalysis.html">performGeneDE()</a></code> functions, which
+take as input a <code>MirnaExperiment</code> object, and compute differential expression
+for miRNAs and genes, respectively.</p>
+<p>Additionally, we must define multiple arguments, namely:</p>
 <ul>
 <li>
-<code>group</code>, which corresponds to the name of the variable of interest as specified in Section <a href="#meta">2.4</a>. In our case, we are interested in studying the differences between cancer tissue and normal tissue, and therefore our variable of interest is “<em>disease</em>”.</li>
+<code>group</code>, which corresponds to the name of the variable of interest, as
+specified in Section <a href="#meta">2.4</a>. In our case, we are interested in studying the
+differences between cancer tissue and normal tissue. Therefore our variable of
+interest is “<em>disease</em>”.</li>
 <li>
-<code>contrast</code>, which indicates the levels of the variable of interest to be compared. In particular, this parameter takes as input a string where the levels are separated by a dash, and where the second level corresponds to the reference group. In our example, we want to compare samples from papillary thyroid cancer (PTC) against normal thyroid tissue (NTH), thus we set <code>contrast</code> to “<em>PTC-NTH</em>”.</li>
+<code>contrast</code>, which indicates the levels of the variable of interest to be
+compared. In particular, this parameter takes as input a string where the
+levels are separated by a dash, and where the second level corresponds to the
+reference group. In our example, we want to compare samples from papillary
+thyroid cancer (PTC) against normal thyroid tissue (NTH), thus we set <code>contrast</code>
+to “<em>PTC-NTH</em>”.</li>
 <li>
-<code>design</code>, which specifies the linear model with the variable of interest and eventual covariates. To do so, we pass to this parameter the R formula that we defined in Section <a href="#model">3.2.2</a>.</li>
+<code>design</code>, which specifies the linear model with the variable of interest and
+eventual covariates. To do so, we pass to this parameter the R formula that we
+defined in Section <a href="#model">3.2.2</a>.</li>
 <li>
-<code>method</code>, which tells MIRit which pipeline we want to use for computing differentially expressed features. As stated in Section <a href="#deMethods">3.2.1</a>, for microarray studies the only option available is <code>limma</code>, while for RNA-Seq experiments, the user can choose between <code>edgeR</code>, <code>DESeq2</code>, and <code>voom</code> (for limma-voom). In our case we are going to perform differential expression analysis through the pipeline implemented in the <em><a href="https://bioconductor.org/packages/3.19/edgeR" class="external-link">edgeR</a></em> package.</li>
+<code>method</code>, which tells MIRit which pipeline we want to use for computing
+differentially expressed features. As stated in Section <a href="#deMethods">3.2.1</a>, for
+microarray studies the only option available is <code>limma</code>, while for RNA-Seq
+experiments, the user can choose between <code>edgeR</code>, <code>DESeq2</code>, and <code>voom</code> (for
+limma-voom). In our case we are going to perform differential expression
+analysis through the Quasi-Likelihood pipeline implemented in the
+<em><a href="https://bioconductor.org/packages/3.19/edgeR" class="external-link">edgeR</a></em> package.</li>
 </ul>
-<p>Following our example, let’s calculate differentially expressed genes and differentially expressed miRNAs in thyroid cancer.</p>
+<p>Following our example, let’s calculate differentially expressed genes and
+differentially expressed miRNAs in thyroid cancer.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## perform differential expression for genes</span></span>
 <span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/deAnalysis.html">performGeneDE</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
 <span>                            group <span class="op">=</span> <span class="st">"disease"</span>,</span>
 <span>                            contrast <span class="op">=</span> <span class="st">"PTC-NTH"</span>,</span>
-<span>                            design <span class="op">=</span> <span class="va">model</span><span class="op">)</span></span>
+<span>                            design <span class="op">=</span> <span class="va">model</span>,</span>
+<span>                            pCutoff <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Performing differential expression analysis with edgeR...</span></span>
+<span><span class="co">#&gt; Differential expression analysis reported 199 significant genes with p &lt; 0.01 (correction: fdr). You can use the 'geneDE()' function to access results.</span></span>
 <span></span>
 <span><span class="co">## perform differential expression for miRNAs</span></span>
 <span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/deAnalysis.html">performMirnaDE</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
 <span>                             group <span class="op">=</span> <span class="st">"disease"</span>,</span>
 <span>                             contrast <span class="op">=</span> <span class="st">"PTC-NTH"</span>,</span>
-<span>                             design <span class="op">=</span> <span class="va">model</span><span class="op">)</span></span></code></pre></div>
-<p>If not specified, the <code><a href="../reference/deAnalysis.html">performMirnaDE()</a></code> and <code><a href="../reference/deAnalysis.html">performGeneDE()</a></code> functions will define differentially expressed genes/miRNAs as those having an adjusted p-value lower than 0.05, and an absolute log2 fold change higher than 1 (FC &gt; 2). However, this behavior can be changed by tweaking the <code>pCutoff</code> parameter, that specifies the statistical significance threshold; the <code>logFC</code> parameter, which indicates the minimum log2 fold change that features must display for being considered as differentially expressed; and the <code>pAdjustment</code> parameter, which specifies the approach used for multiple testing correction (default is <code>fdr</code> to use the Benjamini-Hochberg method).</p>
+<span>                             design <span class="op">=</span> <span class="va">model</span>,</span>
+<span>                             pCutoff <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Performing differential expression analysis with edgeR...</span></span>
+<span><span class="co">#&gt; Differential expression analysis reported 21 significant miRNAs with p &lt; 0.01 (correction: fdr). You can use the 'mirnaDE()' function to access results.</span></span></code></pre></div>
+<p>If not specified, the <code><a href="../reference/deAnalysis.html">performMirnaDE()</a></code> and <code><a href="../reference/deAnalysis.html">performGeneDE()</a></code> functions will
+define differentially expressed genes/miRNAs as those having an adjusted p-value
+lower than 0.05. However, this behavior can be changed by tweaking the <code>pCutoff</code>
+parameter, that specifies the statistical significance threshold; and the
+<code>pAdjustment</code> option, which specifies the approach used for multiple testing
+correction (default is <code>fdr</code> to use the Benjamini-Hochberg method). Optionally,
+it is possible to set the <code>logFC</code> parameter, which indicates the minimum log2
+fold change that features must display for being considered as differentially
+expressed. Please note that the simultaneous use of adjusted p-value and logFC
+cutoffs is discouraged and not recommended.</p>
 </div>
 <div class="section level4" number="3.2.4">
 <h4 id="param">
 <span class="header-section-number">3.2.4</span> Advanced parameters<a class="anchor" aria-label="anchor" href="#param"></a>
 </h4>
-<p>In addition to the above mentioned settings, other parameters can be passed to the <code><a href="../reference/deAnalysis.html">performMirnaDE()</a></code> and <code><a href="../reference/deAnalysis.html">performGeneDE()</a></code> functions. Specifically, depending on the method adopted for differential expression analysis, the user can finely control the arguments passed to each function involved in the pipeline. In particular, these two functions include the following advanced parameters:</p>
+<p>In addition to the above mentioned settings, other options can be passed to
+the <code><a href="../reference/deAnalysis.html">performMirnaDE()</a></code> and <code><a href="../reference/deAnalysis.html">performGeneDE()</a></code> functions. Specifically, depending
+on the method adopted for differential expression analysis, the user can finely
+control the arguments passed to each function involved in the pipeline. In
+particular, the following advanced parameters can be set:</p>
 <ul>
 <li>
 <code>filterByExpr.args</code>,</li>
@@ -730,8 +888,22 @@ Figure 1: <span class="caption-title">MDS plots for miRNAs and genes</span><br>B
 <li><code>correlationBlockVariable</code></li>
 <li><code>duplicateCorrelation.args</code></li>
 </ul>
-<p>In this regard, when using limma-voom strategy, the <code>useVoomWithQualityWeights</code> parameter tells MIRit whether to use <code>voomWithWualityWeights()</code> instead of the standard <code>voom()</code> function. In the same way, for microarray studies, the <code>useArrayWeights</code> specifies whether to consider array quality weights during the <code>limma</code> pipeline. Similarly, <code>useWsva</code> can be set to TRUE to include a weighted surrogate variable analysis for batch effect correction. Moreover, <code>useDuplicateCorrelation</code> can be set to TRUE if you want to consider the effect of correlated samples through the <code>duplicateCorrelation()</code> function in <code>limma</code>. In this concern, the <code>correlationBlockVariable</code> specifies the blocking variable to use. All the other parameters ending with “<em>.args</em>”, accept a <code>list</code> object with additional parameters to be passed to the relative functions. In this way, the user has <strong>full control</strong> over the strategy used for differential expression analysis.</p>
-<p>For a complete reference on the usage of these parameters, check the help page of these functions. Instead, for further instructions on how to use these tools, please refer to their original manuals, which represent exceptional resources for learning the basics of differential expression analysis:</p>
+<p>In detail, when using limma-voom strategy, the <code>useVoomWithQualityWeights</code>
+parameter tells MIRit whether to use <code>voomWithWualityWeights()</code> instead of the
+standard <code>voom()</code> function. In the same way, for microarray studies, the
+<code>useArrayWeights</code> specifies whether to consider array quality weights during
+the <code>limma</code> pipeline. Similarly, <code>useWsva</code> can be set to TRUE to include a
+weighted surrogate variable analysis for batch effect correction. Moreover,
+<code>useDuplicateCorrelation</code> can be set to TRUE if you want to consider the effect
+of correlated samples through the <code>duplicateCorrelation()</code> function in <code>limma</code>.
+In this concern, the <code>correlationBlockVariable</code> specifies the blocking variable
+to use. All the other parameters ending with “<em>.args</em>”, accept a <code>list</code> object
+with additional parameters to be passed to the relative functions. In this way,
+the user has <strong>full control</strong> over the strategy used.</p>
+<p>For a complete reference on the usage of these parameters, check the help page
+of these functions. Instead, for further instructions on how to use these tools,
+please refer to their original manuals, which represent exceptional resources
+for learning the basics of differential expression analysis:</p>
 <ul>
 <li>limma User’s Guide,</li>
 <li>edgeR User’s Guide,</li>
@@ -742,16 +914,37 @@ Figure 1: <span class="caption-title">MDS plots for miRNAs and genes</span><br>B
 <h4 id="add-differential-expression-results-from-other-technologies">
 <span class="header-section-number">3.2.5</span> Add differential expression results from other technologies<a class="anchor" aria-label="anchor" href="#add-differential-expression-results-from-other-technologies"></a>
 </h4>
-<p>Even though MIRit implements all the most commonly used strategies for differential expression analyses, these methods may not be suitable for all kind of experiments. For instance, expression data deriving from technologies different from microarrays and RNA-Seq can’t be processed through <code><a href="../reference/deAnalysis.html">performGeneDE()</a></code> and <code><a href="../reference/deAnalysis.html">performMirnaDE()</a></code> functions. Therefore, MIRit grants the possibility to perform differential expression analysis with every method of choice, and then add the results to an existing <code>MirnaExperiment</code> object. This is particularly valuable for proteomic studies, where different normalization strategies are used in differential expression pipelines. In this way, MIRit fully supports the use of proteomic data for conducting miRNA integrative analyses.</p>
-<p>To do so, we can make use of the <code><a href="../reference/addDifferentialExpression.html">addDifferentialExpression()</a></code> function, which allows to manually add the results of the analysis. This function takes as input a <code>MirnaExperiment</code> object, and a table containing the differential expression results for all miRNAs/genes analyzed, not just for statistically significant species. If we want to manually set differential expression results for both miRNAs and genes, two different tables must be supplied. These tables must include:</p>
+<p>Even though MIRit implements all the most commonly used strategies for
+differential expression analyses, these methods may not be suitable for all kind
+of experiments. For instance, expression data deriving from technologies
+different from microarrays and RNA-Seq can’t be processed through
+<code><a href="../reference/deAnalysis.html">performGeneDE()</a></code> and <code><a href="../reference/deAnalysis.html">performMirnaDE()</a></code> functions. Therefore, MIRit grants the
+possibility to perform differential expression analysis with every method of
+choice, and then add the results to an existing <code>MirnaExperiment</code> object. This
+is particularly valuable for proteomic studies, where different normalization
+strategies are used. In this way, MIRit fully supports the use of proteomic data
+for conducting miRNA integrative analyses.</p>
+<p>To do so, we can make use of the <code><a href="../reference/addDifferentialExpression.html">addDifferentialExpression()</a></code> function, which
+takes as input a <code>MirnaExperiment</code> object, and a table containing the
+differential expression results for all miRNAs/genes analyzed (not just for
+statistically significant species). If we want to manually set differential
+expression results for both miRNAs and genes, two different tables must be
+supplied. These tables must include:</p>
 <ul>
-<li>One column containing miRNA/gene names (according to miRBase/HGNC nomenclature). Accepted column names are: <code>ID</code>, <code>Symbol</code>, <code>Gene_Symbol</code>, <code>Mirna</code>, <code>mir</code>, <code>Gene</code>, <code>gene.symbol</code>, <code>Gene.symbol</code>.</li>
-<li>One column with log2 fold changes. Accepted column names are: <code>logFC</code>, <code>log2FoldChange</code>, <code>FC</code>, <code>lFC</code>.</li>
-<li>One column with average expression. Accepted column names are: <code>AveExpr</code>, <code>baseMean</code>, <code>logCPM</code>.</li>
-<li>One column with the p-values resulting from the differential expression analysis. Accepted column names are: <code>P.Value</code>, <code>pvalue</code>, <code>PValue</code>, <code>Pvalue</code>.</li>
-<li>One column containing p-values adjusted for multiple testing. Accepted column names are: <code>adj.P.Val</code>, <code>padj</code>, <code>FDR</code>, <code>fdr</code>, <code>adj</code>, <code>adj.p</code>, <code>adjp</code>.</li>
+<li>One column containing miRNA/gene names (according to miRBase/HGNC
+nomenclature). Accepted column names are: <code>ID</code>, <code>Symbol</code>, <code>Gene_Symbol</code>,
+<code>Mirna</code>, <code>mir</code>, <code>Gene</code>, <code>gene.symbol</code>, <code>Gene.symbol</code>.</li>
+<li>One column with log2 fold changes. Accepted column names are: <code>logFC</code>,
+<code>log2FoldChange</code>, <code>FC</code>, <code>lFC</code>.</li>
+<li>One column with average expression. Accepted column names are: <code>AveExpr</code>,
+<code>baseMean</code>, <code>logCPM</code>.</li>
+<li>One column with the p-values resulting from the differential expression
+analysis. Accepted column names are: <code>P.Value</code>, <code>pvalue</code>, <code>PValue</code>, <code>Pvalue</code>.</li>
+<li>One column containing p-values adjusted for multiple testing. Accepted column
+names are: <code>adj.P.Val</code>, <code>padj</code>, <code>FDR</code>, <code>fdr</code>, <code>adj</code>, <code>adj.p</code>, <code>adjp</code>.</li>
 </ul>
-<p>Further, we must specify the cutoff levels used to consider miRNAs/genes as significantly differentially expressed. This can be done through the <code>mirna.logFC</code>, <code>mirna.pCutoff</code>, <code>mirna.pAdjustment</code>, <code>gene.logFC</code>, <code>gene.pCutoff</code>, <code>gene.pAdjustment</code> parameters.</p>
+<p>Further, we must specify the cutoff levels used to consider miRNAs/genes as
+significantly differentially expressed.</p>
 </div>
 </div>
 <div class="section level3" number="3.3">
@@ -762,7 +955,9 @@ Figure 1: <span class="caption-title">MDS plots for miRNAs and genes</span><br>B
 <h4 id="access-differential-expression-tables">
 <span class="header-section-number">3.3.1</span> Access differential expression tables<a class="anchor" aria-label="anchor" href="#access-differential-expression-tables"></a>
 </h4>
-<p>Once differential expression analysis has been performed, we can use the <code><a href="../reference/deAccessors.html">mirnaDE()</a></code> and <code><a href="../reference/deAccessors.html">geneDE()</a></code> functions to access a table with differentially expressed features. Therefore, let’s access the results of differential expression analysis in thyroid cancer for both miRNAs and genes.</p>
+<p>Once differential expression analysis has been performed, we can use the
+<code><a href="../reference/deAccessors.html">mirnaDE()</a></code> and <code><a href="../reference/deAccessors.html">geneDE()</a></code> functions to access a table with differentially
+expressed features.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## access DE results for genes</span></span>
 <span><span class="va">deGenes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/deAccessors.html">geneDE</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span></span>
@@ -774,8 +969,10 @@ Figure 1: <span class="caption-title">MDS plots for miRNAs and genes</span><br>B
 <h4 id="create-a-volcano-plot-for-mirnas-and-genes">
 <span class="header-section-number">3.3.2</span> Create a volcano plot for miRNAs and genes<a class="anchor" aria-label="anchor" href="#create-a-volcano-plot-for-mirnas-and-genes"></a>
 </h4>
-<p>In addition to differential expression tables, we can also generate a graphical overview of differential expression through volcano plots, which are extremely useful for visualizing features changing across biological conditions. To produce volcano plots, MIRit offers the <code><a href="../reference/plotVolcano.html">plotVolcano()</a></code> function.</p>
-<p>In our example, let’s create volcano plots for both miRNA and gene differential expression.</p>
+<p>In addition to tables, we can also generate a graphical overview of
+differential expression through volcano plots, which are extremely useful for
+visualizing features changing across biological conditions. To produce volcano
+plots, MIRit offers the <code><a href="../reference/plotVolcano.html">plotVolcano()</a></code> function.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## create a volcano plot for genes</span></span>
 <span><span class="va">geneVolcano</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotVolcano.html">plotVolcano</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
@@ -792,26 +989,27 @@ Figure 1: <span class="caption-title">MDS plots for miRNAs and genes</span><br>B
 <span>                  nrow <span class="op">=</span> <span class="fl">1</span>, labels <span class="op">=</span> <span class="st">"AUTO"</span>, common.legend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <span style="display:block;" id="fig:volcano"></span>
-<img src="MIRit_files/figure-html/volcano-1.png" alt="Volcano plots of gene and miRNA differential expression." width="100%" class="widefigure"><p class="caption">
-Figure 2: <span class="caption-title">Volcano plots of gene and miRNA differential expression</span><br></p>
+<img src="MIRit_files/figure-html/volcano-1.png" alt="Volcano plots of gene and miRNA differential expression. (A) shows the differentially expressed genes, while (B) displays differentially expressed miRNAs." width="100%" class="widefigure"><p class="caption">
+Figure 2: <span class="caption-title">Volcano plots of gene and miRNA differential expression</span><br>(A) shows the differentially expressed genes, while (B) displays differentially expressed miRNAs.
+</p>
 </div>
 </div>
 <div class="section level4" number="3.3.3">
 <h4 id="produce-differential-expression-bar-plots">
 <span class="header-section-number">3.3.3</span> Produce differential expression bar plots<a class="anchor" aria-label="anchor" href="#produce-differential-expression-bar-plots"></a>
 </h4>
-<p>Finally, if we are interested in specific genes/miRNAs, MIRit implements the <code><a href="../reference/plotDE.html">plotDE()</a></code> function that allows to represent expression changes of specific features as box plots, bar plots, or violin plots. In our example, we can use this function to visualize expression changes of different genes involved in the normal functioning of thyroid gland. Note that we use the <code>linear = FALSE</code> option to plot data in log scale (useful when multiple genes have very different expression levels).</p>
+<p>Finally, if we are interested in specific genes/miRNAs, MIRit implements the
+<code><a href="../reference/plotDE.html">plotDE()</a></code> function that allows to represent expression changes of specific
+features as box plots, bar plots, or violin plots. In our example, we can use
+this function to visualize expression changes of different genes involved in
+the normal functioning of thyroid gland. Note that we use the <code>linear = FALSE</code>
+option to plot data in log scale (useful when multiple genes have very different
+expression levels).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## create a bar plot for all thyroid features</span></span>
-<span><span class="va">thyrBar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotDE.html">plotDE</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
-<span>                  features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TG"</span>, <span class="st">"TPO"</span>, <span class="st">"DIO2"</span>, <span class="st">"PAX8"</span><span class="op">)</span>,</span>
-<span>                  graph <span class="op">=</span> <span class="st">"barplot"</span>, linear <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">## show the resulting plot</span></span>
-<span><span class="va">thyrBar</span></span>
-<span><span class="co">#&gt; Warning: Computation failed in `stat_summary()`</span></span>
-<span><span class="co">#&gt; Caused by error in `get()`:</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> object 'mean_sd' of mode 'function' was not found</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/plotDE.html">plotDE</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
+<span>       features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TG"</span>, <span class="st">"TPO"</span>, <span class="st">"DIO2"</span>, <span class="st">"PAX8"</span><span class="op">)</span>,</span>
+<span>       graph <span class="op">=</span> <span class="st">"barplot"</span>, linear <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <span style="display:block;" id="fig:thyroidBars"></span>
 <img src="MIRit_files/figure-html/thyroidBars-1.png" alt="Differential expression bar plots for different thyroid genes. Differential expression analysis demonstrated how TG, TPO, DIO2 and PAX8 result downregulated in thyroid cancer." width="100%"><p class="caption">
@@ -825,33 +1023,81 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <h2 id="functional-enrichment-analysis">
 <span class="header-section-number">4</span> Functional enrichment analysis<a class="anchor" aria-label="anchor" href="#functional-enrichment-analysis"></a>
 </h2>
-<p>After finding differentially expressed genes, we usually end up having long lists of features whose expression changes between biological conditions. However, this is usually not very informative, and we seek to understand which biological functions result impaired in our experiments. In this regard, different methods exist for determining which cellular processes are dysregulated in our conditions.</p>
+<p>After finding differentially expressed genes, we usually end up having long
+lists of features whose expression changes between conditions. However, this is
+usually not very informative, and we seek to understand which functions result
+impaired in our experiments. In this regard, different methods exist for
+determining which cellular processes are dysregulated in our samples.</p>
 <div class="section level3" number="4.1">
 <h3 id="available-approaches-ora-gsea-and-camera">
 <span class="header-section-number">4.1</span> Available approaches: ORA, GSEA and CAMERA<a class="anchor" aria-label="anchor" href="#available-approaches-ora-gsea-and-camera"></a>
 </h3>
-<p>In particular, MIRit supports different strategies for functional enrichment of genes, including over-representation analysis (ORA), gene-set enrichment analysis (GSEA), and Correlation Adjusted MEan RAnk gene set test (CAMERA). In this way, the user can infer compromised biological functions according to the approach of choice.</p>
-<p>Among these methods, the first one that has been developed is named <strong>over-representation analysis</strong> <span class="citation">(<a href="#ref-boyle_gotermfinderopen_2004">Boyle et al. 2004</a>)</span>, often abbreviated as <strong>ORA</strong>. This analysis aims to define whether genes annotated to specific gene sets (such as ontological terms or biological pathways) are differentially expressed more than would be expected by chance. To do this, a p-value is calculated by the hypergeometric distribution for each gene set as in Equation <a href="#eq:hyper">(1)</a>.</p>
+<p>MIRit supports different strategies for functional enrichment analysis of genes,
+including over-representation analysis (ORA), gene-set enrichment analysis
+(GSEA), and Correlation Adjusted MEan RAnk gene set test (CAMERA). In this way,
+the user can infer compromised biological functions according to the approach
+of choice.</p>
+<p>Among these methods, the first one that has been developed is
+<strong>over-representation analysis</strong> <span class="citation">(<a href="#ref-boyle_gotermfinderopen_2004">Boyle et al. 2004</a>)</span>, often
+abbreviated as <strong>ORA</strong>. This analysis aims to define whether genes annotated to
+specific gene-sets (such as ontological terms or biological pathways) are
+differentially expressed more than would be expected by chance. To do this, a
+p-value is calculated by the hypergeometric distribution as in Equation
+<a href="#eq:hyper">(1)</a>.</p>
 <p><span class="math display" id="eq:hyper">\[\begin{equation}
   p = 1 - \sum_{i = 0}^{k - 1}{\frac{\binom{M}{i}\binom{N - M}
   {n - 1}}{\binom{N}{n}}}
   \tag{1}
 \end{equation}\]</span></p>
-<p>Here, <span class="math inline">\(N\)</span> is the total number of genes tested, <span class="math inline">\(M\)</span> is the number of genes that are annotated to a particular gene set, <span class="math inline">\(n\)</span> is the number of differentially expressed genes, and <span class="math inline">\(k\)</span> is the number of differentially expressed genes that are annotated to the gene set.</p>
-<p>Additionally, another available approach is the <strong>gene set enrichment analysis</strong> <span class="citation">(<a href="#ref-subramanian_gene_2005">Subramanian et al. 2005</a>)</span>, often refereed to with the acronym <strong>GSEA</strong>, which is suitable to find categories whose genes change in a small but coordinated way. The GSEA algorithm takes as input a list of genes ranked with a particular criterion, and then walks down the list to evaluate whether members of a given gene set are normally distributed or are mainly present at the top or at the bottom of the list. To check this out, the algorithm uses a running-sum that increases when finding a gene belonging to a given category, and decreases when a gene not contained in that specific set is found. The maximum distance from zero occurred in the running score is defined as the enrichment score (ES). To estimate the statistical significance of enrichment scores, a permutation test is performed by swapping gene labels annotated to a gene set.</p>
-<p>Even though GSEA is arguably the most commonly used approach for functional enrichment, <span class="citation">Wu and Smyth (<a href="#ref-wu_camera_2012">2012</a>)</span> demonstrated that inter-gene correlations might affect the reliability of functional enrichment analyses. To overcome this issue, they developed <strong>Correlation Adjusted MEan RAnk gene set test (CAMERA)</strong>, which is another competitive test used for functional enrichment analysis of genes. The main advantage of this method is that it adjusts the gene set test statistic according to inter-gene correlations.</p>
+<p>Here, <span class="math inline">\(N\)</span> is the total number of genes tested, <span class="math inline">\(M\)</span> is the number of genes that
+are annotated to a particular gene-set, <span class="math inline">\(n\)</span> is the number of differentially
+expressed genes, and <span class="math inline">\(k\)</span> is the number of differentially expressed genes that
+are annotated to the gene set.</p>
+<p>Additionally, another available approach is the <strong>gene set enrichment analysis</strong>
+<span class="citation">(<a href="#ref-subramanian_gene_2005">Subramanian et al. 2005</a>)</span>, often refereed to with the acronym <strong>GSEA</strong>, which is
+suitable to find categories whose genes change in a small but coordinated way.
+The GSEA algorithm takes as input a list of genes ranked with a particular
+criterion, and then walks down the list to evaluate whether members of a given
+gene set are normally distributed or are mainly present at the top or at the
+bottom of the list. To check this out, the algorithm uses a running-sum that
+increases when finding a gene belonging to a given category, and decreases when
+a gene not contained in that specific set is found. The maximum distance from
+zero occurred in the running score is defined as the enrichment score (ES).
+To estimate the statistical significance of enrichment scores, a permutation
+test is performed by swapping gene labels annotated to a gene set.</p>
+<p>Even though GSEA is arguably the most commonly used approach for functional
+enrichment, <span class="citation">Wu and Smyth (<a href="#ref-wu_camera_2012">2012</a>)</span> demonstrated that inter-gene correlations might
+affect its reliability. To overcome this issue, they developed the
+<strong>Correlation Adjusted MEan RAnk gene set test (CAMERA)</strong>. The main advantage
+of this method is that it adjusts the gene set test statistic according to
+inter-gene correlations.</p>
 </div>
 <div class="section level3" number="4.2">
 <h3 id="categories">
 <span class="header-section-number">4.2</span> Available databases and categories<a class="anchor" aria-label="anchor" href="#categories"></a>
 </h3>
-<p>As described above, functional enrichment analysis relies on gene sets, which consist in collections of genes that are annotated to specific functions or terms. Independently from the strategy used for the analysis, functional enrichment methods need access to these properly curated collections of genes. In the effort of providing access to a vast number of these resources, MIRit uses the <em><a href="https://bioconductor.org/packages/3.19/geneset" class="external-link">geneset</a></em> package to support multiple databases, including Gene Ontology (GO), Kyoto Encyclopedia of Genes and Genomes (KEGG), MsigDB, WikiPathways, Reactome, Enrichr, Disease Ontology (DO), Network of Cancer Genes (NCG), DisGeNET, and COVID-19. However, the majority of these databases contain multiple categories. To see the complete list of available gene sets for each database refer to the documentation of the <code><a href="../reference/enrichGenes.html">enrichGenes()</a></code> function.</p>
+<p>As described above, functional enrichment analysis relies on gene-sets, which
+consist in collections of genes that are annotated to specific functions or
+terms. Independently from the strategy used for the analysis, functional
+enrichment methods need access to these properly curated collections of genes.
+In the effort of providing access to a vast number of these resources, MIRit
+uses the <em><a href="https://CRAN.R-project.org/package=geneset" class="external-link">geneset</a></em> package to support multiple databases,
+including Gene Ontology (GO), Kyoto Encyclopedia of Genes and Genomes (KEGG),
+MsigDB, WikiPathways, Reactome, Enrichr, Disease Ontology (DO), Network of
+Cancer Genes (NCG), DisGeNET, and COVID-19. However, the majority of these
+databases contain multiple categories. To see the complete list of available
+gene-sets for each database refer to the documentation of the <code><a href="../reference/enrichGenes.html">enrichGenes()</a></code>
+function.</p>
 </div>
 <div class="section level3" number="4.3">
 <h3 id="supported-species">
 <span class="header-section-number">4.3</span> Supported species<a class="anchor" aria-label="anchor" href="#supported-species"></a>
 </h3>
-<p>The above-mentioned collections have their own lists of supported species. To check the available species for a given database, MIRit provides a practical helper function named <code><a href="../reference/supportedOrganisms.html">supportedOrganisms()</a></code>. For example, to retrieve the species supported by Reactome database, we can simply run the following piece of code.</p>
+<p>The above-mentioned collections have their own lists of supported species.
+To check the available species for a given database, MIRit provides a practical
+helper function named <code><a href="../reference/supportedOrganisms.html">supportedOrganisms()</a></code>. For example, to retrieve the
+species supported by Reactome database, we can simply run the following piece
+of code.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## list available species for Reactome database</span></span>
 <span><span class="fu"><a href="../reference/supportedOrganisms.html">supportedOrganisms</a></span><span class="op">(</span><span class="st">"Reactome"</span><span class="op">)</span></span>
@@ -866,19 +1112,27 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <h3 id="enrichment">
 <span class="header-section-number">4.4</span> Perform functional enrichment with the <code>enrichGenes()</code> function<a class="anchor" aria-label="anchor" href="#enrichment"></a>
 </h3>
-<p>The main function in MIRit for the functional enrichment analysis of genes is <code><a href="../reference/enrichGenes.html">enrichGenes()</a></code>, which requires as input:</p>
+<p>The main function in MIRit for the functional enrichment analysis of genes is
+<code><a href="../reference/enrichGenes.html">enrichGenes()</a></code>, which requires as input:</p>
 <ul>
-<li>the <code>MirnaExperiment</code> object that we get after running differential expression analysis;</li>
+<li>the <code>MirnaExperiment</code> object that we get after running differential
+expression analysis;</li>
 <li>
-<code>method</code>, which specifies the desired approach among <code>ORA</code>, <code>GSEA</code>, and <code>CAMERA</code>;</li>
+<code>method</code>, which specifies the desired approach among <code>ORA</code>, <code>GSEA</code>, and
+<code>CAMERA</code>;</li>
 <li>
-<code>database</code> and <code>category</code>, which define the gene set that you want to use for the enrichment (see Section <a href="#categories">4.2</a> for a complete reference of available databases and categories);</li>
+<code>database</code> and <code>category</code>, which define the gene-set that you want to use
+(see Section <a href="#categories">4.2</a> for a complete reference of available databases
+and categories);</li>
 <li>
-<code>organism</code>, which indicates the specie under investigation (defaults to “Homo sapiens”);</li>
+<code>organism</code>, which indicates the specie under investigation (defaults to
+“Homo sapiens”);</li>
 <li>
-<code>pCutoff</code> and <code>pAdjustment</code>, which specify the cutoff for statistical significance and the multiple testing correction, respectively.</li>
+<code>pCutoff</code> and <code>pAdjustment</code>, which specify the cutoff for statistical
+significance and the multiple testing correction, respectively.</li>
 </ul>
-<p>In our example, we are going to perform the enrichment analysis by using ORA with GO database (biological processes).</p>
+<p>In our example, we are going to perform the enrichment analysis by using ORA
+with GO database (biological processes).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## perform over-representation analysis with GO</span></span>
 <span><span class="va">ora</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichGenes.html">enrichGenes</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
@@ -889,9 +1143,14 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <span><span class="co">#&gt; Reading GO gene-sets from cache...</span></span>
 <span><span class="co">#&gt; Performing the enrichment of upregulated genes...</span></span>
 <span><span class="co">#&gt; Performing the enrichment of downregulated genes...</span></span>
-<span><span class="co">#&gt; The enrichment of genes reported 9 significantly enriched terms for downregulated genes and 0 for upregulated genes.</span></span></code></pre></div>
-<p>MIRit performs ORA separately for upregulated and downregulated genes, as it has been shown that this is more powerful compared to enriching all DE genes <span class="citation">(<a href="#ref-hong_separate_2014-1">Hong et al. 2014</a>)</span>. Therefore, when we use ORA, <code><a href="../reference/enrichGenes.html">enrichGenes()</a></code> returns a <code>list</code> containing two objects of class <code>FunctionalEnrichment</code>, one storing enrichment results for upregulated genes, and one for downregulated genes.</p>
-<p>Before exploring the results of the analysis, we will also demonstrate the capabilities of MIRit by performing GSEA with the gene sets provided by the KEGG pathway database.</p>
+<span><span class="co">#&gt; The enrichment of genes reported 8 significantly enriched terms for downregulated genes and 0 for upregulated genes.</span></span></code></pre></div>
+<p>MIRit performs ORA separately for upregulated and downregulated genes, as it
+has been shown to be more powerful compared to enriching all DE genes
+<span class="citation">(<a href="#ref-hong_separate_2014-1">Hong et al. 2014</a>)</span>. Therefore, when we use ORA, <code><a href="../reference/enrichGenes.html">enrichGenes()</a></code> returns a
+<code>list</code> containing two objects of class <code>FunctionalEnrichment</code>, one storing
+enrichment results for upregulated genes, and one for downregulated genes.</p>
+<p>Before exploring the results of the analysis, we will also demonstrate the use
+of GSEA with the gene-sets provided by the KEGG pathway database.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## set seed for reproducible results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
@@ -905,8 +1164,9 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <span><span class="co">#&gt; Reading KEGG gene-sets from cache...</span></span>
 <span><span class="co">#&gt; Ranking genes based on signed.pval...</span></span>
 <span><span class="co">#&gt; Performing gene-set enrichment analysis (GSEA)...</span></span>
-<span><span class="co">#&gt; GSEA reported 3 significantly enriched terms.</span></span></code></pre></div>
-<p>In this case, the <code><a href="../reference/enrichGenes.html">enrichGenes()</a></code> function returns a single object of class <code>FunctionalEnrichment</code>, containing GSEA results.</p>
+<span><span class="co">#&gt; GSEA reported 2 significantly enriched terms.</span></span></code></pre></div>
+<p>In this case, the <code><a href="../reference/enrichGenes.html">enrichGenes()</a></code> function returns a single object of class
+<code>FunctionalEnrichment</code>, containing GSEA results.</p>
 </div>
 <div class="section level3" number="4.5">
 <h3 id="visualize-enriched-sets">
@@ -916,7 +1176,11 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <h4 id="access-results-table">
 <span class="header-section-number">4.5.1</span> Access results table<a class="anchor" aria-label="anchor" href="#access-results-table"></a>
 </h4>
-<p>After running the <code><a href="../reference/enrichGenes.html">enrichGenes()</a></code> function, we get <code>FunctionalEnrichment</code> objects holding the results of enrichment analyses. To access the full table containing significantly affected biological functions, we can use the <code><a href="../reference/enrichmentResults.html">enrichmentResults()</a></code> function. In our case, we can check the results of our GSEA analysis to investigate the human pathways that result affected in thyroid cancer. In Table <a href="#tab:gseaTab">3</a> we can see the output of <code>enrichmentResults(gse)</code>.</p>
+<p>After running the <code><a href="../reference/enrichGenes.html">enrichGenes()</a></code> function, we get <code>FunctionalEnrichment</code>
+objects holding the results of enrichment analyses. To access the full table
+containing significantly affected functions, we can use the
+<code><a href="../reference/enrichmentResults.html">enrichmentResults()</a></code> function. In our case, we can check the results of GSEA
+(Table <a href="#tab:gseaTab">3</a>).</p>
 <div class="horizontal-scroll"><table class="table">
 <caption>
 <span id="tab:gseaTab">Table 3: </span><span class="caption-title">GSEA results</span><br>A table listing the affected KEGG pathways in thyroid cancer.</caption>
@@ -945,9 +1209,9 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <td align="left">Thyroid hormone synthesis</td>
 <td align="right">0</td>
 <td align="right">0.01</td>
-<td align="right">0.56</td>
+<td align="right">0.54</td>
 <td align="right">-0.67</td>
-<td align="right">-2.02</td>
+<td align="right">-2.01</td>
 <td align="right">27</td>
 <td align="left">SLC26A4,….</td>
 </tr>
@@ -956,20 +1220,10 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <td align="right">0</td>
 <td align="right">0.02</td>
 <td align="right">0.52</td>
-<td align="right">-0.54</td>
-<td align="right">-1.88</td>
+<td align="right">-0.55</td>
+<td align="right">-1.90</td>
 <td align="right">55</td>
 <td align="left">BCL2, HY….</td>
-</tr>
-<tr class="odd">
-<td align="left">Coronavirus disease - COVID-19</td>
-<td align="right">0</td>
-<td align="right">0.04</td>
-<td align="right">0.48</td>
-<td align="right">-0.45</td>
-<td align="right">-1.68</td>
-<td align="right">85</td>
-<td align="left">JUN, RPL….</td>
 </tr>
 </tbody>
 </table></div>
@@ -978,8 +1232,11 @@ Figure 3: <span class="caption-title">Differential expression bar plots for diff
 <h4 id="enrichment-dot-plots-and-bar-plots">
 <span class="header-section-number">4.5.2</span> Enrichment dot plots and bar plots<a class="anchor" aria-label="anchor" href="#enrichment-dot-plots-and-bar-plots"></a>
 </h4>
-<p>Further, in addition to exploring results table, MIRit offers several options for the visualization of enrichment analyses, including dot plots and bar plots. These plots are available for every <code>FunctionalEnrichment</code> object independently from the method used.</p>
-<p>Following our example, we can visualize the results of the ORA that we performed in Section <a href="#enrichment">4.4</a> through a simple dot plot.</p>
+<p>Further, MIRit offers several options for the visualization of enrichment
+analyses, including dot plots and bar plots. These plots are available for
+every <code>FunctionalEnrichment</code> object independently from the method used.</p>
+<p>Following our example, we can visualize ORA results that we obtained in Section
+<a href="#enrichment">4.4</a> through a simple dot plot.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## create a dot plot for ORA</span></span>
 <span><span class="fu"><a href="../reference/enrichmentDotplot.html">enrichmentDotplot</a></span><span class="op">(</span><span class="va">ora</span><span class="op">$</span><span class="va">downregulated</span>, title <span class="op">=</span> <span class="st">"Depleted functions"</span><span class="op">)</span></span></code></pre></div>
@@ -994,7 +1251,11 @@ Figure 4: <span class="caption-title">ORA results for downregulated genes</span>
 <h4 id="other-plots-for-gsea">
 <span class="header-section-number">4.5.3</span> Other plots for GSEA<a class="anchor" aria-label="anchor" href="#other-plots-for-gsea"></a>
 </h4>
-<p>Additionally, MIRit provides specific visualization methods that are exclusive for GSEA, including ridge plots and GSEA plots. For instance, after running GSEA through <code><a href="../reference/enrichGenes.html">enrichGenes()</a></code>, we can produce a GSEA-style plot through the <code><a href="../reference/gseaPlot.html">gseaPlot()</a></code> function. In our case, we are going to use this plotting method for the “Thyroid hormone synthesis” pathway.</p>
+<p>Additionally, MIRit provides specific visualization methods that are exclusive
+for GSEA, including ridge plots and GSEA plots. For instance, after running GSEA
+through <code><a href="../reference/enrichGenes.html">enrichGenes()</a></code>, we can produce a GSEA-style plot through the
+<code><a href="../reference/gseaPlot.html">gseaPlot()</a></code> function. In our case, we are going to produce this plot for the
+“Thyroid hormone synthesis” pathway.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## create a GSEA plot</span></span>
 <span><span class="fu"><a href="../reference/gseaPlot.html">gseaPlot</a></span><span class="op">(</span><span class="va">gse</span>, <span class="st">"Thyroid hormone synthesis"</span>, rankingMetric <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -1011,156 +1272,344 @@ Figure 5: <span class="caption-title">GSEA-style plot for Thyroid hormone synthe
 <h2 id="associate-mirnas-with-disease-snps">
 <span class="header-section-number">5</span> Associate miRNAs with disease-SNPs<a class="anchor" aria-label="anchor" href="#associate-mirnas-with-disease-snps"></a>
 </h2>
-<p>Interestingly, MIRit enables to explore the presence of disease-associated SNPs occurring at loci of differentially expressed miRNAs. In this concern, SNPs occurring within miRNAs may have important effects on the biological function of these transcripts, as they might alter its expression or the spectrum of miRNA targets. To verify the presence of disease-SNPs within miRNA loci, MIRit directly queries the NHGRI-EBI Catalog of published genome-wide association studies through the <em><a href="https://CRAN.R-project.org/package=gwasrapidd" class="external-link">gwasrapidd</a></em> package, and then retains only SNPs that affect DE-miRNA genes or their relative host genes (for intragenic miRNAs).</p>
-<p>In our case, there are no SNPs associated with thyroid cancer that occur witin DE-miRNA loci. Therefore, we will explain how this function works with reference to the analysis on Alzheimer’s disease reported in the MIRit paper.</p>
+<p>Interestingly, MIRit enables to explore the presence of disease-associated SNPs
+located in differentially expressed miRNAs. In this concern, SNPs occurring
+within miRNA loci may have important effects on the biological function of these
+transcripts, as they might alter their expression or the spectrum of targets.
+To verify the presence of disease-SNPs within miRNA loci, MIRit directly queries
+the NHGRI-EBI Catalog of published genome-wide association studies through the
+<em><a href="https://CRAN.R-project.org/package=gwasrapidd" class="external-link">gwasrapidd</a></em> package, and then retains only SNPs that affect
+DE-miRNA genes or their relative host genes (for intragenic miRNAs).</p>
+<p>In our case, there are no SNPs associated with thyroid cancer that occur within
+differentially expressed miRNAs. Therefore, we will demonstrate the use of this
+function with SNPs associated with the response to antidepressant drugs.</p>
 <div class="section level3" number="5.1">
 <h3 id="search-disease-related-snps">
 <span class="header-section-number">5.1</span> Search disease-related SNPs<a class="anchor" aria-label="anchor" href="#search-disease-related-snps"></a>
 </h3>
-<p>First, we need to identify the Experimental Factor Ontology (EFO) identifier of a given disease of interest. To do so, MIRit provides the <code><a href="../reference/searchDisease.html">searchDisease()</a></code> function. For example, to identify the relevant EFO ID for Alzheimer disease we can use the following code chunk.</p>
+<p>First, we need to identify the Experimental Factor Ontology (EFO) identifier of
+a given phenotype. To do so, MIRit provides the <code><a href="../reference/searchDisease.html">searchDisease()</a></code> function.
+For example, to identify the relevant EFO ID for antidepressant response we can
+use the following code chunk.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## identify the EFO ID corresponding to Alzheimer's disease</span></span>
-<span><span class="fu"><a href="../reference/searchDisease.html">searchDisease</a></span><span class="op">(</span><span class="st">"alzheimer"</span><span class="op">)</span></span></code></pre></div>
-<p>The relevant EFO trait is “Alzheimer disease”.</p>
+<code class="sourceCode R"><span><span class="co">## identify the EFO ID corresponding to antidepressant response</span></span>
+<span><span class="fu"><a href="../reference/searchDisease.html">searchDisease</a></span><span class="op">(</span><span class="st">"antidepressant"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Checking for cached EFO traits...</span></span>
+<span><span class="co">#&gt; Reading EFO traits from cache...</span></span>
+<span><span class="co">#&gt; Searching for disease: antidepressant</span></span>
+<span><span class="co">#&gt; [1] "antidepressant-induced side effect"       </span></span>
+<span><span class="co">#&gt; [2] "antidepressant-induced dizziness"         </span></span>
+<span><span class="co">#&gt; [3] "antidepressant-induced sexual dysfunction"</span></span>
+<span><span class="co">#&gt; [4] "antidepressant-induced visual impairment" </span></span>
+<span><span class="co">#&gt; [5] "antidepressant-induced hearing impairment"</span></span>
+<span><span class="co">#&gt; [6] "response to antidepressant"               </span></span>
+<span><span class="co">#&gt; [7] "response to tricyclic antidepressant"     </span></span>
+<span><span class="co">#&gt; [8] "response to tetracyclic antidepressant"   </span></span>
+<span><span class="co">#&gt; [9] "Antidepressant use measurement"</span></span></code></pre></div>
+<p>The relevant EFO trait is “response to antidepressant”.</p>
 </div>
 <div class="section level3" number="5.2">
 <h3 id="identify-mirna-genes-overlapping-with-disease-snps">
 <span class="header-section-number">5.2</span> Identify miRNA genes overlapping with disease-SNPs<a class="anchor" aria-label="anchor" href="#identify-mirna-genes-overlapping-with-disease-snps"></a>
 </h3>
-<p>Now, we can use the <code><a href="../reference/findMirnaSNPs.html">findMirnaSNPs()</a></code> function to identify the disease-related SNPs that affect miRNA loci.</p>
+<p>Now, we can use the <code><a href="../reference/findMirnaSNPs.html">findMirnaSNPs()</a></code> function to identify the disease-related
+SNPs that affect miRNA loci.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## detect disease-SNPs occuring at DE-miRNAs loci</span></span>
-<span><span class="va">association</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findMirnaSNPs.html">findMirnaSNPs</a></span><span class="op">(</span><span class="va">experiment</span>, <span class="st">"Alzheimer disease"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## detect SNPs occuring at DE-miRNAs loci</span></span>
+<span><span class="va">association</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findMirnaSNPs.html">findMirnaSNPs</a></span><span class="op">(</span><span class="va">experiment</span>, <span class="st">"response to antidepressant"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Querying GWAS Catalog, this may take some time...</span></span>
+<span><span class="co">#&gt; Finding genomic information of differentially expressed miRNAs...</span></span>
+<span><span class="co">#&gt; After the analysis, 1 variants associated with response to antidepressant were found within differentially expressed miRNA genes</span></span></code></pre></div>
 </div>
 <div class="section level3" number="5.3">
 <h3 id="build-a-track-plot-to-display-mirna-snp-associations">
 <span class="header-section-number">5.3</span> Build a track plot to display miRNA-SNP associations<a class="anchor" aria-label="anchor" href="#build-a-track-plot-to-display-mirna-snp-associations"></a>
 </h3>
-<p>Finally, if any disease-related SNPs is present within DE-miRNA loci, we can use the <code><a href="../reference/mirVariantPlot.html">mirVariantPlot()</a></code> function to graphically build a track plot displaying the polymorphism along with the relevant genomic context, including the corresponding miRNA locus.</p>
+<p>If any disease-related SNP is present within DE-miRNA loci, we can use the
+<code><a href="../reference/mirVariantPlot.html">mirVariantPlot()</a></code> function to graphically build a track plot that displays the
+polymorphism along with the relevant genomic context, including the
+corresponding miRNA locus.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## create a track plot to represent disease-SNPs at DE-miRNA loci</span></span>
-<span><span class="fu"><a href="../reference/mirVariantPlot.html">mirVariantPlot</a></span><span class="op">(</span><span class="st">"rs2632516"</span>, <span class="va">association</span>, showContext <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/mirVariantPlot.html">mirVariantPlot</a></span><span class="op">(</span><span class="st">"rs2402960"</span>, <span class="va">association</span>, showSequence <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:trackPlot"></span>
+<img src="MIRit_files/figure-html/trackPlot-1.png" alt="Track plot for miRNA-SNPs. This trackplot shows the proximity of rs2402960 with the locus that encodes for miR-182." width="100%"><p class="caption">
+Figure 6: <span class="caption-title">Track plot for miRNA-SNPs</span><br>This trackplot shows the proximity of rs2402960 with the locus that encodes for miR-182.
+</p>
+</div>
+</div>
+<div class="section level3" number="5.4">
+<h3 id="explore-the-evidence-supporting-snps-association">
+<span class="header-section-number">5.4</span> Explore the evidence supporting SNPs association<a class="anchor" aria-label="anchor" href="#explore-the-evidence-supporting-snps-association"></a>
+</h3>
+<p>Finally, to review the literature supporting the association between SNPs and
+specific traits, and possibly with differentially expressed miRNAs, MIRit
+provides the <code><a href="../reference/getEvidence.html">getEvidence()</a></code> function, which returns a data.frame reporting
+some details of the studies where the association is supported.</p>
+<p>For example, we can see the list of experiments where the association between
+rs2402960 and the response to antidepressants was observed.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## retrieve the evidence supporting SNP-trait association</span></span>
+<span><span class="va">snpEvidence</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getEvidence.html">getEvidence</a></span><span class="op">(</span>variant <span class="op">=</span> <span class="st">"rs2402960"</span>,</span>
+<span>                           diseaseEFO <span class="op">=</span> <span class="st">"response to antidepressant"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Retrieving biomedical evidence for the association between response to antidepressant and rs2402960 variant...</span></span>
+<span><span class="co">#&gt; 20 studies reporting this association were found!</span></span>
+<span></span>
+<span><span class="co">## take a look at the evidence table</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">snpEvidence</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
+<span><span class="co">#&gt;   study_id   pubmed_id publication_date publication        title author_fullname</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> GCST003813  27<span style="text-decoration: underline;">622</span>933 2016-09-13       Transl Psychiatry  Anal… Li QS          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> GCST001641  22<span style="text-decoration: underline;">907</span>730 2012-08-21       Pharmacogenomics J Phar… Ji Y           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> GCST002046  23<span style="text-decoration: underline;">726</span>668 2013-05-30       J Psychiatr Res    A ge… Hunter AM      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> GCST000470  19<span style="text-decoration: underline;">724</span>244 2009-08-31       Pharmacogenet Gen… Geno… Laje G         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> GCST000471  19<span style="text-decoration: underline;">736</span>353 2009-09-01       Arch Gen Psychiat… A ge… Ising M        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> GCST000509  19<span style="text-decoration: underline;">846</span>067 2009-10-19       Biol Psychiatry    A ge… Garriock HA    </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: author_orcid &lt;chr&gt;</span></span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2" number="6">
 <h2 id="retrieve-mirna-targets">
 <span class="header-section-number">6</span> Retrieve miRNA targets<a class="anchor" aria-label="anchor" href="#retrieve-mirna-targets"></a>
 </h2>
-<p>Before performing integrative miRNA-mRNA analyses, we need to identify the targets of differentially expressed miRNAs, so that we can test whether they really affect the levels of their targets or not.</p>
+<p>Before performing integrative miRNA-mRNA analyses, we need to identify the
+targets of differentially expressed miRNAs, so that we can test whether they
+really affect the levels of their targets or not.</p>
 <div class="section level3" number="6.1">
 <h3 id="databases-with-mirna-mrna-interactions">
 <span class="header-section-number">6.1</span> Databases with miRNA-mRNA interactions<a class="anchor" aria-label="anchor" href="#databases-with-mirna-mrna-interactions"></a>
 </h3>
-<p>Different resources have been developed over the years to predict and collect miRNA-target interactions, and we can categorize them in two main types:</p>
+<p>Different resources have been developed over the years to predict and collect
+miRNA-target interactions, and we can categorize them in two main types:</p>
 <ul>
 <li>
-<strong>Prediction databases</strong>, that contain information about computationally determined miRNA-target interactions;</li>
+<strong>Prediction databases</strong>, that contain information about computationally
+determined miRNA-target interactions; and</li>
 <li>
-<strong>Validated databases</strong>, which only contain interactions that have been proven through biomolecular experiments.</li>
+<strong>Validated databases</strong>, which only contain interactions that have been proven
+through biomolecular experiments.</li>
 </ul>
-<p>The choice of which type of resources to use for identifying miRNA targets drastically influences the outcome of the analysis. In this regard, some researchers tend to give the priority to validated interactions, even though they are usually fewer than predicted ones. On the other hand, predicted pairs are much more numerous, but they exhibit a high number of false positive hits.</p>
+<p>The choice of which type of resources to use for identifying miRNA targets
+drastically influences the outcome of the analysis. In this regard, some
+researchers tend to give the priority to validated interactions, even though
+they are usually fewer than predicted ones. On the other hand, predicted pairs
+are much more numerous, but they exhibit a high number of false positive hits.</p>
 </div>
 <div class="section level3" number="6.2">
 <h3 id="the-mirdip-approach">
 <span class="header-section-number">6.2</span> The mirDIP approach<a class="anchor" aria-label="anchor" href="#the-mirdip-approach"></a>
 </h3>
-<p>The downside of miRNA target prediction algorithms is also the scarce extend of overlap existing between different tools. To address this issue, several ensemble methods have been developed, trying to aggregate the predictions obtained by different algorithms. Initially, several researchers determined as significant miRNA-target pairs those predicted by more than one tool (intersection method). However, this method is not able to capture an important number of meaningful interactions. Alternatively, other strategies used to merge predictions from several algorithms (union method). Despite identifying more true relationships, the union method leads to a higher proportion of false discoveries. Therefore, other ensemble methods started using other statistics to rank miRNA-target predictions obtained by multiple algorithms. Among these newly developed ensemble methods, one of the best performing one is the <strong>microRNA Data Integration Portal (mirDIP)</strong> database, which aggregates miRNA target predictions from 24 different resources by using an integrated score inferred from different prediction metrics. In this way, mirDIP reports more accurate predictions compared to those of individual tools. For additional information on mirDIP database and its ranking metric refer to <span class="citation">Tokar et al. (<a href="#ref-tokar_mirdip_2018">2018</a>)</span> and <span class="citation">Hauschild et al. (<a href="#ref-hauschild_mirdip_2023">2023</a>)</span>.</p>
+<p>The downside of miRNA target prediction algorithms is also the scarce extend of
+overlap existing between different tools. To address this issue, several
+ensemble methods have been developed, trying to aggregate the predictions
+obtained by different algorithms. Initially, several researchers determined as
+significant miRNA-target pairs those predicted by more than one tool
+(intersection method). However, this method is not able to capture an important
+number of meaningful interactions. Alternatively, other strategies used to merge
+predictions from several algorithms (union method). Despite identifying more
+true relationships, the union method leads to a higher proportion of false
+discoveries. Therefore, other ensemble methods started using other statistics to
+rank miRNA-target predictions obtained by multiple algorithms. Among these newly
+developed ensemble methods, one of the best performing one is the
+<strong>microRNA Data Integration Portal (mirDIP)</strong> database, which aggregates miRNA
+target predictions from 24 different resources by using an integrated score
+inferred from different prediction metrics. In this way, mirDIP reports more
+accurate predictions compared to those of individual tools. For additional
+information on mirDIP database and its ranking metric refer to
+<span class="citation">Tokar et al. (<a href="#ref-tokar_mirdip_2018">2018</a>)</span> and <span class="citation">Hauschild et al. (<a href="#ref-hauschild_mirdip_2023">2023</a>)</span>.</p>
 </div>
 <div class="section level3" number="6.3">
 <h3 id="download-predicted-and-validated-interactions-with-gettargets">
 <span class="header-section-number">6.3</span> Download predicted and validated interactions with <code>getTargets()</code><a class="anchor" aria-label="anchor" href="#download-predicted-and-validated-interactions-with-gettargets"></a>
 </h3>
-<p>Given the above, MIRit allows the prediction of miRNA-target interactions via the <strong>mirDIP</strong> database (version 5.2). In addition, in order to raise the number of true interactions, MIRit combines the miRNA-target pairs returned by mirDIP with the experimentally validated interactions contained in the <strong>miRTarBase</strong> database (version 9) <span class="citation">(<a href="#ref-huang_mirtarbase_2022">Huang et al. 2022</a>)</span>. In practice, to identify miRNA targets MIRit implements the <code><a href="../reference/getTargets.html">getTargets()</a></code> function, which allows to download both type of interactions. Specifically, this function also includes a parameter called <code>score</code> that determines the degree of confidence required for the targets predicted by mirDIP. The value of this parameter must be one of <code>Very High</code>, <code>High</code> (default), <code>Medium</code>, and <code>Low</code>, which correspond to ranks among top 1%, top 5% (excluding top 1%), top 1/3 (excluding top 5%) and remaining predictions, respectively. Moreover, the <code>includeValidated</code> parameter tells MIRit whether to include experimentally validate interactions deriving from miRTarBase (default is TRUE). Please note that mirDIP database is only available for human miRNAs; thus, for species other than Homo sapiens, only validated interactions contained in miRTarBase are used.</p>
-<p>In our example, we are going to retrieve both predicted and validated interactions by using default settings.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<p>Given the above, MIRit allows the prediction of miRNA-target interactions via
+the <strong>mirDIP</strong> database (version 5.2). In addition, in order to raise the number
+of true interactions, MIRit combines the miRNA-target pairs returned by mirDIP
+with the experimentally validated interactions contained in <strong>miRTarBase</strong>
+(version 9) <span class="citation">(<a href="#ref-huang_mirtarbase_2022">Huang et al. 2022</a>)</span>. In practice, to identify miRNA targets,
+MIRit implements the <code><a href="../reference/getTargets.html">getTargets()</a></code> function. Specifically, this function
+includes a parameter called <code>score</code> that determines the degree of confidence
+required for the targets predicted by mirDIP. The value of this parameter must
+be one of <code>Very High</code>, <code>High</code> (default), <code>Medium</code>, and <code>Low</code>, which correspond
+to ranks among top 1%, top 5%, top 1/3, and remaining predictions, respectively.
+Moreover, the <code>includeValidated</code> parameter tells MIRit whether to include
+experimentally validated interactions deriving from miRTarBase. It is also
+possible (with the <code>evidence</code> parameter) to consider all interactions in
+miRTarBase, or just limiting the retrieval to those interactions with strong
+experimental evidence. Please note that mirDIP database is only available for
+human miRNAs; thus, for species other than Homo sapiens, only validated
+interactions contained in miRTarBase are used.</p>
+<p>In our example, we are going to retrieve both predicted and validated
+interactions by using default settings.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## retrieve miRNA target genes</span></span>
-<span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getTargets.html">getTargets</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span></span></code></pre></div>
-<p>After running this function, we obtain a <code>MirnaExperiment</code> object containing miRNA-target interactions in its <code>targets</code> slot. The user can access a <code>data.frame</code> detailing these interactions through the <code><a href="../reference/mirnaTargets.html">mirnaTargets()</a></code> function.</p>
+<span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getTargets.html">getTargets</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Retrieving targets from mirDIP (this may take a while)...</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Loading miRTarBase from cache...</span></span>
+<span><span class="co">#&gt; Merging predicted and validated results...</span></span>
+<span><span class="co">#&gt; 7596 miRNA-target pairs have been identified for the 21 differentially expressed miRNAs.</span></span></code></pre></div>
+<p>After running this function, we obtain a <code>MirnaExperiment</code> object containing
+miRNA-target interactions in its <code>targets</code> slot. The user can access a
+<code>data.frame</code> detailing these interactions through the <code><a href="../reference/mirnaTargets.html">mirnaTargets()</a></code> function.</p>
 </div>
 </div>
 <div class="section level2" number="7">
-<h2 id="investigate-the-effects-of-mirna-expression-changes-on-target-genes">
-<span class="header-section-number">7</span> Investigate the effects of miRNA expression changes on target genes<a class="anchor" aria-label="anchor" href="#investigate-the-effects-of-mirna-expression-changes-on-target-genes"></a>
+<h2 id="assess-the-effects-of-mirnas-on-target-genes">
+<span class="header-section-number">7</span> Assess the effects of miRNAs on target genes<a class="anchor" aria-label="anchor" href="#assess-the-effects-of-mirnas-on-target-genes"></a>
 </h2>
-<p>Now that we have defined the targets of differentially expressed miRNAs, we can continue with the integrative analysis of miRNA and gene expression levels. This analysis is useful as it allows to only consider miNA-target pairs where an inverse relationship is observed. As already mentioned, MIRit can work with both paired and unpaired data by using different statistical approaches, including:</p>
+<p>Now that we have defined the targets of differentially expressed miRNAs, we can
+continue with the integrative analysis of miRNA and gene expression levels. The
+purpose of this analysis is to only consider miNA-target pairs where an inverse
+relationship is observed.</p>
+<p>As already mentioned, MIRit can work with both paired and unpaired data by using
+different statistical approaches, including:</p>
 <ul>
 <li>
-<strong>Correlation analysis</strong>, which is the recommended method when samples are paired;</li>
+<strong>Correlation analysis</strong>, which is the recommended method when samples are
+paired;</li>
 <li>
 <strong>Association tests</strong>, like Fisher’s exact test and Boschloo’s exact test;</li>
 <li>
-<strong>Rotation gene-set tests</strong>, as implemented in the <code>fry</code> function from <em><a href="https://bioconductor.org/packages/3.19/limma" class="external-link">limma</a></em> package.</li>
+<strong>Rotation gene-set tests</strong>, as implemented in the <code>fry</code> function from
+<em><a href="https://bioconductor.org/packages/3.19/limma" class="external-link">limma</a></em> package.</li>
 </ul>
-<p>For unpaired data, only association tests and rotation gene-set tests are available, whereas correlation analysis is the best performing strategy for paired data. The integrative analysis, either performed through correlation, association tests, or rotation gene-set tests, is implemented in the <code><a href="../reference/mirnaIntegration.html">mirnaIntegration()</a></code> function. When using the default option <code>test = "auto"</code>, MIRit automatically performs the appropriate test for paired and unpaired samples. If only some samples of the data set have paired measurements, a correlation analysis will be carried out only for those subjects.</p>
+<p>For unpaired data, only association tests and rotation gene-set tests are
+available, whereas correlation analysis is the best performing strategy for
+paired data. The integrative analysis, either performed through correlation,
+association tests, or rotation gene-set tests, is implemented in the
+<code><a href="../reference/mirnaIntegration.html">mirnaIntegration()</a></code> function. When using the default option <code>test = "auto"</code>,
+MIRit automatically performs the appropriate test for paired and unpaired
+samples. If only some samples of the dataset have paired measurements, a
+correlation analysis will be carried out only for those subjects.</p>
 <div class="section level3" number="7.1">
 <h3 id="correlation-analysis-for-paired-data">
 <span class="header-section-number">7.1</span> Correlation analysis for paired data<a class="anchor" aria-label="anchor" href="#correlation-analysis-for-paired-data"></a>
 </h3>
-<p>When both miRNA and gene expression measurements are available for the same samples, a correlation analysis is the recommended procedure. In statistics, correlation is a measure that expresses the extent to which two random variables are dependent. In our case, we want to assess whether a statistical relationship is present between the expression of a miRNA and the expression of its targets.</p>
+<p>When both miRNA and gene expression measurements are available for the same
+samples, a correlation analysis is the recommended procedure. In statistics,
+correlation is a measure that expresses the extent to which two random variables
+are dependent. In our case, we want to assess whether a statistical relationship
+is present between the expression of a miRNA and the expression of its targets.</p>
 <div class="section level4" number="7.1.1">
 <h4 id="statistical-correlation-coefficients">
 <span class="header-section-number">7.1.1</span> Statistical correlation coefficients<a class="anchor" aria-label="anchor" href="#statistical-correlation-coefficients"></a>
 </h4>
-<p>Several statistical coefficients can be used to weigh the degree of a correlation. Among them, the most commonly used are <em>Pearson’s correlation coefficient</em> <span class="math inline">\(r\)</span>, <em>Spearman’s correlation coefficient</em> <span class="math inline">\(\rho\)</span>, and <em>Kendall’s Tau-b correlation coefficient</em> <span class="math inline">\(\tau_b\)</span>. Pearson’s <span class="math inline">\(r\)</span> is probably the most diffused for determining the association between miRNA and gene expression. However, it assumes that the relationships between miRNA and gene expression values is linear. This is typically not true for miRNAs, whose interactions with their targets are characterized by imperfect complementarity. Additionally, miRNAs can target multiple genes with different binding sites, and this implies that a simple linear relationship may not be sufficient to properly describe the complexity of these interactions. In contrast, Spearman’s and Kendall’s Tau-b correlation coefficients result more suitable for representing the interplay between miRNAs and target genes, because they are robust to non-linear relationships and outliers. However, Kendall’s correlation just relies on the number of concordant and discordant pairs, and is less sensitive then Spearman’s correlation; so, when many ties are present or when the sample size is small, it may have a lower detection power. This is the reason why <strong>Spearman’s correlation coefficient</strong> is the default coefficient used in the <code><a href="../reference/mirnaIntegration.html">mirnaIntegration()</a></code> function to measure the correlation between miRNA and gene expression. Moreover, since miRNAs mainly act as negative regulators, only negatively correlated miRNA-target pairs are considered, and statistical significance is estimated through a one-tailed t-test.</p>
+<p>Several statistical coefficients can be used to weigh the degree of a
+correlation. Among them, the most commonly used are
+<em>Pearson’s correlation coefficient</em> <span class="math inline">\(r\)</span>, <em>Spearman’s correlation coefficient</em>
+<span class="math inline">\(\rho\)</span>, and <em>Kendall’s Tau-b correlation coefficient</em> <span class="math inline">\(\tau_b\)</span>. Pearson’s <span class="math inline">\(r\)</span> is
+probably the most diffused for determining the association between miRNA and
+gene expression. However, it assumes that the relationship between miRNA and
+gene expression values is linear. This is typically not true for miRNAs, whose
+interactions with their targets are characterized by imperfect complementarity.
+Additionally, miRNAs can target multiple genes with different binding sites, and
+this implies that a simple linear relationship may not be sufficient to properly
+model the complexity of these interactions. In contrast, Spearman’s and
+Kendall’s Tau-b correlation coefficients result more suitable for representing
+the interplay between miRNAs and targets, because they are robust to non-linear
+relationships and outliers. However, Kendall’s correlation just relies on the
+number of concordant and discordant pairs, and is less sensitive then Spearman’s
+correlation; so, when many ties are present or when the sample size is small, it
+may have a lower detection power. This is the reason why
+<strong>Spearman’s correlation coefficient</strong> is the default used in the
+<code><a href="../reference/mirnaIntegration.html">mirnaIntegration()</a></code> function. Moreover, since miRNAs mainly act as negative
+regulators, only negatively correlated miRNA-target pairs are considered, and
+statistical significance is estimated through a one-tailed t-test.</p>
 </div>
 <div class="section level4" number="7.1.2">
 <h4 id="correlation">
 <span class="header-section-number">7.1.2</span> Perform a correlation analysis in MIRit<a class="anchor" aria-label="anchor" href="#correlation"></a>
 </h4>
-<p>To sum up the steps that MIRit follows when evaluating the correlation between miRNAs and genes, what the <code><a href="../reference/mirnaIntegration.html">mirnaIntegration()</a></code> function does during a correlation analysis is to:</p>
+<p>To sum up the steps that MIRit follows when evaluating the correlation between
+miRNAs and genes, what the <code><a href="../reference/mirnaIntegration.html">mirnaIntegration()</a></code> function does during a
+correlation analysis is to:</p>
 <ol style="list-style-type: decimal">
-<li>consider the miRNA-target interactions retrieved with the <code><a href="../reference/getTargets.html">getTargets()</a></code> function;</li>
-<li>calculate the correlation coefficient for each miRNA-target pair based on their expression values;</li>
+<li>consider the miRNA-target interactions retrieved with the <code><a href="../reference/getTargets.html">getTargets()</a></code>
+function;</li>
+<li>calculate the correlation coefficient for each miRNA-target pair based on
+their expression values;</li>
 <li>compute the statistical significance of all miRNA-target pairs;</li>
 <li>adjust p-values for multiple testing before reporting significant results.</li>
 </ol>
-<p>In our thyroid cancer example, we want to find the miRNA-target pairs that exhibit a negative correlation with a Spearman’s coefficient lower than -0.5 and with an adjusted p-value lower than 0.05.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<p>In our thyroid cancer example, we want to find the miRNA-target pairs that
+exhibit a negative correlation with a Spearman’s coefficient lower than -0.5 and
+with an adjusted p-value less than 0.05.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## perform a correlation analysis</span></span>
 <span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mirnaIntegration.html">mirnaIntegration</a></span><span class="op">(</span><span class="va">experiment</span>, test <span class="op">=</span> <span class="st">"correlation"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; As specified by the user, a correlation will be used.</span></span>
 <span><span class="co">#&gt; Performing Spearman's correlation analysis...</span></span>
-<span><span class="co">#&gt; A statistically significant correlation between 215 miRNA-target pairs was found!</span></span></code></pre></div>
-<p>Please note that all the parameters used for the correlation analysis are customizable. For instance, the user can change the significance threshold and the multiple testing correction method by setting the <code>pCutoff</code> and <code>pAdjustment</code> parameters, respectively. Further, it is also possible to change the correlation coefficient used, by editing the <code>corMethod</code> option, and the minimum required value of the correlation coefficient, by changing the <code>corCutoff</code> setting.</p>
+<span><span class="co">#&gt; A statistically significant correlation between 106 miRNA-target pairs was found!</span></span></code></pre></div>
+<p>Please note that all the parameters used for the correlation analysis are
+customizable. For instance, the user can change the significance threshold and
+the multiple testing correction method by setting the <code>pCutoff</code> and
+<code>pAdjustment</code> parameters, respectively. Further, it is also possible to change
+the correlation coefficient used, by editing the <code>corMethod</code> option, and the
+minimum required value of the correlation coefficient, by changing the
+<code>corCutoff</code> setting.</p>
 </div>
 <div class="section level4" number="7.1.3">
 <h4 id="account-for-batch-effects-prior-to-correlation-analysis">
 <span class="header-section-number">7.1.3</span> Account for batch effects prior to correlation analysis<a class="anchor" aria-label="anchor" href="#account-for-batch-effects-prior-to-correlation-analysis"></a>
 </h4>
-<p>Sometimes, when exploring expression variability through MDS plots, as we do with the <code><a href="../reference/plotDimensions.html">plotDimensions()</a></code> function, we notice the presence of batch effects that prevent a clear separation of our biological groups. Indeed, batch effects consist in unwanted sources of technical variation that confound expression variability and limit downstream analyses. Since the reliability of biological conclusions of integrative miRNA-mRNA analyses depends on the correlation between miRNA and gene expression levels, it is pivotal to ensure that expression measurements are not affected by technical variation. In this regard, if batch effects are noticed in the data, MIRit provides the <code><a href="../reference/batchCorrection.html">batchCorrection()</a></code> function, which removes batch effects from expression data before moving to correlation analysis. Please note that this procedure can only be used prior to correlation analysis, because for differential expression analysis it is more appropriate to include batch variables in the linear model, as specified in Section <a href="#model">3.2.2</a>. For additional information, please refer to the manual of the <code><a href="../reference/batchCorrection.html">batchCorrection()</a></code> function.</p>
+<p>Sometimes, when exploring expression variability through MDS plots, as we do
+with the <code><a href="../reference/plotDimensions.html">plotDimensions()</a></code> function, we notice the presence of batch effects
+that prevent a clear separation of our biological groups. Batch effects
+consist in unwanted sources of technical variation that confound expression
+variability and limit downstream analyses. Since the reliability of biological
+conclusions depends on the correlation between miRNAs and genes,
+it is pivotal to ensure that expression measurements are scarcely affected by
+technical artifacts. In this regard, if strong batch effects are noticed in the
+data, MIRit provides the <code><a href="../reference/batchCorrection.html">batchCorrection()</a></code> function, which removes batch
+effects prior to correlation analysis. Please note that this procedure cannot be
+used before differential expression testing, because for that purpose it is more appropriate to include batch variables in the linear model, as specified in
+Section <a href="#model">3.2.2</a>. For additional information, please refer to the manual of
+the <code><a href="../reference/batchCorrection.html">batchCorrection()</a></code> function.</p>
 </div>
 <div class="section level4" number="7.1.4">
 <h4 id="explore-the-succesfully-integrated-mirna-target-pairs">
 <span class="header-section-number">7.1.4</span> Explore the succesfully integrated miRNA-target pairs<a class="anchor" aria-label="anchor" href="#explore-the-succesfully-integrated-mirna-target-pairs"></a>
 </h4>
-<p>Before moving on to the identification of the altered miRNAs regulatory networks, we can explore correlated miRNA-target pairs thanks to the <code><a href="../reference/integration.html">integration()</a></code> function, which returns a <code>data.frame</code> object with comprehensive details about the computed correlations.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<p>Before moving to the identification of the altered miRNAs regulatory networks,
+we can explore correlated miRNA-target pairs thanks to the <code><a href="../reference/integration.html">integration()</a></code>
+function, which returns a <code>data.frame</code> object with comprehensive details about
+the computed interactions.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## extract correlation results</span></span>
 <span><span class="va">integrationResults</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/integration.html">integration</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## take a look at correlation results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">integrationResults</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                     microRNA Target microRNA.Direction Corr.Coefficient</span></span>
-<span><span class="co">#&gt; hsa.miR.1179.7  hsa-miR-1179  ITGA6      downregulated       -0.8617647</span></span>
-<span><span class="co">#&gt; hsa.miR.1179.10 hsa-miR-1179  RBMS2      downregulated       -0.7764706</span></span>
-<span><span class="co">#&gt; hsa.miR.1179.12 hsa-miR-1179 SPIRE1      downregulated       -0.7117647</span></span>
-<span><span class="co">#&gt; hsa.miR.1179.14 hsa-miR-1179   TAF5      downregulated       -0.5970588</span></span>
-<span><span class="co">#&gt; hsa.miR.1275.1  hsa-miR-1275  CCND2      downregulated       -0.7794118</span></span>
-<span><span class="co">#&gt; hsa.miR.1275.2  hsa-miR-1275   CD44      downregulated       -0.8382353</span></span>
-<span><span class="co">#&gt;                 Corr.P.Value Corr.Adjusted.P.Val</span></span>
-<span><span class="co">#&gt; hsa.miR.1179.7  8.902592e-06        0.0006579303</span></span>
-<span><span class="co">#&gt; hsa.miR.1179.10 2.021754e-04        0.0034840545</span></span>
-<span><span class="co">#&gt; hsa.miR.1179.12 9.920216e-04        0.0072485216</span></span>
-<span><span class="co">#&gt; hsa.miR.1179.14 7.304866e-03        0.0266876638</span></span>
-<span><span class="co">#&gt; hsa.miR.1275.1  1.858401e-04        0.0034840545</span></span>
-<span><span class="co">#&gt; hsa.miR.1275.2  2.505171e-05        0.0013423542</span></span></code></pre></div>
+<span><span class="co">#&gt;                            microRNA Target microRNA.Direction Corr.Coefficient</span></span>
+<span><span class="co">#&gt; hsa.miR.138.1.3p   hsa-miR-138-1-3p CCDC18      downregulated       -0.6235294</span></span>
+<span><span class="co">#&gt; hsa.miR.138.1.3p.1 hsa-miR-138-1-3p  CCND2      downregulated       -0.8941176</span></span>
+<span><span class="co">#&gt; hsa.miR.138.1.3p.6 hsa-miR-138-1-3p LRP2BP      downregulated       -0.5529412</span></span>
+<span><span class="co">#&gt; hsa.miR.138.1.3p.9 hsa-miR-138-1-3p  TNNI1      downregulated       -0.7764706</span></span>
+<span><span class="co">#&gt; hsa.miR.138.5p       hsa-miR-138-5p  CLCN2      downregulated       -0.7029412</span></span>
+<span><span class="co">#&gt; hsa.miR.138.5p.3     hsa-miR-138-5p   DTX4      downregulated       -0.7441176</span></span>
+<span><span class="co">#&gt;                    Corr.P.Value Corr.Adjusted.P.Val</span></span>
+<span><span class="co">#&gt; hsa.miR.138.1.3p   4.927825e-03        1.448662e-02</span></span>
+<span><span class="co">#&gt; hsa.miR.138.1.3p.1 1.505655e-06        9.184495e-05</span></span>
+<span><span class="co">#&gt; hsa.miR.138.1.3p.6 1.315725e-02        3.309659e-02</span></span>
+<span><span class="co">#&gt; hsa.miR.138.1.3p.9 2.021754e-04        1.710951e-03</span></span>
+<span><span class="co">#&gt; hsa.miR.138.5p     1.193476e-03        4.773905e-03</span></span>
+<span><span class="co">#&gt; hsa.miR.138.5p.3   4.741414e-04        2.754536e-03</span></span></code></pre></div>
 </div>
 <div class="section level4" number="7.1.5">
 <h4 id="visualize-the-correlation-between-mirnas-and-genes">
 <span class="header-section-number">7.1.5</span> Visualize the correlation between miRNAs and genes<a class="anchor" aria-label="anchor" href="#visualize-the-correlation-between-mirnas-and-genes"></a>
 </h4>
-<p>Additionally, for correlation analyses, MIRit allows to graphically represent inverse correlations through a scatter plot. Indeed, we can make use of the <code><a href="../reference/plotCorrelation.html">plotCorrelation()</a></code> function to display the correlation between specific miRNA-target pairs. For example, the correlation analysis performed in Section <a href="#correlation">7.1.2</a> revealed how miR-146b-5p, the most upregulated miRNA, is inversely correlated with the expression of DIO2, which is crucial for thyroid hormone functioning. Furthermore, it has also emerged that miR-146b-3p results negatively correlated with PAX8, which directly induces TG transcription.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<p>Additionally, MIRit allows to graphically represent inverse correlations through
+a scatter plot. To do so, we can use the <code><a href="../reference/plotCorrelation.html">plotCorrelation()</a></code> function to display
+the correlation between specific miRNA-target pairs. For example, we can plot
+the existing correlation between miR-146b-5p and DIO2, which is crucial for
+thyroid hormone functioning. Furthermore, we can also show how the upregulation
+of miR-146b-3p is associated with the downregulation of PAX8, which directly
+induces TG transcription.</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## plot the correlation between miR-146b-5p and DIO2</span></span>
 <span><span class="va">cor1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCorrelation.html">plotCorrelation</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
 <span>                        mirna <span class="op">=</span> <span class="st">"hsa-miR-146b-5p"</span>,</span>
@@ -1179,7 +1628,7 @@ Figure 5: <span class="caption-title">GSEA-style plot for Thyroid hormone synthe
 <div class="figure">
 <span style="display:block;" id="fig:corPlot"></span>
 <img src="MIRit_files/figure-html/corPlot-1.png" alt="Correlation between miRNAs and key thyroid genes. These plots suggest that the upregulation of miR-146b-5p and miR-146b-3p may be responsible for the downregulation of DIO2 and PAX8, respectively." width="100%" class="widefigure"><p class="caption">
-Figure 6: <span class="caption-title">Correlation between miRNAs and key thyroid genes</span><br>These plots suggest that the upregulation of miR-146b-5p and miR-146b-3p may be responsible for the downregulation of DIO2 and PAX8, respectively.
+Figure 7: <span class="caption-title">Correlation between miRNAs and key thyroid genes</span><br>These plots suggest that the upregulation of miR-146b-5p and miR-146b-3p may be responsible for the downregulation of DIO2 and PAX8, respectively.
 </p>
 </div>
 </div>
@@ -1188,23 +1637,32 @@ Figure 6: <span class="caption-title">Correlation between miRNAs and key thyroid
 <h3 id="association-tests-for-unpaired-data">
 <span class="header-section-number">7.2</span> Association tests for unpaired data<a class="anchor" aria-label="anchor" href="#association-tests-for-unpaired-data"></a>
 </h3>
-<p>For unpaired data, we cannot directly quantify the influence of miRNA expression on the levels of their targets, because we do not have any sample correspondence between miRNA and gene measurements. However, <strong>one-sided association tests</strong> can be applied in these cases to evaluate if targets of downregulated miRNAs are statistically enriched in upregulated genes, and, conversely, if targets of upregulated miRNAs are statistically enriched in downregulated genes. In this regard, to estimate the effects of differentially expressed miRNAs on their target genes, MIRit can use two different one-sided association tests, namely:</p>
+<p>For unpaired data, we cannot directly quantify the influence of miRNA expression
+on the levels of their targets, because we do not have any sample correspondence
+between miRNA and gene measurements. However, <strong>one-sided association tests</strong>
+can be applied in these cases to evaluate if targets of downregulated miRNAs are
+statistically enriched in upregulated genes, and, conversely, if targets of
+upregulated miRNAs are statistically enriched in downregulated genes. In this
+regard, to estimate the effects of differentially expressed miRNAs on their
+targets, MIRit can use two different one-sided association tests, namely:</p>
 <ul>
 <li>
 <strong>Fisher’s exact test</strong>,</li>
 <li>
 <strong>Boschloo’s exact test</strong> (default).</li>
 </ul>
-<p>Both these tests consist in a statistical procedure that estimates the association between two dichotomous categorical variables. In our case, for each miRNA, we want to evaluate whether the proportion of targets within the differentially expressed genes significantly differs from the proportion of targets in non-differentially expressed genes. To do this, a 2x2 contingency table is built as shown in Table <a href="#tab:contingency">4</a>.</p>
+<p>Both these tests consist in a statistical procedure that estimates the
+association between two dichotomous categorical variables. In our case, for each
+miRNA, we want to evaluate whether the proportion of targets within the
+differentially expressed genes significantly differs from the proportion of
+targets in non-differentially expressed genes. To do this, a 2x2 contingency
+table is built as shown in Table <a href="#tab:contingency">4</a>.</p>
 <div class="horizontal-scroll"><table class="table">
 <caption>
-<span id="tab:contingency">Table 4: </span><span class="caption-title">The 2x2 contingency table that MIRit uses for one-sided association tests</span><br>This is the table that the <code><a href="../reference/mirnaIntegration.html">mirnaIntegration()</a></code> function creates to determine if differentially expressed genes are enriched in miRNA targets.</caption>
-<colgroup>
-<col width="25%">
-<col width="24%">
-<col width="24%">
-<col width="24%">
-</colgroup>
+<span id="tab:contingency">Table 4: </span><span class="caption-title">The 2x2 contingency table that MIRit uses for one-sided</span><br>
+association tests. This is the table that the <code><a href="../reference/mirnaIntegration.html">mirnaIntegration()</a></code> function
+creates to determine if differentially expressed genes are enriched in miRNA
+targets.</caption>
 <thead><tr class="header">
 <th align="right"></th>
 <th align="center">Target genes</th>
@@ -1236,67 +1694,105 @@ Figure 6: <span class="caption-title">Correlation between miRNAs and key thyroid
 <h4 id="fishers-exact-test">
 <span class="header-section-number">7.2.1</span> Fisher’s exact test<a class="anchor" aria-label="anchor" href="#fishers-exact-test"></a>
 </h4>
-<p>After that the contingency table has been defined, Fisher’s exact test p-value can be calculated through Equation <a href="#eq:fisher">(2)</a>.</p>
+<p>When the contingency table has been defined, Fisher’s exact test p-value can be
+calculated through Equation <a href="#eq:fisher">(2)</a>.</p>
 <p><span class="math display" id="eq:fisher">\[\begin{equation}
   p = \frac{(a + b)!\ (c + d)!\ (a + c)!\ (b + d)!}{a!\ b!\ c!\ d!\ n!}
   \tag{2}
 \end{equation}\]</span></p>
-<p>Additionally, it is also possible to compute Fisher’s p-values with <strong>Lancaster’s mid-p adjustment</strong>, since it has been proven that it increases statistical power while retaining Type I error rates.</p>
+<p>Additionally, it is also possible to compute Fisher’s p-values with
+<strong>Lancaster’s mid-p adjustment</strong>, since it has been proven that it increases
+statistical power while retaining Type I error rates.</p>
 </div>
 <div class="section level4" number="7.2.2">
 <h4 id="boschloos-exact-test">
 <span class="header-section-number">7.2.2</span> Boschloo’s exact test<a class="anchor" aria-label="anchor" href="#boschloos-exact-test"></a>
 </h4>
-<p>In contrast to Fisher’s exact test, a more appropriate method for the integrative analysis between miRNAs and genes is Boschloo’s exact test. Indeed, the major drawback of the Fisher’s exact test is that it consists in a conditional test that requires the sum of both rows and columns of a contingency table to be fixed. Notably, this is not true for genomic data because it is likely that different data sets may lead to a different number of DEGs. Therefore, the <strong>default</strong> behavior in MIRit is to use a variant of Barnard’s exact test, named <strong>Boschloo’s exact test</strong>, that is suitable when group sizes of contingency tables are variable. Moreover, it is possible to demonstrate that Boschloo’s test is uniformly more powerful compared to Fisher’s exact test. However, keep in mind that Boschloo’s test is much more computational intensive compared to Fisher’s exact test, and it may require some time.</p>
+<p>The major drawback of the Fisher’s exact test is that it consists in a
+conditional test that requires the sum of both rows and columns of a contingency
+table to be fixed. Notably, this is not true for genomic data because it is
+likely that different datasets may lead to a different number of DEGs.
+Therefore, the <strong>default</strong> behavior in MIRit is to use a variant of Barnard’s
+exact test, named <strong>Boschloo’s exact test</strong>, that is suitable when group sizes
+of contingency tables are variable. Moreover, it is possible to demonstrate that
+Boschloo’s exact test is uniformly more powerful compared to Fisher’s one.
+However, keep in mind that Boschloo’s test is much more computational intensive
+compared to Fisher’s exact test, and it may require some time, even though
+parallel computing is employed.</p>
 </div>
 <div class="section level4" number="7.2.3">
 <h4 id="perform-one-sideded-association-tests-in-mirit">
 <span class="header-section-number">7.2.3</span> Perform one-sideded association tests in MIRit<a class="anchor" aria-label="anchor" href="#perform-one-sideded-association-tests-in-mirit"></a>
 </h4>
-<p>In MIRit, the <code><a href="../reference/mirnaIntegration.html">mirnaIntegration()</a></code> function automatically performs association tests for unpaired data when <code>test = "auto"</code>. Moreover, the type of association test to use can be specified through the <code>associationMethod</code> parameter, which can be set to:</p>
+<p>In MIRit, the <code><a href="../reference/mirnaIntegration.html">mirnaIntegration()</a></code> function automatically performs association
+tests for unpaired data when <code>test = "auto"</code>. Moreover, the type of association
+test to use can be specified through the <code>associationMethod</code> parameter, which
+can be set to:</p>
 <ul>
 <li>
 <code>fisher</code>, to perform a simple one-sided Fisher’s exact test;</li>
 <li>
-<code>fisher-midp</code>, to perform a one-sided Fisher’s exact test with Lancaster’s mid-p correction;</li>
+<code>fisher-midp</code>, to perform a one-sided Fisher’s exact test with Lancaster’s
+mid-p correction; and</li>
 <li>
 <code>boschloo</code>, to perform a one-sided Boschloo’s exact test (<em>default option</em>).</li>
 </ul>
-<p>For example, we could use the Boschloo’s exact to evaluate the inverse association between miRNA and gene expression values through a simple call to <code><a href="../reference/mirnaIntegration.html">mirnaIntegration()</a></code> function.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<p>For example, we could use Fisher’s exact test with mid-p correction to evaluate
+the inverse association between miRNA and gene expression.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## perform a one-sided inverse association</span></span>
 <span><span class="va">exp.association</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mirnaIntegration.html">mirnaIntegration</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
 <span>                                    test <span class="op">=</span> <span class="st">"association"</span>,</span>
-<span>                                    associationMethod <span class="op">=</span> <span class="st">"boschloo"</span>,</span>
-<span>                                    pAdjustment <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<p>Finally, after performing the association analysis, results can be accessed through the <code><a href="../reference/integration.html">integration()</a></code> function in the same way as we can do for correlation analyses.</p>
+<span>                                    associationMethod <span class="op">=</span> <span class="st">"fisher-midp"</span>,</span>
+<span>                                    pCutoff <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>                                    pAdjustment <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; As specified by the user, a association will be used.</span></span>
+<span><span class="co">#&gt; Performing One-sided Fisher's exact test with Lancaster's mid-p correction...</span></span>
+<span><span class="co">#&gt; A statistically significant association between 3 DE-miRNAs and 23 genes was found!</span></span></code></pre></div>
+<p>In the end, results can be accessed through the <code><a href="../reference/integration.html">integration()</a></code> function in the
+same way as we can do for correlation analyses.</p>
 </div>
 </div>
 <div class="section level3" number="7.3">
 <h3 id="rotation-gene-set-tests-for-unpaired-data">
 <span class="header-section-number">7.3</span> Rotation gene-set tests for unpaired data<a class="anchor" aria-label="anchor" href="#rotation-gene-set-tests-for-unpaired-data"></a>
 </h3>
-<p>Lastly, for unpaired data, the effect of DE-miRNAs on the expression of target genes can be estimated through rotation gene-set tests. In this approach, we want to evaluate for each miRNA whether its target genes tend to be differentially expressed in the opposite direction. In particular, a fast approximation to rotation gene-set testing called <code>fry</code>, implemented in the <em><a href="https://bioconductor.org/packages/3.19/limma" class="external-link">limma</a></em> package, can be used to statistically quantify the influence of miRNAs on expression changes of their target genes.</p>
-<p>To perform the integrative analysis through rotation gene-set tests, we must simply set <code>test = "fry"</code> when calling <code><a href="../reference/mirnaIntegration.html">mirnaIntegration()</a></code> function.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<p>Lastly, for unpaired data, the effect of DE-miRNAs on the expression of target
+genes can be estimated through rotation gene-set tests. In this approach, we
+want to evaluate for each miRNA whether its target genes tend to be
+differentially expressed in the opposite direction. In particular, a fast
+approximation to rotation gene-set testing called <code>fry</code>, implemented in the
+<em><a href="https://bioconductor.org/packages/3.19/limma" class="external-link">limma</a></em> package, can be used to statistically quantify the
+impact of miRNAs on expression changes of their targets.</p>
+<p>To perform the integrative analysis through rotation gene-set tests, we must
+simply set <code>test = "fry"</code> when calling the <code><a href="../reference/mirnaIntegration.html">mirnaIntegration()</a></code> function.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## perform the integrative analysis through 'fry' method</span></span>
 <span><span class="va">exp.fry</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mirnaIntegration.html">mirnaIntegration</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
 <span>                            test <span class="op">=</span> <span class="st">"fry"</span>,</span>
-<span>                            pCutoff <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
+<span>                            pAdjustment <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; As specified by the user, a fry will be used.</span></span>
+<span><span class="co">#&gt; Performing miRNA-gene integrative analysis using 'fry' method...</span></span>
+<span><span class="co">#&gt; A statistically significant association between 2 DE-miRNAs and 17 genes was found!</span></span></code></pre></div>
 </div>
 <div class="section level3" number="7.4">
 <h3 id="functional-enrichment-of-integrated-target-genes">
 <span class="header-section-number">7.4</span> Functional enrichment of integrated target genes<a class="anchor" aria-label="anchor" href="#functional-enrichment-of-integrated-target-genes"></a>
 </h3>
-<p>Additionally, after finding miRNA-target pairs that appear to have an inverse association, we can try to identify the impaired biological functions as a result of miRNA dysregulations through ORA. To do this, MIRit provides the <code><a href="../reference/enrichTargets.html">enrichTargets()</a></code> function, which automatically performs ORA for the functional enrichment of target genes that result associated with differentially expressed miRNAs.</p>
-<p>In our example, we are going to enrich the significantly anti-correlated targets that we have found in Section <a href="#correlation">7.1.2</a> through the Disease Ontology database.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<p>After finding influential miRNA-target pairs, we can try to identify the
+consequences of miRNomic alterations through ORA. To do this, MIRit provides the
+<code><a href="../reference/enrichTargets.html">enrichTargets()</a></code> function, which automatically performs ORA for target genes
+that result associated with differentially expressed miRNAs.</p>
+<p>In our example, we are going to enrich the significantly anti-correlated targets
+that we have found in Section <a href="#correlation">7.1.2</a> through the Disease Ontology
+database.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## enrichment of integrated targets</span></span>
 <span><span class="va">oraTarg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichTargets.html">enrichTargets</a></span><span class="op">(</span><span class="va">experiment</span>, database <span class="op">=</span> <span class="st">"DO"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Reading DO gene-sets from cache...</span></span>
 <span><span class="co">#&gt; Performing the enrichment of upregulated genes...</span></span>
 <span><span class="co">#&gt; Performing the enrichment of downregulated genes...</span></span>
-<span><span class="co">#&gt; The enrichment of genes reported 113 significantly enriched terms for downregulated genes and 0 for upregulated genes.</span></span>
+<span><span class="co">#&gt; The enrichment of genes reported 61 significantly enriched terms for downregulated genes and 0 for upregulated genes.</span></span>
 <span></span>
 <span><span class="co">## show a dot plot for the enrichment of downregulated genes</span></span>
 <span><span class="fu"><a href="../reference/enrichmentDotplot.html">enrichmentDotplot</a></span><span class="op">(</span><span class="va">oraTarg</span><span class="op">$</span><span class="va">downregulated</span>,</span>
@@ -1306,34 +1802,58 @@ Figure 6: <span class="caption-title">Correlation between miRNAs and key thyroid
 <div class="figure">
 <span style="display:block;" id="fig:intTargEnr"></span>
 <img src="MIRit_files/figure-html/intTargEnr-1.png" alt="Functional enrichment of integrated targets. This dot plot shows the enriched diseases for downregulated genes." width="100%"><p class="caption">
-Figure 7: <span class="caption-title">Functional enrichment of integrated targets</span><br>This dot plot shows the enriched diseases for downregulated genes.
+Figure 8: <span class="caption-title">Functional enrichment of integrated targets</span><br>This dot plot shows the enriched diseases for downregulated genes.
 </p>
 </div>
-<p>In Figure <a href="#fig:intTargEnr">7</a>, we appreciate the depletion of diseases where thyroid gland is overly active, such as goiter and hyperthyroidism, therefore suggesting the involvement of miRNAs in thyroid malfunctioning.</p>
+<p>In Figure <a href="#fig:intTargEnr">8</a>, we appreciate the depletion of diseases where
+thyroid gland is overly active, such as goiter and hyperthyroidism, therefore
+suggesting the involvement of miRNAs in thyroid malfunctioning.</p>
 </div>
 </div>
 <div class="section level2" number="8">
 <h2 id="identify-the-impaired-mirna-mrna-regulatory-networks">
 <span class="header-section-number">8</span> Identify the impaired miRNA-mRNA regulatory networks<a class="anchor" aria-label="anchor" href="#identify-the-impaired-mirna-mrna-regulatory-networks"></a>
 </h2>
-<p>Once the dysregulated miRNA-mRNA regulatory networks have been identified, the typical goal is to infer altered cellular processes and functions. To do so, MIRit introduces a novel approach named <strong>Topology-Aware Integrative Pathway Analysis (TAIPA)</strong>, which specifically focuses on detecting altered molecular networks in miRNA-mRNA multi-omic analyses by considering the topology of biological pathways and miRNA-mRNA interactions.</p>
+<p>Once the dysregulated miRNA-mRNA pairs have been identified, the typical goal is
+to infer altered cellular processes and networks. To do so, MIRit introduces a
+novel approach named <strong>Topology-Aware Integrative Pathway Analysis (TAIPA)</strong>,
+which specifically focuses on detecting compromised molecular networks in
+miRNA-mRNA multi-omic analyses by considering the topology of biological
+pathways and miRNA-interactions interactions.</p>
 <div class="section level3" number="8.1">
-<h3 id="topologically-aware-integrative-pathway-analysis-taipa">
-<span class="header-section-number">8.1</span> Topologically-Aware Integrative Pathway Analysis (TAIPA)<a class="anchor" aria-label="anchor" href="#topologically-aware-integrative-pathway-analysis-taipa"></a>
+<h3 id="topology-aware-integrative-pathway-analysis-taipa">
+<span class="header-section-number">8.1</span> Topology-Aware Integrative Pathway Analysis (TAIPA)<a class="anchor" aria-label="anchor" href="#topology-aware-integrative-pathway-analysis-taipa"></a>
 </h3>
-<p>This analysis aims to identify the biological pathways that result affected by miRNA and mRNA dysregulations. In this analysis, biological pathways are retrieved from a pathway database such as KEGG, and the interplay between miRNAs and genes is then added to the networks. Each network is defined as a graph <span class="math inline">\(G(V, E)\)</span>, where <span class="math inline">\(V\)</span> represents nodes, and <span class="math inline">\(E\)</span> represents the relationships between nodes. Then, nodes that are not significantly differentially expressed are assigned a weight <span class="math inline">\(w_i = 1\)</span>, whereas differentially expressed nodes are assigned a weight <span class="math inline">\(w_i = \left| \Delta E_i \right|\)</span>, where <span class="math inline">\(\Delta E_i\)</span> is the linear fold change of the node. Moreover, to consider the biological interaction between two nodes, namely <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>, we define an interaction parameter <span class="math inline">\(\beta_{i \rightarrow j} = 1\)</span> for activation interactions and <span class="math inline">\(\beta_{i \rightarrow j} = -1\)</span> for repression interactions. Subsequently, the concordance coefficient <span class="math inline">\(\gamma_{i \rightarrow j}\)</span> is defined as in Equation <a href="#eq:gamma">(3)</a>:</p>
+<p>In this analysis, biological pathways are retrieved from a pathway database such
+as KEGG, and the interplay between miRNAs and genes is then added to the
+networks. Each network is defined as a graph <span class="math inline">\(G(V, E)\)</span>, where <span class="math inline">\(V\)</span> represents
+nodes, and <span class="math inline">\(E\)</span> represents the relationships between nodes. Then, nodes that are
+not significantly differentially expressed are assigned a weight <span class="math inline">\(w_i = 1\)</span>,
+whereas differentially expressed nodes are assigned a weight
+<span class="math inline">\(w_i = \left| \Delta E_i \right|\)</span>, where <span class="math inline">\(\Delta E_i\)</span> is the linear fold change
+of the node. Moreover, to consider the biological interaction between two nodes,
+namely <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>, we define an interaction parameter
+<span class="math inline">\(\beta_{i \rightarrow j} = 1\)</span> for activation interactions and
+<span class="math inline">\(\beta_{i \rightarrow j} = -1\)</span> for repression interactions. Subsequently, the
+concordance coefficient <span class="math inline">\(\gamma_{i \rightarrow j}\)</span> is defined as in Equation <a href="#eq:gamma">(3)</a>:</p>
 <p><span class="math display" id="eq:gamma">\[\begin{equation}
   \gamma_{i \rightarrow j} = \begin{cases} \beta_{i \rightarrow j}
 &amp;\text{if } sign(\Delta E_i) = sign(\Delta E_j) \\ - \beta_{i \rightarrow j}
 &amp;\text{if } sign(\Delta E_i) \not= sign(\Delta E_j) \end{cases}\,.
   \tag{3}
 \end{equation}\]</span></p>
-<p>Later in the process, a breadth-first search (BFS) algorithm is applied to topologically sort pathway nodes so that each individual node occurs after all its upstream nodes. Nodes within cycles are considered leaf nodes. At this point, a node score <span class="math inline">\(\phi\)</span> is calculated for each pathway node <span class="math inline">\(i\)</span> as in Equation <a href="#eq:phi">(4)</a>:</p>
+<p>Later in the process, a breadth-first search (BFS) algorithm is applied to
+topologically sort pathway nodes so that each individual node occurs after all
+its upstream nodes. Nodes within cycles are considered leaf nodes. At this
+point, a node score <span class="math inline">\(\phi\)</span> is calculated for each pathway node <span class="math inline">\(i\)</span> as in
+Equation <a href="#eq:phi">(4)</a>:</p>
 <p><span class="math display" id="eq:phi">\[\begin{equation}
   \phi_i = w_i + \sum_{j=1}^{U} \gamma_{i \rightarrow j} \cdot k_j\,,
   \tag{4}
 \end{equation}\]</span></p>
-<p>where <span class="math inline">\(U\)</span> represents the number of upstream nodes, <span class="math inline">\(\gamma_{i \rightarrow j}\)</span> denotes the concordance coefficient, and <span class="math inline">\(k_j\)</span> is a propagation factor defined as in Equation <a href="#eq:k">(5)</a>:</p>
+<p>where <span class="math inline">\(U\)</span> represents the number of upstream nodes, <span class="math inline">\(\gamma_{i \rightarrow j}\)</span>
+denotes the concordance coefficient, and <span class="math inline">\(k_j\)</span> is a propagation factor defined
+as in Equation <a href="#eq:k">(5)</a>:</p>
 <p><span class="math display" id="eq:k">\[\begin{equation}
   k_j = \begin{cases} w_j &amp;\text{if } \phi_j = 0 \\ \phi_j &amp;\text{if }
 \phi_j \not = 0 \end{cases}\,.
@@ -1344,50 +1864,107 @@ Figure 7: <span class="caption-title">Functional enrichment of integrated target
   \Psi = \frac{1 - M}{N} \cdot \sum_{i=1}^{N} \phi_i\,,
   \tag{6}
 \end{equation}\]</span></p>
-<p>where <span class="math inline">\(M\)</span> represents the proportion of miRNAs in the pathway, and <span class="math inline">\(N\)</span> represents the total number of nodes in the network. Then, to compute the statistical significance of each pathway score, a permutation procedure is applied. Later, both observed pathway scores and permuted scores are standardized by subtracting the mean score of the permuted sets <span class="math inline">\(\mu_{\Psi_P}\)</span> and then dividing by the standard deviation of the permuted scores <span class="math inline">\(\sigma_{\Psi_P}\)</span>.</p>
-<p>Finally, the p-value is defined based on the fraction of permutations that reported a higher normalized pathway score than the observed one. However, to prevent p-values equal to zero, we define p-values as in Equation <a href="#eq:pval">(7)</a>:</p>
+<p>where <span class="math inline">\(M\)</span> represents the proportion of miRNAs in the pathway, and <span class="math inline">\(N\)</span> represents
+the total number of nodes in the network. Then, to compute the statistical
+significance of each pathway score, a permutation procedure is applied. Later,
+both observed pathway scores and permuted scores are standardized by subtracting
+the mean score of the permuted sets <span class="math inline">\(\mu_{\Psi_P}\)</span> and then dividing by the
+standard deviation of the permuted scores <span class="math inline">\(\sigma_{\Psi_P}\)</span>.</p>
+<p>Finally, the p-value is defined based on the fraction of permutations that
+reported a higher normalized pathway score than the observed one. However, to
+prevent p-values equal to zero, we define p-values as in
+Equation <a href="#eq:pval">(7)</a>:</p>
 <p><span class="math display" id="eq:pval">\[\begin{equation}
   p = \frac{\sum_{n=1}^{N_p} \left[ \Psi_{P_N} \ge \Psi_N \right] + 1}
 {N_p + 1}\,.
   \tag{7}
 \end{equation}\]</span></p>
-<p>In the end, either p-values are corrected for multiple testing through the max-T procedure (default option) which is particularly suited for permutation tests, or through the standard multiple testing approaches.</p>
+<p>In the end, either p-values are corrected for multiple testing through the max-T
+procedure (default option) which is particularly suited for permutation tests,
+or through the standard multiple testing approaches.</p>
 </div>
 <div class="section level3" number="8.2">
 <h3 id="perform-taipa-in-mirit">
 <span class="header-section-number">8.2</span> Perform TAIPA in MIRit<a class="anchor" aria-label="anchor" href="#perform-taipa-in-mirit"></a>
 </h3>
-<p>Before performing TAIPA, we need to create miRNA-augmented networks. To do so, MIRit implements the <code><a href="../reference/preparePathways.html">preparePathways()</a></code> function, which automatically uses the <em><a href="https://bioconductor.org/packages/3.19/graphite" class="external-link">graphite</a></em> R package to download biological networks from multiple pathway databases, namely <code>KEGG</code>, <code>WikiPathways</code> and <code>Reactome</code>. Then, each pathway is converted to a <code>graph</code> object and significant miRNA-mRNA pairs are added to the network. Further, edge weights are included according to interaction type. After running this function, we obtain a <code>list</code> containing all the miRNA-augmented nwtworks as <code>graph</code> objects.</p>
-<p>In our example, we want to use the significant miRNA-target pairs that we identified in Section <a href="#correlation">7.1.2</a> to augment biological pathways retrieved from the KEGG database.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<p>Before performing TAIPA, we need to create miRNA-augmented networks. To do so,
+MIRit implements the <code><a href="../reference/preparePathways.html">preparePathways()</a></code> function, which automatically uses the
+<em><a href="https://bioconductor.org/packages/3.19/graphite" class="external-link">graphite</a></em> R package to download biological networks from multiple
+pathway databases, namely <code>KEGG</code>, <code>WikiPathways</code> and <code>Reactome</code>. Then, each
+pathway is converted to a <code>graph</code> object and significant miRNA-mRNA pairs are
+added to the network. Further, edge weights are included according to
+interaction type. After running this function, we obtain a <code>list</code> containing
+all the miRNA-augmented networks as <code>graph</code> objects.</p>
+<p>In our example, we want to use the significant miRNA-target pairs that we
+identified in Section <a href="#correlation">7.1.2</a> to augment biological pathways
+retrieved from the KEGG database.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## create miRNA-augmented networks using KEGG pathways</span></span>
 <span><span class="va">networks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/preparePathways.html">preparePathways</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
 <span>                            database <span class="op">=</span> <span class="st">"KEGG"</span>,</span>
-<span>                            organism <span class="op">=</span> <span class="st">"Homo sapiens"</span><span class="op">)</span></span></code></pre></div>
-<p>After running this function, pathways with less than 10% of nodes with expression measurements are removed. This option can be changed by specifying the <code>minPc</code> parameter.</p>
-<p>Now, we are ready to perform TAIPA through the <code><a href="../reference/topologicalAnalysis.html">topologicalAnalysis()</a></code> function, which is used to calculate pathway scores for all the augmented networks and to evaluate their statistical significance through permutation tests.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## set seed for reproducible results</span></span>
+<span>                            organism <span class="op">=</span> <span class="st">"Homo sapiens"</span>,</span>
+<span>                            minPc <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Reading KEGG pathways from cache...</span></span>
+<span><span class="co">#&gt; Adding miRNA-gene interactions to biological pathways...</span></span>
+<span><span class="co">#&gt; Loading required package: graph</span></span>
+<span><span class="co">#&gt; Warning: 292 pathways have been ignored because they contain too few nodes with</span></span>
+<span><span class="co">#&gt; gene expression measurement.</span></span>
+<span><span class="co">#&gt; Performing topological sorting of pathway nodes...</span></span></code></pre></div>
+<p>After running this function, pathways with less than 20% of nodes with
+expression measurements are removed. This option can be changed by specifying
+the <code>minPc</code> parameter (default is 10%).</p>
+<p>Now, we are ready to perform TAIPA through the <code><a href="../reference/topologicalAnalysis.html">topologicalAnalysis()</a></code> function,
+which is used to calculate pathway scores for all the augmented networks and
+evaluate their statistical significance through permutation testing. For
+demonstration purposes, we only considered a smaller subset of augmented
+pathways.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## only consider a smaller set of augmented networks</span></span>
+<span><span class="va">networks</span> <span class="op">&lt;-</span> <span class="va">networks</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">30</span><span class="op">)</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co">## set seed for reproducible results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">## perform TAIPA</span></span>
+<span><span class="co">## perform TAIPA with 1000 permutations</span></span>
 <span><span class="va">taipa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/topologicalAnalysis.html">topologicalAnalysis</a></span><span class="op">(</span><span class="va">experiment</span>,</span>
 <span>                             pathways <span class="op">=</span> <span class="va">networks</span>,</span>
-<span>                             nPerm <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span></code></pre></div>
-<p>As a result of the analysis, an object of class <code>IntegrativePathwayAnalysis</code> storing the results of TAIPA is returned. Notably, the user can change the behavior of the <code><a href="../reference/topologicalAnalysis.html">topologicalAnalysis()</a></code> in several ways. For example, the <code>pCutoff</code> and <code>pAdjustment</code> parameters can be used to change the significance threshold and the multiple testing correction method, respectively. Moreover, the <code>nPerm</code> parameter can be tweaked to change the number of permutations to use for evaluating statistical significance. In this regard, we recommend using at least 10000 permutations, with no less than 1000.</p>
+<span>                             nPerm <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Calculating pathway scores...</span></span>
+<span><span class="co">#&gt; Generating random permutations...</span></span>
+<span><span class="co">#&gt; Calculating p-values with 1000 permutations...</span></span>
+<span><span class="co">#&gt; Correcting p-values through the max-T procedure...</span></span>
+<span><span class="co">#&gt; The topologically-aware integrative pathway analysis reported 2 significantly altered pathways!</span></span></code></pre></div>
+<p>As a result of the analysis, an object of class <code>IntegrativePathwayAnalysis</code>
+storing the results of TAIPA is returned. Notably, the user can change the
+behavior of <code><a href="../reference/topologicalAnalysis.html">topologicalAnalysis()</a></code> in several ways. For example, the <code>pCutoff</code>
+and <code>pAdjustment</code> parameters can be used to change the significance threshold
+and the multiple testing correction method, respectively. Moreover, the <code>nPerm</code>
+parameter can be tweaked to change the number of permutations used for
+evaluating statistical significance. In this regard, we recommend using at least
+10000 permutations, with no less than 1000.</p>
 </div>
 <div class="section level3" number="8.3">
 <h3 id="c-code-and-parallel-computing-with-biocparallel">
 <span class="header-section-number">8.3</span> C++ code and parallel computing with <code>BiocParallel</code><a class="anchor" aria-label="anchor" href="#c-code-and-parallel-computing-with-biocparallel"></a>
 </h3>
-<p>For computational efficiency, pathway score computation has been implemented in C++ language. Furthermore, since computing pathway score for 10000 networks for each pathway is computationally intensive, parallel computing has been employed to reduce running time. The user can modify the parallel computing behavior by specifying the <code>BPPARAM</code> parameter. See the help page of the <em><a href="https://bioconductor.org/packages/3.19/BiocParallel" class="external-link">BiocParallel</a></em> package for further details. Both the <code><a href="../reference/preparePathways.html">preparePathways()</a></code> and the <code><a href="../reference/topologicalAnalysis.html">topologicalAnalysis()</a></code> functions accept the <code>BPPARAM</code> option.</p>
+<p>For computational efficiency, pathway score computation has been implemented in
+C++ language. Furthermore, since computing pathway score for 10000 networks for
+each pathway is computationally intensive, parallel computing has been employed
+to reduce running time. The user can modify the parallel computing behavior by
+specifying the <code>BPPARAM</code> parameter. See the help page of the
+<em><a href="https://bioconductor.org/packages/3.19/BiocParallel" class="external-link">BiocParallel</a></em> package for further details. Both the
+<code><a href="../reference/preparePathways.html">preparePathways()</a></code> and the <code><a href="../reference/topologicalAnalysis.html">topologicalAnalysis()</a></code> functions accept the
+<code>BPPARAM</code> option.</p>
 </div>
 <div class="section level3" number="8.4">
 <h3 id="visualize-the-significantly-affected-pathways">
 <span class="header-section-number">8.4</span> Visualize the significantly affected pathways<a class="anchor" aria-label="anchor" href="#visualize-the-significantly-affected-pathways"></a>
 </h3>
-<p>After running the <code><a href="../reference/topologicalAnalysis.html">topologicalAnalysis()</a></code> function, we can inspect the significantly perturbed pathways contained in the <code>IntegrativePathwayAnalysis</code> object by using the <code><a href="../reference/integratedPathways.html">integratedPathways()</a></code> function, which returns a <code>data.frame</code> reporting the results of TAIPA.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<p>After running the <code><a href="../reference/topologicalAnalysis.html">topologicalAnalysis()</a></code> function, we can inspect the
+significantly perturbed pathways contained in the <code>IntegrativePathwayAnalysis</code>
+object by using the <code><a href="../reference/integratedPathways.html">integratedPathways()</a></code> function, which returns a
+<code>data.frame</code> reporting the results.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## extract the results of TAIPA</span></span>
 <span><span class="va">perturbedNetworks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/integratedPathways.html">integratedPathways</a></span><span class="op">(</span><span class="va">taipa</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -1395,25 +1972,31 @@ Figure 7: <span class="caption-title">Functional enrichment of integrated target
 <h3 id="visualize-the-impaired-networks-within-biological-pathways">
 <span class="header-section-number">8.5</span> Visualize the impaired networks within biological pathways<a class="anchor" aria-label="anchor" href="#visualize-the-impaired-networks-within-biological-pathways"></a>
 </h3>
-<p>As with functional enrichment analyses, we can plot perturbed miRNA-mRNA networks as dot plots. To do so, the <code><a href="../reference/integrationDotplot.html">integrationDotplot()</a></code> function can be used. In particular, we will graphically represent the most perturbed pathways in thyroid cancer.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<p>As with functional enrichment analyses, we can plot perturbed miRNA-mRNA
+networks as dotplots. To do so, the <code><a href="../reference/integrationDotplot.html">integrationDotplot()</a></code> function can be used.</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## produce a dotplot that shows the most affected networks</span></span>
-<span><span class="va">intDot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/integrationDotplot.html">integrationDotplot</a></span><span class="op">(</span><span class="va">taipa</span><span class="op">)</span></span>
-<span><span class="va">intDot</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/integrationDotplot.html">integrationDotplot</a></span><span class="op">(</span><span class="va">taipa</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <span style="display:block;" id="fig:integrationDot"></span>
-<img src="MIRit_files/figure-html/integrationDot-1.png" alt="The perturbation of miRNA-mRNA networks in thyroid cancer. This dot plot display the impairment of the biological processes involved in the production of thyroid hormone, further highlighting the disruption of this mechanism in this disease." width="100%"><p class="caption">
-Figure 8: <span class="caption-title">The perturbation of miRNA-mRNA networks in thyroid cancer</span><br>This dot plot display the impairment of the biological processes involved in the production of thyroid hormone, further highlighting the disruption of this mechanism in this disease.
+<img src="MIRit_files/figure-html/integrationDot-1.png" alt="The perturbation of miRNA-mRNA networks in thyroid cancer. This dot plot display the impairment of thyroid hormone production." width="100%"><p class="caption">
+Figure 9: <span class="caption-title">The perturbation of miRNA-mRNA networks in thyroid cancer</span><br>This dot plot display the impairment of thyroid hormone production.
 </p>
 </div>
-<p>Finally, after identifying the impaired molecular networks, MIRit provides the possibility of exploring the molecular perturbations. In this concern, the <code>visualizeNetworks()</code> function can be used to visually represent the compromised pathways along with expression changes of both miRNAs and genes, so that users can easily interpret the functional consequences of miRNA and gene dysregulations. For example, we can explore the perturbed molecular events that are responsible for diminished production of thyroid hormone in thyroid cancer.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<p>Finally, MIRit provides the possibility of exploring the molecular
+perturbations. In this concern, the <code>visualizeNetworks()</code> function can be used
+to visually reconstruct the compromised pathways along with expression changes
+of both miRNAs and genes, so that users can easily interpret the functional
+consequences of miRNA and gene dysregulations. For example, we can explore the
+perturbed molecular events that are responsible for diminished production of
+thyroid hormone in thyroid cancer.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## plot the impaired network responsible for reduced TG synthesis</span></span>
 <span><span class="fu"><a href="../reference/visualizeNetwork.html">visualizeNetwork</a></span><span class="op">(</span><span class="va">taipa</span>, <span class="st">"Thyroid hormone synthesis"</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <span style="display:block;" id="fig:thyroidNetwork"></span>
-<img src="MIRit_files/figure-html/thyroidNetwork-1.png" alt="Impaired miRNA-mRNA regulatory network prevents thyroid hormone synthesis in thyroid cancer. The network created by MIRit suggests that the upregulation of miR-146b-5p and miR-146b-3p may be responsible for diminished expression of PAX8, which in turn causes reduced transcription of thyroid hormone." width="100%" class="widefigure"><p class="caption">
-Figure 9: <span class="caption-title">Impaired miRNA-mRNA regulatory network prevents thyroid hormone synthesis in thyroid cancer</span><br>The network created by MIRit suggests that the upregulation of miR-146b-5p and miR-146b-3p may be responsible for diminished expression of PAX8, which in turn causes reduced transcription of thyroid hormone.
+<img src="MIRit_files/figure-html/thyroidNetwork-1.png" alt="Impaired network involved in thyroid hormone synthesis. The network created by MIRit suggests that the upregulation of miR-146b-5p and miR-146b-3p may be responsible for diminished expression of PAX8, which in turn causes reduced transcription of thyroid hormone." width="100%" class="widefigure"><p class="caption">
+Figure 10: <span class="caption-title">Impaired network involved in thyroid hormone synthesis</span><br>The network created by MIRit suggests that the upregulation of miR-146b-5p and miR-146b-3p may be responsible for diminished expression of PAX8, which in turn causes reduced transcription of thyroid hormone.
 </p>
 </div>
 </div>
@@ -1421,7 +2004,7 @@ Figure 9: <span class="caption-title">Impaired miRNA-mRNA regulatory network pre
 <div class="section level2">
 <h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<pre><code><span><span class="co">#&gt; R Under development (unstable) (2024-01-31 r85845)</span></span>
+<pre><code><span><span class="co">#&gt; R Under development (unstable) (2024-02-07 r85873)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
 <span><span class="co">#&gt; Running under: Ubuntu 22.04.3 LTS</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1441,65 +2024,69 @@ Figure 9: <span class="caption-title">Impaired miRNA-mRNA regulatory network pre
 <span><span class="co">#&gt; tzcode source: system (glibc)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; attached base packages:</span></span>
-<span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
+<span><span class="co">#&gt; [1] stats4    stats     graphics  grDevices utils     datasets  methods  </span></span>
+<span><span class="co">#&gt; [8] base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] MIRit_0.99.11    BiocStyle_2.31.0</span></span>
+<span><span class="co">#&gt;  [1] graph_1.81.0                MIRit_0.99.12              </span></span>
+<span><span class="co">#&gt;  [3] MultiAssayExperiment_1.29.1 SummarizedExperiment_1.33.3</span></span>
+<span><span class="co">#&gt;  [5] Biobase_2.63.0              GenomicRanges_1.55.2       </span></span>
+<span><span class="co">#&gt;  [7] GenomeInfoDb_1.39.6         IRanges_2.37.1             </span></span>
+<span><span class="co">#&gt;  [9] S4Vectors_0.41.3            BiocGenerics_0.49.1        </span></span>
+<span><span class="co">#&gt; [11] MatrixGenerics_1.15.0       matrixStats_1.2.0          </span></span>
+<span><span class="co">#&gt; [13] BiocStyle_2.31.0           </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;   [1] DBI_1.2.1                   bitops_1.0-7               </span></span>
-<span><span class="co">#&gt;   [3] gridExtra_2.3               rlang_1.1.3                </span></span>
-<span><span class="co">#&gt;   [5] magrittr_2.0.3              MonoPoly_0.3-10            </span></span>
-<span><span class="co">#&gt;   [7] matrixStats_1.2.0           compiler_4.4.0             </span></span>
-<span><span class="co">#&gt;   [9] RSQLite_2.3.5               vctrs_0.6.5                </span></span>
-<span><span class="co">#&gt;  [11] quadprog_1.5-8              stringr_1.5.1              </span></span>
-<span><span class="co">#&gt;  [13] pkgconfig_2.0.3             crayon_1.5.2               </span></span>
-<span><span class="co">#&gt;  [15] fastmap_1.1.1               backports_1.4.1            </span></span>
-<span><span class="co">#&gt;  [17] dbplyr_2.4.0                XVector_0.43.1             </span></span>
-<span><span class="co">#&gt;  [19] labeling_0.4.3              utf8_1.2.4                 </span></span>
-<span><span class="co">#&gt;  [21] rmarkdown_2.25              graph_1.81.0               </span></span>
-<span><span class="co">#&gt;  [23] purrr_1.0.2                 bit_4.0.5                  </span></span>
-<span><span class="co">#&gt;  [25] xfun_0.41                   MultiAssayExperiment_1.29.1</span></span>
-<span><span class="co">#&gt;  [27] zlibbioc_1.49.0             cachem_1.0.8               </span></span>
-<span><span class="co">#&gt;  [29] GenomeInfoDb_1.39.5         jsonlite_1.8.8             </span></span>
-<span><span class="co">#&gt;  [31] blob_1.2.4                  highr_0.10                 </span></span>
-<span><span class="co">#&gt;  [33] DelayedArray_0.29.1         BiocParallel_1.37.0        </span></span>
-<span><span class="co">#&gt;  [35] broom_1.0.5                 parallel_4.4.0             </span></span>
-<span><span class="co">#&gt;  [37] R6_2.5.1                    bslib_0.6.1                </span></span>
-<span><span class="co">#&gt;  [39] stringi_1.8.3               limma_3.59.2               </span></span>
-<span><span class="co">#&gt;  [41] car_3.1-2                   GenomicRanges_1.55.2       </span></span>
-<span><span class="co">#&gt;  [43] jquerylib_0.1.4             Rcpp_1.0.12                </span></span>
-<span><span class="co">#&gt;  [45] bookdown_0.37               SummarizedExperiment_1.33.3</span></span>
-<span><span class="co">#&gt;  [47] knitr_1.45                  IRanges_2.37.1             </span></span>
-<span><span class="co">#&gt;  [49] BiocBaseUtils_1.5.0         Matrix_1.6-5               </span></span>
-<span><span class="co">#&gt;  [51] tidyselect_1.2.0            abind_1.4-5                </span></span>
-<span><span class="co">#&gt;  [53] yaml_2.3.8                  codetools_0.2-19           </span></span>
-<span><span class="co">#&gt;  [55] curl_5.2.0                  geneset_0.2.7              </span></span>
-<span><span class="co">#&gt;  [57] lattice_0.22-5              tibble_3.2.1               </span></span>
-<span><span class="co">#&gt;  [59] Biobase_2.63.0              withr_3.0.0                </span></span>
-<span><span class="co">#&gt;  [61] evaluate_0.23               BiocFileCache_2.11.1       </span></span>
-<span><span class="co">#&gt;  [63] pillar_1.9.0                BiocManager_1.30.22        </span></span>
-<span><span class="co">#&gt;  [65] ggpubr_0.6.0                filelock_1.0.3             </span></span>
-<span><span class="co">#&gt;  [67] MatrixGenerics_1.15.0       carData_3.0-5              </span></span>
-<span><span class="co">#&gt;  [69] stats4_4.4.0                generics_0.1.3             </span></span>
-<span><span class="co">#&gt;  [71] RCurl_1.98-1.14             S4Vectors_0.41.3           </span></span>
-<span><span class="co">#&gt;  [73] ggplot2_3.4.4               munsell_0.5.0              </span></span>
-<span><span class="co">#&gt;  [75] scales_1.3.0                glue_1.7.0                 </span></span>
-<span><span class="co">#&gt;  [77] tools_4.4.0                 data.table_1.15.0          </span></span>
-<span><span class="co">#&gt;  [79] fgsea_1.29.0                locfit_1.5-9.8             </span></span>
-<span><span class="co">#&gt;  [81] ggsignif_0.6.4              fastmatch_1.1-4            </span></span>
-<span><span class="co">#&gt;  [83] cowplot_1.1.3               grid_4.4.0                 </span></span>
-<span><span class="co">#&gt;  [85] tidyr_1.3.1                 edgeR_4.1.15               </span></span>
-<span><span class="co">#&gt;  [87] colorspace_2.1-0            GenomeInfoDbData_1.2.11    </span></span>
-<span><span class="co">#&gt;  [89] cli_3.6.2                   fansi_1.0.6                </span></span>
-<span><span class="co">#&gt;  [91] S4Arrays_1.3.3              dplyr_1.1.4                </span></span>
-<span><span class="co">#&gt;  [93] Rgraphviz_2.47.0            gtable_0.3.4               </span></span>
-<span><span class="co">#&gt;  [95] rstatix_0.7.2               sass_0.4.8                 </span></span>
-<span><span class="co">#&gt;  [97] digest_0.6.34               BiocGenerics_0.49.1        </span></span>
-<span><span class="co">#&gt;  [99] SparseArray_1.3.3           farver_2.1.1               </span></span>
-<span><span class="co">#&gt; [101] memoise_2.0.1               htmltools_0.5.7            </span></span>
-<span><span class="co">#&gt; [103] lifecycle_1.0.4             httr_1.4.7                 </span></span>
-<span><span class="co">#&gt; [105] statmod_1.5.0               bit64_4.0.5</span></span></code></pre>
+<span><span class="co">#&gt;   [1] splines_4.4.0            BiocIO_1.13.0            bitops_1.0-7            </span></span>
+<span><span class="co">#&gt;   [4] urltools_1.7.3           filelock_1.0.3           tibble_3.2.1            </span></span>
+<span><span class="co">#&gt;   [7] cellranger_1.1.0         triebeard_0.4.1          XML_3.99-0.16.1         </span></span>
+<span><span class="co">#&gt;  [10] rpart_4.1.23             lifecycle_1.0.4          httr2_1.0.0             </span></span>
+<span><span class="co">#&gt;  [13] rstatix_0.7.2            edgeR_4.1.15             lattice_0.22-5          </span></span>
+<span><span class="co">#&gt;  [16] ensembldb_2.27.1         backports_1.4.1          magrittr_2.0.3          </span></span>
+<span><span class="co">#&gt;  [19] limma_3.59.2             Hmisc_5.1-1              sass_0.4.8              </span></span>
+<span><span class="co">#&gt;  [22] rmarkdown_2.25           jquerylib_0.1.4          yaml_2.3.8              </span></span>
+<span><span class="co">#&gt;  [25] Gviz_1.47.1              cowplot_1.1.3            DBI_1.2.1               </span></span>
+<span><span class="co">#&gt;  [28] RColorBrewer_1.1-3       lubridate_1.9.3          abind_1.4-5             </span></span>
+<span><span class="co">#&gt;  [31] zlibbioc_1.49.0          quadprog_1.5-8           purrr_1.0.2             </span></span>
+<span><span class="co">#&gt;  [34] AnnotationFilter_1.27.0  biovizBase_1.51.0        RCurl_1.98-1.14         </span></span>
+<span><span class="co">#&gt;  [37] nnet_7.3-19              VariantAnnotation_1.49.6 rappdirs_0.3.3          </span></span>
+<span><span class="co">#&gt;  [40] GenomeInfoDbData_1.2.11  codetools_0.2-19         DelayedArray_0.29.1     </span></span>
+<span><span class="co">#&gt;  [43] xml2_1.3.6               tidyselect_1.2.0         farver_2.1.1            </span></span>
+<span><span class="co">#&gt;  [46] BiocFileCache_2.11.1     base64enc_0.1-3          GenomicAlignments_1.39.2</span></span>
+<span><span class="co">#&gt;  [49] jsonlite_1.8.8           Formula_1.2-5            tools_4.4.0             </span></span>
+<span><span class="co">#&gt;  [52] progress_1.2.3           Rcpp_1.0.12              glue_1.7.0              </span></span>
+<span><span class="co">#&gt;  [55] gridExtra_2.3            SparseArray_1.3.3        BiocBaseUtils_1.5.0     </span></span>
+<span><span class="co">#&gt;  [58] xfun_0.42                dplyr_1.1.4              withr_3.0.0             </span></span>
+<span><span class="co">#&gt;  [61] BiocManager_1.30.22      fastmap_1.1.1            latticeExtra_0.6-30     </span></span>
+<span><span class="co">#&gt;  [64] fansi_1.0.6              digest_0.6.34            timechange_0.3.0        </span></span>
+<span><span class="co">#&gt;  [67] R6_2.5.1                 mime_0.12                colorspace_2.1-0        </span></span>
+<span><span class="co">#&gt;  [70] jpeg_0.1-10              dichromat_2.0-0.1        biomaRt_2.59.1          </span></span>
+<span><span class="co">#&gt;  [73] RSQLite_2.3.5            utf8_1.2.4               tidyr_1.3.1             </span></span>
+<span><span class="co">#&gt;  [76] generics_0.1.3           data.table_1.15.0        rtracklayer_1.63.0      </span></span>
+<span><span class="co">#&gt;  [79] prettyunits_1.2.0        httr_1.4.7               htmlwidgets_1.6.4       </span></span>
+<span><span class="co">#&gt;  [82] S4Arrays_1.3.3           pkgconfig_2.0.3          gtable_0.3.4            </span></span>
+<span><span class="co">#&gt;  [85] blob_1.2.4               XVector_0.43.1           htmltools_0.5.7         </span></span>
+<span><span class="co">#&gt;  [88] carData_3.0-5            geneset_0.2.7            bookdown_0.37           </span></span>
+<span><span class="co">#&gt;  [91] fgsea_1.29.0             ProtGenerics_1.35.2      scales_1.3.0            </span></span>
+<span><span class="co">#&gt;  [94] png_0.1-8                knitr_1.45               rstudioapi_0.15.0       </span></span>
+<span><span class="co">#&gt;  [97] rjson_0.2.21             checkmate_2.3.1          curl_5.2.0              </span></span>
+<span><span class="co">#&gt; [100] cachem_1.0.8             stringr_1.5.1            parallel_4.4.0          </span></span>
+<span><span class="co">#&gt; [103] foreign_0.8-86           AnnotationDbi_1.65.2     restfulr_0.0.15         </span></span>
+<span><span class="co">#&gt; [106] pillar_1.9.0             grid_4.4.0               vctrs_0.6.5             </span></span>
+<span><span class="co">#&gt; [109] ggpubr_0.6.0             car_3.1-2                dbplyr_2.4.0            </span></span>
+<span><span class="co">#&gt; [112] cluster_2.1.6            htmlTable_2.4.2          Rgraphviz_2.47.0        </span></span>
+<span><span class="co">#&gt; [115] evaluate_0.23            GenomicFeatures_1.55.3   cli_3.6.2               </span></span>
+<span><span class="co">#&gt; [118] locfit_1.5-9.8           compiler_4.4.0           Rsamtools_2.19.3        </span></span>
+<span><span class="co">#&gt; [121] rlang_1.1.3              crayon_1.5.2             ggsignif_0.6.4          </span></span>
+<span><span class="co">#&gt; [124] labeling_0.4.3           interp_1.1-6             plyr_1.8.9              </span></span>
+<span><span class="co">#&gt; [127] stringi_1.8.3            deldir_2.0-2             BiocParallel_1.37.0     </span></span>
+<span><span class="co">#&gt; [130] assertthat_0.2.1         munsell_0.5.0            Biostrings_2.71.2       </span></span>
+<span><span class="co">#&gt; [133] lazyeval_0.2.2           Matrix_1.6-5             BSgenome_1.71.2         </span></span>
+<span><span class="co">#&gt; [136] hms_1.1.3                bit64_4.0.5              ggplot2_3.4.4           </span></span>
+<span><span class="co">#&gt; [139] KEGGREST_1.43.0          statmod_1.5.0            highr_0.10              </span></span>
+<span><span class="co">#&gt; [142] broom_1.0.5              memoise_2.0.1            bslib_0.6.1             </span></span>
+<span><span class="co">#&gt; [145] fastmatch_1.1-4          gwasrapidd_0.99.17       bit_4.0.5               </span></span>
+<span><span class="co">#&gt; [148] readxl_1.4.3             MonoPoly_0.3-10</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

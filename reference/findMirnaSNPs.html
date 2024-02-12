@@ -18,7 +18,7 @@ relative host genes (for intronic miRNAs)."><meta property="og:image" content="/
     
     <a class="navbar-brand me-2" href="../index.html">MIRit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.12</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,23 +136,18 @@ and wrangle GWAS catalog data, Bioinformatics, Volume 36, Issue 2, January
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># search disease</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="searchDisease.html">searchDisease</a></span><span class="op">(</span><span class="st">"Alzheimer disease"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="searchDisease.html">searchDisease</a></span><span class="op">(</span><span class="st">"response to antidepressant"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Checking for cached EFO traits...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading EFO traits, this may take some minutes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Searching for disease: Alzheimer disease</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Alzheimer's disease biomarker measurement" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2] "Alzheimer's disease neuropathologic change"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "Alzheimer disease"                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4] "late-onset Alzheimers disease"             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "family history of Alzheimer’s disease"     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6] "age of onset of Alzheimer disease"         </span>
-<span class="r-in"><span><span class="va">disId</span> <span class="op">&lt;-</span> <span class="st">"Alzheimer disease"</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading EFO traits from cache...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Searching for disease: response to antidepressant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "response to antidepressant" "response to anticonvulsant"</span>
+<span class="r-in"><span><span class="va">disId</span> <span class="op">&lt;-</span> <span class="st">"response to antidepressant"</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># retrieve associated SNPs</span></span></span>
 <span class="r-in"><span><span class="va">association</span> <span class="op">&lt;-</span> <span class="fu">findMirnaSNPs</span><span class="op">(</span><span class="va">obj</span>, <span class="va">disId</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Querying GWAS Catalog, this may take some time...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding genomic information of differentially expressed miRNAs...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No disease-related SNPs are present within DE-miRNA loci.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> After the analysis, 1 variants associated with response to antidepressant were found within differentially expressed miRNA genes</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
