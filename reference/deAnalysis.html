@@ -6,7 +6,7 @@ expression through different methods, namely edgeR (Quasi-Likelihood
 framework), DESeq2, limma-voom and limma. Data deriving from NGS
 experiments and microarray technology are all suitable for these functions.
 For precise indications about how to use these functions, please refer to
-the details section."><title>Perform differential expression analysis — deAnalysis • MIRit</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet"><meta property="og:title" content="Perform differential expression analysis — deAnalysis"><meta property="og:description" content="performMirnaDE() and performGeneDE() are two functions provided by MIRit
+the details section."><title>Perform differential expression analysis — deAnalysis • MIRit</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet"><meta property="og:title" content="Perform differential expression analysis — deAnalysis"><meta property="og:description" content="performMirnaDE() and performGeneDE() are two functions provided by MIRit
 to conduct miRNA and gene differential expression analysis, respectively.
 In particular, these functions allow the user to compute differential
 expression through different methods, namely edgeR (Quasi-Likelihood
@@ -41,10 +41,9 @@ the details section."><meta property="og:image" content="/logo.svg"><!-- mathjax
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-      </ul><form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
-
-      <ul class="navbar-nav"><li class="nav-item">
+      </ul><ul class="navbar-nav"><li><form class="form-inline" role="search">
+<input type="search" class="form-control" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json"></form></li>
+<li class="nav-item">
   <a class="external-link nav-link" href="https://github.com/jacopo-ronchi/MIRit/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
@@ -134,149 +133,149 @@ the <em>details</em> section.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>mirnaObj</dt>
+    <dl><dt id="arg-mirnaobj">mirnaObj<a class="anchor" aria-label="anchor" href="#arg-mirnaobj"></a></dt>
 <dd><p>A <code><a href="MirnaExperiment-class.html">MirnaExperiment</a></code> object
 containing miRNA and gene data</p></dd>
 
 
-<dt>group</dt>
+<dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
 <dd><p>The variable of interest for differential expression analysis.
 It must be the column name of a variable present in the metadata (colData)
 of a <code><a href="MirnaExperiment-class.html">MirnaExperiment</a></code> object. See the <em>details</em>
 section for additional information</p></dd>
 
 
-<dt>contrast</dt>
+<dt id="arg-contrast">contrast<a class="anchor" aria-label="anchor" href="#arg-contrast"></a></dt>
 <dd><p>A <code>character</code> object that specifies the groups to be
 compared during differential expression analysis, separated by a dash
 (e.g. 'disease-healthy'). Note that reference group must be the last one,
 for additional information see the <em>details</em> section</p></dd>
 
 
-<dt>design</dt>
+<dt id="arg-design">design<a class="anchor" aria-label="anchor" href="#arg-design"></a></dt>
 <dd><p>An R <code>formula</code> that indicates the model to fit. It must
 include the variable of interest (<code>group</code>) together with eventual
 covariates (e.g. '~ 0 + disease + sex'). Please note that <code>group</code> variable
 must be the first one. See the <em>details</em> section for additional information</p></dd>
 
 
-<dt>method</dt>
+<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>The statistical package used to compute differential
 expression. For NGS experiments, it must be one of <code>edgeR</code> (default),
 <code>DESeq2</code>, and <code>voom</code> (for limma-voom). Instead, for microarray data, only
 <code>limma</code> can be used</p></dd>
 
 
-<dt>logFC</dt>
+<dt id="arg-logfc">logFC<a class="anchor" aria-label="anchor" href="#arg-logfc"></a></dt>
 <dd><p>The minimum log2 fold change required to consider a gene as
 differentially expressed. Optional, default is 0</p></dd>
 
 
-<dt>pCutoff</dt>
+<dt id="arg-pcutoff">pCutoff<a class="anchor" aria-label="anchor" href="#arg-pcutoff"></a></dt>
 <dd><p>The adjusted p-value cutoff to use for statistical
 significance. The default value is <code>0.05</code></p></dd>
 
 
-<dt>pAdjustment</dt>
+<dt id="arg-padjustment">pAdjustment<a class="anchor" aria-label="anchor" href="#arg-padjustment"></a></dt>
 <dd><p>The p-value correction method for multiple testing. It
 must be one of: <code>fdr</code> (default), <code>BH</code>, <code>none</code>, <code>holm</code>, <code>hochberg</code>, <code>hommel</code>,
 <code>bonferroni</code>, <code>BY</code></p></dd>
 
 
-<dt>filterByExpr.args</dt>
+<dt id="arg-filterbyexpr-args">filterByExpr.args<a class="anchor" aria-label="anchor" href="#arg-filterbyexpr-args"></a></dt>
 <dd><p>A <code>list</code> object containing additional arguments
 passed to <code><a href="https://rdrr.io/pkg/edgeR/man/filterByExpr.html" class="external-link">edgeR::filterByExpr()</a></code> function. It is used when <code>method</code> is set
 to <code>edgeR</code> or <code>voom</code></p></dd>
 
 
-<dt>calcNormFactors.args</dt>
+<dt id="arg-calcnormfactors-args">calcNormFactors.args<a class="anchor" aria-label="anchor" href="#arg-calcnormfactors-args"></a></dt>
 <dd><p>A <code>list</code> object containing additional arguments
 passed to <code><a href="https://rdrr.io/pkg/edgeR/man/calcNormFactors.html" class="external-link">edgeR::calcNormFactors()</a></code> function. It is used when <code>method</code> is
 set to <code>edgeR</code> or <code>voom</code></p></dd>
 
 
-<dt>estimateDisp.args</dt>
+<dt id="arg-estimatedisp-args">estimateDisp.args<a class="anchor" aria-label="anchor" href="#arg-estimatedisp-args"></a></dt>
 <dd><p>A <code>list</code> object containing additional arguments
 passed to <code><a href="https://rdrr.io/pkg/edgeR/man/estimateDisp.html" class="external-link">edgeR::estimateDisp()</a></code> function. It is used when <code>method</code> is
 set to <code>edgeR</code>. Default is <code>list(robust = TRUE)</code> to use the robust parameter</p></dd>
 
 
-<dt>glmQLFit.args</dt>
+<dt id="arg-glmqlfit-args">glmQLFit.args<a class="anchor" aria-label="anchor" href="#arg-glmqlfit-args"></a></dt>
 <dd><p>A <code>list</code> object containing additional arguments
 passed to <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFit.html" class="external-link">edgeR::glmQLFit()</a></code> function. It is used when <code>method</code> is
 set to <code>edgeR</code></p></dd>
 
 
-<dt>glmQLFTest.args</dt>
+<dt id="arg-glmqlftest-args">glmQLFTest.args<a class="anchor" aria-label="anchor" href="#arg-glmqlftest-args"></a></dt>
 <dd><p>A <code>list</code> object containing additional arguments
 passed to <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFTest.html" class="external-link">edgeR::glmQLFTest()</a></code> function. It is used when <code>method</code> is
 set to <code>edgeR</code></p></dd>
 
 
-<dt>DESeq.args</dt>
+<dt id="arg-deseq-args">DESeq.args<a class="anchor" aria-label="anchor" href="#arg-deseq-args"></a></dt>
 <dd><p>A <code>list</code> object containing additional arguments
 passed to <code><a href="https://rdrr.io/pkg/DESeq2/man/DESeq.html" class="external-link">DESeq2::DESeq()</a></code> function. It is used when <code>method</code> is
 set to <code>DESeq</code></p></dd>
 
 
-<dt>useVoomWithQualityWeights</dt>
+<dt id="arg-usevoomwithqualityweights">useVoomWithQualityWeights<a class="anchor" aria-label="anchor" href="#arg-usevoomwithqualityweights"></a></dt>
 <dd><p>Logical, whether to use the
 <code><a href="https://rdrr.io/pkg/limma/man/voomWithQualityWeights.html" class="external-link">limma::voomWithQualityWeights()</a></code> function or just the <code><a href="https://rdrr.io/pkg/limma/man/voom.html" class="external-link">limma::voom()</a></code>
 function. It is used when <code>method</code> is set to <code>voom</code>. Default is TRUE</p></dd>
 
 
-<dt>voom.args</dt>
+<dt id="arg-voom-args">voom.args<a class="anchor" aria-label="anchor" href="#arg-voom-args"></a></dt>
 <dd><p>A <code>list</code> object containing additional arguments
 passed to <code><a href="https://rdrr.io/pkg/limma/man/voom.html" class="external-link">limma::voom()</a></code> function or <code><a href="https://rdrr.io/pkg/limma/man/voomWithQualityWeights.html" class="external-link">limma::voomWithQualityWeights()</a></code>
 function. It is used when <code>method</code> is set to <code>voom</code></p></dd>
 
 
-<dt>lmFit.args</dt>
+<dt id="arg-lmfit-args">lmFit.args<a class="anchor" aria-label="anchor" href="#arg-lmfit-args"></a></dt>
 <dd><p>A <code>list</code> object containing additional arguments
 passed to <code><a href="https://rdrr.io/pkg/limma/man/lmFit.html" class="external-link">limma::lmFit()</a></code> function. It is used when <code>method</code> is set
 to <code>voom</code> or <code>limma</code></p></dd>
 
 
-<dt>eBayes.args</dt>
+<dt id="arg-ebayes-args">eBayes.args<a class="anchor" aria-label="anchor" href="#arg-ebayes-args"></a></dt>
 <dd><p>A <code>list</code> object containing additional arguments
 passed to <code><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">limma::eBayes()</a></code> function. It is used when <code>method</code> is set
 to <code>voom</code> or <code>limma</code></p></dd>
 
 
-<dt>useArrayWeights</dt>
+<dt id="arg-usearrayweights">useArrayWeights<a class="anchor" aria-label="anchor" href="#arg-usearrayweights"></a></dt>
 <dd><p>Logical, whether to use the <code><a href="https://rdrr.io/pkg/limma/man/arrayWeights.html" class="external-link">limma::arrayWeights()</a></code>
 function or not. It is used when <code>method</code> is set to <code>limma</code>. Default is TRUE</p></dd>
 
 
-<dt>useWsva</dt>
+<dt id="arg-usewsva">useWsva<a class="anchor" aria-label="anchor" href="#arg-usewsva"></a></dt>
 <dd><p>Logical, whether to use the <code><a href="https://rdrr.io/pkg/limma/man/wsva.html" class="external-link">limma::wsva()</a></code> function or not.
 It is used when <code>method</code> is set to <code>limma</code>. Default is FALSE</p></dd>
 
 
-<dt>wsva.args</dt>
+<dt id="arg-wsva-args">wsva.args<a class="anchor" aria-label="anchor" href="#arg-wsva-args"></a></dt>
 <dd><p>A <code>list</code> object containing additional arguments
 passed to <code><a href="https://rdrr.io/pkg/limma/man/wsva.html" class="external-link">limma::wsva()</a></code> function. It is used when <code>method</code> is set
 to <code>limma</code></p></dd>
 
 
-<dt>arrayWeights.args</dt>
+<dt id="arg-arrayweights-args">arrayWeights.args<a class="anchor" aria-label="anchor" href="#arg-arrayweights-args"></a></dt>
 <dd><p>A <code>list</code> object containing additional arguments
 passed to <code><a href="https://rdrr.io/pkg/limma/man/arrayWeights.html" class="external-link">limma::arrayWeights()</a></code> function. It is used when <code>method</code> is set
 to <code>limma</code></p></dd>
 
 
-<dt>useDuplicateCorrelation</dt>
+<dt id="arg-useduplicatecorrelation">useDuplicateCorrelation<a class="anchor" aria-label="anchor" href="#arg-useduplicatecorrelation"></a></dt>
 <dd><p>Logical, whether to use the
 <code><a href="https://rdrr.io/pkg/limma/man/dupcor.html" class="external-link">limma::duplicateCorrelation()</a></code> function or not. It is used when <code>method</code> is
 set to <code>limma</code>. Default is FALSE</p></dd>
 
 
-<dt>correlationBlockVariable</dt>
+<dt id="arg-correlationblockvariable">correlationBlockVariable<a class="anchor" aria-label="anchor" href="#arg-correlationblockvariable"></a></dt>
 <dd><p>It is the blocking variable to use for
 <code><a href="https://rdrr.io/pkg/limma/man/dupcor.html" class="external-link">limma::duplicateCorrelation()</a></code>. Default is NULL</p></dd>
 
 
-<dt>duplicateCorrelation.args</dt>
+<dt id="arg-duplicatecorrelation-args">duplicateCorrelation.args<a class="anchor" aria-label="anchor" href="#arg-duplicatecorrelation-args"></a></dt>
 <dd><p>A <code>list</code> object containing additional
 arguments passed to <code><a href="https://rdrr.io/pkg/limma/man/dupcor.html" class="external-link">limma::duplicateCorrelation()</a></code> function. It is used
 when <code>method</code> is set to <code>limma</code></p></dd>
@@ -402,11 +401,11 @@ dispersion for RNA-seq data with DESeq2.” Genome Biology, 15, 550.
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Jacopo Ronchi.</p>
+  <p>Developed by Jacopo Ronchi.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>MIRit is provided without <strong>any warranty</strong>. Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+  <p>MIRit is provided without <strong>any warranty</strong>. Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
     </footer></div>

@@ -5,7 +5,7 @@ class IntegrativePathwayAnalysis,
 this function allows to produce a network graph for a specified biological
 pathway, alongside with expression fold changes. In this way, augmented
 pathways made of both miRNAs and genes can be visually explored to better
-investigate the consequences of miRNA/gene dysregulations."><title>Visualize the relationships between miRNAs and genes in a biological pathway — visualizeNetwork • MIRit</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet"><meta property="og:title" content="Visualize the relationships between miRNAs and genes in a biological pathway — visualizeNetwork"><meta property="og:description" content="This function can be used to plot augmented pathways created by the
+investigate the consequences of miRNA/gene dysregulations."><title>Visualize the relationships between miRNAs and genes in a biological pathway — visualizeNetwork • MIRit</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet"><meta property="og:title" content="Visualize the relationships between miRNAs and genes in a biological pathway — visualizeNetwork"><meta property="og:description" content="This function can be used to plot augmented pathways created by the
 topologicalAnalysis() function. In particular, given a valid object of
 class IntegrativePathwayAnalysis,
 this function allows to produce a network graph for a specified biological
@@ -39,10 +39,9 @@ investigate the consequences of miRNA/gene dysregulations."><meta property="og:i
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-      </ul><form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
-
-      <ul class="navbar-nav"><li class="nav-item">
+      </ul><ul class="navbar-nav"><li><form class="form-inline" role="search">
+<input type="search" class="form-control" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json"></form></li>
+<li class="nav-item">
   <a class="external-link nav-link" href="https://github.com/jacopo-ronchi/MIRit/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
@@ -96,30 +95,30 @@ investigate the consequences of miRNA/gene dysregulations.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>object</dt>
+    <dl><dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
 <dd><p>An object of class
 <code><a href="IntegrativePathwayAnalysis-class.html">IntegrativePathwayAnalysis</a></code> containing
 the results of a miRNA-mRNA pathway analysis</p></dd>
 
 
-<dt>pathway</dt>
+<dt id="arg-pathway">pathway<a class="anchor" aria-label="anchor" href="#arg-pathway"></a></dt>
 <dd><p>The name of the biological pathway to show. The available
 pathways for a given database can be seen through the <code><a href="listPathways.html">listPathways()</a></code>
 function</p></dd>
 
 
-<dt>algorithm</dt>
+<dt id="arg-algorithm">algorithm<a class="anchor" aria-label="anchor" href="#arg-algorithm"></a></dt>
 <dd><p>The layout algorithm used to arrange nodes in the network.
 It must be one of <code>dot</code> (default), <code>circo</code>, <code>fdp</code>, <code>neato</code>, <code>osage</code> or
 <code>twopi</code>. For more information regarding these algorithms, please check the
 <em>details</em> section</p></dd>
 
 
-<dt>fontsize</dt>
+<dt id="arg-fontsize">fontsize<a class="anchor" aria-label="anchor" href="#arg-fontsize"></a></dt>
 <dd><p>The font size of each node in the graph. Default is 14</p></dd>
 
 
-<dt>lfcScale</dt>
+<dt id="arg-lfcscale">lfcScale<a class="anchor" aria-label="anchor" href="#arg-lfcscale"></a></dt>
 <dd><p>It must be a <code>character</code> vector of length 3 containing valid
 R color names for creating a gradient of log2 fold changes. The first value
 refers to downregulation, the middle one to stable expression, and the last
@@ -128,76 +127,76 @@ Available color formats include color names, such as 'blue' and 'red', and
 hexadecimal colors specified as #RRGGBB</p></dd>
 
 
-<dt>nodeBorderCol</dt>
+<dt id="arg-nodebordercol">nodeBorderCol<a class="anchor" aria-label="anchor" href="#arg-nodebordercol"></a></dt>
 <dd><p>It must be an R color name that specifies the color
 of node borders. Default is <code>black</code>. Available color formats include
 color names, such as 'blue' and 'red', and hexadecimal colors specified
 as #RRGGBB</p></dd>
 
 
-<dt>nodeTextCol</dt>
+<dt id="arg-nodetextcol">nodeTextCol<a class="anchor" aria-label="anchor" href="#arg-nodetextcol"></a></dt>
 <dd><p>It must be an R color name that specifies the color of
 miRNA/gene names. Default is <code>black</code>. Available color formats include
 color names, such as 'blue' and 'red', and hexadecimal colors specified
 as #RRGGBB</p></dd>
 
 
-<dt>edgeCol</dt>
+<dt id="arg-edgecol">edgeCol<a class="anchor" aria-label="anchor" href="#arg-edgecol"></a></dt>
 <dd><p>It must be an R color name that specifies the color of
 edges between nodes. Default is <code>darkgrey</code>. Available color formats include
 color names, such as 'blue' and 'red', and hexadecimal colors specified
 as #RRGGBB</p></dd>
 
 
-<dt>edgeWidth</dt>
+<dt id="arg-edgewidth">edgeWidth<a class="anchor" aria-label="anchor" href="#arg-edgewidth"></a></dt>
 <dd><p>The width of edges. Default is 1</p></dd>
 
 
-<dt>subgraph</dt>
+<dt id="arg-subgraph">subgraph<a class="anchor" aria-label="anchor" href="#arg-subgraph"></a></dt>
 <dd><p>An optional <code>character</code> vector containing the nodes that you
 want to maintain in the final plot. All the other nodes will not be shown.
 This is useful to display specific features of extremely messy graphs.
 Default is NULL</p></dd>
 
 
-<dt>highlightNodes</dt>
+<dt id="arg-highlightnodes">highlightNodes<a class="anchor" aria-label="anchor" href="#arg-highlightnodes"></a></dt>
 <dd><p>A <code>character</code> vector containing the names of nodes
 that you want to highlight. Default is NULL not to highlight any nodes.
 See the <em>details</em> section for additional information</p></dd>
 
 
-<dt>highlightCol</dt>
+<dt id="arg-highlightcol">highlightCol<a class="anchor" aria-label="anchor" href="#arg-highlightcol"></a></dt>
 <dd><p>It must be an R color name that specifies the color of
 edges and borders for highlighted nodes. Default is <code>gold</code>. Available color
 formats include color names, such as 'blue' and 'red', and hexadecimal colors
 specified as #RRGGBB</p></dd>
 
 
-<dt>highlightWidth</dt>
+<dt id="arg-highlightwidth">highlightWidth<a class="anchor" aria-label="anchor" href="#arg-highlightwidth"></a></dt>
 <dd><p>The width of edges between highlighted nodes. Default
 is 2</p></dd>
 
 
-<dt>legendColorbar</dt>
+<dt id="arg-legendcolorbar">legendColorbar<a class="anchor" aria-label="anchor" href="#arg-legendcolorbar"></a></dt>
 <dd><p>Logical, whether to add a legend with a color bar for
 log2 fold changes. Default is TRUE</p></dd>
 
 
-<dt>legendInteraction</dt>
+<dt id="arg-legendinteraction">legendInteraction<a class="anchor" aria-label="anchor" href="#arg-legendinteraction"></a></dt>
 <dd><p>Logical, whether to add a legend that links edge
 types to biological interactions. Default is TRUE</p></dd>
 
 
-<dt>title</dt>
+<dt id="arg-title">title<a class="anchor" aria-label="anchor" href="#arg-title"></a></dt>
 <dd><p>The title of the plot. Default is <code>NULL</code> not to include a plot
 title</p></dd>
 
 
-<dt>titleCex</dt>
+<dt id="arg-titlecex">titleCex<a class="anchor" aria-label="anchor" href="#arg-titlecex"></a></dt>
 <dd><p>The cex of the plot main title. Default is 2</p></dd>
 
 
-<dt>titleFace</dt>
+<dt id="arg-titleface">titleFace<a class="anchor" aria-label="anchor" href="#arg-titleface"></a></dt>
 <dd><p>An integer which specifies which font to use for title. 1
 corresponds to plain text, 2 to bold face, 3 to italic, 4 to bold italic,
 and 5 to symbol font. Default is 1</p></dd>
@@ -309,11 +308,11 @@ include a network title with the desired look.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Jacopo Ronchi.</p>
+  <p>Developed by Jacopo Ronchi.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>MIRit is provided without <strong>any warranty</strong>. Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+  <p>MIRit is provided without <strong>any warranty</strong>. Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
     </footer></div>
