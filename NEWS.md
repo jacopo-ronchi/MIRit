@@ -1,3 +1,8 @@
+# MIRit 1.1.1
+
+Changes were made to ensure that R CMD check runs without errors or warnings.
+Moreover, MIRit has been updated to use the new miRTarBase version 10 database.
+
 # MIRit 0.99.13
 
 A minor fix was made to fix the undefined variables note during R CMD check.
