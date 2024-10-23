@@ -1,6 +1,6 @@
 Package: MIRit
 Title: Integrate microRNA and gene expression to decipher pathway complexity
-Version: 0.99.13
+Version: 0.99.14
 Date: 2023-11-23
 Authors@R: c(
     person("Jacopo", "Ronchi", email = "jacopo.ronchi@unimib.it",
@@ -22,7 +22,7 @@ BugReports: https://github.com/jacopo-ronchi/MIRit/issues
 biocViews: Software, GeneRegulation, NetworkEnrichment, NetworkInference, Epigenetics, FunctionalGenomics, SystemsBiology, Network, Pathways, GeneExpression, DifferentialExpression
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Imports: 
     AnnotationDbi,
     BiocFileCache,
@@ -42,7 +42,6 @@ Imports:
     limma,
     methods,
     Rcpp,
-    readxl,
     Rgraphviz (>= 2.44.0),
     rlang,
     stats,

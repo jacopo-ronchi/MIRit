@@ -22,9 +22,9 @@ test_that("miRTarBase is responsive", {
 
     ## targets retrieval through miRTarBase is not tested, but we
     ## check that the miRTarBase link is active
-    mtUrl <- paste("https://mirtarbase.cuhk.edu.cn/~miRTarBase/",
-        "miRTarBase_2022/cache/download/9.0/miRTarBase_MTI.xlsx",
-        sep = ""
+    mtUrl <- paste("https://awi.cuhk.edu.cn/~miRTarBase/miRTarBase_2025/",
+          "cache/download/10.0/miRTarBase_MTI.csv",
+          sep = ""
     )
     hd <- httr::HEAD(mtUrl, httr::timeout(4))
     status <- httr::status_code(hd)

@@ -1,7 +1,7 @@
 #' Get microRNA targets
 #'
 #' This function allows to obtain human miRNA-target interactions using two
-#' databases, namely miRTarBase v9, which contains experimentally validated
+#' databases, namely miRTarBase v10, which contains experimentally validated
 #' interactions, and the microRNA Data Integration Portal (mirDIP) database,
 #' which aggregates miRNA target predictions from 24 different resources by
 #' using an integrated score inferred from different prediction metrics. In
@@ -31,7 +31,7 @@
 #' metric check Tokar et al. 2018 and Hauschild et al. 2023.
 #'
 #' This function defines miRNA targets by considering both validated
-#' interactions present in miRTarBase (version 9), and predicted interactions
+#' interactions present in miRTarBase (version 10), and predicted interactions
 #' identified by mirDIP. Please note that for species other than Homo sapiens,
 #' only miRTarBase interactions are available. Further, it is possible to
 #' include all validated miRNA-target interactions, or limit the retrieval to
@@ -155,7 +155,7 @@ getTargets <- function(mirnaObj,
     }
 
     ## define miRNAs
-    allMirnas <- mirnaDE(mirnaObj)$ID
+    allMirnas <- mirnaDE(mirnaObj, onlySignificant = FALSE)$ID
 
     ## use only miRTarBase for organisms other than Homo sapiens
     if (organism != "Homo sapiens") {
@@ -231,9 +231,9 @@ getTargets <- function(mirnaObj,
 
     ## add validated interactions from miRTarBase
     if (includeValidated == TRUE) {
-        ## define miRTarBase v9 link
-        mtUrl <- paste("https://mirtarbase.cuhk.edu.cn/~miRTarBase/",
-            "miRTarBase_2022/cache/download/9.0/miRTarBase_MTI.xlsx",
+        ## define miRTarBase v10 link
+        mtUrl <- paste("https://awi.cuhk.edu.cn/~miRTarBase/miRTarBase_2025/",
+            "cache/download/10.0/miRTarBase_MTI.csv",
             sep = ""
         )
 
@@ -241,25 +241,21 @@ getTargets <- function(mirnaObj,
         bfc <- .get_cache()
 
         ## check if miRTarBase is cached
-        rid <- BiocFileCache::bfcquery(bfc, "miRTarBase", "rname")$rid
+        bQ <- BiocFileCache::bfcquery(bfc, "miRTarBase10", "rname")
+        rid <- bQ$rid
         if (!length(rid)) {
             ## download miRTarBase and add it to the cache directory
             message(
                 "\nDownloading validated interactions ",
-                "from miRTarBase v9.0..."
+                "from miRTarBase v10.0..."
             )
-            rid <- names(BiocFileCache::bfcadd(bfc, "miRTarBase", mtUrl))
+            rid <- names(BiocFileCache::bfcadd(bfc, "miRTarBase10", mtUrl))
         } else {
             message("\nLoading miRTarBase from cache...")
         }
 
-        ## check if cached file needs to be updated
-        if (!isFALSE(BiocFileCache::bfcneedsupdate(bfc, rid))) {
-            BiocFileCache::bfcdownload(bfc, rid, ask = FALSE)
-        }
-
         ## load miRTarBase
-        mt <- quiet(readxl::read_xlsx(BiocFileCache::bfcrpath(bfc, rids = rid)))
+        mt <- quiet(utils::read.csv(BiocFileCache::bfcrpath(bfc, rids = rid)))
         
         ## limit results to strongly supported interactions
         if (evidence == "strong") {
@@ -285,6 +281,9 @@ getTargets <- function(mirnaObj,
             tg$Type <- "Validated"
         }
     }
+    
+    ## only keep interactions with measured genes
+    tg <- tg[tg$Gene.Symbol %in% rownames(mirnaObj[["genes"]]), ]
 
     ## add miRNA-target pairs to the MirnaExperiment object
     mirnaTargets(mirnaObj) <- tg

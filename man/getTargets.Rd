@@ -44,7 +44,7 @@ stored in the \code{targets} slot. Results can be accessed with the
 }
 \description{
 This function allows to obtain human miRNA-target interactions using two
-databases, namely miRTarBase v9, which contains experimentally validated
+databases, namely miRTarBase v10, which contains experimentally validated
 interactions, and the microRNA Data Integration Portal (mirDIP) database,
 which aggregates miRNA target predictions from 24 different resources by
 using an integrated score inferred from different prediction metrics. In
@@ -74,7 +74,7 @@ algorithms. For additional information on mirDIP database and its ranking
 metric check Tokar et al. 2018 and Hauschild et al. 2023.
 
 This function defines miRNA targets by considering both validated
-interactions present in miRTarBase (version 9), and predicted interactions
+interactions present in miRTarBase (version 10), and predicted interactions
 identified by mirDIP. Please note that for species other than Homo sapiens,
 only miRTarBase interactions are available. Further, it is possible to
 include all validated miRNA-target interactions, or limit the retrieval to
