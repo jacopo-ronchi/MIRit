@@ -1,4 +1,4 @@
-# MIRit 1.1.4
+# MIRit 1.3.1
 
 Now it is possible to use a local copy of miRTarBase with the getTargets()
 function.

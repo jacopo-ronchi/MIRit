@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Devel
-version](https://img.shields.io/badge/devel%20version-1.1.4-blue.svg)](https://github.com/jacopo-ronchi/MIRit)
+version](https://img.shields.io/badge/devel%20version-1.3.1-blue.svg)](https://github.com/jacopo-ronchi/MIRit)
 [![GitHub
 issues](https://img.shields.io/github/issues/jacopo-ronchi/MIRit)](https://github.com/jacopo-ronchi/MIRit/issues)
 [![GitHub
