@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Devel
-version](https://img.shields.io/badge/devel%20version-1.3.1-blue.svg)](https://github.com/jacopo-ronchi/MIRit)
+version](https://img.shields.io/badge/devel%20version-1.3.2-blue.svg)](https://github.com/jacopo-ronchi/MIRit)
 [![GitHub
 issues](https://img.shields.io/github/issues/jacopo-ronchi/MIRit)](https://github.com/jacopo-ronchi/MIRit/issues)
 [![GitHub
@@ -16,7 +16,7 @@ commit](https://img.shields.io/github/last-commit/jacopo-ronchi/MIRit.svg)](http
 [![Project Status:
 Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![License: GPL (\>=
 3)](https://img.shields.io/badge/license-GPL%20(%3E=%203)-blue.svg)](https://cran.r-project.org/web/licenses/GPL-3)
 [![DOI
@@ -54,8 +54,17 @@ Milano-Bicocca, Italy
 
 ## Installation
 
-`MIRit` is currently undergoing Bioconductor submission. In the
-meantime, you can install it from
+`MIRit` is available on Bioconductor and can be installed using:
+
+``` r
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+
+BiocManager::install("MIRit")
+```
+
+Alternatively, the development version of MIRit can be installed from
 [GitHub](https://github.com/jacopo-ronchi/MIRit) with:
 
 ``` r
@@ -70,7 +79,8 @@ BiocManager::install("jacopo-ronchi/MIRit")
 
 For detailed instructions on how to use `MIRit` for integrative
 miRNA-mRNA analysis, please refer to the package vignette on
-[Bioconductor](). Alternatively, you can refer to the [documentation
+[Bioconductor](https://www.bioconductor.org/packages/release/bioc/vignettes/MIRit/inst/doc/MIRit.html).
+Alternatively, you can refer to the [documentation
 website](http://jacopo-ronchi.github.io/MIRit).
 
 ## Citation
