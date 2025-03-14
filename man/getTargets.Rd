@@ -9,7 +9,8 @@ getTargets(
   organism = "Homo sapiens",
   score = "High",
   includeValidated = TRUE,
-  evidence = "all"
+  evidence = "all",
+  local = NULL
 )
 }
 \arguments{
@@ -36,6 +37,11 @@ validated interactions are considered.}
 interactions. The possible options are \code{strong}, to only include targets
 with strong experimental support, and \code{all} (default) to also include
 validated interactions with less strong evidence.}
+
+\item{local}{A \code{data.frame} with a local copy of miRTarBase csv file with
+validated miRNA-mRNA interactions. This parameter is optional and is set to
+\code{NULL} by default, in order to download the database from miRTarBase on the
+first use.}
 }
 \value{
 A \code{\link[=MirnaExperiment-class]{MirnaExperiment}} object containing miRNA targets

@@ -56,6 +56,10 @@
 #' interactions. The possible options are `strong`, to only include targets
 #' with strong experimental support, and `all` (default) to also include
 #' validated interactions with less strong evidence.
+#' @param local A `data.frame` with a local copy of miRTarBase csv file with
+#' validated miRNA-mRNA interactions. This parameter is optional and is set to
+#' `NULL` by default, in order to download the database from miRTarBase on the
+#' first use.
 #'
 #' @returns
 #' A [`MirnaExperiment`][MirnaExperiment-class] object containing miRNA targets
@@ -101,7 +105,8 @@ getTargets <- function(mirnaObj,
     organism = "Homo sapiens",
     score = "High",
     includeValidated = TRUE,
-    evidence = "all") {
+    evidence = "all",
+    local = NULL) {
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -152,6 +157,21 @@ getTargets <- function(mirnaObj,
              "For additional details, see ?getTargets",
              call. = FALSE
         )
+    }
+    mtbNames <- c("miRTarBase ID", "miRNA", "Species (miRNA)", "Target Gene",
+                  "Target Gene (Entrez ID)", "Species (Target Gene)",
+                  "Experiments", "Support Type", "References (PMID)")
+    if (!is.null(local)) {
+        if (!is.data.frame(local) |
+            (!identical(colnames(local), mtbNames) &
+             !identical(colnames(local), make.names(mtbNames)))) {
+            stop("'local' must be a data.frame containing a local copy of ",
+                 "miRTarBase. Therefore, it must contain the following ",
+                 "columns: ", paste(mtbNames, collapse = ", "), ". ",
+                 "For additional details, see ?getTargets",
+                 call. = FALSE
+            )
+        }
     }
 
     ## define miRNAs
@@ -231,31 +251,40 @@ getTargets <- function(mirnaObj,
 
     ## add validated interactions from miRTarBase
     if (includeValidated == TRUE) {
-        ## define miRTarBase v10 link
-        mtUrl <- paste("https://awi.cuhk.edu.cn/~miRTarBase/miRTarBase_2025/",
-            "cache/download/10.0/miRTarBase_MTI.csv",
-            sep = ""
-        )
-
-        ## load cache
-        bfc <- .get_cache()
-
-        ## check if miRTarBase is cached
-        bQ <- BiocFileCache::bfcquery(bfc, "miRTarBase10", "rname")
-        rid <- bQ$rid
-        if (!length(rid)) {
-            ## download miRTarBase and add it to the cache directory
-            message(
-                "\nDownloading validated interactions ",
-                "from miRTarBase v10.0..."
+        
+        ## query miRTarBase or use a local copy
+        if (is.null(local)) {
+            
+            ## define miRTarBase v10 link
+            mtUrl <- paste("https://awi.cuhk.edu.cn/~miRTarBase/miRTarBase_",
+                           "2025/miRTarBase_MTI.csv",
+                           sep = ""
             )
-            rid <- names(BiocFileCache::bfcadd(bfc, "miRTarBase10", mtUrl))
+            
+            ## load cache
+            bfc <- .get_cache()
+            
+            ## check if miRTarBase is cached
+            bQ <- BiocFileCache::bfcquery(bfc, "miRTarBase10", "rname")
+            rid <- bQ$rid
+            if (!length(rid)) {
+                ## download miRTarBase and add it to the cache directory
+                message(
+                    "\nDownloading validated interactions ",
+                    "from miRTarBase v10.0..."
+                )
+                rid <- names(BiocFileCache::bfcadd(bfc, "miRTarBase10", mtUrl))
+            } else {
+                message("\nLoading miRTarBase from cache...")
+            }
+            
+            ## load miRTarBase
+            mt <- quiet(utils::read.csv(BiocFileCache::bfcrpath(bfc,
+                                                                rids = rid)))
+            
         } else {
-            message("\nLoading miRTarBase from cache...")
+            mt <- local
         }
-
-        ## load miRTarBase
-        mt <- quiet(utils::read.csv(BiocFileCache::bfcrpath(bfc, rids = rid)))
         
         ## limit results to strongly supported interactions
         if (evidence == "strong") {

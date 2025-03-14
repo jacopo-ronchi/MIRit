@@ -1,3 +1,8 @@
+# MIRit 1.1.4
+
+Now it is possible to use a local copy of miRTarBase with the getTargets()
+function.
+
 # MIRit 1.1.1
 
 Changes were made to ensure that R CMD check runs without errors or warnings.
