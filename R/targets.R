@@ -172,6 +172,7 @@ getTargets <- function(mirnaObj,
                  call. = FALSE
             )
         }
+        colnames(local) <- mtbNames
     }
 
     ## define miRNAs
