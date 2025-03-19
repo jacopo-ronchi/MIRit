@@ -373,6 +373,7 @@ correlateMirnaTargets <- function(mirnaObj,
 
     ## retrieve targets of DE-miRNAs from the object
     targetsTable <- mirnaTargets(mirnaObj)
+    targetsTable <- targetsTable[targetsTable$MicroRNA %in% dem$ID, ]
 
     ## select differentially expressed miRNA targets
     targetsTable <- targetsTable[targetsTable$Gene.Symbol %in% deg$ID, ]
