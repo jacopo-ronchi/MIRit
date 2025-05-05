@@ -258,7 +258,7 @@ getTargets <- function(mirnaObj,
             
             ## define miRTarBase v10 link
             mtUrl <- paste("https://awi.cuhk.edu.cn/~miRTarBase/miRTarBase_",
-                           "2025/miRTarBase_MTI.csv",
+                           "2025/cache/download/10.0/miRTarBase_MTI.csv",
                            sep = ""
             )
             
