@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Devel
-version](https://img.shields.io/badge/devel%20version-1.3.4-blue.svg)](https://github.com/jacopo-ronchi/MIRit)
+version](https://img.shields.io/badge/devel%20version-1.5.1-blue.svg)](https://github.com/jacopo-ronchi/MIRit)
 [![GitHub
 issues](https://img.shields.io/github/issues/jacopo-ronchi/MIRit)](https://github.com/jacopo-ronchi/MIRit/issues)
 [![GitHub
@@ -111,7 +111,7 @@ contributing to this project, you agree to abide by its terms.
   *[rcmdcheck](https://CRAN.R-project.org/package=rcmdcheck)* customized
   to use [Bioconductor’s docker
   containers](https://www.bioconductor.org/help/docker/) and
-  *[BiocCheck](https://bioconductor.org/packages/3.21/BiocCheck)*.
+  *[BiocCheck](https://bioconductor.org/packages/3.22/BiocCheck)*.
 - Code coverage assessment is possible thanks to
   [codecov](https://codecov.io/gh) and
   *[covr](https://CRAN.R-project.org/package=covr)*.
@@ -125,4 +125,4 @@ contributing to this project, you agree to abide by its terms.
   *[roxygen2](https://CRAN.R-project.org/package=roxygen2)*.
 
 This package was developed using
-*[biocthis](https://bioconductor.org/packages/3.21/biocthis)*.
+*[biocthis](https://bioconductor.org/packages/3.22/biocthis)*.

@@ -1,3 +1,7 @@
+# MIRit 1.5.1
+
+The link for downloading miRTarBase v10 has been updated.
+
 # MIRit 1.3.1
 
 Now it is possible to use a local copy of miRTarBase with the getTargets()
