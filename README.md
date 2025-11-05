@@ -6,10 +6,9 @@
 <!-- badges: start -->
 
 [![Devel
-version](https://img.shields.io/badge/devel%20version-1.5.2-blue.svg)](https://github.com/jacopo-ronchi/MIRit)
+version](https://img.shields.io/badge/devel%20version-1.7.1-blue.svg)](https://github.com/jacopo-ronchi/MIRit)
 [![GitHub
 issues](https://img.shields.io/github/issues/jacopo-ronchi/MIRit)](https://github.com/jacopo-ronchi/MIRit/issues)
-[![GitHub
 pulls](https://img.shields.io/github/issues-pr/jacopo-ronchi/MIRit)](https://github.com/jacopo-ronchi/MIRit/pulls)
 [![Last
 commit](https://img.shields.io/github/last-commit/jacopo-ronchi/MIRit.svg)](https://github.com/jacopo-ronchi/MIRit/commits/devel)
@@ -21,9 +20,8 @@ stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecy
 3)](https://img.shields.io/badge/license-GPL%20(%3E=%203)-blue.svg)](https://cran.r-project.org/web/licenses/GPL-3)
 [![DOI
 badge](https://img.shields.io/badge/doi-10.1101/2023.11.24.568528-yellow.svg)](https://doi.org/10.1101/2023.11.24.568528)
-[![R-CMD-check-bioc](https://github.com/jacopo-ronchi/MIRit/actions/workflows/check-bioc.yml/badge.svg)](https://github.com/jacopo-ronchi/MIRit/actions/workflows/check-bioc.yml)
-[![Codecov test
-coverage](https://codecov.io/gh/jacopo-ronchi/MIRit/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/jacopo-ronchi/MIRit?branch=devel)
+[![R-CMD-check](https://github.com/jacopo-ronchi/MIRit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jacopo-ronchi/MIRit/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/jacopo-ronchi/MIRit/graph/badge.svg)](https://app.codecov.io/gh/jacopo-ronchi/MIRit)
 <!-- badges: end -->
 
 ## Overview
@@ -42,11 +40,11 @@ finish.
 
 ## Authors
 
-**Dr. Jacopo Ronchi**
+**Dr. Jacopo Ronchi**
 <a itemprop="sameAs" content="https://orcid.org/0000-0001-5520-4631" href="https://orcid.org/0000-0001-5520-4631" target="orcid.widget" rel="noopener noreferrer" style="vertical-align:top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon"></a><sup>1</sup>
 (author and maintainer)
 
-**Dr. Maria Foti**
+**Dr. Maria Foti**
 <a itemprop="sameAs" content="https://orcid.org/0000-0002-4481-1900" href="https://orcid.org/0000-0002-4481-1900" target="orcid.widget" rel="noopener noreferrer" style="vertical-align:top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon"></a><sup>1</sup>
 
 <sup>1</sup>School of Medicine and Surgery, University of
@@ -101,28 +99,3 @@ the vignettes and/or the paper(s) describing this package.
 Please note that the `MIRit` project is released with a [Contributor
 Code of Conduct](http://bioconductor.org/about/code-of-conduct/). By
 contributing to this project, you agree to abide by its terms.
-
-## Development tools
-
-- Continuous code testing is possible thanks to [GitHub
-  actions](https://www.tidyverse.org/blog/2020/04/usethis-1-6-0/)
-  through *[usethis](https://CRAN.R-project.org/package=usethis)*,
-  *[remotes](https://CRAN.R-project.org/package=remotes)*, and
-  *[rcmdcheck](https://CRAN.R-project.org/package=rcmdcheck)* customized
-  to use [Bioconductor’s docker
-  containers](https://www.bioconductor.org/help/docker/) and
-  *[BiocCheck](https://bioconductor.org/packages/3.22/BiocCheck)*.
-- Code coverage assessment is possible thanks to
-  [codecov](https://codecov.io/gh) and
-  *[covr](https://CRAN.R-project.org/package=covr)*.
-- The [documentation website](http://jacopo-ronchi.github.io/MIRit) is
-  automatically updated thanks to
-  *[pkgdown](https://CRAN.R-project.org/package=pkgdown)*.
-- The code is styled automatically thanks to
-  *[styler](https://CRAN.R-project.org/package=styler)*.
-- The documentation is formatted thanks to
-  *[devtools](https://CRAN.R-project.org/package=devtools)* and
-  *[roxygen2](https://CRAN.R-project.org/package=roxygen2)*.
-
-This package was developed using
-*[biocthis](https://bioconductor.org/packages/3.22/biocthis)*.
