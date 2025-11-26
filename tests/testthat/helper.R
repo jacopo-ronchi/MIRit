@@ -227,7 +227,7 @@ testPreparePathways.internal <- function(
     }
     
     ## select a subset of KEGG pathways for testing purposes
-    pathDb <- pathDb[seq(205, 210)]
+    pathDb <- pathDb[seq(180, 220)]
     
     ## create a list of augmented pathways
     message("Adding miRNA-gene interactions to biological pathways...")
