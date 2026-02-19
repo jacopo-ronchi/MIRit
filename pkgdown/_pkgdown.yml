@@ -1,3 +1,5 @@
+url: https://jacopo-ronchi.github.io/MIRit/
+
 template:
   bootstrap: 5
   bootswatch: litera
@@ -72,6 +74,7 @@ reference:
 - contents:
   - getTargets
   - mirnaTargets
+  - setTargets
 - title: Disease-SNPs association
   desc:  >
     The functions used to associate differentially expressed miRNAs with
