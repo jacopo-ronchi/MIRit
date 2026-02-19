@@ -1,5 +1,6 @@
 ## helper function to download the desired gene set for enrichment analyses
 prepareGeneSet <- function(organism, database, category) {
+    
     ## determine organism name accepted by database
     org <- species[species$specie == organism, database]
 
@@ -120,6 +121,7 @@ prepareGeneSet <- function(organism, database, category) {
 
 ## helper function that checks for valid categories for a given database
 validateCategories <- function(database, category, organism) {
+    
     ## check if category is included in the specified database
     if (database == "GO" &
         !category %in% c("bp", "mf", "cc")) {

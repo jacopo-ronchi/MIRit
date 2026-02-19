@@ -2012,6 +2012,11 @@ plotCorrelation <- function(mirnaObj,
         length(grid) != 1) {
         stop("'grid' must be logical (TRUE/FALSE)!", call. = FALSE)
     }
+    if (mirnaObj@integration$partial) {
+        warning("This function does not currently support the plot of ",
+                "partial correlation analyses. The plot will be produced ",
+                "considering a standard correlation analysis", call. = FALSE)
+    }
 
     ## get integration results
     intRes <- integration(mirnaObj)

@@ -99,3 +99,15 @@ test_that("correlation analysis works for partially paired datasets", {
     corDf <- integration(corr)
     expect_equal(sum(corDf$Corr.P.Value), 0.676758000095)
 })
+
+
+test_that("partial correlation analysis works", {
+    ## load the example MirnaExperiment object
+    obj <- loadTestObject()
+    
+    ## perform integrative analysis through correlation analysis
+    expect_no_error(
+        corr <- mirnaIntegration(obj, test = "correlation", partial = TRUE,
+                                 pCutoff = 1)
+    )
+})

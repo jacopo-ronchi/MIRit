@@ -4,27 +4,15 @@
 # MIRit <img src="man/figures/logo.svg" align="right" height="139" alt="" />
 
 <!-- badges: start -->
-
-[![Devel
-version](https://img.shields.io/badge/devel%20version-1.5.2-blue.svg)](https://github.com/jacopo-ronchi/MIRit)
-[![GitHub
-issues](https://img.shields.io/github/issues/jacopo-ronchi/MIRit)](https://github.com/jacopo-ronchi/MIRit/issues)
-[![GitHub
-pulls](https://img.shields.io/github/issues-pr/jacopo-ronchi/MIRit)](https://github.com/jacopo-ronchi/MIRit/pulls)
-[![Last
-commit](https://img.shields.io/github/last-commit/jacopo-ronchi/MIRit.svg)](https://github.com/jacopo-ronchi/MIRit/commits/devel)
-[![Project Status:
-Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Lifecycle:
-stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![License: GPL (\>=
-3)](https://img.shields.io/badge/license-GPL%20(%3E=%203)-blue.svg)](https://cran.r-project.org/web/licenses/GPL-3)
-[![DOI
-badge](https://img.shields.io/badge/doi-10.1101/2023.11.24.568528-yellow.svg)](https://doi.org/10.1101/2023.11.24.568528)
-[![R-CMD-check-bioc](https://github.com/jacopo-ronchi/MIRit/actions/workflows/check-bioc.yml/badge.svg)](https://github.com/jacopo-ronchi/MIRit/actions/workflows/check-bioc.yml)
-[![Codecov test
-coverage](https://codecov.io/gh/jacopo-ronchi/MIRit/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/jacopo-ronchi/MIRit?branch=devel)
-<!-- badges: end -->
+[![Devel version](https://img.shields.io/badge/devel%20version-1.7.3-blue.svg)](https://github.com/jacopo-ronchi/MIRit)
+[![GitHub issues](https://img.shields.io/github/issues/jacopo-ronchi/MIRit)](https://github.com/jacopo-ronchi/MIRit/issues)
+[![Last commit](https://img.shields.io/github/last-commit/jacopo-ronchi/MIRit.svg)](https://github.com/jacopo-ronchi/MIRit/commits/devel)
+[![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![License: GPL (\>=3)](https://img.shields.io/badge/license-GPL%20(%3E=%203)-blue.svg)](https://cran.r-project.org/web/licenses/GPL-3)
+[![DOI badge](https://img.shields.io/badge/doi-10.1093/bioadv/vbag042-yellow.svg)](https://doi.org/10.1093/bioadv/vbag042)
+[![R-CMD-check](https://github.com/jacopo-ronchi/MIRit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jacopo-ronchi/MIRit/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/jacopo-ronchi/MIRit/graph/badge.svg)](https://app.codecov.io/gh/jacopo-ronchi/MIRit)
 
 ## Overview
 
@@ -88,9 +76,10 @@ website](http://jacopo-ronchi.github.io/MIRit).
 If you use `MIRit` in published research, please cite the corresponding
 paper:
 
-> Ronchi J and Foti M. ‘MIRit: an integrative R framework for the
-> identification of impaired miRNA-mRNA regulatory networks in complex
-> diseases’. bioRxiv (2023). <doi:10.1101/2023.11.24.568528>
+> Ronchi, J., & Foti, M. (2026). MIRit: An integrative R framework for the
+> identification of impaired miRNA–mRNA regulatory networks in complex
+> diseases. Bioinformatics Advances, vbag042.
+> https://doi.org/10.1093/bioadv/vbag042
 
 Please note that the `MIRit` package was made possible thanks to many
 other R and bioinformatics software authors, which are cited either in

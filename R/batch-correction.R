@@ -5,8 +5,6 @@
 #' miRNA/gene expression levels, and then removes the variability caused by
 #' batch effects. Furthermore, a weighted surrogate variable analysis (WSVA)
 #' can also be included to remove the effects due to surrogate variables.
-#' If batch effects are present, it is crucial to remove them with this
-#' function before moving to correlation analysis.
 #'
 #' @details
 #' Batch effects consist in unwanted sources of technical variation that
@@ -14,9 +12,13 @@
 #' reliability of biological conclusions of integrative miRNA-mRNA analyses
 #' depends on the association between miRNA and gene expression levels, it is
 #' pivotal to ensure that expression measurements are not affected by technical
-#' variations. In this regard, if batch effects are noticed in the data, the
-#' user should run this function before using the [mirnaIntegration()]
-#' function to perform a correlation analysis.
+#' variations. To account for effects that influence both gene and miRNA
+#' expression (e.g. sex, smoking, hospitals), the most appropriate way is to
+#' perform a partial correlation analysis by including `partial = TRUE` when
+#' calling the [mirnaIntegration()] function. Nevertheless, for effects that
+#' are impacting either gene or miRNA expression matrix, the only option is to
+#' regress out their influence using this function before using the
+#' [mirnaIntegration()] function to perform a correlation analysis.
 #'
 #' Usually, given a [`MirnaExperiment`][MirnaExperiment-class] object, the user
 #' should specify:
@@ -94,6 +96,11 @@
 #' Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015). “limma
 #' powers differential expression analyses for RNA-sequencing and microarray
 #' studies.” Nucleic Acids Research, 43(7), e47. \url{doi:10.1093/nar/gkv007}.
+#' 
+#' Ronchi, J., & Foti, M. (2026). MIRit: An integrative R framework for the
+#' identification of impaired miRNA–mRNA regulatory networks in complex
+#' diseases. Bioinformatics Advances, vbag042.
+#' \url{https://doi.org/10.1093/bioadv/vbag042}
 #'
 #' @note
 #' To estimate surrogate variables and to remove batch effects from expression
@@ -105,13 +112,14 @@
 #'
 #' @export
 batchCorrection <- function(mirnaObj,
-    assay,
-    batch = NULL,
-    batch2 = NULL,
-    covariates = NULL,
-    includeWsva = FALSE,
-    n.sv = 1L,
-    weight.by.sd = TRUE) {
+                            assay,
+                            batch = NULL,
+                            batch2 = NULL,
+                            covariates = NULL,
+                            includeWsva = FALSE,
+                            n.sv = 1L,
+                            weight.by.sd = TRUE) {
+    
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",

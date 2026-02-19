@@ -22,7 +22,7 @@ BugReports: https://github.com/jacopo-ronchi/MIRit/issues
 biocViews: Software, GeneRegulation, NetworkEnrichment, NetworkInference, Epigenetics, FunctionalGenomics, SystemsBiology, Network, Pathways, GeneExpression, DifferentialExpression
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Imports: 
     AnnotationDbi,
     BiocFileCache,

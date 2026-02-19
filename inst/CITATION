@@ -2,9 +2,9 @@ bibentry(bibtype = "article",
          title = "MIRit: an integrative R framework for the identification of impaired miRNA-mRNA regulatory networks in complex diseases",
          author = personList( as.person("Jacopo Ronchi"),
                               as.person("Maria Foti")),
-         year = 2023,
-         journal = "bioRxiv",
-         doi = "10.1101/2023.11.24.568528",
-         url = "https://doi.org/10.1101/2023.11.24.568528",
-         textVersion = 
-         "Ronchi J and Foti M. 'MIRit: an integrative R framework for the identification of impaired miRNA-mRNA regulatory networks in complex diseases'. bioRxiv (2023). doi:10.1101/2023.11.24.568528")
+         year = 2026,
+         month = 02,
+         journal = "Bioinformatics Advances",
+         pages = "vbag042",
+         doi = "10.1093/bioadv/vbag042",
+         issn = "2635-0041")

@@ -52,7 +52,7 @@ An object of class \code{ggplot} containing the GSEA plot.
 This function creates a classic enrichment plot to show the results of
 gene set enrichment analyses (GSEA). In particular, this function takes as
 input GSEA results originating from the \code{\link[=enrichGenes]{enrichGenes()}} function, and
-returns a \link{ggplot2} object with GSEA plot. In this kind of plots, the
+returns a \link[ggplot2:ggplot2-package]{ggplot2::ggplot2} object with GSEA plot. In this kind of plots, the
 running enrichment score (ES) for a given pathway is shown on the y-axis,
 whereas gene positions in the ranked list are reported on the x-axis.
 }

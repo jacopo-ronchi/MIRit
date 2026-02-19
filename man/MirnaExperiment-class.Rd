@@ -170,7 +170,7 @@ and gene expression matrices. It contains a
 
 
 The \code{colData} slot is a collection of primary specimen data valid across all
-experiments. This slot is strictly of class \code{\link{DataFrame}} but arguments for
+experiments. This slot is strictly of class \code{\link[S4Vectors:DataFrame-class]{S4Vectors::DataFrame}} but arguments for
 the constructor function allow arguments to be of class \code{data.frame} and
 subsequently coerced.
 }
@@ -178,7 +178,7 @@ subsequently coerced.
 \section{sampleMap}{
 
 
-The \code{sampleMap} contains a \code{\link{DataFrame}} of translatable identifiers of
+The \code{sampleMap} contains a \code{\link[S4Vectors:DataFrame-class]{S4Vectors::DataFrame}} of translatable identifiers of
 samples and participants or biological units. The standard column names of
 the sampleMap are "assay", "primary", and "colname". Note that the "assay"
 column is a factor corresponding to the names of each experiment in the
@@ -300,6 +300,11 @@ accessed through the \code{\link[=integration]{integration()}} function.
 Marcel Ramos et al. Software For The Integration Of Multiomics Experiments
 In Bioconductor. Cancer Research, 2017 November 1; 77(21); e39-42. DOI:
 \url{10.1158/0008-5472.CAN-17-0344}
+
+Ronchi, J., & Foti, M. (2026). MIRit: An integrative R framework for the
+identification of impaired miRNA–mRNA regulatory networks in complex
+diseases. Bioinformatics Advances, vbag042.
+\url{https://doi.org/10.1093/bioadv/vbag042}
 }
 \seealso{
 See \code{\link[MultiAssayExperiment:MultiAssayExperiment-class]{MultiAssayExperiment-class}}

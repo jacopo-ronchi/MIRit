@@ -92,6 +92,11 @@
 #' for experimentally validated miRNA–target interactions, Nucleic Acids
 #' Research, Volume 50, Issue D1, 7 January 2022, Pages D222–D230,
 #' \url{https://doi.org/10.1093/nar/gkab1079}.
+#' 
+#' Ronchi, J., & Foti, M. (2026). MIRit: An integrative R framework for the
+#' identification of impaired miRNA–mRNA regulatory networks in complex
+#' diseases. Bioinformatics Advances, vbag042.
+#' \url{https://doi.org/10.1093/bioadv/vbag042}
 #'
 #' @note
 #' To access mirDIP database at \url{https://ophid.utoronto.ca/mirDIP/}, this
@@ -107,6 +112,7 @@ getTargets <- function(mirnaObj,
                        includeValidated = TRUE,
                        evidence = "all",
                        local = NULL) {
+    
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -370,5 +376,106 @@ getURL <- function(URL, FUN, ..., N.TRIES = 3L) {
     
     ## return results
     return(result)
+}
+
+
+
+
+
+#' Use custom miRNA-target interactions
+#'
+#' Apart from the [getTargets()] function, users can use their own custom
+#' list of miRNA-target interactions. This function allows to directly add
+#' custom interactions to an existing
+#' [`MirnaExperiment`][MirnaExperiment-class] object.
+#'
+#' @details
+#' This function requires interactions to be passed as a `data.frame` object
+#' with two column, one for miRNAs and one for genes. The column names of this
+#' `data.frame` must include `MicroRNA` and `Gene.Symbol`.
+#'
+#' @param mirnaObj A [`MirnaExperiment`][MirnaExperiment-class] object
+#' containing miRNA and gene data
+#' @param tg A `data.frame` object specifying miRNA-target interactions. Check
+#' the **details section** for the format
+#'
+#' @returns
+#' A [`MirnaExperiment`][MirnaExperiment-class] object containing miRNA targets
+#' stored in the `targets` slot. Results can be accessed with the
+#' [mirnaTargets()] function.
+#'
+#' @examples
+#' # load example MirnaExperiment object
+#' obj <- loadExamples()
+#'
+#' # define targets
+#' tg <- data.frame(MicroRNA = c("hsa-miR-1179", "hsa-miR-1179"),
+#'                  Gene.Symbol = c("ACVR2A", "ABI2"))
+#' 
+#' # set targets
+#' obj <- setTargets(obj, tg)
+#'
+#' # print targets
+#' mirnaTargets(obj)
+#'
+#' @references
+#' Ronchi, J., & Foti, M. (2026). MIRit: An integrative R framework for the
+#' identification of impaired miRNA–mRNA regulatory networks in complex
+#' diseases. Bioinformatics Advances, vbag042.
+#' \url{https://doi.org/10.1093/bioadv/vbag042}
+#'
+#' @author
+#' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
+#'
+#' @export
+setTargets <- function(mirnaObj, tg) {
+    
+    ## check inputs
+    if (!is(mirnaObj, "MirnaExperiment")) {
+        stop("'mirnaObj' should be of class MirnaExperiment! ",
+             "See ?MirnaExperiment",
+             call. = FALSE
+        )
+    }
+    if (nrow(mirnaDE(mirnaObj, onlySignificant = FALSE)) == 0) {
+        stop("MiRNA differential expression results are not present in ",
+             "'mirnaObj'. Please, use 'performMirnaDE()' before using ",
+             "this function. See ?performMirnaDE",
+             call. = FALSE
+        )
+    }
+    if (!is.data.frame(tg) |
+        !all(c("MicroRNA", "Gene.Symbol") %in% colnames(tg))) {
+        stop("'tg' must be a data.frame that contains a table of miRNA-target",
+             " interaction. It must contain at least two columns named ",
+             "'MicroRNA' and 'Gene.Symbol'.",
+             call. = FALSE
+        )
+    }
+    
+    ## define miRNAs and genes
+    allMirnas <- mirnaDE(mirnaObj, onlySignificant = FALSE)$ID
+    allGenes <- rownames(mirnaObj[["genes"]])
+    
+    ## filter the interaction table
+    val <- tg$MicroRNA %in% allMirnas & tg$Gene.Symbol %in% allGenes
+    if (sum(val) == 0) {
+        stop("The provided interaction table does not contain interactions ",
+             "between miRNAs and genes that are present in 'mirnaObj'. ",
+             "Please check their nomenclature.", call. = FALSE)
+    }
+    if (sum(!val) > 0) {
+        warning(paste(sum(!val)), " interactions have been ignored as they do",
+                " not involve miRNAs and genes present in 'mirnaObj'.",
+                call. = FALSE)
+    }
+    tgTab <- tg[val, ]
+    
+    ## add miRNA-target pairs to the MirnaExperiment object
+    mirnaTargets(mirnaObj) <- tgTab
+    
+    ## return mirnaObj with targets
+    return(mirnaObj)
+    
 }
 

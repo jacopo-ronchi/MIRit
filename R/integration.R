@@ -35,10 +35,31 @@
 #' Regarding correlation direction, since miRNAs mainly act as negative
 #' regulators, only negatively correlated miRNA-target pairs are evaluated, and
 #' statistical significance is calculated through a one-tailed t-test.
-#'
-#' Please notice that if strong batch effects are noticed in expression data,
-#' it is recommended to remove them through the [batchCorrection()] function
-#' implemented in MIRit.
+#' 
+#' Additionally, when enough observations are present, it is appropriate to
+#' account for the group effect by performing a partial correlation analysis.
+#' In particular, a partial correlation analysis evaluates the strength and the
+#' direction of a relationship between two variables -- miRNA and gene
+#' expression in our case -- while accounting for the effect of other factors.
+#' In integrative miRNA-mRNA analyses, the group effect considered for
+#' differential expression analysis may lead to the identification of several
+#' spurious correlated pairs, which result anti-correlated simply because they
+#' are dysregulated in opposing directions (upregulated miRNA and downregulated
+#' gene). This phenomenon, known as Simpson's paradox, may therefore inflate
+#' false positive relationships. By accounting for the group variable using
+#' partial correlation analysis, the association between miRNA and gene
+#' expression is evaluated within each group, thereby leading to reliable
+#' identification of influential miRNAs. To perform such analysis, the
+#' `partial` argument must be set to `TRUE`. Furthermore, the effect of other
+#' covariates can be considered by passing a `character` vector with the names
+#' of variables to account for to the `partialCovs` parameter. However, partial
+#' correlation analyses are only effective when a medium-large number of
+#' samples are available in each group. Our simulations show that partial
+#' correlation outperforms standard correlation when there are at least 20--30
+#' samples for each condition, this is way the default is set to
+#' `partial = FALSE`. Furthermore, for batch effects that individually affect
+#' either miRNA or gene expression matrices, the only way is to remove them
+#' using the [batchCorrection()] function implemented in MIRit.
 #'
 #' Moreover, if gene expression data and miRNA expression data derive from
 #' different samples (unpaired data), a correlation analysis can't be
@@ -78,7 +99,11 @@
 #' analysis; `association`, to perform a one-sided association test; `fry` to
 #' perform the integrative analysis through rotation gene-set testing
 #' @param pCutoff The adjusted p-value cutoff to use for statistical
-#' significance. The default value is `0.05`
+#' significance. The default value is `0.05`. When a lot of interactions are
+#' considered, a p-value cutoff after multiple testing correction could result
+#' excessively restrictive. In such cases, it is wise to just consider a
+#' threshold on the correlation strength and ignore p-values by setting
+#' `pCutoff = 1`.
 #' @param pAdjustment The p-value correction method for multiple testing. It
 #' must be one of: `fdr` (default), `BH`, `none`, `holm`, `hochberg`, `hommel`,
 #' `bonferroni`, `BY`
@@ -87,6 +112,13 @@
 #' *details* section for further information
 #' @param corCutoff The minimum (negative) value of correlation coefficient to
 #' consider meaningful a miRNA-target relationship. Default is `0.5`
+#' @param partial Logical, whether a partial correlation analysis should be
+#' performed. Default is `FALSE`. See the **details section** for further
+#' information
+#' @param partialCovs Additional covariates to be considered in partial
+#' correlation analysis. This parameter is only considered when `TRUE`. It is
+#' an optional parameter that allows to include other covariates in the
+#' analysis in addition to `group`
 #' @param associationMethod The statistical test used for evaluating the
 #' association between miRNAs and their targets for unpaired data. It must be
 #' one of `boschloo` (default), to perform a one-sided Boschloo's exact test;
@@ -130,20 +162,32 @@
 #' 2x2-table when Testing the Equality of Two Probabilities".
 #' Statistica Neerlandica. 24: 1–35.
 #' \url{doi:10.1111/j.1467-9574.1970.tb00104.x}.
+#' 
+#' Simpson, E. H. (1951). The Interpretation of Interaction in Contingency
+#' Tables. Journal of the Royal Statistical Society: Series B (Methodological),
+#' 13(2), 238–241. \url{https://doi.org/10.1111/j.2517-6161.1951.tb00088.x}
+#' 
+#' Ronchi, J., & Foti, M. (2026). MIRit: An integrative R framework for the
+#' identification of impaired miRNA–mRNA regulatory networks in complex
+#' diseases. Bioinformatics Advances, vbag042.
+#' \url{https://doi.org/10.1093/bioadv/vbag042}
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}
 #'
 #' @export
 mirnaIntegration <- function(mirnaObj,
-    test = "auto",
-    pCutoff = 0.05,
-    pAdjustment = "fdr",
-    corMethod = "spearman",
-    corCutoff = 0.5,
-    associationMethod = "boschloo",
-    nuisanceParam = 100,
-    BPPARAM = bpparam()) {
+                             test = "auto",
+                             pCutoff = 0.05,
+                             pAdjustment = "fdr",
+                             corMethod = "spearman",
+                             corCutoff = 0.5,
+                             partial = FALSE,
+                             partialCovs = NULL,
+                             associationMethod = "boschloo",
+                             nuisanceParam = 100,
+                             BPPARAM = bpparam()) {
+    
     ## check inputs
     if (!is(mirnaObj, "MirnaExperiment")) {
         stop("'mirnaObj' should be of class MirnaExperiment! ",
@@ -236,6 +280,39 @@ mirnaIntegration <- function(mirnaObj,
             call. = FALSE
         )
     }
+    if (!is.logical(partial) |
+        length(partial) != 1) {
+        stop("'partial' must be logical (TRUE/FALSE)!",
+             call. = FALSE
+        )
+    }
+    if (partial & corMethod == "kendall") {
+        warning("Only 'pearson' and 'spearman' coefficients are supported ",
+                "for partial correlation analyses. Switching to Spearman's ",
+                "correlation...", call. = FALSE)
+        corMethod <- "spearman"
+    }
+    if (!is.null(partialCovs)) {
+        if (!is.character(partialCovs) |
+            any(!partialCovs %in% colnames(colData(mirnaObj)))) {
+            stop("'partialCovs' must contain the names of additional ",
+                 "covariates to account for in partial correlation analysis. ",
+                 "They must match the column names of the metadata as ",
+                 "specified in the 'colData' slot of the object.",
+                 call. = FALSE
+            )
+        }
+    }
+    ## check that the group was the same if partial correlation is chosen
+    if (partial &
+        (mirnaObj@mirnaDE$group !=
+         mirnaObj@geneDE$group)) {
+        warning("Partial correlation analysis can't be performed when the ",
+                "'group' variable used for differential expression analysis ",
+                "differs for miRNAs and genes. Switching to standard ",
+                "correlation...", call. = FALSE)
+        partial <- FALSE
+    }
     if (!is.character(associationMethod) |
         length(associationMethod) != 1 |
         !associationMethod %in% c("boschloo", "fisher-midp", "fisher")) {
@@ -279,6 +356,8 @@ mirnaIntegration <- function(mirnaObj,
             mirnaObj,
             corMethod,
             corCutoff,
+            partial,
+            partialCovs,
             pCutoff,
             pAdjustment,
             BPPARAM
@@ -310,11 +389,14 @@ mirnaIntegration <- function(mirnaObj,
 
 ## correlation analysis
 correlateMirnaTargets <- function(mirnaObj,
-    corMethod,
-    corCutoff,
-    pCutoff,
-    pAdjustment,
-    BPPARAM) {
+                                  corMethod,
+                                  corCutoff,
+                                  partial,
+                                  partialCovs,
+                                  pCutoff,
+                                  pAdjustment,
+                                  BPPARAM) {
+    
     ## extract miRNA and gene expression values
     mirnaExpr <- mirnaObj[["microRNA"]]
     geneExpr <- mirnaObj[["genes"]]
@@ -323,8 +405,8 @@ correlateMirnaTargets <- function(mirnaObj,
     sMap <- sampleMap(mirnaObj)
     mirnaSamples <- sMap$primary[sMap$assay == "microRNA"]
     geneSamples <- sMap$primary[sMap$assay == "genes"]
-
     if (!identical(mirnaSamples, geneSamples)) {
+        
         ## determine common and uncommon samples
         common <- intersect(mirnaSamples, geneSamples)
         unpaired <- setdiff(c(mirnaSamples, geneSamples), common)
@@ -337,7 +419,7 @@ correlateMirnaTargets <- function(mirnaObj,
             )
         }
 
-        ## remove samples without measurments of both miRNAs and genes
+        ## remove samples without measurements of both miRNAs and genes
         if (length(unpaired) > 0) {
             mirnaExpr <- mirnaExpr[, sMap$colname[sMap$assay == "microRNA" &
                 sMap$primary %in% common]]
@@ -381,25 +463,52 @@ correlateMirnaTargets <- function(mirnaObj,
     ## restrict to target genes present in the assay
     targetsTable <- targetsTable[targetsTable$Gene.Symbol
         %in% rownames(geneExpr), ]
+    
+    ## ensure that interactions exist
+    if (nrow(targetsTable) == 0) {
+        stop("There are no putative interactions between DE-miRNAs and DEGs.",
+             call. = FALSE)
+    }
 
     ## extract the expression values of miRNA targets
     targetExpr <- geneExpr[rownames(geneExpr) %in% targetsTable$Gene.Symbol, ]
+    
+    ## define metadata for partial correlation
+    if (partial) {
+        group <- mirnaObj@mirnaDE$group
+        metaCorr <- colData(mirnaObj)[colnames(geneExpr), c(group, partialCovs)]
+        tps <- c("numeric", "integer", "factor", "ordered", "character")
+        colTps <- sapply(metaCorr, class)
+        unsupported <- !sapply(metaCorr, function(col) inherits(col, tps))
+        if (any(unsupported)) {
+            stop(paste("Unsupported column types:",
+                       paste(names(metaCorr)[unsupported], collapse = ", ")),
+                 call. = FALSE)
+        }
+    }
 
     ## compute the correlation between each pair of DE-miRNA - target
     usedCoef <- gsub("(^)([[:alpha:]])", "\\1\\U\\2", corMethod, perl = TRUE)
     message("Performing ", usedCoef, "'s correlation analysis...")
     correlation <- bpmapply(function(mirna, gene) {
+        
         ## extract the expression values of the microRNA and the target
         mirnaInt <- as.numeric(mirnaExpr[mirna, ])
         geneInt <- as.numeric(targetExpr[gene, ])
 
         ## perform the correlation analysis
-        corPair <- cor.test(mirnaInt,
-            geneInt,
-            method = corMethod,
-            alternative = "less",
-            exact = FALSE
-        )
+        if (partial) {
+            corPair <- partial.test(mirnaInt,
+                                    geneInt,
+                                    metaCorr,
+                                    corMethod)
+        } else {
+            corPair <- cor.test(mirnaInt,
+                                geneInt,
+                                method = corMethod,
+                                alternative = "less",
+                                exact = FALSE)
+        }
 
         ## report the results of the correlation analysis
         fold <- ifelse(dem$logFC[dem$ID == mirna] > 0,
@@ -432,7 +541,7 @@ correlateMirnaTargets <- function(mirnaObj,
 
     ## select statistically significant associations
     corRes <- corRes[corRes$Corr.Adjusted.P.Val <= pCutoff &
-        abs(corRes$Corr.Coefficient) >= corCutoff, ]
+        corRes$Corr.Coefficient <= -corCutoff, ]
 
     ## report the results of the correlation analysis
     if (nrow(corRes) >= 1) {
@@ -452,10 +561,68 @@ correlateMirnaTargets <- function(mirnaObj,
         data = corRes,
         method = paste(usedCoef, "'s correlation analysis", sep = ""),
         pCutoff = pCutoff,
-        pAdjustment = pAdjustment
+        pAdjustment = pAdjustment,
+        partial = partial
     )
     integration(mirnaObj) <- resList
     return(mirnaObj)
+}
+
+
+
+
+
+## helper function for performing partial correlation and test the significance
+partial.test <- function(mirnaInt,
+                         geneInt,
+                         z,
+                         method) {
+    
+    ## convert to rank if needed
+    mirnaInt <- if (method == "spearman") rank(mirnaInt) else mirnaInt
+    geneInt <- if (method == "spearman") rank(geneInt) else geneInt
+    
+    ## prepare covariate matrix
+    if (is.vector(z) || is.factor(z) || is.character(z)) {
+        z <- data.frame(z1 = z)
+    }
+    z <- as.data.frame(z)
+    zPrep <- lapply(z, function(col) {
+        if (is.character(col)) {
+            factor(col)
+        } else if (is.factor(col) && !is.ordered(col)) {
+            col
+        } else if (is.ordered(col)) {
+            if (method == "spearman") rank(as.integer(col))
+            else as.integer(col)
+        } else {
+            if (method == "spearman") rank(col) else col
+        }
+    })
+    zPrep <- as.data.frame(zPrep)
+    
+    ## residualize the effects
+    resX <- residuals(lm(mirnaInt ~ ., data = zPrep))
+    resY <- residuals(lm(geneInt ~ ., data = zPrep))
+    
+    ## calculate the correlation
+    rho <- cor(resX, resY)
+    
+    ## define the degrees of freedom
+    n <- length(mirnaInt)
+    k <- sum(sapply(zPrep, function(col) {
+        if (is.factor(col)) nlevels(col) - 1 else 1
+    }))
+    df <- n - 2 - k
+    
+    ## calculate p-value
+    tStat <- rho * sqrt(df) / sqrt(1 - rho^2)
+    p <- pt(tStat, df)
+    
+    ## return results
+    return(list(estimate = rho,
+                p.value = p))
+    
 }
 
 

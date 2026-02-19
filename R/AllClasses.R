@@ -178,6 +178,11 @@ NULL
 #' Marcel Ramos et al. Software For The Integration Of Multiomics Experiments
 #' In Bioconductor. Cancer Research, 2017 November 1; 77(21); e39-42. DOI:
 #' \url{10.1158/0008-5472.CAN-17-0344}
+#' 
+#' Ronchi, J., & Foti, M. (2026). MIRit: An integrative R framework for the
+#' identification of impaired miRNA–mRNA regulatory networks in complex
+#' diseases. Bioinformatics Advances, vbag042.
+#' \url{https://doi.org/10.1093/bioadv/vbag042}
 #'
 #' @author
 #' Jacopo Ronchi, \email{jacopo.ronchi@@unimib.it}

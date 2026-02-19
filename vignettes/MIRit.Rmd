@@ -23,9 +23,8 @@ abstract: |
   compromised miRNA-gene regulatory networks in thyroid cancer. In particular,
   an RNA-Seq experiment will be used as an example to demonstrate how to perform
   an integrative analysis with MIRit, including differential expression
-  analysis, functional enrichment and characterization, correlation analysis
-  and, lastly, the construction and visualization of the impaired miRNAs
-  regulatory axes within biological pathways.
+  analysis, functional enrichment and characterization, and integration
+  analysis using either correlation and association approaches.
 vignette: |
   %\VignetteIndexEntry{Integrate miRNA and gene expression data with MIRit}
   %\VignetteEncoding{UTF-8}
@@ -77,19 +76,16 @@ miRNA-target interactions through innovative state-of-the-art approaches that
 limit false discoveries;
 5. **Expression levels integration**, which integrates the expression levels of
 miRNAs and mRNAs for both paired data, through correlation analyses, and
-unpaired data, through association tests and rotation gene-set tests;
-6. **Topological analysis**, which implements a novel approach called
-*Topology-Aware Integrative Pathway Analysis (TAIPA)* for identifying the
-impaired molecular networks that affect biological pathways retrieved from KEGG,
-Reactome and WikiPathways.
+unpaired data, through association tests and rotation gene-set tests.
 
 ## How to cite MIRit
 
 If you use MIRit in published research, please cite the following paper:
 
-> Ronchi J and Foti M. 'MIRit: an integrative R framework for the identification
-of impaired miRNA-mRNA regulatory networks in complex diseases'. bioRxiv (2023).
-doi:10.1101/2023.11.24.568528
+> Ronchi, J., & Foti, M. (2026). MIRit: An integrative R framework for the
+identification of impaired miRNA–mRNA regulatory networks in complex
+diseases. Bioinformatics Advances, vbag042.
+https://doi.org/10.1093/bioadv/vbag042
 
 This package internally uses different R/Bioconductor packages, remember to cite
 the appropriate publications.
@@ -804,7 +800,8 @@ experiment <- loadExamples()
 After running this function, we obtain a `MirnaExperiment` object containing
 miRNA-target interactions in its `targets` slot. The user can access a
 `data.frame` detailing these interactions through the `mirnaTargets()` function.
-
+Additionally, users can also supply custom miRNA-target interactions using the
+`setTargets()` function.
 
 # Assess the effects of miRNAs on target genes
 
@@ -851,13 +848,13 @@ gene expression values is linear. This is typically not true for miRNAs, whose
 interactions with their targets are characterized by imperfect complementarity.
 Additionally, miRNAs can target multiple genes with different binding sites, and
 this implies that a simple linear relationship may not be sufficient to properly
-model the complexity of these interactions. In contrast, Spearman's and
-Kendall's Tau-b correlation coefficients result more suitable for representing
-the interplay between miRNAs and targets, because they are robust to non-linear
-relationships and outliers. However, Kendall's correlation just relies on the
-number of concordant and discordant pairs, and is less sensitive then Spearman's
-correlation; so, when many ties are present or when the sample size is small, it
-may have a lower detection power. This is the reason why
+model the complexity of these interactions [@ronchi_mirit_2026]. In contrast,
+Spearman's and Kendall's Tau-b correlation coefficients result more suitable for
+representing the interplay between miRNAs and targets, because they are robust
+to non-linear relationships and outliers. However, Kendall's correlation just
+relies on the number of concordant and discordant pairs, and is less sensitive
+than Spearman's correlation; so, when many ties are present or when the sample
+size is small, it may have a lower detection power. This is the reason why
 **Spearman's correlation coefficient** is the default used in the
 `mirnaIntegration()` function. Moreover, since miRNAs mainly act as negative
 regulators, only negatively correlated miRNA-target pairs are considered, and
@@ -893,21 +890,47 @@ the correlation coefficient used, by editing the `corMethod` option, and the
 minimum required value of the correlation coefficient, by changing the
 `corCutoff` setting.
 
-### Account for batch effects prior to correlation analysis
+### Account for the group effect in correlation analysis
 
-Sometimes, when exploring expression variability through MDS plots, as we do
-with the `plotDimensions()` function, we notice the presence of batch effects
-that prevent a clear separation of our biological groups. Batch effects
-consist in unwanted sources of technical variation that confound expression
-variability and limit downstream analyses. Since the reliability of biological
-conclusions depends on the correlation between miRNAs and genes,
-it is pivotal to ensure that expression measurements are scarcely affected by
-technical artifacts. In this regard, if strong batch effects are noticed in the
-data, MIRit provides the `batchCorrection()` function, which removes batch
-effects prior to correlation analysis. Please note that this procedure cannot be
-used before differential expression testing, because for that purpose it is more appropriate to include batch variables in the linear model, as specified in
-Section \@ref(model). For additional information, please refer to the manual of
-the `batchCorrection()` function.
+MIRit allows users to perform partial correlation analysis between miRNA and
+gene expression instead of usual approaches. A partial correlation analysis
+evaluates the strength and the direction of a relationship between two variables
+-- miRNA and gene expression in our case -- while accounting for the effect of
+other factors.
+
+In integrative miRNA-mRNA analyses, the group effect considered for
+differential expression analysis may lead to the identification of several
+spurious anti-correlated pairs that are simply due to the fact that they
+are dysregulated in opposing directions (upregulated miRNA and downregulated
+gene). This phenomenon, known as Simpson's paradox, may therefore inflate
+false positive relationships. By accounting for the group variable using
+partial correlation analysis, the association between miRNA and gene
+expression is evaluated within each group, thereby leading to reliable
+identification of influential miRNAs. To perform such analysis, the
+`partial` argument must be set to `TRUE`.
+
+However, partial correlation analyses are only effective when a medium-large
+number of samples are available in each group. Our simulations show that partial
+correlation outperforms standard correlation when there are at least 20--30
+samples for each condition [@ronchi_mirit_2026], this is way the default is set
+to `partial = FALSE`.
+
+For example, we can perform a partial Spearman's correlation analysis using
+the code below. Note that we set `pCutoff = 1` because in this dataset there
+are too few observations for a proper partial correlation analysis.
+
+```{r}
+## perform a partial correlation analysis
+partial <- mirnaIntegration(experiment, test = "correlation",
+                            partial = TRUE, pCutoff = 1)
+```
+
+Additionally, one should consider that partial correlation can also account
+for the effect of other covariates, which can be specified using the
+`partialCovs` parameter. However, note that only variables affecting both
+miRNA and gene expression can be included in the partial correlation analysis.
+For batch effects that individually affect either miRNA or gene expression
+matrices, the only way is to remove them using the `batchCorrection()` function.
 
 ### Explore the succesfully integrated miRNA-target pairs
 
