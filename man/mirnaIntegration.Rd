@@ -11,6 +11,8 @@ mirnaIntegration(
   pAdjustment = "fdr",
   corMethod = "spearman",
   corCutoff = 0.5,
+  partial = FALSE,
+  partialCovs = NULL,
   associationMethod = "boschloo",
   nuisanceParam = 100,
   BPPARAM = bpparam()
@@ -27,7 +29,11 @@ analysis; \code{association}, to perform a one-sided association test; \code{fry
 perform the integrative analysis through rotation gene-set testing}
 
 \item{pCutoff}{The adjusted p-value cutoff to use for statistical
-significance. The default value is \code{0.05}}
+significance. The default value is \code{0.05}. When a lot of interactions are
+considered, a p-value cutoff after multiple testing correction could result
+excessively restrictive. In such cases, it is wise to just consider a
+threshold on the correlation strength and ignore p-values by setting
+\code{pCutoff = 1}.}
 
 \item{pAdjustment}{The p-value correction method for multiple testing. It
 must be one of: \code{fdr} (default), \code{BH}, \code{none}, \code{holm}, \code{hochberg}, \code{hommel},
@@ -39,6 +45,15 @@ It must be one of: \code{spearman} (default), \code{pearson}, \code{kendall}. Se
 
 \item{corCutoff}{The minimum (negative) value of correlation coefficient to
 consider meaningful a miRNA-target relationship. Default is \code{0.5}}
+
+\item{partial}{Logical, whether a partial correlation analysis should be
+performed. Default is \code{FALSE}. See the \strong{details section} for further
+information}
+
+\item{partialCovs}{Additional covariates to be considered in partial
+correlation analysis. This parameter is only considered when \code{TRUE}. It is
+an optional parameter that allows to include other covariates in the
+analysis in addition to \code{group}}
 
 \item{associationMethod}{The statistical test used for evaluating the
 association between miRNAs and their targets for unpaired data. It must be
@@ -100,9 +115,30 @@ Regarding correlation direction, since miRNAs mainly act as negative
 regulators, only negatively correlated miRNA-target pairs are evaluated, and
 statistical significance is calculated through a one-tailed t-test.
 
-Please notice that if strong batch effects are noticed in expression data,
-it is recommended to remove them through the \code{\link[=batchCorrection]{batchCorrection()}} function
-implemented in MIRit.
+Additionally, when enough observations are present, it is appropriate to
+account for the group effect by performing a partial correlation analysis.
+In particular, a partial correlation analysis evaluates the strength and the
+direction of a relationship between two variables -- miRNA and gene
+expression in our case -- while accounting for the effect of other factors.
+In integrative miRNA-mRNA analyses, the group effect considered for
+differential expression analysis may lead to the identification of several
+spurious correlated pairs, which result anti-correlated simply because they
+are dysregulated in opposing directions (upregulated miRNA and downregulated
+gene). This phenomenon, known as Simpson's paradox, may therefore inflate
+false positive relationships. By accounting for the group variable using
+partial correlation analysis, the association between miRNA and gene
+expression is evaluated within each group, thereby leading to reliable
+identification of influential miRNAs. To perform such analysis, the
+\code{partial} argument must be set to \code{TRUE}. Furthermore, the effect of other
+covariates can be considered by passing a \code{character} vector with the names
+of variables to account for to the \code{partialCovs} parameter. However, partial
+correlation analyses are only effective when a medium-large number of
+samples are available in each group. Our simulations show that partial
+correlation outperforms standard correlation when there are at least 20--30
+samples for each condition, this is way the default is set to
+\code{partial = FALSE}. Furthermore, for batch effects that individually affect
+either miRNA or gene expression matrices, the only way is to remove them
+using the \code{\link[=batchCorrection]{batchCorrection()}} function implemented in MIRit.
 
 Moreover, if gene expression data and miRNA expression data derive from
 different samples (unpaired data), a correlation analysis can't be
@@ -159,6 +195,15 @@ Boschloo R.D. (1970). "Raised Conditional Level of Significance for the
 2x2-table when Testing the Equality of Two Probabilities".
 Statistica Neerlandica. 24: 1–35.
 \url{doi:10.1111/j.1467-9574.1970.tb00104.x}.
+
+Simpson, E. H. (1951). The Interpretation of Interaction in Contingency
+Tables. Journal of the Royal Statistical Society: Series B (Methodological),
+13(2), 238–241. \url{https://doi.org/10.1111/j.2517-6161.1951.tb00088.x}
+
+Ronchi, J., & Foti, M. (2026). MIRit: An integrative R framework for the
+identification of impaired miRNA–mRNA regulatory networks in complex
+diseases. Bioinformatics Advances, vbag042.
+\url{https://doi.org/10.1093/bioadv/vbag042}
 }
 \author{
 Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}

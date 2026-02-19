@@ -117,6 +117,11 @@ Hsi-Yuan Huang and others, miRTarBase update 2022: an informative resource
 for experimentally validated miRNA–target interactions, Nucleic Acids
 Research, Volume 50, Issue D1, 7 January 2022, Pages D222–D230,
 \url{https://doi.org/10.1093/nar/gkab1079}.
+
+Ronchi, J., & Foti, M. (2026). MIRit: An integrative R framework for the
+identification of impaired miRNA–mRNA regulatory networks in complex
+diseases. Bioinformatics Advances, vbag042.
+\url{https://doi.org/10.1093/bioadv/vbag042}
 }
 \author{
 Jacopo Ronchi, \email{jacopo.ronchi@unimib.it}
