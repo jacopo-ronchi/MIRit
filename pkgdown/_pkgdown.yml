@@ -32,7 +32,7 @@ reference:
   desc:  >
     Methods and accessors for objects of class `MirnaExperiment`, the main
     class in MIRit to work with miRNA and gene expression data.
-- contents:
+  contents:
   - MirnaExperiment-class
   - MirnaExperiment
   - pairedSamples
@@ -40,7 +40,7 @@ reference:
   desc:  >
     Example datasets provided by MIRit for exploring the capabilities of the
     software.
-- contents:
+  contents:
   - mirnaCounts
   - geneCounts
   - loadExamples
@@ -48,7 +48,7 @@ reference:
   desc:  >
     The functions used to perform miRNA and gene differential expression
     analyses from start to finish.
-- contents:
+  contents:
   - plotDimensions
   - deAnalysis
   - addDifferentialExpression
@@ -60,7 +60,7 @@ reference:
   desc:  >
     Methods and functions used to perform functional enrichment analysis of
     genes.
-- contents:
+  contents:
   - FunctionalEnrichment-class
   - starts_with("enrich")
   - geneSet
@@ -71,7 +71,7 @@ reference:
   desc:  >
     The functions for obtaining and visualizing the target genes of
     differentially expressed miRNAs.
-- contents:
+  contents:
   - getTargets
   - mirnaTargets
   - setTargets
@@ -79,7 +79,7 @@ reference:
   desc:  >
     The functions used to associate differentially expressed miRNAs with
     disease-related SNPs.
-- contents:
+  contents:
   - searchDisease
   - findMirnaSNPs
   - mirVariantPlot
@@ -88,7 +88,7 @@ reference:
   desc:  >
     The functions for integrating miRNA and gene expression levels for both
     paired and unpaired samples.
-- contents:
+  contents:
   - batchCorrection
   - mirnaIntegration
   - integration
@@ -97,7 +97,7 @@ reference:
   desc:  >
     The functions needed to perform a comprehensive topology-aware integrative
     pathway analysis (TAIPA) with MIRit.
-- contents:
+  contents:
   - IntegrativePathwayAnalysis-class
   - listPathways
   - preparePathways

@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![Devel version](https://img.shields.io/badge/devel%20version-1.7.3-blue.svg)](https://github.com/jacopo-ronchi/MIRit)
+[![Devel version](https://img.shields.io/badge/devel%20version-1.7.4-blue.svg)](https://github.com/jacopo-ronchi/MIRit)
 [![GitHub issues](https://img.shields.io/github/issues/jacopo-ronchi/MIRit)](https://github.com/jacopo-ronchi/MIRit/issues)
 [![Last commit](https://img.shields.io/github/last-commit/jacopo-ronchi/MIRit.svg)](https://github.com/jacopo-ronchi/MIRit/commits/devel)
 [![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)

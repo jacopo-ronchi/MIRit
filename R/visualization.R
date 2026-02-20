@@ -1410,7 +1410,7 @@ theme.MIRit <- function(
     ## set plot borders
     if (allBorders == TRUE) {
         br <- element_rect(
-            size = borderWidth,
+            linewidth = borderWidth,
             fill = NA,
             color = "black"
         )

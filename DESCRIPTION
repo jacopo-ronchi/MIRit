@@ -17,7 +17,7 @@ Description: MIRit is an R package that provides several methods for
     miRNA-mRNA analyses, from differential expression analysis to network
     characterization.
 License: GPL (>= 3)
-URL: https://github.com/jacopo-ronchi/MIRit
+URL: https://jacopo-ronchi.github.io/MIRit/, https://github.com/jacopo-ronchi/MIRit
 BugReports: https://github.com/jacopo-ronchi/MIRit/issues
 biocViews: Software, GeneRegulation, NetworkEnrichment, NetworkInference, Epigenetics, FunctionalGenomics, SystemsBiology, Network, Pathways, GeneExpression, DifferentialExpression
 Encoding: UTF-8
