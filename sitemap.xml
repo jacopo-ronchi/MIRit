@@ -1,180 +1,62 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>/SUPPORT.html</loc>
-  </url>
-  <url>
-    <loc>/articles/MIRit.html</loc>
-  </url>
-  <url>
-    <loc>/articles/MIRit_files/jqueryui-1.13.2/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FunctionalEnrichment-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IntegrativePathwayAnalysis-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/MIRit-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/MirnaExperiment-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/MirnaExperiment.html</loc>
-  </url>
-  <url>
-    <loc>/reference/addDifferentialExpression.html</loc>
-  </url>
-  <url>
-    <loc>/reference/augmentedPathways.html</loc>
-  </url>
-  <url>
-    <loc>/reference/batchCorrection.html</loc>
-  </url>
-  <url>
-    <loc>/reference/deAccessors.html</loc>
-  </url>
-  <url>
-    <loc>/reference/deAnalysis.html</loc>
-  </url>
-  <url>
-    <loc>/reference/enrichGenes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/enrichTargets.html</loc>
-  </url>
-  <url>
-    <loc>/reference/enrichedFeatures.html</loc>
-  </url>
-  <url>
-    <loc>/reference/enrichmentBarplot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/enrichmentDatabase.html</loc>
-  </url>
-  <url>
-    <loc>/reference/enrichmentDotplot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/enrichmentMethod.html</loc>
-  </url>
-  <url>
-    <loc>/reference/enrichmentMetric.html</loc>
-  </url>
-  <url>
-    <loc>/reference/enrichmentResults.html</loc>
-  </url>
-  <url>
-    <loc>/reference/findMirnaSNPs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/geneCounts.html</loc>
-  </url>
-  <url>
-    <loc>/reference/geneSet.html</loc>
-  </url>
-  <url>
-    <loc>/reference/getEvidence.html</loc>
-  </url>
-  <url>
-    <loc>/reference/getTargets.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gseaPlot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gseaRidgeplot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/integratedPathways.html</loc>
-  </url>
-  <url>
-    <loc>/reference/integration.html</loc>
-  </url>
-  <url>
-    <loc>/reference/integrationDatabase.html</loc>
-  </url>
-  <url>
-    <loc>/reference/integrationDotplot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/listPathways.html</loc>
-  </url>
-  <url>
-    <loc>/reference/loadExamples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mirVariantPlot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mirnaCounts.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mirnaIntegration.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mirnaTargets.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pairedSamples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plotCorrelation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plotDE.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plotDimensions.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plotVolcano.html</loc>
-  </url>
-  <url>
-    <loc>/reference/preparePathways.html</loc>
-  </url>
-  <url>
-    <loc>/reference/searchDisease.html</loc>
-  </url>
-  <url>
-    <loc>/reference/significantAccessors.html</loc>
-  </url>
-  <url>
-    <loc>/reference/supportedOrganisms.html</loc>
-  </url>
-  <url>
-    <loc>/reference/topologicalAnalysis.html</loc>
-  </url>
-  <url>
-    <loc>/reference/visualizeNetwork.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/404.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/CONTRIBUTING.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/LICENSE.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/SUPPORT.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/articles/MIRit.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/articles/index.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/authors.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/index.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/news/index.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/FunctionalEnrichment-class.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/IntegrativePathwayAnalysis-class.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/MIRit-package.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/MirnaExperiment-class.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/MirnaExperiment.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/addDifferentialExpression.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/augmentedPathways.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/batchCorrection.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/deAccessors.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/deAnalysis.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/enrichGenes.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/enrichTargets.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/enrichedFeatures.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/enrichmentBarplot.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/enrichmentDatabase.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/enrichmentDotplot.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/enrichmentMethod.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/enrichmentMetric.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/enrichmentResults.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/findMirnaSNPs.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/geneCounts.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/geneSet.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/getEvidence.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/getTargets.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/gseaPlot.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/gseaRidgeplot.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/index.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/integratedPathways.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/integration.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/integrationDatabase.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/integrationDotplot.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/listPathways.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/loadExamples.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/mirVariantPlot.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/mirnaCounts.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/mirnaIntegration.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/mirnaTargets.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/pairedSamples.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/plotCorrelation.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/plotDE.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/plotDimensions.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/plotVolcano.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/preparePathways.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/searchDisease.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/setTargets.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/significantAccessors.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/supportedOrganisms.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/topologicalAnalysis.html</loc></url>
+<url><loc>https://jacopo-ronchi.github.io/MIRit/reference/visualizeNetwork.html</loc></url>
 </urlset>
+
